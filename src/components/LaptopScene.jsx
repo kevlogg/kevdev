@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from 'react'
 import gsap from 'gsap'
+import BrandLogo from './BrandLogo'
 
 const CODE_TEXT = `const build = () => {
   ship();
@@ -200,14 +201,10 @@ export default function LaptopScene({ embedded = false }) {
               ref={kevdevTextRef}
               className="absolute inset-0 flex items-center justify-center pointer-events-none"
             >
-              <span
-                className="font-display font-bold text-4xl sm:text-5xl text-kev-electric tracking-tight"
-                style={{
-                  textShadow: '0 0 40px rgba(56, 189, 248, 0.5), 0 0 80px rgba(56, 189, 248, 0.25)',
-                }}
-              >
-                kevdev
-              </span>
+              <BrandLogo
+                className="h-[6.5rem] w-auto sm:h-28 md:h-32 max-w-[min(340px,94%)] object-contain drop-shadow-[0_0_32px_rgba(56,189,248,0.65)]"
+                alt=""
+              />
             </div>
           )}
     </div>

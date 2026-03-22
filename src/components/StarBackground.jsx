@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import ShootingStars from './ShootingStars'
 
 function generateBoxShadows(n) {
   const parts = []
@@ -19,13 +20,15 @@ export default function StarBackground() {
 
   return (
     <div
-      className="fixed inset-0 overflow-hidden pointer-events-none"
+      className="fixed inset-0 pointer-events-none"
       style={{
         zIndex: 0,
+        overflow: 'visible',
         background: 'radial-gradient(ellipse at bottom, #1B2735 0%, #0a0e1a 70%, #050810 100%)',
       }}
       aria-hidden
     >
+      <div className="absolute inset-0 overflow-hidden">
       <div
         className="star-layer"
         style={{
@@ -125,6 +128,8 @@ export default function StarBackground() {
           }}
         />
       </div>
+      </div>
+      <ShootingStars />
       <style>{`
         @keyframes starAnim {
           from { transform: translateY(0); }

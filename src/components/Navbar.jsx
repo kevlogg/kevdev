@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import BrandLogo from './BrandLogo'
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
@@ -16,8 +17,12 @@ export default function Navbar() {
       }`}
     >
       <nav className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-        <a href="#" className="font-display font-semibold text-lg text-kev-white tracking-tight hover:text-kev-electric transition-colors">
-          kevdev
+        <a
+          href="#"
+          className="flex items-center shrink-0 opacity-90 hover:opacity-100 transition-opacity"
+          aria-label="kevdev — inicio"
+        >
+          <BrandLogo className="h-14 w-auto sm:h-16 object-contain object-left" />
         </a>
         <div className="flex items-center gap-8">
           <a href="#que-hago" className="text-sm text-kev-muted hover:text-kev-white transition-colors hidden sm:inline">
