@@ -9,6 +9,9 @@ lerna-debug.log*
 
 node_modules
 dist
+# Build estático del demo Galaxy (public); sí se versiona
+!/public/webgpu-galaxy-main/dist/
+!/public/webgpu-galaxy-main/dist/**
 dist-ssr
 *.local
 

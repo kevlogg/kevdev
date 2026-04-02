@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+
+# Build output: se versiona en este repo para servir desde kevdev/public
+
+# Environment variables
+.env
+.env.local
+
+# Editor directories
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Cache
+.cache/
