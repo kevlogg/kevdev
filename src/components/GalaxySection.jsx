@@ -1,26 +1,28 @@
 export default function GalaxySection() {
   return (
     <section
-      className="relative py-16 sm:py-20 px-6 min-h-[min(520px,72vh)] overflow-hidden"
+      className="py-16 sm:py-20 px-6"
       aria-label="Demostración visual WebGPU"
     >
-      <div className="absolute inset-0 z-0 min-h-[min(420px,60vh)]">
-        <iframe
-          title="Simulación de galaxia WebGPU"
-          src="/webgpu-galaxy-main/dist/index.html"
-          className="absolute inset-0 h-full w-full border-0 bg-transparent"
-          loading="lazy"
-        />
-      </div>
-
-      <div className="relative z-10 max-w-6xl mx-auto pointer-events-none">
-        <div className="text-center max-w-2xl mx-auto">
-          <h2 className="font-display font-bold text-2xl sm:text-3xl text-kev-white mb-3 [text-shadow:0_2px_24px_rgba(0,0,0,0.9),0_0_2px_rgba(0,0,0,0.8)]">
+      <div className="max-w-6xl mx-auto">
+        <div className="text-center max-w-2xl mx-auto mb-10">
+          <h2 className="font-display font-bold text-2xl sm:text-3xl text-kev-white mb-3">
             Galaxia en tiempo real
           </h2>
-          <p className="text-kev-muted text-base sm:text-lg [text-shadow:0_1px_16px_rgba(0,0,0,0.95),0_0_1px_rgba(0,0,0,0.9)]">
-            WebGPU y Three.js: arrastrá para orbitar la cámara. Solo la galaxia; el fondo es el de la página.
+          <p className="text-kev-muted text-base sm:text-lg">
+            Simulación WebGPU con Three.js: arrastrá para mover la cámara. Ideal para fondos
+            inmersivos o demos técnicas.
           </p>
+        </div>
+        <div className="relative rounded-2xl overflow-hidden border border-white/10 bg-black/40 shadow-[0_0_0_1px_rgba(56,189,248,0.08)]">
+          <div className="relative w-full aspect-[16/10] min-h-[min(360px,55vh)] sm:min-h-[420px] max-h-[65vh]">
+            <iframe
+              title="Simulación de galaxia WebGPU"
+              src="/webgpu-galaxy-main/dist/index.html"
+              className="absolute inset-0 h-full w-full border-0"
+              loading="lazy"
+            />
+          </div>
         </div>
       </div>
     </section>
