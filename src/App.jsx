@@ -2,7 +2,6 @@ import StarBackground from './components/StarBackground'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import QueHago from './components/QueHago'
-import GalaxySection from './components/GalaxySection'
 import Proyectos from './components/Proyectos'
 import MiEnfoque from './components/MiEnfoque'
 import ParaQuien from './components/ParaQuien'
@@ -18,7 +17,6 @@ export default function App() {
       <main>
         <Hero />
         <QueHago />
-        <GalaxySection />
         <Proyectos />
         <MiEnfoque />
         <ParaQuien />
