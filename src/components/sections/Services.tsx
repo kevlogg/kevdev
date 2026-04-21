@@ -1,140 +1,344 @@
 'use client'
 
-import { motion } from 'framer-motion'
-import { stagger, fadeInUp, fadeInLeft, inView } from '@/lib/motion'
+import { useState, useRef } from 'react'
+import {
+  motion, AnimatePresence,
+  useScroll, useTransform, useMotionValueEvent,
+} from 'framer-motion'
+
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
 const SERVICES = [
   {
     num: '01',
     title: 'Landing pages',
-    desc: 'Páginas de aterrizaje claras y modernas. Diseño enfocado en conversión y en transmitir el mensaje correcto.',
+    desc: 'Páginas de aterrizaje claras y de alto impacto. Diseño centrado en transmitir el mensaje correcto y convertir desde el primer scroll.',
+    detail: 'Cada landing es una pieza estratégica: copy alineado al negocio, jerarquía visual que guía la atención y performance optimizada. Sin templates. Sin relleno visual.',
+    stack: 'Next.js  ·  Figma  ·  Framer Motion',
+    tag: 'Conversión',
   },
   {
     num: '02',
     title: 'Web apps & paneles',
-    desc: 'Aplicaciones web y dashboards para gestionar datos, usuarios o procesos. Interfaces útiles y escalables.',
+    desc: 'Aplicaciones web y dashboards para gestionar datos, usuarios o procesos. Interfaces útiles, rápidas y escalables desde el día uno.',
+    detail: 'Arquitectura pensada para crecer: autenticación, roles, base de datos en tiempo real y UX que reduce la curva de aprendizaje del usuario final desde el primer día.',
+    stack: 'React  ·  Node.js  ·  Firebase',
+    tag: 'Producto',
   },
   {
     num: '03',
     title: 'Automatizaciones con IA',
-    desc: 'Flujos que combinan APIs, integraciones e IA para automatizar tareas repetitivas y mejorar la operación.',
+    desc: 'Flujos que combinan APIs, integraciones e IA para eliminar tareas manuales y mejorar la operación del negocio.',
+    detail: 'Desde notificaciones automáticas hasta pipelines de datos. Integración con OpenAI, webhooks y las herramientas que el equipo ya usa — sin reemplazar lo que funciona.',
+    stack: 'n8n  ·  OpenAI  ·  Make',
+    tag: 'Eficiencia',
   },
   {
     num: '04',
     title: 'MVPs para validar',
-    desc: 'Versiones mínimas viables para probar con usuarios reales antes de invertir en algo más grande.',
+    desc: 'Versiones mínimas viables para probar hipótesis con usuarios reales antes de invertir en algo más grande.',
+    detail: 'El objetivo no es el código: es la hipótesis validada. Construyo lo mínimo necesario para obtener feedback real y decidir con datos, no con suposiciones ni presentaciones.',
+    stack: 'FlutterFlow  ·  Firebase  ·  IA',
+    tag: 'Validación',
   },
 ]
 
+const N = SERVICES.length   // 4
+
 export default function Services() {
+  const [active, setActive] = useState(0)
+  const containerRef = useRef<HTMLElement>(null)
+
+  /* ── Scroll progress over the full 4×100vh section ─────────────── */
+  const { scrollYProgress } = useScroll({
+    target:  containerRef,
+    offset:  ['start start', 'end end'],
+  })
+
+  /* Active item driven by scroll */
+  useMotionValueEvent(scrollYProgress, 'change', (v) => {
+    const idx = Math.min(Math.floor(v * N), N - 1)
+    setActive(idx)
+  })
+
+  /* Extra fixed darkening — only visible while section is pinned */
+  const overlayOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.04, 0.96, 1],
+    [0,  0.42,  0.42, 0],
+  )
+
   return (
-    <section id="servicios" className="section-y" style={{ position: 'relative', zIndex: 10 }}>
-      <div className="site-container">
+    <>
+      {/* ── Extra video darkening (fixed, section-scoped) ─────────── */}
+      <motion.div
+        aria-hidden
+        style={{
+          position: 'fixed', inset: 0, zIndex: 5,
+          background: 'rgba(6,8,16,1)',
+          pointerEvents: 'none',
+          opacity: overlayOpacity,
+        }}
+      />
 
-        {/* Header */}
-        <motion.div {...inView} variants={stagger}
-          style={{ marginBottom: 'clamp(3rem, 6vw, 5rem)', display: 'grid',
-                   gridTemplateColumns: '1fr auto', alignItems: 'end', gap: '2rem' }}>
-          <div>
-            <motion.span variants={fadeInUp} className="type-label"
-              style={{ display: 'block', marginBottom: '1rem' }}>
-              Qué hago
-            </motion.span>
-            <motion.h2 variants={fadeInUp} style={{
-              fontFamily: 'var(--font-display)', fontWeight: 400, fontStyle: 'italic',
-              fontSize: 'clamp(2.25rem, 5vw, 4rem)', lineHeight: 0.95,
-              letterSpacing: '-0.02em', color: 'var(--color-star)',
+      {/* ── Outer section — sets the scroll height ────────────────── */}
+      <section
+        ref={containerRef}
+        id="servicios"
+        style={{
+          position: 'relative',
+          zIndex: 10,
+          height: `${N * 100}vh`,
+        }}
+      >
+        {/* ── Sticky viewport ───────────────────────────────────────── */}
+        <div style={{
+          position: 'sticky',
+          top: 0,
+          height: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          paddingTop: '5rem',      /* clear navbar (68px) */
+          paddingBottom: '2rem',
+          overflow: 'hidden',
+        }}>
+          <div className="site-container">
+
+            {/* Header */}
+            <div style={{ marginBottom: 'clamp(1.5rem, 3vw, 2.5rem)' }}>
+              <span className="type-label" style={{ display: 'block', marginBottom: '0.75rem' }}>
+                Qué hago
+              </span>
+              <h2 style={{
+                fontFamily: 'var(--font-display)', fontWeight: 800,
+                fontSize: 'clamp(1.875rem, 3.5vw, 2.875rem)',
+                lineHeight: 1.0, letterSpacing: '-0.03em',
+                color: 'var(--color-star)', margin: 0,
+              }}>
+                Cuatro formas de{' '}
+                <span style={{
+                  fontFamily: 'var(--font-serif)', fontStyle: 'italic',
+                  fontWeight: 400, color: 'var(--color-accent)',
+                }}>sumar valor real.</span>
+              </h2>
+            </div>
+
+            {/* Two-column layout */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: 'clamp(3rem, 6vw, 7rem)',
+              alignItems: 'start',
+            }}
+              className="services-grid"
+            >
+              {/* Left: item list */}
+              <div>
+                {SERVICES.map((s, i) => (
+                  <ServiceItem
+                    key={s.num}
+                    service={s}
+                    active={active === i}
+                    done={i < active}
+                    isLast={i === N - 1}
+                    scrollYProgress={scrollYProgress}
+                    index={i}
+                  />
+                ))}
+              </div>
+
+              {/* Right: animated detail panel */}
+              <div>
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={active}
+                    initial={{ opacity: 0, y: 18 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{   opacity: 0, y: -12 }}
+                    transition={{ duration: 0.38, ease: EASE }}
+                  >
+                    <ServiceDetail service={SERVICES[active]} />
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </div>
+
+            {/* Progress bar — bottom */}
+            <div style={{
+              marginTop: 'clamp(2rem, 4vw, 3rem)',
+              height: 1,
+              background: 'rgba(255,255,255,0.07)',
+              borderRadius: 99,
+              overflow: 'hidden',
             }}>
-              Cuatro formas de<br />sumar valor real.
-            </motion.h2>
+              <motion.div style={{
+                height: '100%',
+                background: 'var(--color-accent)',
+                width: useTransform(scrollYProgress, [0, 1], ['0%', '100%']),
+              }} />
+            </div>
+
           </div>
-          <motion.p variants={fadeInUp} style={{
-            fontFamily: 'var(--font-ui)', fontSize: '0.875rem',
-            color: 'var(--color-faint)', maxWidth: '28ch', textAlign: 'right',
-            lineHeight: 1.6,
-          }} className="hidden sm:block">
-            Negocio, validación<br />y ejecución — no solo código.
-          </motion.p>
-        </motion.div>
+        </div>
+      </section>
 
-        {/* Línea separadora */}
-        <div style={{ height: 1, background: 'var(--color-border)', marginBottom: 0 }} />
-
-        {/* Lista de servicios */}
-        <motion.div {...inView} variants={stagger}>
-          {SERVICES.map((s, i) => (
-            <ServiceRow key={s.num} service={s} index={i} last={i === SERVICES.length - 1} />
-          ))}
-        </motion.div>
-      </div>
-    </section>
+      <style>{`
+        @media (max-width: 768px) {
+          .services-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
+    </>
   )
 }
 
-function ServiceRow({ service, index, last }: {
-  service: typeof SERVICES[0]; index: number; last: boolean
+/* ─── Left item ──────────────────────────────────────────────────────── */
+function ServiceItem({
+  service, active, done, isLast, scrollYProgress, index,
+}: {
+  service: typeof SERVICES[0]
+  active: boolean
+  done: boolean
+  isLast: boolean
+  scrollYProgress: ReturnType<typeof useScroll>['scrollYProgress']
+  index: number
 }) {
-  const [hov, setHov] = useState(false)
+  /* Progress line fill — fills as this item's slot scrolls */
+  const lo = index / N
+  const hi = (index + 1) / N
+  const lineH = useTransform(scrollYProgress, [lo, hi], ['0%', '100%'])
 
   return (
-    <motion.div
-      variants={fadeInUp}
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
-      style={{
-        display: 'grid',
-        gridTemplateColumns: '3rem 1fr auto',
-        gap: 'clamp(1.5rem, 3vw, 2.5rem)',
-        alignItems: 'center',
-        padding: 'clamp(1.5rem, 3vw, 2rem) 0',
-        borderBottom: last ? 'none' : '1px solid var(--color-border)',
-        cursor: 'default',
-        transition: 'background 0.3s',
-      }}
-    >
-      {/* Número */}
-      <span style={{
-        fontFamily: 'var(--font-mono)', fontSize: '0.6875rem',
-        letterSpacing: '0.08em', color: hov ? 'var(--color-accent)' : 'var(--color-faint)',
-        transition: 'color 0.3s',
+    <div style={{
+      position: 'relative',
+      borderTop: '1px solid rgba(255,255,255,0.07)',
+      borderBottom: isLast ? '1px solid rgba(255,255,255,0.07)' : 'none',
+      display: 'flex',
+      gap: '1.25rem',
+    }}>
+      {/* Animated left line */}
+      <div style={{
+        position: 'relative',
+        width: 2,
+        flexShrink: 0,
+        background: 'rgba(255,255,255,0.07)',
+        alignSelf: 'stretch',
+      }}>
+        <motion.div style={{
+          position: 'absolute', top: 0, left: 0,
+          width: '100%', height: lineH,
+          background: active
+            ? 'var(--color-accent)'
+            : done ? 'rgba(34,211,238,0.4)' : 'transparent',
+        }} />
+      </div>
+
+      {/* Content */}
+      <div style={{
+        padding: 'clamp(1.25rem, 2.5vw, 1.875rem) 0',
+        flex: 1,
+        opacity: active ? 1 : done ? 0.55 : 0.38,
+        transition: 'opacity 0.4s',
+      }}>
+        <span style={{
+          display: 'block',
+          fontFamily: 'var(--font-mono)', fontSize: '0.625rem',
+          letterSpacing: '0.12em',
+          color: active ? 'var(--color-accent)' : 'var(--color-faint)',
+          marginBottom: '0.5rem',
+          transition: 'color 0.3s',
+        }}>
+          {service.num}
+        </span>
+
+        <h3 style={{
+          fontFamily: 'var(--font-display)', fontWeight: 800,
+          fontSize: 'clamp(1.5rem, 2.75vw, 2.375rem)',
+          letterSpacing: '-0.025em', lineHeight: 1.07,
+          color: 'var(--color-star)', margin: 0,
+        }}>
+          {service.title}
+        </h3>
+
+        <motion.div
+          animate={{ height: active ? 'auto' : 0, opacity: active ? 1 : 0 }}
+          transition={{ duration: 0.42, ease: EASE }}
+          style={{ overflow: 'hidden' }}
+        >
+          <p style={{
+            fontFamily: 'var(--font-ui)', fontSize: '0.875rem',
+            color: 'var(--color-muted)', lineHeight: 1.75,
+            margin: '0.75rem 0 0', maxWidth: '36ch',
+          }}>
+            {service.desc}
+          </p>
+        </motion.div>
+      </div>
+    </div>
+  )
+}
+
+/* ─── Right detail panel ─────────────────────────────────────────────── */
+function ServiceDetail({ service }: { service: typeof SERVICES[0] }) {
+  return (
+    <div style={{
+      position: 'relative',
+      padding: 'clamp(2rem, 3.5vw, 3rem)',
+      background: 'rgba(255,255,255,0.028)',
+      border: '1px solid rgba(255,255,255,0.07)',
+      borderTop: '1px solid rgba(34,211,238,0.35)',
+      borderRadius: 16,
+      overflow: 'hidden',
+    }}>
+      {/* Large faint number */}
+      <span aria-hidden style={{
+        position: 'absolute',
+        bottom: '-1.5rem', right: '1.5rem',
+        fontFamily: 'var(--font-display)', fontWeight: 800,
+        fontSize: '11rem', lineHeight: 1,
+        letterSpacing: '-0.05em',
+        color: 'rgba(255,255,255,0.025)',
+        userSelect: 'none', pointerEvents: 'none',
       }}>
         {service.num}
       </span>
 
-      {/* Título + descripción */}
-      <div>
-        <p style={{
-          fontFamily: 'var(--font-display)', fontWeight: 500,
-          fontSize: 'clamp(1.375rem, 2.5vw, 1.875rem)',
-          letterSpacing: '-0.015em', lineHeight: 1.1,
-          color: hov ? 'var(--color-star)' : 'rgba(237,232,223,0.88)',
-          transition: 'color 0.3s', marginBottom: '0.375rem',
+      <div style={{ position: 'relative', zIndex: 1 }}>
+        <span style={{
+          fontFamily: 'var(--font-ui)', fontSize: '0.625rem',
+          fontWeight: 600, letterSpacing: '0.16em', textTransform: 'uppercase',
+          color: 'var(--color-accent)',
+        }}>
+          {service.tag}
+        </span>
+
+        <h3 style={{
+          fontFamily: 'var(--font-display)', fontWeight: 800,
+          fontSize: 'clamp(1.75rem, 2.75vw, 2.5rem)',
+          letterSpacing: '-0.03em', lineHeight: 1.06,
+          color: 'var(--color-star)',
+          margin: '0.875rem 0 1.5rem',
         }}>
           {service.title}
-        </p>
-        <p style={{
-          fontFamily: 'var(--font-ui)', fontSize: '0.875rem',
-          color: 'var(--color-faint)', lineHeight: 1.6,
-          maxWidth: '52ch',
-          opacity: hov ? 1 : 0.7,
-          transition: 'opacity 0.3s',
-        }}>
-          {service.desc}
-        </p>
-      </div>
+        </h3>
 
-      {/* Arrow */}
-      <span style={{
-        fontFamily: 'var(--font-ui)', fontSize: '1.125rem',
-        color: 'var(--color-accent)',
-        opacity: hov ? 1 : 0,
-        transform: hov ? 'translateX(0)' : 'translateX(-8px)',
-        transition: 'opacity 0.3s, transform 0.3s var(--ease-expo)',
-      }}>
-        →
-      </span>
-    </motion.div>
+        <div style={{ height: 1, background: 'rgba(255,255,255,0.07)', marginBottom: '1.5rem' }} />
+
+        <p style={{
+          fontFamily: 'var(--font-ui)', fontSize: '0.9375rem',
+          lineHeight: 1.8, color: 'var(--color-muted)',
+          margin: '0 0 2.5rem',
+        }}>
+          {service.detail}
+        </p>
+
+        <span style={{
+          fontFamily: 'var(--font-mono)', fontSize: '0.6875rem',
+          letterSpacing: '0.06em', color: 'var(--color-faint)',
+        }}>
+          {service.stack}
+        </span>
+      </div>
+    </div>
   )
 }
-
-import { useState } from 'react'
