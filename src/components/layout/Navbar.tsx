@@ -12,9 +12,9 @@ const NAV_ITEMS = [
 ]
 
 const CONTACT_LINKS = [
-  { label: 'WhatsApp', href: 'https://wa.me/5491100000000', arrow: true },
-  { label: 'LinkedIn',  href: 'https://linkedin.com/in/kevinloggia', arrow: true },
-  { label: 'Email',     href: 'mailto:kevin@kevdev.com', arrow: true },
+  { label: 'WhatsApp', href: 'https://wa.me/542235851419', arrow: true },
+  { label: 'LinkedIn',  href: 'https://www.linkedin.com/in/kevin-loggia/', arrow: true },
+  { label: 'Email',     href: 'mailto:loggia.1996@gmail.com', arrow: true },
 ]
 
 const STACK_TAGS = ['React', 'Node.js', 'Firebase', 'FlutterFlow', 'IA', 'Automatización']
@@ -25,7 +25,12 @@ function scrollTo(href: string, cb?: () => void) {
   const el = document.querySelector(href)
   if (!el) return
   const lenis = (window as any).__lenis
-  lenis ? lenis.scrollTo(el, { offset: -80 }) : el.scrollIntoView({ behavior: 'smooth' })
+  if (lenis) {
+    lenis.start()
+    lenis.scrollTo(el, { offset: -80 })
+  } else {
+    el.scrollIntoView({ behavior: 'smooth' })
+  }
 }
 
 /* ─── Variants ──────────────────────────────────────────────────────── */
@@ -136,14 +141,9 @@ export default function Navbar() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1,  y: 0 }}
             transition={{ duration: 0.7, delay: 1.1, ease: EASE_OUT }}
-            style={{
-              fontFamily: 'var(--font-ui)', fontWeight: 700,
-              fontSize: '0.9375rem', letterSpacing: '0.12em',
-              textTransform: 'uppercase', color: 'var(--color-star)',
-              textDecoration: 'none', position: 'relative', zIndex: 101,
-            }}
+            style={{ textDecoration: 'none', position: 'relative', zIndex: 101, display: 'flex', alignItems: 'center' }}
           >
-            kev.dev
+            <img src="/kevdev-icono.png" alt="kevdev" style={{ height: 28, width: 'auto', display: 'block' }} />
           </motion.a>
 
           {/* Menu trigger */}

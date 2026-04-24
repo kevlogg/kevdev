@@ -3,7 +3,7 @@
 import { useRef, useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 
-const FRAME_COUNT = 328
+const FRAME_COUNT = 300
 
 /* ─── WebGL shaders ──────────────────────────────────────────────────── */
 const VERT_SRC = `
