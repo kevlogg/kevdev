@@ -17,7 +17,14 @@ const CONTACT_LINKS = [
   { label: 'Email',     href: 'mailto:loggia.1996@gmail.com', arrow: true },
 ]
 
-const STACK_TAGS = ['React', 'Node.js', 'Firebase', 'FlutterFlow', 'IA', 'Automatización']
+const STACK_TAGS = [
+  { label: 'React',          accent: true  },
+  { label: 'Node.js',        accent: false },
+  { label: 'Firebase',       accent: false },
+  { label: 'FlutterFlow',    accent: false },
+  { label: 'IA',             accent: false },
+  { label: 'Automatización', accent: false },
+]
 
 /* ─── Helpers ───────────────────────────────────────────────────────── */
 function scrollTo(href: string, cb?: () => void) {
@@ -374,19 +381,20 @@ export default function Navbar() {
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
                       {STACK_TAGS.map((tag, i) => (
                         <motion.span
-                          key={tag}
+                          key={tag.label}
                           custom={i + 5}
                           variants={rightV}
                           style={{
-                            fontFamily: 'var(--font-mono)', fontSize: '0.6875rem',
-                            padding: '0.3rem 0.65rem',
-                            border: '1px solid rgba(255,255,255,0.08)',
+                            fontFamily: 'var(--font-mono)', fontSize: '0.75rem',
+                            padding: '0.35rem 0.75rem',
+                            border: `1px solid ${tag.accent ? 'rgba(34,211,238,0.5)' : 'rgba(255,255,255,0.13)'}`,
                             borderRadius: 99,
-                            color: 'var(--color-faint)',
+                            color: tag.accent ? 'var(--color-accent)' : 'rgba(221,232,255,0.55)',
                             letterSpacing: '0.04em',
+                            background: tag.accent ? 'rgba(34,211,238,0.07)' : 'transparent',
                           }}
                         >
-                          {tag}
+                          {tag.label}
                         </motion.span>
                       ))}
                     </div>

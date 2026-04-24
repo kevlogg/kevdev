@@ -13,6 +13,7 @@ const PROJECTS = [
     description: 'Reservas online, panel administrativo y automatizaciones de recordatorios. Pensado para barberías, peluquerías y centros de estética que quieren profesionalizar su operación y crecer.',
     tags: ['Web app', 'SaaS', 'Firebase', 'React'],
     year: '2025',
+    href: 'https://kronitt.com.ar',
   },
   {
     name: 'GrowAi',
@@ -58,9 +59,11 @@ export default function Projects() {
 
 function ProjectCard({ project }: { project: typeof PROJECTS[0] }) {
   const [hov, setHov] = useState(false)
+  const Tag = project.href ? 'a' : 'div'
 
   return (
-    <div
+    <Tag
+      {...(project.href ? { href: project.href, target: '_blank', rel: 'noopener noreferrer' } : {})}
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
       style={{
@@ -70,8 +73,11 @@ function ProjectCard({ project }: { project: typeof PROJECTS[0] }) {
         background: hov ? 'rgba(255,255,255,0.03)' : 'rgba(6,8,16,0.45)',
         backdropFilter: 'blur(12px)',
         transition: 'border-color 0.35s, background 0.35s',
-        cursor: 'default', textAlign: 'center',
+        cursor: project.href ? 'pointer' : 'default',
+        textAlign: 'center',
         height: '100%',
+        textDecoration: 'none',
+        display: 'block',
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.625rem', marginBottom: '1.5rem' }}>
@@ -100,6 +106,6 @@ function ProjectCard({ project }: { project: typeof PROJECTS[0] }) {
           </span>
         ))}
       </div>
-    </div>
+    </Tag>
   )
 }

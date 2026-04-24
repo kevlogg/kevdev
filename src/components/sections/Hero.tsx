@@ -118,18 +118,34 @@ export default function Hero() {
             paddingTop:     'clamp(2rem, 4vw, 3rem)',
           }}
         >
-          <p style={{
-            fontFamily: 'var(--font-ui)',
-            fontWeight: 400,
-            fontSize:   'clamp(0.875rem, 1.1vw, 0.9375rem)',
-            lineHeight: 1.7,
-            color:      'var(--color-muted)',
-            maxWidth:   '36ch',
-            margin:     0,
-          }}>
-            Landing pages, web apps, MVPs y automatizaciones.<br />
-            Con foco en negocio, validación y ejecución real.
-          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+              {['Landing pages', 'Web apps', 'MVPs', 'Automatizaciones'].map(chip => (
+                <span key={chip} style={{
+                  fontFamily:    'var(--font-mono)',
+                  fontSize:      'clamp(0.625rem, 0.9vw, 0.75rem)',
+                  letterSpacing: '0.05em',
+                  color:         'rgba(221,232,255,0.55)',
+                  border:        '1px solid rgba(255,255,255,0.13)',
+                  borderRadius:  99,
+                  padding:       '0.3rem 0.75rem',
+                }}>
+                  {chip}
+                </span>
+              ))}
+            </div>
+            <p style={{
+              fontFamily: 'var(--font-ui)',
+              fontWeight: 400,
+              fontSize:   'clamp(0.8rem, 1vw, 0.875rem)',
+              lineHeight: 1.6,
+              color:      'var(--color-muted)',
+              maxWidth:   '36ch',
+              margin:     0,
+            }}>
+              Con foco en negocio, validación y ejecución real.
+            </p>
+          </div>
 
           <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexShrink: 0 }}>
             <CTADark onClick={() => scrollTo('#proyectos')}>Ver proyectos</CTADark>
