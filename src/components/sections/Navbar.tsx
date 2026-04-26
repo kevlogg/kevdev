@@ -138,7 +138,7 @@ export default function Navbar() {
             transition={{ duration: 0.7, delay: 1.1, ease: EASE_OUT }}
             style={{
               fontFamily: 'var(--font-ui)', fontWeight: 700,
-              fontSize: '0.9375rem', letterSpacing: '0.12em',
+              fontSize: '1.125rem', letterSpacing: '0.12em',
               textTransform: 'uppercase', color: 'var(--color-star)',
               textDecoration: 'none', position: 'relative', zIndex: 101,
             }}
@@ -318,7 +318,8 @@ export default function Navbar() {
                   style={{
                     display: 'none', /* shown via media query below */
                     flexDirection: 'column',
-                    justifyContent: 'space-between',
+                    justifyContent: 'flex-start',
+                    gap: 'clamp(2rem, 6vh, 4rem)',
                     paddingLeft: 'clamp(2rem, 4vw, 5rem)',
                     borderLeft: '1px solid rgba(255,255,255,0.07)',
                   }}

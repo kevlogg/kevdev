@@ -16,6 +16,16 @@ const PROJECTS = [
     href: 'https://kronitt.com.ar',
   },
   {
+    name: 'Experience Fly',
+    status: 'En producción',
+    statusDot: 'var(--color-accent)',
+    tagline: 'Landing inmersiva para una aerolínea de experiencias premium.',
+    description: 'Cockpit 3D interactivo con scroll, planificador de vuelos, sección de destinos y asistente IA integrado. Proyecto de diseño y desarrollo frontend de alto impacto visual.',
+    tags: ['Next.js', 'Three.js', 'Framer Motion', 'IA'],
+    year: '2025',
+    href: 'https://experience-fly.vercel.app/',
+  },
+  {
     name: 'GrowAi',
     status: 'En construcción',
     statusDot: 'rgba(221,232,255,0.25)',
@@ -30,7 +40,6 @@ export default function Projects() {
   return (
     <section id="proyectos" style={{ position: 'relative', zIndex: 10, padding: 'clamp(5rem, 10vw, 9rem) 0' }}>
       <div style={{ maxWidth: 820, marginInline: 'auto', paddingInline: 'var(--gutter)' }}>
-
         <TunnelReveal style={{ textAlign: 'center', marginBottom: '1rem' }}>
           <span className="type-label">Proyectos reales</span>
         </TunnelReveal>
@@ -44,14 +53,27 @@ export default function Projects() {
             Ejecución real,<br />no portfolios ficticios.
           </h2>
         </TunnelReveal>
+      </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.25rem' }}>
-          {PROJECTS.map((p, i) => (
-            <TunnelReveal key={p.name} delay={i * 0.1}>
-              <ProjectCard project={p} />
-            </TunnelReveal>
-          ))}
-        </div>
+      <div style={{
+        display: 'flex',
+        overflowX: 'auto',
+        gap: '1.25rem',
+        paddingInline: 'var(--gutter)',
+        paddingBottom: '1rem',
+        scrollSnapType: 'x mandatory',
+        WebkitOverflowScrolling: 'touch',
+        msOverflowStyle: 'none',
+        scrollbarWidth: 'none',
+      }}
+      id="proyectos-scroll"
+      >
+        <style>{`#proyectos-scroll::-webkit-scrollbar { display: none; }`}</style>
+        {PROJECTS.map((p, i) => (
+          <TunnelReveal key={p.name} delay={i * 0.1} style={{ flexShrink: 0, width: 'clamp(280px, 38vw, 400px)', scrollSnapAlign: 'start' }}>
+            <ProjectCard project={p} />
+          </TunnelReveal>
+        ))}
       </div>
     </section>
   )

@@ -150,7 +150,7 @@ export default function Navbar() {
             transition={{ duration: 0.7, delay: 1.1, ease: EASE_OUT }}
             style={{ textDecoration: 'none', position: 'relative', zIndex: 101, display: 'flex', alignItems: 'center' }}
           >
-            <img src="/kevdev-icono.png" alt="kevdev" style={{ height: 28, width: 'auto', display: 'block' }} />
+            <img src="/kevdev-icono.png" alt="kevdev" style={{ height: 42, width: 'auto', display: 'block' }} />
           </motion.a>
 
           {/* Menu trigger */}
@@ -325,8 +325,10 @@ export default function Navbar() {
                   style={{
                     display: 'none', /* shown via media query below */
                     flexDirection: 'column',
-                    justifyContent: 'space-between',
+                    justifyContent: 'flex-start',
+                    gap: 'clamp(2.5rem, 7vh, 5rem)',
                     paddingLeft: 'clamp(2rem, 4vw, 5rem)',
+                    paddingBottom: 'clamp(1rem, 3vh, 2rem)',
                     borderLeft: '1px solid rgba(255,255,255,0.07)',
                   }}
                 >
