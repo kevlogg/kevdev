@@ -34,6 +34,16 @@ const PROJECTS = [
     tags: ['Mobile web', 'Firebase', 'IA', 'Comunidad'],
     year: '2025',
   },
+  {
+    name: 'Bad Bee',
+    status: 'En producción',
+    statusDot: 'var(--color-accent)',
+    tagline: 'Landing para una marca de miel artesanal.',
+    description: 'Sitio de presentación para Bad Bee, marca de miel con identidad visual fuerte. Diseño limpio, orientado a conversión y con foco en transmitir autenticidad del producto.',
+    tags: ['Next.js', 'Landing', 'Branding'],
+    year: '2025',
+    href: 'https://v0-bad-bee-landing-page-ng5w.vercel.app/',
+  },
 ]
 
 export default function Projects() {
