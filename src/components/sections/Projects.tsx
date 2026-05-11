@@ -27,12 +27,13 @@ const PROJECTS = [
   },
   {
     name: 'GrowAi',
-    status: 'En construcción',
-    statusDot: 'rgba(221,232,255,0.25)',
+    status: 'En producción',
+    statusDot: 'var(--color-accent)',
     tagline: 'App de seguimiento de cultivo, diagnóstico y comunidad de nicho.',
     description: 'Seguimiento de ciclos, registro de acciones, diagnóstico asistido por imágenes y comunidad integrada. Producto de nicho con visión de utilidad real y retención por engagement.',
     tags: ['Mobile web', 'Firebase', 'IA', 'Comunidad'],
     year: '2025',
+    href: 'https://growai.com.ar',
   },
   {
     name: 'Bad Bee',
