@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import TunnelReveal from '@/components/ui/TunnelReveal'
 
 const WA_HREF = 'https://wa.me/542235851419?text=Hola%20Kevin%2C%20te%20escribo%20desde%20kevdev.com'
 
@@ -18,11 +17,11 @@ export default function Contact() {
 
         <div style={{ height: 1, background: 'var(--color-border)', marginBottom: 'clamp(3rem, 6vw, 5rem)' }} />
 
-        <TunnelReveal style={{ marginBottom: '1.25rem' }}>
+        <div style={{ marginBottom: '1.25rem' }}>
           <span className="type-label">Hablemos</span>
-        </TunnelReveal>
+        </div>
 
-        <TunnelReveal delay={0.08} style={{ marginBottom: 'clamp(1.5rem, 3vw, 2rem)' }}>
+        <div style={{ marginBottom: 'clamp(1.5rem, 3vw, 2rem)' }}>
           <h2 style={{
             fontFamily: 'var(--font-display)', fontWeight: 800, fontStyle: 'normal',
             fontSize: 'clamp(2.5rem, 7vw, 5.5rem)', lineHeight: 0.96,
@@ -34,9 +33,9 @@ export default function Contact() {
               color: 'var(--color-accent)',
             }}>Construyámosla.</span>
           </h2>
-        </TunnelReveal>
+        </div>
 
-        <TunnelReveal delay={0.16} style={{ marginBottom: 'clamp(2rem, 4vw, 3rem)' }}>
+        <div style={{ marginBottom: 'clamp(2rem, 4vw, 3rem)' }}>
           <p style={{
             fontFamily: 'var(--font-ui)', fontSize: 'clamp(0.9375rem, 1.5vw, 1.0625rem)',
             color: 'var(--color-muted)', lineHeight: 1.7,
@@ -45,7 +44,7 @@ export default function Contact() {
             Si tenés una idea, un proceso para mejorar o un producto por lanzar, escribime.
             Sin formularios. Sin fricción.
           </p>
-        </TunnelReveal>
+        </div>
 
         <div style={{ marginBottom: 'clamp(1.5rem, 3vw, 2rem)' }}>
           <a
@@ -87,6 +86,7 @@ export default function Contact() {
         <div style={{ display: 'flex', gap: 'clamp(1rem, 3vw, 2rem)', flexWrap: 'wrap', justifyContent: 'center' }}>
           {LINKS.map(link => <ContactLink key={link.label} link={link} />)}
         </div>
+
       </div>
     </section>
   )
