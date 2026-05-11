@@ -47,7 +47,7 @@ export default function Contact() {
           </p>
         </TunnelReveal>
 
-        <TunnelReveal delay={0.22} style={{ marginBottom: 'clamp(1.5rem, 3vw, 2rem)' }}>
+        <div style={{ marginBottom: 'clamp(1.5rem, 3vw, 2rem)' }}>
           <a
             href={WA_HREF}
             target="_blank"
@@ -82,13 +82,11 @@ export default function Contact() {
             </svg>
             Escribime por WhatsApp
           </a>
-        </TunnelReveal>
+        </div>
 
-        <TunnelReveal delay={0.3}>
-          <div style={{ display: 'flex', gap: 'clamp(1rem, 3vw, 2rem)', flexWrap: 'wrap', justifyContent: 'center' }}>
-            {LINKS.map(link => <ContactLink key={link.label} link={link} />)}
-          </div>
-        </TunnelReveal>
+        <div style={{ display: 'flex', gap: 'clamp(1rem, 3vw, 2rem)', flexWrap: 'wrap', justifyContent: 'center' }}>
+          {LINKS.map(link => <ContactLink key={link.label} link={link} />)}
+        </div>
       </div>
     </section>
   )
