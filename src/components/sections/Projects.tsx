@@ -44,6 +44,16 @@ const PROJECTS = [
     year: '2025',
     href: 'https://v0-bad-bee-landing-page-ng5w.vercel.app/',
   },
+  {
+    name: 'Tienda de Astillas',
+    status: 'En producción',
+    statusDot: 'var(--color-accent)',
+    tagline: 'E-commerce de productos artesanales en madera.',
+    description: 'Tienda online para una marca de productos de madera trabajada a mano. Catálogo de productos, carrito de compras y flujo de pago integrado. Identidad visual cálida y artesanal que transmite el valor del trabajo manual.',
+    tags: ['Next.js', 'E-commerce', 'Landing', 'Branding'],
+    year: '2025',
+    href: 'https://tiendadeastillas.com.ar',
+  },
 ]
 
 export default function Projects() {
