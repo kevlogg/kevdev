@@ -6,7 +6,7 @@ import TunnelReveal from '@/components/ui/TunnelReveal'
 const PILLARS = [
   { label: 'Producto',   desc: 'Pienso en el usuario y en el negocio antes de tocar código.' },
   { label: 'Validación', desc: 'Construyo lo mínimo necesario para probar una hipótesis real.' },
-  { label: 'Ejecución',  desc: 'Entrego cosas que funcionan, no prototipos ni demos.' },
+  { label: 'Ejecución',  desc: 'Entrego productos que funcionan, no prototipos ni demos.' },
 ]
 
 export default function Approach() {
@@ -36,7 +36,7 @@ export default function Approach() {
           }}>
             Pienso producto, negocio y validación antes de escribir la primera línea de código.{' '}
             <span style={{ color: 'var(--color-star)' }}>
-              Construyo cosas para usarse, no solo para verse bien.
+              Construyo productos para usarse, no solo para verse bien.
             </span>
           </p>
         </TunnelReveal>
