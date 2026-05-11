@@ -46,6 +46,16 @@ const PROJECTS = [
     href: 'https://v0-bad-bee-landing-page-ng5w.vercel.app/',
   },
   {
+    name: 'Nexo',
+    status: 'En construcción',
+    statusDot: 'rgba(221,232,255,0.25)',
+    tagline: 'App para parejas con sincronización en tiempo real.',
+    description: 'Estado emocional, mensajes, necesidades y gestos de amor sincronizados al instante. Construida con Firebase Realtime y notificaciones push para mantener la conexión activa entre dos personas.',
+    tags: ['React', 'Firebase', 'Tiempo real', 'Mobile web'],
+    year: '2025',
+    href: 'https://nexo-seven-nu.vercel.app/',
+  },
+  {
     name: 'Tienda de Astillas',
     status: 'En producción',
     statusDot: 'var(--color-accent)',
