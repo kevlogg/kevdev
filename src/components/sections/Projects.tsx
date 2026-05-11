@@ -75,22 +75,18 @@ export default function Projects() {
         </TunnelReveal>
       </div>
 
-      <div style={{
-        display: 'flex',
-        overflowX: 'auto',
+      <div id="proyectos-grid" style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(3, 1fr)',
         gap: '1.25rem',
         paddingInline: 'var(--gutter)',
-        paddingBottom: '1rem',
-        scrollSnapType: 'x mandatory',
-        WebkitOverflowScrolling: 'touch',
-        msOverflowStyle: 'none',
-        scrollbarWidth: 'none',
-      }}
-      id="proyectos-scroll"
-      >
-        <style>{`#proyectos-scroll::-webkit-scrollbar { display: none; }`}</style>
+      }}>
+        <style>{`
+          @media (max-width: 900px) { #proyectos-grid { grid-template-columns: repeat(2, 1fr) !important; } }
+          @media (max-width: 560px) { #proyectos-grid { grid-template-columns: 1fr !important; } }
+        `}</style>
         {PROJECTS.map((p, i) => (
-          <TunnelReveal key={p.name} delay={i * 0.1} style={{ flexShrink: 0, width: 'clamp(280px, 38vw, 400px)', scrollSnapAlign: 'start' }}>
+          <TunnelReveal key={p.name} delay={i * 0.1}>
             <ProjectCard project={p} />
           </TunnelReveal>
         ))}
