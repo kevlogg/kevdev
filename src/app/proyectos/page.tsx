@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import Navbar from '@/components/layout/Navbar'
 import { PROJECTS, type Project } from '@/lib/projects'
@@ -27,6 +27,7 @@ export default function ProyectosPage() {
   const [pageState, setPageState]       = useState<PageState>('intro')
   const [currentIndex, setCurrentIndex] = useState(0)
   const [direction, setDirection]       = useState<1 | -1>(1)
+  const videoRef = useRef<HTMLVideoElement>(null)
 
   const enterCarousel = useCallback(() => setPageState('carousel'), [])
 
@@ -35,12 +36,20 @@ export default function ProyectosPage() {
     setCurrentIndex(prev => (prev + dir + PROJECTS.length) % PROJECTS.length)
   }, [])
 
+  useEffect(() => {
+    const v = videoRef.current
+    if (!v) return
+    v.currentTime = 0
+    v.play()
+  }, [currentIndex])
+
   return (
     <div style={{ position: 'relative', width: '100vw', height: '100vh', overflow: 'hidden' }}>
       <div className="grain"    aria-hidden />
       <div className="vignette" aria-hidden />
 
       <video
+        ref={videoRef}
         autoPlay
         muted
         loop
