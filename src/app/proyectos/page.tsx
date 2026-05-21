@@ -123,7 +123,7 @@ function IntroState({ onEnter }: { onEnter: () => void }) {
         transition={{ duration: 0.7, delay: 0.2, ease: EASE_OUT }}
         style={{ color: 'var(--color-accent)' }}
       >
-        02 — Proyectos
+        Proyectos
       </motion.span>
 
       <motion.h1

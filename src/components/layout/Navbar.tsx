@@ -159,7 +159,7 @@ export default function Navbar() {
           {/* Wordmark */}
           <motion.a
             href="#"
-            onClick={e => { e.preventDefault(); close(); (window as any).__lenis?.scrollTo(0) }}
+            onClick={e => { e.preventDefault(); close(); if (pathname !== '/') { router.push('/') } else { (window as any).__lenis?.scrollTo(0) } }}
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1,  y: 0 }}
             transition={{ duration: 0.7, delay: 1.1, ease: EASE_OUT }}
