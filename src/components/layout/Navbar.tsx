@@ -121,8 +121,8 @@ export default function Navbar() {
     }
     // Anchor (e.g., #servicios)
     if (pathname !== '/') {
-      // On a different page: navigate to homepage with anchor
-      router.push('/' + href)
+      // Hard navigation so browser handles hash scroll natively (Lenis-safe)
+      window.location.href = '/' + href
       return
     }
     // Same page: smooth scroll
