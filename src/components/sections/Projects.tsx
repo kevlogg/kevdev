@@ -24,7 +24,7 @@ export default function Projects() {
 
         <TunnelReveal delay={0.16} style={{ marginBottom: '2.5rem' }}>
           <p style={{ fontFamily: 'var(--font-ui)', fontSize: '1rem', color: 'var(--color-muted)', lineHeight: 1.6 }}>
-            6 productos en producción. Sin demos, sin relleno.
+            8 productos en producción. Sin demos, sin relleno.
           </p>
         </TunnelReveal>
 

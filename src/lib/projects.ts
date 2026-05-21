@@ -83,4 +83,27 @@ export const PROJECTS: Project[] = [
     href: 'https://tiendadeastillas.com.ar',
     color: '#fb923c',
   },
+  {
+    name: 'Mundialito',
+    status: 'En producción',
+    statusDot: 'var(--color-accent)',
+    tagline: 'Torneo de pronósticos para el Mundial 2026 con plata real.',
+    description:
+      'App de pronósticos con torneos privados y públicos, entry fees en ARS y distribución automática del pozo. Leaderboard en tiempo real, sincronización de partidos y hasta 100 participantes por torneo.',
+    tags: ['Next.js', 'Firebase', 'MercadoPago', 'Tiempo real'],
+    year: '2025',
+    href: 'https://mundialito-gold.vercel.app',
+    color: '#00D26A',
+  },
+  {
+    name: 'Andreac Tejidos',
+    status: 'En construcción',
+    statusDot: 'rgba(221,232,255,0.25)',
+    tagline: 'Landing premium para una marca de ropa artesanal.',
+    description:
+      'Sitio de presentación para marca textil artesanal con talleres, tienda, galería y testimonios. Diseño cálido y editorial que transmite el valor del trabajo a mano.',
+    tags: ['React', 'Vite', 'Framer Motion', 'Branding'],
+    year: '2025',
+    color: '#c9a97a',
+  },
 ]
