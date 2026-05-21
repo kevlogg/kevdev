@@ -1,12 +1,13 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import { useRouter, usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 
 /* ─── Data ──────────────────────────────────────────────────────────── */
 const NAV_ITEMS = [
   { href: '#servicios', label: 'Servicios', index: '01' },
-  { href: '#proyectos', label: 'Proyectos', index: '02' },
+  { href: '/proyectos', label: 'Proyectos', index: '02' },
   { href: '#enfoque',   label: 'Enfoque',   index: '03' },
   { href: '#contacto',  label: 'Contacto',  index: '04' },
 ]
@@ -25,20 +26,6 @@ const STACK_TAGS = [
   { label: 'IA',             accent: false },
   { label: 'Automatización', accent: false },
 ]
-
-/* ─── Helpers ───────────────────────────────────────────────────────── */
-function scrollTo(href: string, cb?: () => void) {
-  cb?.()
-  const el = document.querySelector(href)
-  if (!el) return
-  const lenis = (window as any).__lenis
-  if (lenis) {
-    lenis.start()
-    lenis.scrollTo(el, { offset: -80 })
-  } else {
-    el.scrollIntoView({ behavior: 'smooth' })
-  }
-}
 
 /* ─── Variants ──────────────────────────────────────────────────────── */
 const EASE_EXPO: [number,number,number,number] = [0.76, 0, 0.24, 1]
@@ -90,6 +77,9 @@ export default function Navbar() {
   const [open, setOpen]         = useState(false)
   const [hovered, setHovered]   = useState<number | null>(null)
 
+  const router   = useRouter()
+  const pathname = usePathname()
+
   /* Scroll detection */
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 32)
@@ -121,6 +111,31 @@ export default function Navbar() {
   }, [open])
 
   const close = useCallback(() => setOpen(false), [])
+
+  const handleNav = useCallback((href: string, cb?: () => void) => {
+    cb?.()
+    if (href.startsWith('/')) {
+      // Page route (e.g., /proyectos)
+      if (pathname !== href) router.push(href)
+      return
+    }
+    // Anchor (e.g., #servicios)
+    if (pathname !== '/') {
+      // On a different page: navigate to homepage with anchor
+      router.push('/' + href)
+      return
+    }
+    // Same page: smooth scroll
+    const el = document.querySelector(href)
+    if (!el) return
+    const lenis = (window as any).__lenis
+    if (lenis) {
+      lenis.start()
+      lenis.scrollTo(el, { offset: -80 })
+    } else {
+      el.scrollIntoView({ behavior: 'smooth' })
+    }
+  }, [pathname, router])
 
   return (
     <>
@@ -247,7 +262,7 @@ export default function Navbar() {
                         <motion.button
                           custom={i}
                           variants={itemV}
-                          onClick={() => scrollTo(item.href, close)}
+                          onClick={() => handleNav(item.href, close)}
                           style={{
                             background: 'none', border: 'none', cursor: 'pointer',
                             padding: 0, display: 'flex', alignItems: 'baseline',
