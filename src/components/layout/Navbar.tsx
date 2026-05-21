@@ -255,7 +255,7 @@ export default function Navbar() {
 
                       {/* Nav row */}
                       <motion.div
-                        style={{ overflow: 'hidden', padding: 'clamp(0.6rem, 1.5vw, 1rem) 0' }}
+                        style={{ overflow: 'hidden', padding: 'clamp(0.4rem, min(1.5vw, 1.8vh), 1rem) 0' }}
                         onMouseEnter={() => setHovered(i)}
                         onMouseLeave={() => setHovered(null)}
                       >
@@ -289,7 +289,7 @@ export default function Navbar() {
                           <span style={{
                             fontFamily: 'var(--font-display)',
                             fontStyle: 'normal',
-                            fontSize: 'clamp(2.75rem, 8.5vw, 7.5rem)',
+                            fontSize: 'clamp(2rem, min(8.5vw, 11vh), 7.5rem)',
                             fontWeight: 800,
                             lineHeight: 1.0,
                             letterSpacing: '-0.03em',
