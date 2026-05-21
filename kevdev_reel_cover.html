@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>kevdev — reel cover 1080x1920</title>
+<style>
+  html, body { margin: 0; padding: 0; background: #0a0a0a; }
+  /* Renderizado a tamaño exacto 1080x1920 para captura/exportación 1:1 */
+  .frame {
+    width: 1080px;
+    height: 1920px;
+    position: relative;
+  }
+  .frame object {
+    width: 1080px;
+    height: 1920px;
+    display: block;
+  }
+  /* Botón de descarga PNG (vía canvas) */
+  .toolbar {
+    position: fixed; top: 12px; right: 12px; z-index: 10;
+    background: #1a1a1a; color: #f5f5f0;
+    padding: 10px 14px; border-radius: 6px;
+    font-family: -apple-system, "Segoe UI", Arial, sans-serif;
+    font-size: 13px; cursor: pointer; border: 1px solid #2e2e2e;
+  }
+</style>
+</head>
+<body>
+  <button class="toolbar" onclick="exportPNG()">Descargar PNG (1080×1920)</button>
+  <div class="frame">
+    <object data="kevdev_reel_cover.svg" type="image/svg+xml"></object>
+  </div>
+
+  <script>
+    async function exportPNG() {
+      const res = await fetch('kevdev_reel_cover.svg');
+      const svgText = await res.text();
+      const svgBlob = new Blob([svgText], { type: 'image/svg+xml;charset=utf-8' });
+      const url = URL.createObjectURL(svgBlob);
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = 1080;
+        canvas.height = 1920;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#0a0a0a';
+        ctx.fillRect(0, 0, 1080, 1920);
+        ctx.drawImage(img, 0, 0, 1080, 1920);
+        URL.revokeObjectURL(url);
+        canvas.toBlob((blob) => {
+          const link = document.createElement('a');
+          link.download = 'kevdev_reel_cover.png';
+          link.href = URL.createObjectURL(blob);
+          link.click();
+        }, 'image/png');
+      };
+      img.src = url;
+    }
+  </script>
+</body>
+</html>

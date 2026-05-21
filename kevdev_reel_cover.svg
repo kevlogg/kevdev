@@ -1,0 +1,220 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="1080" height="1920" preserveAspectRatio="xMidYMid meet">
+  <!-- ============================================================
+       kevdev — reel cover 9:16 (1080x1920)
+       Minimalist · flat · pro · NO text (overlay en CapCut)
+       ============================================================ -->
+
+  <!-- Background -->
+  <rect width="1080" height="1920" fill="#0a0a0a"/>
+
+  <defs>
+    <!-- Phone body -->
+    <symbol id="phoneFrame" viewBox="0 0 470 950">
+      <!-- bezel -->
+      <rect x="0" y="0" width="470" height="950" rx="56" ry="56" fill="#1a1a1a"/>
+      <!-- inner screen mask area background drawn per-phone -->
+      <!-- side buttons -->
+      <rect x="-3" y="180" width="4" height="60" fill="#2e2e2e"/>
+      <rect x="-3" y="260" width="4" height="70" fill="#2e2e2e"/>
+      <rect x="469" y="220" width="4" height="70" fill="#2e2e2e"/>
+      <!-- notch / dynamic island -->
+      <rect x="170" y="26" width="130" height="28" rx="14" ry="14" fill="#050505"/>
+    </symbol>
+
+    <clipPath id="screenClipLeft">
+      <rect x="74" y="194" width="442" height="922" rx="44" ry="44"/>
+    </clipPath>
+    <clipPath id="screenClipRight">
+      <rect x="564" y="194" width="442" height="922" rx="44" ry="44"/>
+    </clipPath>
+
+    <!-- Reusable favicon for "site" entries -->
+    <symbol id="favSite" viewBox="0 0 22 22">
+      <circle cx="11" cy="11" r="11" fill="#3a3a3a"/>
+    </symbol>
+    <symbol id="favNoSite" viewBox="0 0 22 22">
+      <circle cx="11" cy="11" r="11" fill="#d8d8d3"/>
+    </symbol>
+  </defs>
+
+  <!-- ============================================================
+       LEFT PHONE — Google search results
+       ============================================================ -->
+  <g>
+    <use href="#phoneFrame" x="60" y="180" width="470" height="950"/>
+    <!-- screen background -->
+    <rect x="74" y="194" width="442" height="922" rx="44" ry="44" fill="#f5f5f0"/>
+
+    <g clip-path="url(#screenClipLeft)" font-family="Inter, 'Helvetica Neue', Arial, sans-serif">
+      <!-- Status bar -->
+      <text x="100" y="232" fill="#1c1c1c" font-size="15" font-weight="700">9:41</text>
+      <!-- signal bars -->
+      <rect x="430" y="222" width="3" height="6" fill="#1c1c1c"/>
+      <rect x="436" y="220" width="3" height="8" fill="#1c1c1c"/>
+      <rect x="442" y="217" width="3" height="11" fill="#1c1c1c"/>
+      <rect x="448" y="214" width="3" height="14" fill="#1c1c1c"/>
+      <!-- battery -->
+      <rect x="465" y="218" width="28" height="12" rx="3" ry="3" fill="none" stroke="#1c1c1c" stroke-width="1"/>
+      <rect x="468" y="221" width="20" height="6" fill="#1c1c1c"/>
+
+      <!-- Google search bar -->
+      <rect x="92" y="254" width="406" height="46" rx="23" ry="23" fill="#ffffff" stroke="#dcdcd6" stroke-width="1"/>
+      <!-- G stand-in (minimalist circle) -->
+      <circle cx="115" cy="277" r="10" fill="none" stroke="#7d7d7d" stroke-width="2"/>
+      <text x="140" y="282" fill="#1c1c1c" font-size="15">plomeros zona norte</text>
+      <!-- mic dot -->
+      <circle cx="478" cy="277" r="9" fill="#b9b9b3"/>
+
+      <!-- Tabs -->
+      <g font-size="15">
+        <text x="92" y="338" fill="#1c1c1c" font-weight="600">Todos</text>
+        <rect x="92" y="346" width="56" height="3" fill="#1c1c1c"/>
+        <text x="170" y="338" fill="#8c8c8c">Maps</text>
+        <text x="225" y="338" fill="#8c8c8c">Imágenes</text>
+        <text x="320" y="338" fill="#8c8c8c">Videos</text>
+      </g>
+      <line x1="92" y1="370" x2="498" y2="370" stroke="#e2e2dc" stroke-width="1"/>
+
+      <!-- Results -->
+      <!-- Entry 1 — WITH SITE -->
+      <g transform="translate(92,392)">
+        <use href="#favSite" x="0" y="2" width="22" height="22"/>
+        <text x="32" y="14" fill="#1c1c1c" font-size="14">Plomería Express SRL</text>
+        <text x="32" y="32" fill="#208046" font-size="13">plomeriaexpress.com.ar</text>
+        <text x="0" y="60" fill="#1c1c1c" font-size="17" font-weight="700">Plomería Express — Servicio 24hs</text>
+        <text x="0" y="82" fill="#8c8c8c" font-size="13">Presupuesto sin cargo · Zona Norte y CABA</text>
+        <text x="0" y="100" fill="#8c8c8c" font-size="13">Atención inmediata · WhatsApp</text>
+        <line x1="0" y1="118" x2="406" y2="118" stroke="#e2e2dc" stroke-width="1"/>
+      </g>
+
+      <!-- Entry 2 — NO SITE -->
+      <g transform="translate(92,524)">
+        <use href="#favNoSite" x="0" y="2" width="22" height="22"/>
+        <text x="32" y="14" fill="#8c8c8c" font-size="14">Don Carlos Plomero</text>
+        <text x="32" y="32" fill="#b85050" font-size="13">Sin sitio web</text>
+        <text x="0" y="60" fill="#555555" font-size="17" font-weight="700">Don Carlos Plomero</text>
+        <text x="0" y="82" fill="#9a9a9a" font-size="13">Solo teléfono · Sin información</text>
+        <text x="0" y="100" fill="#9a9a9a" font-size="13">Sin reseñas · Sin horarios</text>
+        <line x1="0" y1="118" x2="406" y2="118" stroke="#e2e2dc" stroke-width="1"/>
+      </g>
+
+      <!-- Entry 3 — WITH SITE -->
+      <g transform="translate(92,656)">
+        <use href="#favSite" x="0" y="2" width="22" height="22"/>
+        <text x="32" y="14" fill="#1c1c1c" font-size="14">Aqua Service 24hs</text>
+        <text x="32" y="32" fill="#208046" font-size="13">aquaservice24.com</text>
+        <text x="0" y="60" fill="#1c1c1c" font-size="17" font-weight="700">Aqua Service — Plomería pro</text>
+        <text x="0" y="82" fill="#8c8c8c" font-size="13">Destapaciones · Calderas · Termotanques</text>
+        <text x="0" y="100" fill="#8c8c8c" font-size="13">★ 4.8 (213 reseñas)</text>
+        <line x1="0" y1="118" x2="406" y2="118" stroke="#e2e2dc" stroke-width="1"/>
+      </g>
+
+      <!-- Entry 4 — NO SITE -->
+      <g transform="translate(92,788)">
+        <use href="#favNoSite" x="0" y="2" width="22" height="22"/>
+        <text x="32" y="14" fill="#8c8c8c" font-size="14">Plomero del Barrio</text>
+        <text x="32" y="32" fill="#b85050" font-size="13">Sin sitio web</text>
+        <text x="0" y="60" fill="#555555" font-size="17" font-weight="700">Plomero del Barrio</text>
+        <text x="0" y="82" fill="#9a9a9a" font-size="13">Sin información disponible</text>
+        <text x="0" y="100" fill="#9a9a9a" font-size="13">Sin reseñas</text>
+        <line x1="0" y1="118" x2="406" y2="118" stroke="#e2e2dc" stroke-width="1"/>
+      </g>
+
+      <!-- Entry 5 — WITH SITE -->
+      <g transform="translate(92,920)">
+        <use href="#favSite" x="0" y="2" width="22" height="22"/>
+        <text x="32" y="14" fill="#1c1c1c" font-size="14">TecnoPlomería</text>
+        <text x="32" y="32" fill="#208046" font-size="13">tecnoplomeria.com.ar</text>
+        <text x="0" y="60" fill="#1c1c1c" font-size="17" font-weight="700">TecnoPlomería — Soluciones</text>
+        <text x="0" y="82" fill="#8c8c8c" font-size="13">Reparación e instalación · Garantía</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- ============================================================
+       RIGHT PHONE — Minimalist professional website
+       ============================================================ -->
+  <g>
+    <use href="#phoneFrame" x="550" y="180" width="470" height="950"/>
+    <!-- screen background -->
+    <rect x="564" y="194" width="442" height="922" rx="44" ry="44" fill="#f5f5f0"/>
+
+    <g clip-path="url(#screenClipRight)" font-family="Inter, 'Helvetica Neue', Arial, sans-serif">
+      <!-- Status bar -->
+      <text x="590" y="232" fill="#1c1c1c" font-size="15" font-weight="700">9:41</text>
+      <rect x="920" y="222" width="3" height="6" fill="#1c1c1c"/>
+      <rect x="926" y="220" width="3" height="8" fill="#1c1c1c"/>
+      <rect x="932" y="217" width="3" height="11" fill="#1c1c1c"/>
+      <rect x="938" y="214" width="3" height="14" fill="#1c1c1c"/>
+      <rect x="955" y="218" width="28" height="12" rx="3" ry="3" fill="none" stroke="#1c1c1c" stroke-width="1"/>
+      <rect x="958" y="221" width="20" height="6" fill="#1c1c1c"/>
+
+      <!-- Browser URL bar -->
+      <rect x="582" y="252" width="406" height="40" rx="20" ry="20" fill="#eeeeea"/>
+      <!-- lock -->
+      <rect x="600" y="265" width="10" height="14" rx="2" ry="2" fill="none" stroke="#8c8c8c" stroke-width="1.5"/>
+      <path d="M 601 265 A 4 4 0 0 1 609 265" fill="none" stroke="#8c8c8c" stroke-width="1.5"/>
+      <text x="620" y="277" fill="#1c1c1c" font-size="14">estudio-fernandez.com</text>
+      <line x1="582" y1="312" x2="988" y2="312" stroke="#e2e2dc" stroke-width="1"/>
+
+      <!-- Top nav -->
+      <text x="588" y="350" fill="#1c1c1c" font-size="16" font-weight="700" letter-spacing="1.5">FERNÁNDEZ</text>
+      <text x="588" y="368" fill="#8c8c8c" font-size="11" letter-spacing="1.5">ESTUDIO JURÍDICO</text>
+      <!-- hamburger -->
+      <rect x="950" y="340" width="24" height="2.5" fill="#1c1c1c"/>
+      <rect x="950" y="348" width="24" height="2.5" fill="#1c1c1c"/>
+      <rect x="950" y="356" width="24" height="2.5" fill="#1c1c1c"/>
+
+      <!-- Hero -->
+      <g font-weight="700" fill="#1c1c1c">
+        <text x="588" y="438" font-size="32">Defensa legal</text>
+        <text x="588" y="476" font-size="32">con experiencia</text>
+        <text x="588" y="514" font-size="32">y resultados.</text>
+      </g>
+      <text x="588" y="554" fill="#8c8c8c" font-size="14">20 años asesorando a empresas y</text>
+      <text x="588" y="574" fill="#8c8c8c" font-size="14">particulares en Buenos Aires.</text>
+
+      <!-- CTAs -->
+      <rect x="588" y="608" width="186" height="48" rx="6" ry="6" fill="#1c1c1c"/>
+      <text x="612" y="638" fill="#f5f5f0" font-size="14" font-weight="700">Agendar consulta</text>
+      <rect x="784" y="608" width="140" height="48" rx="6" ry="6" fill="none" stroke="#1c1c1c" stroke-width="2"/>
+      <text x="816" y="638" fill="#1c1c1c" font-size="14" font-weight="700">Servicios</text>
+
+      <!-- Divider -->
+      <line x1="588" y1="700" x2="988" y2="700" stroke="#e2e2dc" stroke-width="1"/>
+
+      <!-- Services section label -->
+      <text x="588" y="732" fill="#8c8c8c" font-size="11" letter-spacing="2">ÁREAS DE PRÁCTICA</text>
+
+      <!-- Service cards -->
+      <g>
+        <rect x="588" y="752" width="400" height="58" rx="8" ry="8" fill="#efefe9"/>
+        <rect x="604" y="775" width="12" height="12" fill="#b4dc5a"/>
+        <text x="628" y="787" fill="#1c1c1c" font-size="14" font-weight="700">Derecho Corporativo</text>
+        <text x="958" y="790" fill="#1c1c1c" font-size="20" font-weight="700">→</text>
+      </g>
+      <g>
+        <rect x="588" y="820" width="400" height="58" rx="8" ry="8" fill="#efefe9"/>
+        <rect x="604" y="843" width="12" height="12" fill="#b4dc5a"/>
+        <text x="628" y="855" fill="#1c1c1c" font-size="14" font-weight="700">Litigio Civil</text>
+        <text x="958" y="858" fill="#1c1c1c" font-size="20" font-weight="700">→</text>
+      </g>
+      <g>
+        <rect x="588" y="888" width="400" height="58" rx="8" ry="8" fill="#efefe9"/>
+        <rect x="604" y="911" width="12" height="12" fill="#b4dc5a"/>
+        <text x="628" y="923" fill="#1c1c1c" font-size="14" font-weight="700">Derecho Laboral</text>
+        <text x="958" y="926" fill="#1c1c1c" font-size="20" font-weight="700">→</text>
+      </g>
+
+      <!-- Footer trust strip -->
+      <line x1="588" y1="1020" x2="988" y2="1020" stroke="#e2e2dc" stroke-width="1"/>
+      <text x="588" y="1044" fill="#8c8c8c" font-size="11">Colegio Público de Abogados · CABA</text>
+      <text x="588" y="1066" fill="#1c1c1c" font-size="13" font-weight="700">★★★★★  4.9 (127 reseñas)</text>
+    </g>
+  </g>
+
+  <!-- ============================================================
+       Bottom area intentionally EMPTY (clean dark zone)
+       for CapCut text overlay (y ≈ 1180 → 1920)
+       ============================================================ -->
+</svg>

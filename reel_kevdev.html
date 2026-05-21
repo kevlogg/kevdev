@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Reel kevdev — Presupuesto Web</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #050505;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 16px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    min-height: 100vh;
+  }
+  h1 {
+    color: #444;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 400;
+    margin-bottom: 24px;
+  }
+  .preview-wrap {
+    border: 1px solid #1a1a1a;
+    display: inline-block;
+    margin-bottom: 28px;
+  }
+  .preview-wrap svg {
+    display: block;
+    width: 320px;
+    height: 568px;
+  }
+  button {
+    background: #ffffff;
+    color: #0a0a0a;
+    border: none;
+    padding: 12px 32px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  button:hover { background: #e0e0e0; }
+  .note {
+    color: #2a2a2a;
+    font-size: 10px;
+    letter-spacing: 1px;
+    margin-top: 14px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<h1>kevdev · reel · 1080×1920</h1>
+
+<div class="preview-wrap">
+<svg id="reel-svg" width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- ══ FONDO ══ -->
+  <rect width="1080" height="1920" fill="#0a0a0a"/>
+
+  <!-- ══ LAPTOP: BEZEL EXTERIOR ══ -->
+  <rect x="140" y="130" width="800" height="532" rx="20" fill="#1b1b1b"/>
+
+  <!-- Cámara -->
+  <circle cx="540" cy="152" r="9" fill="#242424"/>
+  <circle cx="540" cy="152" r="5" fill="#141414"/>
+
+  <!-- ══ PANTALLA (área de display) ══ -->
+  <rect x="167" y="170" width="746" height="476" fill="#060f1c"/>
+
+  <!-- ── BARRA DE TÍTULO ── -->
+  <rect x="167" y="170" width="746" height="38" fill="#0b1929"/>
+
+  <!-- Dots de ventana -->
+  <circle cx="193" cy="189" r="6" fill="#242424"/>
+  <circle cx="213" cy="189" r="6" fill="#242424"/>
+  <circle cx="233" cy="189" r="6" fill="#242424"/>
+
+  <!-- Nombre de archivo en tab -->
+  <rect x="272" y="176" width="196" height="26" rx="4" fill="#080f1a"/>
+  <text x="370" y="193" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#334d66" text-anchor="middle">presupuesto_web_v3.pdf</text>
+
+  <!-- ── CABECERA DEL DOCUMENTO ── -->
+  <rect x="167" y="208" width="746" height="62" fill="#091624"/>
+
+  <!-- Título izquierda -->
+  <text x="197" y="232" font-family="Arial, Helvetica, sans-serif" font-size="10" fill="#2a4560" letter-spacing="3">PROPUESTA COMERCIAL</text>
+  <text x="197" y="256" font-family="Arial, Helvetica, sans-serif" font-size="17" fill="#cce0f5" font-weight="300">Presupuesto de Desarrollo Web</text>
+
+  <!-- Meta derecha -->
+  <text x="906" y="226" font-family="Arial, Helvetica, sans-serif" font-size="9" fill="#1c3048" text-anchor="end">Ref. #2024-087</text>
+  <text x="906" y="242" font-family="Arial, Helvetica, sans-serif" font-size="9" fill="#1c3048" text-anchor="end">Vigencia: 15 días</text>
+  <text x="906" y="258" font-family="Arial, Helvetica, sans-serif" font-size="9" fill="#1c3048" text-anchor="end">Noviembre 2024</text>
+
+  <!-- Separador bajo cabecera -->
+  <line x1="167" y1="270" x2="913" y2="270" stroke="#0e2236" stroke-width="1.5"/>
+
+  <!-- ── ENCABEZADO DE TABLA ── -->
+  <rect x="167" y="270" width="746" height="28" fill="#081522"/>
+  <text x="197" y="288" font-family="Arial, Helvetica, sans-serif" font-size="9" fill="#284560" letter-spacing="2">DESCRIPCIÓN DEL SERVICIO</text>
+  <text x="904" y="288" font-family="Arial, Helvetica, sans-serif" font-size="9" fill="#284560" text-anchor="end" letter-spacing="2">COSTO</text>
+
+  <!-- ── ITEMS ── -->
+
+  <!-- 1 -->
+  <line x1="185" y1="298" x2="902" y2="298" stroke="#0c1e2e" stroke-width="1"/>
+  <text x="197" y="320" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#5c7d9e">Diseño UI/UX &amp; Wireframing</text>
+  <text x="197" y="335" font-family="Arial, Helvetica, sans-serif" font-size="9" fill="#1a2e40">Investigación · Prototipos · Sistema de diseño</text>
+  <text x="904" y="322" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#3c607e" text-anchor="end">$ 1,200</text>
+
+  <!-- 2 -->
+  <line x1="185" y1="342" x2="902" y2="342" stroke="#0c1e2e" stroke-width="1"/>
+  <text x="197" y="364" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#5c7d9e">Desarrollo Frontend</text>
+  <text x="197" y="379" font-family="Arial, Helvetica, sans-serif" font-size="9" fill="#1a2e40">React / Next.js · Responsive · Animaciones CSS</text>
+  <text x="904" y="366" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#3c607e" text-anchor="end">$ 1,800</text>
+
+  <!-- 3 -->
+  <line x1="185" y1="386" x2="902" y2="386" stroke="#0c1e2e" stroke-width="1"/>
+  <text x="197" y="408" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#5c7d9e">Backend, APIs &amp; Base de Datos</text>
+  <text x="197" y="423" font-family="Arial, Helvetica, sans-serif" font-size="9" fill="#1a2e40">Node.js · PostgreSQL · Auth · Panel administrativo</text>
+  <text x="904" y="410" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#3c607e" text-anchor="end">$ 1,500</text>
+
+  <!-- 4 -->
+  <line x1="185" y1="430" x2="902" y2="430" stroke="#0c1e2e" stroke-width="1"/>
+  <text x="197" y="452" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#5c7d9e">Infraestructura &amp; Deploy</text>
+  <text x="197" y="467" font-family="Arial, Helvetica, sans-serif" font-size="9" fill="#1a2e40">VPS · SSL · CDN · CI/CD · Monitoreo 24/7</text>
+  <text x="904" y="454" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#3c607e" text-anchor="end">$ 800</text>
+
+  <!-- 5 -->
+  <line x1="185" y1="474" x2="902" y2="474" stroke="#0c1e2e" stroke-width="1"/>
+  <text x="197" y="496" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#5c7d9e">Testing, QA &amp; Soporte (3 meses)</text>
+  <text x="197" y="511" font-family="Arial, Helvetica, sans-serif" font-size="9" fill="#1a2e40">Pruebas funcionales · Bugs · Soporte post-lanzamiento</text>
+  <text x="904" y="498" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#3c607e" text-anchor="end">$ 700</text>
+
+  <!-- ── TOTAL ── -->
+  <line x1="167" y1="518" x2="913" y2="518" stroke="#18364e" stroke-width="2"/>
+  <rect x="167" y="518" width="746" height="66" fill="#091a2e"/>
+  <text x="197" y="554" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#90b8d8" letter-spacing="1">INVERSIÓN TOTAL ESTIMADA</text>
+  <text x="904" y="560" font-family="Arial, Helvetica, sans-serif" font-size="24" fill="#ffffff" text-anchor="end" font-weight="bold">$6,000 USD</text>
+
+  <!-- ── FOOTER DEL DOCUMENTO ── -->
+  <line x1="167" y1="584" x2="913" y2="584" stroke="#0c1e2e" stroke-width="1"/>
+  <text x="197" y="604" font-family="Arial, Helvetica, sans-serif" font-size="9" fill="#18293a">* Precios en USD. No incluye licencias de software de terceros ni dominio.</text>
+  <text x="197" y="618" font-family="Arial, Helvetica, sans-serif" font-size="9" fill="#18293a">* Pago: 50% al inicio · 50% al cierre del proyecto.</text>
+  <text x="197" y="632" font-family="Arial, Helvetica, sans-serif" font-size="9" fill="#18293a">* Presupuesto válido por 15 días a partir de la fecha de emisión.</text>
+
+  <!-- ══ TECLADO BASE ══ -->
+
+  <!-- Bisagra -->
+  <rect x="167" y="662" width="746" height="12" rx="3" fill="#131313"/>
+
+  <!-- Cuerpo teclado -->
+  <rect x="78" y="674" width="924" height="102" rx="14" fill="#131313"/>
+
+  <!-- Superficie teclado (flat) -->
+  <rect x="138" y="684" width="804" height="70" rx="6" fill="#0f0f0f"/>
+
+  <!-- Trackpad -->
+  <rect x="418" y="696" width="244" height="44" rx="8" fill="#0c0c0c"/>
+
+  <!-- Borde inferior laptop -->
+  <rect x="66" y="776" width="948" height="16" rx="8" fill="#101010"/>
+
+</svg>
+</div>
+
+<button onclick="downloadPNG()">↓ Descargar PNG (1080×1920)</button>
+<p class="note">Abrí este archivo en Chrome o Firefox · El PNG se descarga en la resolución original</p>
+
+<script>
+function downloadPNG() {
+  const svg = document.getElementById('reel-svg');
+  const clone = svg.cloneNode(true);
+  clone.setAttribute('width', '1080');
+  clone.setAttribute('height', '1920');
+  const data = new XMLSerializer().serializeToString(clone);
+  const svgBlob = new Blob([data], { type: 'image/svg+xml;charset=utf-8' });
+  const url = URL.createObjectURL(svgBlob);
+  const img = new Image();
+  img.onload = function () {
+    const canvas = document.createElement('canvas');
+    canvas.width = 1080;
+    canvas.height = 1920;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#0a0a0a';
+    ctx.fillRect(0, 0, 1080, 1920);
+    ctx.drawImage(img, 0, 0, 1080, 1920);
+    URL.revokeObjectURL(url);
+    const a = document.createElement('a');
+    a.download = 'reel_kevdev_1080x1920.png';
+    a.href = canvas.toDataURL('image/png');
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+  img.onerror = function() {
+    alert('Para descargar el PNG, abrí este archivo directamente en Chrome (no en el visor de archivos). Luego hacé clic en el botón.');
+    URL.revokeObjectURL(url);
+  };
+  img.src = url;
+}
+</script>
+</body>
+</html>
