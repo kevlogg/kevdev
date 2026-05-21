@@ -6,7 +6,7 @@ export interface Project {
   description: string
   tags: string[]
   year: string
-  href: string
+  href?: string
   color: string
 }
 
