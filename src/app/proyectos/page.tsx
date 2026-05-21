@@ -55,7 +55,6 @@ export default function ProyectosPage() {
         }}
       >
         <source src="/video-proyectos.mov" type="video/quicktime" />
-        <source src="/video-proyectos.mov" type="video/mp4" />
       </video>
 
       <div
@@ -195,7 +194,7 @@ function CarouselState({ currentIndex, direction, onNavigate }: {
     }}>
       <div style={{
         position: 'absolute',
-        top: 'clamp(5.5rem, 10vh, 7rem)',
+        top: 'clamp(6rem, 10vh, 8rem)',
         left: '50%',
         transform: 'translateX(-50%)',
         fontFamily: 'var(--font-mono)',
