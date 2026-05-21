@@ -52,7 +52,6 @@ export default function ProyectosPage() {
         ref={videoRef}
         autoPlay
         muted
-        loop
         playsInline
         style={{
           position: 'fixed',
