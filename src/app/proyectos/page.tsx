@@ -54,7 +54,7 @@ export default function ProyectosPage() {
           zIndex: 0,
         }}
       >
-        <source src="/video-proyectos.mov" type="video/quicktime" />
+        <source src="/video-proyectos.mp4" type="video/mp4" />
       </video>
 
       <div

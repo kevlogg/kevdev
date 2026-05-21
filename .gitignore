@@ -42,3 +42,4 @@ next-env.d.ts
 
 public/video-proyectos.mov
 public/frames/vp-frame-*.jpg
+.env*.local
