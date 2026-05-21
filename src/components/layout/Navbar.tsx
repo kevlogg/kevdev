@@ -342,6 +342,7 @@ export default function Navbar() {
                     flexDirection: 'column',
                     justifyContent: 'flex-start',
                     gap: 'clamp(2.5rem, 7vh, 5rem)',
+                    paddingTop: 'clamp(2rem, 5vh, 4rem)',
                     paddingLeft: 'clamp(2rem, 4vw, 5rem)',
                     paddingBottom: 'clamp(1rem, 3vh, 2rem)',
                     borderLeft: '1px solid rgba(255,255,255,0.07)',
