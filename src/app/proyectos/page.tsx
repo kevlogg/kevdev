@@ -48,22 +48,33 @@ export default function ProyectosPage() {
       <div className="grain"    aria-hidden />
       <div className="vignette" aria-hidden />
 
-      <video
-        ref={videoRef}
-        autoPlay
-        muted
-        playsInline
-        style={{
-          position: 'fixed',
-          inset: 0,
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          zIndex: 0,
-        }}
-      >
-        <source src="/video-proyectos.mp4" type="video/mp4" />
-      </video>
+      <div style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 0,
+        overflow: 'hidden',
+      }}>
+        <video
+          ref={videoRef}
+          autoPlay
+          muted
+          playsInline
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            minWidth: '100%',
+            minHeight: '100%',
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            objectPosition: 'center center',
+          }}
+        >
+          <source src="/video-proyectos.mp4" type="video/mp4" />
+        </video>
+      </div>
 
       <div
         aria-hidden

@@ -21,7 +21,7 @@ export const PROJECTS: Project[] = [
     tags: ['Web app', 'SaaS', 'Firebase', 'React'],
     year: '2025',
     href: 'https://kronitt.com.ar',
-    color: '#a78bfa',
+    color: '#d4a017',
   },
   {
     name: 'Experience Fly',

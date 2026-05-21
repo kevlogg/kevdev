@@ -50,28 +50,30 @@ export default function Projects() {
         <TunnelReveal delay={0.3}>
           <style>{`
             .proyectos-cta:hover {
-              background: var(--color-accent) !important;
-              color: var(--color-on-accent, #060810) !important;
+              opacity: 0.85 !important;
             }
           `}</style>
           <Link
             href="/proyectos"
             className="proyectos-cta"
             style={{
-              display: 'inline-block',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem',
               border: '1px solid var(--color-accent)',
-              color: 'var(--color-accent)',
-              background: 'transparent',
+              color: 'var(--color-on-accent, #060810)',
+              background: 'var(--color-accent)',
               fontFamily: 'var(--font-ui)',
-              fontSize: '0.9375rem',
-              padding: '0.75rem 2.25rem',
+              fontSize: '1rem',
+              fontWeight: 700,
+              padding: '0.875rem 2.5rem',
               borderRadius: 6,
               textDecoration: 'none',
               letterSpacing: '0.02em',
-              transition: 'background 0.25s, color 0.25s',
+              transition: 'opacity 0.2s',
             }}
           >
-            Entrar a la galería →
+            Ver mis proyectos →
           </Link>
         </TunnelReveal>
       </div>
