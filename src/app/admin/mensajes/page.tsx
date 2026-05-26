@@ -2,37 +2,76 @@
 
 import { useState } from 'react'
 
-interface Plantilla {
-  titulo: string
+interface Variante {
+  label: string
+  tono: string
   texto: (nombre: string, demo: string) => string
 }
 
-const PLANTILLAS: Plantilla[] = [
+interface GrupoPlantilla {
+  titulo: string
+  variantes: Variante[]
+}
+
+const GRUPOS: GrupoPlantilla[] = [
   {
-    titulo: 'Demo cercana',
-    texto: (nombre, demo) =>
-      `Hola ${nombre}! Te comparto la demo que armé para tu negocio: ${demo}\n\nEs completamente personalizada para vos. Cualquier duda o cambio que quieras hacerle, avisame.`,
-  },
-  {
-    titulo: 'Demo profesional',
-    texto: (nombre, demo) =>
-      `Hola ${nombre}, soy Kevin. Armé esta demo especialmente para tu negocio: ${demo}\n\nEl objetivo es que puedas ver concretamente cómo quedaría tu sitio. Si querés avanzar o tenés preguntas, estoy disponible.`,
+    titulo: 'Envío de demo',
+    variantes: [
+      {
+        label: 'A',
+        tono: 'Tono cercano',
+        texto: (_nombre, demo) =>
+          `¡Hola! Te comparto la demo de tu sitio web 👇\n\n🔗 ${demo || '[LINK]'}\n\nTe recomiendo verlo desde la computadora para la mejor experiencia, aunque desde el celu se ve bien también.\n\nTené en cuenta que es una demo: colores, imágenes, textos y precios se pueden modificar a gusto — está armado así para mostrarte cómo quedaría.\n\n¿Qué te parece? ¡Contame! 👀`,
+      },
+      {
+        label: 'B',
+        tono: 'Tono profesional',
+        texto: (_nombre, demo) =>
+          `Hola, te comparto la demo de tu sitio web:\n\n🔗 ${demo || '[LINK]'}\n\nLo ideal es verlo desde una computadora, aunque desde el celular también funciona correctamente.\n\nEs una demo de concepto: colores, imágenes, textos y precios son completamente personalizables. Están elegidos para mostrar cómo quedaría el resultado final.\n\nCualquier feedback que tengas, quedo a disposición.`,
+      },
+    ],
   },
   {
     titulo: 'Seguimiento 48hs',
-    texto: (nombre, demo) =>
-      `Hola ${nombre}! Te escribo por la demo que te envié hace un par de días: ${demo}\n\n¿Pudiste verla? Quería saber si te generó alguna duda o si te interesa que hablemos.`,
+    variantes: [
+      {
+        label: 'A',
+        tono: 'Tono cercano',
+        texto: (nombre, demo) =>
+          `¡Hola ${nombre || '[nombre]'}! Te escribo por la demo que te mandé hace un par de días 👀\n\n🔗 ${demo || '[LINK]'}\n\n¿Pudiste verla? Quería saber si te generó alguna duda o si te interesa que hablemos.`,
+      },
+      {
+        label: 'B',
+        tono: 'Tono profesional',
+        texto: (nombre, demo) =>
+          `Hola ${nombre || '[nombre]'}, te escribo para hacer seguimiento de la demo que te compartí:\n\n🔗 ${demo || '[LINK]'}\n\n¿Tuviste oportunidad de revisarla? Quedo disponible para cualquier consulta o para avanzar cuando lo consideres.`,
+      },
+    ],
   },
   {
     titulo: 'Pedido de referido',
-    texto: (nombre, _demo) =>
-      `Hola ${nombre}! Espero que estés disfrutando el sitio. Si conocés a alguien que pueda necesitar algo similar, te agradecería mucho que me recomiendes. Un saludo!`,
+    variantes: [
+      {
+        label: 'A',
+        tono: 'Tono cercano',
+        texto: (nombre, _demo) =>
+          `¡Hola ${nombre || '[nombre]'}! Espero que estés disfrutando el sitio 🙌\n\nSi conocés a alguien que pueda necesitar algo similar, te agradecería mucho que me recomiendes. ¡Un abrazo!`,
+      },
+      {
+        label: 'B',
+        tono: 'Tono profesional',
+        texto: (nombre, _demo) =>
+          `Hola ${nombre || '[nombre]'}, espero que el sitio esté funcionando bien.\n\nSi en algún momento conocés a alguien que pueda necesitar un sitio web, te agradecería que me tengas en cuenta. Quedo a disposición.`,
+      },
+    ],
   },
 ]
 
-function PlantillaCard({ plantilla, nombre, demo }: { plantilla: Plantilla; nombre: string; demo: string }) {
+function GrupoCard({ grupo, nombre, demo }: { grupo: GrupoPlantilla; nombre: string; demo: string }) {
+  const [tab, setTab]       = useState(0)
   const [copied, setCopied] = useState(false)
-  const texto = plantilla.texto(nombre || '[nombre]', demo || '[link demo]')
+  const variante = grupo.variantes[tab]
+  const texto = variante.texto(nombre, demo)
 
   async function handleCopy() {
     try {
@@ -44,48 +83,120 @@ function PlantillaCard({ plantilla, nombre, demo }: { plantilla: Plantilla; nomb
     }
   }
 
+  function handleAbrir() {
+    const encoded = encodeURIComponent(texto)
+    window.open(`sms:&body=${encoded}`, '_blank')
+  }
+
   return (
     <div style={{
       background: 'var(--color-depth)',
       border: '1px solid var(--color-border)',
       borderRadius: 12,
-      padding: 20,
-      display: 'flex',
-      flexDirection: 'column',
-      gap: 12,
+      overflow: 'hidden',
     }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.8125rem', fontWeight: 600, color: 'var(--color-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-          {plantilla.titulo}
-        </span>
-        <button
-          onClick={handleCopy}
-          style={{
-            background: copied ? '#4ade8020' : 'transparent',
-            border: `1px solid ${copied ? '#4ade80' : 'var(--color-border)'}`,
-            color: copied ? '#4ade80' : 'var(--color-muted)',
-            borderRadius: 6,
-            padding: '4px 12px',
-            fontFamily: 'var(--font-ui)',
-            fontSize: '0.75rem',
-            cursor: 'pointer',
-            transition: 'all 0.2s',
-          }}
-        >
-          {copied ? '¡Copiado!' : 'Copiar'}
-        </button>
+      {/* Tabs */}
+      <div style={{ display: 'flex', borderBottom: '1px solid var(--color-border)' }}>
+        {grupo.variantes.map((v, i) => (
+          <button
+            key={v.label}
+            onClick={() => setTab(i)}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8,
+              padding: '10px 20px',
+              background: tab === i ? 'var(--color-accent-dim)' : 'transparent',
+              border: 'none',
+              borderBottom: tab === i ? '2px solid var(--color-accent)' : '2px solid transparent',
+              cursor: 'pointer',
+              fontFamily: 'var(--font-ui)',
+              fontSize: '0.8125rem',
+              fontWeight: 600,
+              color: tab === i ? 'var(--color-accent)' : 'var(--color-muted)',
+              transition: 'all 0.15s',
+              marginBottom: -1,
+            }}
+          >
+            <span style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 20,
+              height: 20,
+              borderRadius: '50%',
+              background: tab === i ? 'var(--color-accent)' : 'var(--color-border)',
+              color: tab === i ? 'var(--color-on-accent)' : 'var(--color-muted)',
+              fontSize: '0.625rem',
+              fontWeight: 700,
+            }}>
+              {v.label}
+            </span>
+            {v.tono}
+          </button>
+        ))}
       </div>
-      <p style={{
-        fontFamily: 'var(--font-ui)',
-        fontSize: '0.9375rem',
-        color: 'var(--color-star)',
-        lineHeight: 1.65,
-        margin: 0,
-        whiteSpace: 'pre-wrap',
-        opacity: nombre ? 1 : 0.5,
-      }}>
-        {texto}
-      </p>
+
+      {/* Body */}
+      <div style={{ padding: 20 }}>
+        <p style={{
+          fontFamily: 'var(--font-ui)',
+          fontSize: '0.9375rem',
+          color: 'var(--color-star)',
+          lineHeight: 1.65,
+          margin: '0 0 20px',
+          whiteSpace: 'pre-wrap',
+        }}>
+          {texto}
+        </p>
+
+        {/* Actions */}
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
+          <button
+            onClick={handleCopy}
+            title="Copiar texto"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 36,
+              height: 36,
+              background: copied ? '#4ade8020' : 'transparent',
+              border: `1px solid ${copied ? '#4ade80' : 'var(--color-border)'}`,
+              borderRadius: 8,
+              color: copied ? '#4ade80' : 'var(--color-muted)',
+              cursor: 'pointer',
+              fontSize: '1rem',
+              transition: 'all 0.2s',
+            }}
+          >
+            {copied ? '✓' : '⧉'}
+          </button>
+          <button
+            onClick={handleAbrir}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+              padding: '0 16px',
+              height: 36,
+              background: 'var(--color-accent)',
+              border: 'none',
+              borderRadius: 8,
+              color: 'var(--color-on-accent)',
+              fontFamily: 'var(--font-ui)',
+              fontSize: '0.8125rem',
+              fontWeight: 600,
+              cursor: 'pointer',
+              transition: 'background 0.2s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'var(--color-accent-hi)' }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'var(--color-accent)' }}
+          >
+            💬 Abrir en Mensajes
+          </button>
+        </div>
+      </div>
     </div>
   )
 }
@@ -146,10 +257,22 @@ export default function MensajesPage() {
         </label>
       </div>
 
-      {/* Templates */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-        {PLANTILLAS.map(p => (
-          <PlantillaCard key={p.titulo} plantilla={p} nombre={nombre} demo={demo} />
+      {/* Grupos */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+        {GRUPOS.map(g => (
+          <div key={g.titulo}>
+            <p style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.6875rem',
+              color: 'var(--color-faint)',
+              textTransform: 'uppercase',
+              letterSpacing: '0.08em',
+              margin: '0 0 8px 4px',
+            }}>
+              {g.titulo}
+            </p>
+            <GrupoCard grupo={g} nombre={nombre} demo={demo} />
+          </div>
         ))}
       </div>
     </div>
