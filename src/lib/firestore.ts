@@ -10,6 +10,9 @@ export type EstadoCliente =
   | 'prospecto' | 'contactado' | 'demo'
   | 'negociacion' | 'cerrado' | 'entregado'
 
+export type DemoEstado = 'PRESENTADA' | 'HECHA' | ''
+export type Situacion  = 'NO RESPONDIO' | 'EN ESPERA' | 'EN PRODUCCION' | 'RECHAZADA' | ''
+
 export interface Cliente {
   id?: string
   creadoEn: Timestamp
@@ -19,6 +22,10 @@ export interface Cliente {
   telefono: string
   instagram: string
   estado: EstadoCliente
+  demo: DemoEstado
+  situacion: Situacion
+  plan: string
+  url: string
   notas: string
 }
 
