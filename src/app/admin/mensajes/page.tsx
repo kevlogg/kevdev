@@ -49,6 +49,17 @@ const GRUPOS: GrupoPlantilla[] = [
     ],
   },
   {
+    titulo: 'Envío de presupuesto',
+    variantes: [
+      {
+        label: 'A',
+        tono: 'Template',
+        texto: (_nombre, _demo) =>
+          `🔹 PAGO UNICO - USO DE POR VIDA\n\n- $250.000\n- Renovación anual $45.000\n\n🔹 PAGO MENSUAL - USO MIENTRAS SE ABONE\n\n- $39.000\n- Sin renovación anual\n- Podés optar más adelante por pago único\n\n🔸 Ambos planes tienen un ajuste cada 6 meses ajustado a la inflación.\n\n🔸 Ambos incluyen dominio y hosting\n\n🔸 Ambos vienen con herramientas para potenciar el sitio web y tu marca`,
+      },
+    ],
+  },
+  {
     titulo: 'Pedido de referido',
     variantes: [
       {
