@@ -17,8 +17,9 @@ export default function LoginPage() {
     try {
       await signInWithEmailAndPassword(auth, email, password)
       /* layout.tsx useEffect will redirect to /admin/dashboard */
-    } catch {
-      setError('Credenciales incorrectas')
+    } catch (err: unknown) {
+      const code = (err as { code?: string }).code ?? 'unknown'
+      setError(`Error: ${code}`)
     } finally {
       setLoading(false)
     }
