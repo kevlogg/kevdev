@@ -48,19 +48,29 @@ export default function ClientesPage() {
 
   async function load() {
     setLoading(true)
-    const data = await getClientes()
-    setClientes(data)
-    setLoading(false)
+    try {
+      const data = await getClientes()
+      setClientes(data)
+    } catch {
+      // keeps existing list on refresh failure
+    } finally {
+      setLoading(false)
+    }
   }
 
   async function handleAdd(e: FormEvent) {
     e.preventDefault()
     setSaving(true)
-    await addCliente(form)
-    setForm(EMPTY_FORM)
-    setShowForm(false)
-    await load()
-    setSaving(false)
+    try {
+      await addCliente(form)
+      setForm(EMPTY_FORM)
+      setShowForm(false)
+      await load()
+    } catch {
+      // keep form open on failure
+    } finally {
+      setSaving(false)
+    }
   }
 
   const visible = filter === 'todos'

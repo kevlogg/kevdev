@@ -21,6 +21,8 @@ const ESTADO_LABELS: Record<EstadoCliente, string> = {
   entregado:   'Entregado',
 }
 
+type EditableField = 'nombre' | 'rubro' | 'contacto' | 'telefono' | 'instagram' | 'notas' | 'estado'
+
 export default function ClienteDetailPage() {
   const params = useParams()
   const router = useRouter()
@@ -36,26 +38,42 @@ export default function ClienteDetailPage() {
 
   useEffect(() => {
     async function load() {
-      const [c, p] = await Promise.all([
-        getCliente(id),
-        getChecklistProgreso(id),
-      ])
-      if (!c) { router.replace('/admin/clientes'); return }
-      setCliente(c)
-      setForm(c)
-      setProgreso(p)
-      setLoading(false)
+      try {
+        const [c, p] = await Promise.all([
+          getCliente(id),
+          getChecklistProgreso(id),
+        ])
+        if (!c) { router.replace('/admin/clientes'); return }
+        setCliente(c)
+        setForm(c)
+        setProgreso(p)
+      } catch {
+        router.replace('/admin/clientes')
+      } finally {
+        setLoading(false)
+      }
     }
     load()
   }, [id, router])
 
-  async function saveField(field: keyof Cliente, value: string) {
+  useEffect(() => {
+    return () => {
+      if (notasTimer.current) clearTimeout(notasTimer.current)
+    }
+  }, [])
+
+  async function saveField(field: EditableField, value: string) {
     setSaving(true)
-    await updateCliente(id, { [field]: value })
-    setCliente(prev => prev ? { ...prev, [field]: value } : prev)
-    setSaving(false)
-    setSaved(true)
-    setTimeout(() => setSaved(false), 1800)
+    try {
+      await updateCliente(id, { [field]: value })
+      setCliente(prev => prev ? { ...prev, [field]: value } : prev)
+      setSaved(true)
+      setTimeout(() => setSaved(false), 1800)
+    } catch {
+      // save failed silently - form value stays as edited
+    } finally {
+      setSaving(false)
+    }
   }
 
   function handleNotasChange(value: string) {
@@ -67,7 +85,12 @@ export default function ClienteDetailPage() {
   async function handleChecklistToggle(stepId: number) {
     const next = !progreso[stepId]
     setProgreso(p => ({ ...p, [stepId]: next }))
-    await toggleChecklistStep(id, stepId, next)
+    try {
+      await toggleChecklistStep(id, stepId, next)
+    } catch {
+      // revert optimistic update on failure
+      setProgreso(p => ({ ...p, [stepId]: !next }))
+    }
   }
 
   if (loading) {
@@ -136,7 +159,7 @@ export default function ClienteDetailPage() {
               { field: 'contacto',  label: 'Contacto'  },
               { field: 'telefono',  label: 'Teléfono'  },
               { field: 'instagram', label: 'Instagram' },
-            ] as { field: keyof Cliente; label: string }[]
+            ] as { field: EditableField; label: string }[]
           ).map(({ field, label }) => (
             <label key={field} style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
               <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6875rem', color: 'var(--color-faint)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>

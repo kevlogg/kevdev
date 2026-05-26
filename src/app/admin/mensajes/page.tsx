@@ -35,9 +35,13 @@ function PlantillaCard({ plantilla, nombre, demo }: { plantilla: Plantilla; nomb
   const texto = plantilla.texto(nombre || '[nombre]', demo || '[link demo]')
 
   async function handleCopy() {
-    await navigator.clipboard.writeText(texto)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+    try {
+      await navigator.clipboard.writeText(texto)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      // clipboard unavailable
+    }
   }
 
   return (

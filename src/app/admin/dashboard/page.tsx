@@ -40,7 +40,6 @@ function Stat({ label, value }: { label: string; value: number }) {
         color: 'var(--color-muted)',
         letterSpacing: '0.08em',
         textTransform: 'uppercase',
-        marginBottom: 8,
         margin: '0 0 8px',
       }}>
         {label}
@@ -64,10 +63,10 @@ export default function DashboardPage() {
   const [loading,  setLoading]  = useState(true)
 
   useEffect(() => {
-    getClientes().then(data => {
-      setClientes(data)
-      setLoading(false)
-    })
+    getClientes()
+      .then(data => setClientes(data))
+      .catch(() => {/* silent fail - dashboard degrades gracefully to zeros */})
+      .finally(() => setLoading(false))
   }, [])
 
   if (loading) {

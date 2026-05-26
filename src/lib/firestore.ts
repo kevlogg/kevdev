@@ -113,7 +113,9 @@ export async function toggleChecklistStep(
 
 export async function getPresupuestoItems(): Promise<PresupuestoItem[]> {
   const snap = await getDocs(collection(db, 'presupuestoItems'))
-  return snap.docs.map(d => ({ id: d.id, ...d.data() } as PresupuestoItem))
+  return snap.docs
+    .map(d => ({ id: d.id, ...d.data() } as PresupuestoItem))
+    .sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'))
 }
 
 export async function addPresupuestoItem(

@@ -28,24 +28,38 @@ export default function PresupuestoPage() {
 
   async function load() {
     setLoading(true)
-    const data = await getPresupuestoItems()
-    setItems(data)
-    setLoading(false)
+    try {
+      const data = await getPresupuestoItems()
+      setItems(data)
+    } catch {
+      // keeps existing list
+    } finally {
+      setLoading(false)
+    }
   }
 
   async function handleAdd(e: FormEvent) {
     e.preventDefault()
     setSaving(true)
-    await addPresupuestoItem(form)
-    setForm(EMPTY_ITEM)
-    setShowForm(false)
-    await load()
-    setSaving(false)
+    try {
+      await addPresupuestoItem(form)
+      setForm(EMPTY_ITEM)
+      setShowForm(false)
+      await load()
+    } catch {
+      // keep form open on failure
+    } finally {
+      setSaving(false)
+    }
   }
 
   async function handleDelete(id: string) {
-    await deletePresupuestoItem(id)
-    setItems(prev => prev.filter(i => i.id !== id))
+    try {
+      await deletePresupuestoItem(id)
+      setItems(prev => prev.filter(i => i.id !== id))
+    } catch {
+      // item stays in list if delete fails
+    }
   }
 
   const total = items.reduce((acc, i) => acc + i.precio, 0)
@@ -65,9 +79,13 @@ export default function PresupuestoPage() {
   }
 
   async function handleCopy() {
-    await navigator.clipboard.writeText(buildTexto())
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+    try {
+      await navigator.clipboard.writeText(buildTexto())
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      // clipboard unavailable — no visual feedback
+    }
   }
 
   const inputStyle = {
