@@ -145,9 +145,6 @@ export default function ClientesPage() {
             <option value="">Situación: —</option>
             {SITUACIONES.filter(s => s !== '').map(s => <option key={s} value={s}>{s}</option>)}
           </select>
-          <input placeholder="Rubro"      value={form.rubro}     onChange={e => setForm(f => ({ ...f, rubro:     e.target.value }))} style={inputStyle} />
-          <input placeholder="Contacto"   value={form.contacto}  onChange={e => setForm(f => ({ ...f, contacto:  e.target.value }))} style={inputStyle} />
-          <input placeholder="Instagram"  value={form.instagram} onChange={e => setForm(f => ({ ...f, instagram: e.target.value }))} style={inputStyle} />
           <div style={{ gridColumn: '1 / -1', display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
             <button type="button" onClick={() => setShowForm(false)} style={{ ...inputStyle, width: 'auto', cursor: 'pointer', color: 'var(--color-muted)' }}>Cancelar</button>
             <button type="submit" disabled={saving} style={{ background: 'var(--color-accent)', color: 'var(--color-on-accent)', border: 'none', borderRadius: 8, padding: '8px 20px', fontFamily: 'var(--font-ui)', fontSize: '0.875rem', fontWeight: 600, cursor: saving ? 'not-allowed' : 'pointer' }}>
