@@ -50,8 +50,9 @@ export default function ImportPage() {
         })
         ok++
         setLog(l => [...l, `✓ ${row.nombre}`])
-      } catch {
-        setLog(l => [...l, `✗ ${row.nombre} — error`])
+      } catch (err: unknown) {
+        const msg = (err as { message?: string }).message ?? String(err)
+        setLog(l => [...l, `✗ ${row.nombre} — ${msg}`])
       }
     }
 
