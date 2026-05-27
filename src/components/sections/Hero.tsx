@@ -149,7 +149,7 @@ export default function Hero() {
 
           <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexShrink: 0 }}>
             <CTADark onClick={() => scrollTo('#proyectos')}>Ver proyectos</CTADark>
-            <CTAArrow onClick={() => scrollTo('#contacto')} />
+            <CTAArrow href="https://wa.me/542235851419?text=Hola%20Kevin%2C%20quiero%20solicitar%20una%20demo%20sin%20cargo%20para%20mi%20negocio." />
           </div>
         </motion.div>
       </motion.div>
@@ -180,25 +180,30 @@ function CTADark({ children, onClick }: { children: React.ReactNode; onClick: ()
   )
 }
 
-function CTAArrow({ onClick }: { onClick: () => void }) {
+function CTAArrow({ href }: { href: string }) {
   const [hov, setHov] = useState(false)
   return (
-    <button onClick={onClick}
+    <a href={href} target="_blank" rel="noreferrer"
       onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
-      aria-label="Contacto"
       style={{
-        width:        '3rem', height: '3rem',
-        borderRadius: '50%', border: 'none', cursor: 'pointer',
-        display:      'flex', alignItems: 'center', justifyContent: 'center',
+        display:      'flex', alignItems: 'center', gap: '0.5rem',
+        padding:      '0 1.25rem',
+        height:       '3rem',
+        borderRadius: '99px', border: 'none', cursor: 'pointer',
         background:   hov ? 'var(--color-accent-hi)' : 'var(--color-accent)',
         color:        'var(--color-on-accent)',
-        fontSize:     '1.125rem', lineHeight: 1,
-        transition:   'background 0.22s var(--ease-expo), transform 0.22s var(--ease-expo)',
-        transform:    hov ? 'scale(1.1) rotate(-12deg)' : 'scale(1) rotate(0deg)',
+        fontFamily:   'var(--font-ui)',
+        fontSize:     '0.875rem',
+        fontWeight:   700,
+        letterSpacing:'0.01em',
+        textDecoration: 'none',
+        whiteSpace:   'nowrap',
+        transition:   'background 0.22s var(--ease-expo), transform 0.22s var(--ease-expo), box-shadow 0.22s',
+        transform:    hov ? 'scale(1.04)' : 'scale(1)',
         boxShadow:    hov ? '0 6px 28px rgba(34,211,238,0.32)' : '0 0 0 transparent',
         flexShrink:   0,
       }}>
-      ↗
-    </button>
+      Solicitar demo sin cargo ↗
+    </a>
   )
 }
