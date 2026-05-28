@@ -48,17 +48,41 @@ export default function ProyectosPage() {
       <div className="grain"    aria-hidden />
       <div className="vignette" aria-hidden />
 
-      <div style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: 0,
-        overflow: 'hidden',
-      }}>
+      <style>{`
+        @media (max-width: 768px) {
+          .project-bg-video-wrap {
+            inset: auto !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 45vh !important;
+            border-radius: 0 0 16px 16px;
+          }
+          .project-bg-video {
+            min-width: unset !important;
+            min-height: unset !important;
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+          }
+        }
+      `}</style>
+
+      <div
+        className="project-bg-video-wrap"
+        style={{
+          position: 'fixed',
+          inset: 0,
+          zIndex: 0,
+          overflow: 'hidden',
+        }}
+      >
         <video
           ref={videoRef}
           autoPlay
           muted
           playsInline
+          className="project-bg-video"
           style={{
             position: 'absolute',
             top: '50%',
@@ -203,14 +227,40 @@ function CarouselState({ currentIndex, direction, onNavigate }: {
   direction: 1 | -1
   onNavigate: (dir: 1 | -1) => void
 }) {
+  const lastNav    = useRef(0)
+  const touchStart = useRef(0)
+
+  const handleWheel = useCallback((e: React.WheelEvent) => {
+    const now = Date.now()
+    if (now - lastNav.current < 650) return
+    const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY
+    if (Math.abs(delta) < 15) return
+    lastNav.current = now
+    onNavigate(delta > 0 ? 1 : -1)
+  }, [onNavigate])
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStart.current = e.touches[0].clientX
+  }, [])
+
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    const delta = touchStart.current - e.changedTouches[0].clientX
+    if (Math.abs(delta) > 50) onNavigate(delta > 0 ? 1 : -1)
+  }, [onNavigate])
+
   return (
-    <div style={{
-      height: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      position: 'relative',
-    }}>
+    <div
+      onWheel={handleWheel}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      style={{
+        height: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+      }}
+    >
       <div style={{
         position: 'absolute',
         top: 'clamp(6rem, 10vh, 8rem)',
