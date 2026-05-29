@@ -201,28 +201,29 @@ export default function ClientesPage() {
             </thead>
             <tbody>
               {visible.map(c => {
-                if (!c.id) return null
+                const id = c.id
+                if (!id) return null
                 return (
                 <tr
-                  key={c.id}
+                  key={id}
                   style={{ borderBottom: '1px solid var(--color-border)' }}
                   onMouseEnter={e => { e.currentTarget.style.background = 'rgba(221,232,255,0.03)' }}
                   onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}
                 >
                   {/* Cliente */}
                   <td style={{ padding: '12px 16px' }}>
-                    <Link href={`/admin/clientes/${c.id}`} style={{ fontFamily: 'var(--font-ui)', fontSize: '0.9375rem', color: 'var(--color-star)', textDecoration: 'none', fontWeight: 500 }}>
+                    <Link href={`/admin/clientes/${id}`} style={{ fontFamily: 'var(--font-ui)', fontSize: '0.9375rem', color: 'var(--color-star)', textDecoration: 'none', fontWeight: 500 }}>
                       {c.nombre}
                     </Link>
                   </td>
 
                   {/* Demo */}
-                  <td style={{ padding: '8px 16px' }} onClick={() => editing?.id !== c.id && startEdit(c.id, 'demo', c.demo ?? '')}>
-                    {editing?.id === c.id && editing.field === 'demo' ? (
+                  <td style={{ padding: '8px 16px' }} onClick={() => editing?.id !== id && startEdit(id, 'demo', c.demo ?? '')}>
+                    {editing?.id === id && editing.field === 'demo' ? (
                       <select
                         autoFocus
                         value={editVal}
-                        onChange={e => saveInline(c.id, 'demo', e.target.value)}
+                        onChange={e => saveInline(id, 'demo', e.target.value)}
                         onBlur={() => setEditing(null)}
                         style={cellInputStyle}
                       >
@@ -240,12 +241,12 @@ export default function ClientesPage() {
                   </td>
 
                   {/* Situacion */}
-                  <td style={{ padding: '8px 16px' }} onClick={() => editing?.id !== c.id && startEdit(c.id, 'situacion', c.situacion ?? '')}>
-                    {editing?.id === c.id && editing.field === 'situacion' ? (
+                  <td style={{ padding: '8px 16px' }} onClick={() => editing?.id !== id && startEdit(id, 'situacion', c.situacion ?? '')}>
+                    {editing?.id === id && editing.field === 'situacion' ? (
                       <select
                         autoFocus
                         value={editVal}
-                        onChange={e => saveInline(c.id, 'situacion', e.target.value)}
+                        onChange={e => saveInline(id, 'situacion', e.target.value)}
                         onBlur={() => setEditing(null)}
                         style={cellInputStyle}
                       >
@@ -261,14 +262,14 @@ export default function ClientesPage() {
                   </td>
 
                   {/* Plan */}
-                  <td style={{ padding: '8px 16px' }} onClick={() => editing?.id !== c.id && startEdit(c.id, 'plan', c.plan ?? '')}>
-                    {editing?.id === c.id && editing.field === 'plan' ? (
+                  <td style={{ padding: '8px 16px' }} onClick={() => editing?.id !== id && startEdit(id, 'plan', c.plan ?? '')}>
+                    {editing?.id === id && editing.field === 'plan' ? (
                       <input
                         autoFocus
                         value={editVal}
                         onChange={e => setEditVal(e.target.value)}
-                        onBlur={e => saveInline(c.id, 'plan', e.target.value)}
-                        onKeyDown={e => e.key === 'Enter' && saveInline(c.id, 'plan', editVal)}
+                        onBlur={e => saveInline(id, 'plan', e.target.value)}
+                        onKeyDown={e => e.key === 'Enter' && saveInline(id, 'plan', editVal)}
                         style={cellInputStyle}
                       />
                     ) : (
@@ -279,14 +280,14 @@ export default function ClientesPage() {
                   </td>
 
                   {/* WSP */}
-                  <td style={{ padding: '8px 16px' }} onClick={() => editing?.id !== c.id && startEdit(c.id, 'telefono', c.telefono ?? '')}>
-                    {editing?.id === c.id && editing.field === 'telefono' ? (
+                  <td style={{ padding: '8px 16px' }} onClick={() => editing?.id !== id && startEdit(id, 'telefono', c.telefono ?? '')}>
+                    {editing?.id === id && editing.field === 'telefono' ? (
                       <input
                         autoFocus
                         value={editVal}
                         onChange={e => setEditVal(e.target.value)}
-                        onBlur={e => saveInline(c.id, 'telefono', e.target.value)}
-                        onKeyDown={e => e.key === 'Enter' && saveInline(c.id, 'telefono', editVal)}
+                        onBlur={e => saveInline(id, 'telefono', e.target.value)}
+                        onKeyDown={e => e.key === 'Enter' && saveInline(id, 'telefono', editVal)}
                         style={cellInputStyle}
                       />
                     ) : c.telefono ? (
@@ -305,14 +306,14 @@ export default function ClientesPage() {
                   </td>
 
                   {/* URL */}
-                  <td style={{ padding: '8px 16px' }} onClick={() => editing?.id !== c.id && startEdit(c.id, 'url', c.url ?? '')}>
-                    {editing?.id === c.id && editing.field === 'url' ? (
+                  <td style={{ padding: '8px 16px' }} onClick={() => editing?.id !== id && startEdit(id, 'url', c.url ?? '')}>
+                    {editing?.id === id && editing.field === 'url' ? (
                       <input
                         autoFocus
                         value={editVal}
                         onChange={e => setEditVal(e.target.value)}
-                        onBlur={e => saveInline(c.id, 'url', e.target.value)}
-                        onKeyDown={e => e.key === 'Enter' && saveInline(c.id, 'url', editVal)}
+                        onBlur={e => saveInline(id, 'url', e.target.value)}
+                        onKeyDown={e => e.key === 'Enter' && saveInline(id, 'url', editVal)}
                         style={cellInputStyle}
                       />
                     ) : c.url ? (
