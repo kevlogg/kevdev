@@ -3,7 +3,7 @@
 import { useEffect, useState, FormEvent } from 'react'
 import Link from 'next/link'
 import {
-  getClientes, addCliente,
+  getClientes, addCliente, updateCliente,
   type Cliente, type DemoEstado, type Situacion,
 } from '@/lib/firestore'
 
@@ -38,6 +38,8 @@ export default function ClientesPage() {
   const [showForm,  setShowForm]  = useState(false)
   const [form,      setForm]      = useState(EMPTY_FORM)
   const [saving,    setSaving]    = useState(false)
+  const [editing,   setEditing]   = useState<{ id: string; field: string } | null>(null)
+  const [editVal,   setEditVal]   = useState('')
 
   useEffect(() => { load() }, [])
 
@@ -60,6 +62,19 @@ export default function ClientesPage() {
     finally { setSaving(false) }
   }
 
+  async function saveInline(id: string, field: string, value: string) {
+    setEditing(null)
+    try {
+      await updateCliente(id, { [field]: value })
+      setClientes(prev => prev.map(c => c.id === id ? { ...c, [field]: value } : c))
+    } catch { /* silent */ }
+  }
+
+  function startEdit(id: string, field: string, current: string) {
+    setEditing({ id, field })
+    setEditVal(current)
+  }
+
   const visible = filter === 'todos'
     ? clientes
     : clientes.filter(c => c.situacion === filter)
@@ -74,6 +89,19 @@ export default function ClientesPage() {
     color: 'var(--color-star)',
     outline: 'none',
     width: '100%',
+  }
+
+  const cellInputStyle = {
+    background: 'rgba(221,232,255,0.08)',
+    border: '1px solid var(--color-accent)',
+    borderRadius: 6,
+    padding: '4px 8px',
+    fontFamily: 'var(--font-ui)',
+    fontSize: '0.875rem',
+    color: 'var(--color-star)',
+    outline: 'none',
+    width: '100%',
+    minWidth: 110,
   }
 
   const FILTER_LABELS: Record<Situacion | 'todos', string> = {
@@ -175,45 +203,129 @@ export default function ClientesPage() {
               {visible.map(c => (
                 <tr
                   key={c.id}
-                  style={{ borderBottom: '1px solid var(--color-border)', cursor: 'pointer' }}
+                  style={{ borderBottom: '1px solid var(--color-border)' }}
                   onMouseEnter={e => { e.currentTarget.style.background = 'rgba(221,232,255,0.03)' }}
                   onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}
                 >
+                  {/* Cliente */}
                   <td style={{ padding: '12px 16px' }}>
                     <Link href={`/admin/clientes/${c.id}`} style={{ fontFamily: 'var(--font-ui)', fontSize: '0.9375rem', color: 'var(--color-star)', textDecoration: 'none', fontWeight: 500 }}>
                       {c.nombre}
                     </Link>
                   </td>
-                  <td style={{ padding: '12px 16px' }}>
-                    {c.demo ? (
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: DEMO_COLORS[c.demo], background: `${DEMO_COLORS[c.demo]}18`, border: `1px solid ${DEMO_COLORS[c.demo]}40`, borderRadius: 99, padding: '2px 10px', letterSpacing: '0.05em' }}>
+
+                  {/* Demo */}
+                  <td style={{ padding: '8px 16px' }} onClick={() => editing?.id !== c.id && startEdit(c.id, 'demo', c.demo ?? '')}>
+                    {editing?.id === c.id && editing.field === 'demo' ? (
+                      <select
+                        autoFocus
+                        value={editVal}
+                        onChange={e => saveInline(c.id, 'demo', e.target.value)}
+                        onBlur={() => setEditing(null)}
+                        style={cellInputStyle}
+                      >
+                        <option value="">—</option>
+                        <option value="PRESENTADA">PRESENTADA</option>
+                        <option value="HECHA">HECHA</option>
+                      </select>
+                    ) : c.demo ? (
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: DEMO_COLORS[c.demo], background: `${DEMO_COLORS[c.demo]}18`, border: `1px solid ${DEMO_COLORS[c.demo]}40`, borderRadius: 99, padding: '2px 10px', letterSpacing: '0.05em', cursor: 'pointer' }}>
                         {c.demo}
                       </span>
-                    ) : <span style={{ color: 'var(--color-faint)', fontFamily: 'var(--font-ui)', fontSize: '0.875rem' }}>—</span>}
+                    ) : (
+                      <span style={{ color: 'var(--color-faint)', fontFamily: 'var(--font-ui)', fontSize: '0.875rem', cursor: 'pointer' }}>—</span>
+                    )}
                   </td>
-                  <td style={{ padding: '12px 16px' }}>
-                    {c.situacion ? (
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: SITUACION_COLORS[c.situacion], background: `${SITUACION_COLORS[c.situacion]}18`, border: `1px solid ${SITUACION_COLORS[c.situacion]}40`, borderRadius: 99, padding: '2px 10px', letterSpacing: '0.05em', whiteSpace: 'nowrap' }}>
+
+                  {/* Situacion */}
+                  <td style={{ padding: '8px 16px' }} onClick={() => editing?.id !== c.id && startEdit(c.id, 'situacion', c.situacion ?? '')}>
+                    {editing?.id === c.id && editing.field === 'situacion' ? (
+                      <select
+                        autoFocus
+                        value={editVal}
+                        onChange={e => saveInline(c.id, 'situacion', e.target.value)}
+                        onBlur={() => setEditing(null)}
+                        style={cellInputStyle}
+                      >
+                        {SITUACIONES.map(s => <option key={s} value={s}>{s || '—'}</option>)}
+                      </select>
+                    ) : c.situacion ? (
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: SITUACION_COLORS[c.situacion], background: `${SITUACION_COLORS[c.situacion]}18`, border: `1px solid ${SITUACION_COLORS[c.situacion]}40`, borderRadius: 99, padding: '2px 10px', letterSpacing: '0.05em', whiteSpace: 'nowrap', cursor: 'pointer' }}>
                         {c.situacion}
                       </span>
-                    ) : <span style={{ color: 'var(--color-faint)', fontFamily: 'var(--font-ui)', fontSize: '0.875rem' }}>—</span>}
+                    ) : (
+                      <span style={{ color: 'var(--color-faint)', fontFamily: 'var(--font-ui)', fontSize: '0.875rem', cursor: 'pointer' }}>—</span>
+                    )}
                   </td>
-                  <td style={{ padding: '12px 16px', fontFamily: 'var(--font-ui)', fontSize: '0.875rem', color: 'var(--color-muted)' }}>
-                    {c.plan || '—'}
+
+                  {/* Plan */}
+                  <td style={{ padding: '8px 16px' }} onClick={() => editing?.id !== c.id && startEdit(c.id, 'plan', c.plan ?? '')}>
+                    {editing?.id === c.id && editing.field === 'plan' ? (
+                      <input
+                        autoFocus
+                        value={editVal}
+                        onChange={e => setEditVal(e.target.value)}
+                        onBlur={e => saveInline(c.id, 'plan', e.target.value)}
+                        onKeyDown={e => e.key === 'Enter' && saveInline(c.id, 'plan', editVal)}
+                        style={cellInputStyle}
+                      />
+                    ) : (
+                      <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.875rem', color: 'var(--color-muted)', cursor: 'pointer' }}>
+                        {c.plan || '—'}
+                      </span>
+                    )}
                   </td>
-                  <td style={{ padding: '12px 16px', fontFamily: 'var(--font-mono)', fontSize: '0.8125rem', color: 'var(--color-muted)' }}>
-                    {c.telefono ? (
-                      <a href={`https://wa.me/54${c.telefono}`} target="_blank" rel="noreferrer" style={{ color: 'var(--color-accent)', textDecoration: 'none' }}>
+
+                  {/* WSP */}
+                  <td style={{ padding: '8px 16px' }} onClick={() => editing?.id !== c.id && startEdit(c.id, 'telefono', c.telefono ?? '')}>
+                    {editing?.id === c.id && editing.field === 'telefono' ? (
+                      <input
+                        autoFocus
+                        value={editVal}
+                        onChange={e => setEditVal(e.target.value)}
+                        onBlur={e => saveInline(c.id, 'telefono', e.target.value)}
+                        onKeyDown={e => e.key === 'Enter' && saveInline(c.id, 'telefono', editVal)}
+                        style={cellInputStyle}
+                      />
+                    ) : c.telefono ? (
+                      <a
+                        href={`https://wa.me/54${c.telefono}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={e => e.stopPropagation()}
+                        style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8125rem', color: 'var(--color-accent)', textDecoration: 'none', cursor: 'pointer' }}
+                      >
                         {c.telefono}
                       </a>
-                    ) : '—'}
+                    ) : (
+                      <span style={{ color: 'var(--color-faint)', fontFamily: 'var(--font-ui)', fontSize: '0.875rem', cursor: 'pointer' }}>—</span>
+                    )}
                   </td>
-                  <td style={{ padding: '12px 16px', fontFamily: 'var(--font-ui)', fontSize: '0.8125rem' }}>
-                    {c.url ? (
-                      <a href={c.url.startsWith('http') ? c.url : `https://${c.url}`} target="_blank" rel="noreferrer" style={{ color: 'var(--color-accent)', textDecoration: 'none' }}>
+
+                  {/* URL */}
+                  <td style={{ padding: '8px 16px' }} onClick={() => editing?.id !== c.id && startEdit(c.id, 'url', c.url ?? '')}>
+                    {editing?.id === c.id && editing.field === 'url' ? (
+                      <input
+                        autoFocus
+                        value={editVal}
+                        onChange={e => setEditVal(e.target.value)}
+                        onBlur={e => saveInline(c.id, 'url', e.target.value)}
+                        onKeyDown={e => e.key === 'Enter' && saveInline(c.id, 'url', editVal)}
+                        style={cellInputStyle}
+                      />
+                    ) : c.url ? (
+                      <a
+                        href={c.url.startsWith('http') ? c.url : `https://${c.url}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={e => e.stopPropagation()}
+                        style={{ fontFamily: 'var(--font-ui)', fontSize: '0.8125rem', color: 'var(--color-accent)', textDecoration: 'none', cursor: 'pointer' }}
+                      >
                         {c.url.replace(/^https?:\/\//, '')}
                       </a>
-                    ) : '—'}
+                    ) : (
+                      <span style={{ color: 'var(--color-faint)', fontFamily: 'var(--font-ui)', fontSize: '0.875rem', cursor: 'pointer' }}>—</span>
+                    )}
                   </td>
                 </tr>
               ))}
