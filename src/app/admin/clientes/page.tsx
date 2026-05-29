@@ -192,7 +192,7 @@ export default function ClientesPage() {
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--color-border)' }}>
-                {['Cliente', 'Demo', 'Situación', 'Plan', 'WSP', 'URL'].map(h => (
+                {['Cliente', 'Demo', 'Situación', 'Plan', 'WSP', 'URL', 'Observaciones'].map(h => (
                   <th key={h} style={{ padding: '12px 16px', textAlign: 'left', fontFamily: 'var(--font-ui)', fontSize: '0.6875rem', fontWeight: 600, color: 'var(--color-muted)', letterSpacing: '0.08em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
                     {h}
                   </th>
@@ -328,6 +328,24 @@ export default function ClientesPage() {
                       </a>
                     ) : (
                       <span style={{ color: 'var(--color-faint)', fontFamily: 'var(--font-ui)', fontSize: '0.875rem', cursor: 'pointer' }}>—</span>
+                    )}
+                  </td>
+
+                  {/* Observaciones */}
+                  <td style={{ padding: '8px 16px', maxWidth: 220 }} onClick={() => editing?.id !== id && startEdit(id, 'notas', c.notas ?? '')}>
+                    {editing?.id === id && editing.field === 'notas' ? (
+                      <input
+                        autoFocus
+                        value={editVal}
+                        onChange={e => setEditVal(e.target.value)}
+                        onBlur={e => saveInline(id, 'notas', e.target.value)}
+                        onKeyDown={e => e.key === 'Enter' && saveInline(id, 'notas', editVal)}
+                        style={{ ...cellInputStyle, minWidth: 180 }}
+                      />
+                    ) : (
+                      <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.8125rem', color: 'var(--color-muted)', cursor: 'pointer', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {c.notas || '—'}
+                      </span>
                     )}
                   </td>
                 </tr>
