@@ -200,8 +200,9 @@ export default function ClientesPage() {
               </tr>
             </thead>
             <tbody>
-              {visible.map(c => (
-                <tr
+              {visible.map(c => {
+                if (!c.id) return null
+                return <tr
                   key={c.id}
                   style={{ borderBottom: '1px solid var(--color-border)' }}
                   onMouseEnter={e => { e.currentTarget.style.background = 'rgba(221,232,255,0.03)' }}
@@ -328,7 +329,7 @@ export default function ClientesPage() {
                     )}
                   </td>
                 </tr>
-              ))}
+              )})}
             </tbody>
           </table>
         </div>
