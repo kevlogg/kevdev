@@ -4,13 +4,15 @@ import { useEffect, useState, useRef } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import {
   getCliente, updateCliente, getChecklistProgreso, toggleChecklistStep,
-  type Cliente, type EstadoCliente,
+  type Cliente, type EstadoCliente, type DemoEstado, type Situacion,
 } from '@/lib/firestore'
 import { CHECKLIST_STEPS } from '@/lib/checklist-steps'
 
 const ESTADOS: EstadoCliente[] = [
   'prospecto', 'contactado', 'demo', 'negociacion', 'cerrado', 'entregado',
 ]
+
+const SITUACIONES: Situacion[] = ['', 'NO RESPONDIO', 'EN ESPERA', 'EN PRODUCCION', 'RECHAZADA']
 
 const ESTADO_LABELS: Record<EstadoCliente, string> = {
   prospecto:   'Prospecto',
@@ -21,7 +23,7 @@ const ESTADO_LABELS: Record<EstadoCliente, string> = {
   entregado:   'Entregado',
 }
 
-type EditableField = 'nombre' | 'rubro' | 'contacto' | 'telefono' | 'instagram' | 'notas' | 'estado'
+type EditableField = 'nombre' | 'rubro' | 'contacto' | 'telefono' | 'instagram' | 'notas' | 'estado' | 'demo' | 'situacion' | 'plan' | 'url'
 
 export default function ClienteDetailPage() {
   const params = useParams()
@@ -159,6 +161,8 @@ export default function ClienteDetailPage() {
               { field: 'contacto',  label: 'Contacto'  },
               { field: 'telefono',  label: 'Teléfono'  },
               { field: 'instagram', label: 'Instagram' },
+              { field: 'plan',      label: 'Plan'      },
+              { field: 'url',       label: 'URL'        },
             ] as { field: EditableField; label: string }[]
           ).map(({ field, label }) => (
             <label key={field} style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
@@ -173,6 +177,44 @@ export default function ClienteDetailPage() {
               />
             </label>
           ))}
+
+          {/* Demo */}
+          <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6875rem', color: 'var(--color-faint)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+              Demo
+            </span>
+            <select
+              value={(form.demo as string) ?? ''}
+              onChange={e => {
+                const v = e.target.value as DemoEstado
+                setForm(f => ({ ...f, demo: v }))
+                saveField('demo', v)
+              }}
+              style={inputStyle}
+            >
+              <option value="">—</option>
+              <option value="PRESENTADA">PRESENTADA</option>
+              <option value="HECHA">HECHA</option>
+            </select>
+          </label>
+
+          {/* Situacion */}
+          <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6875rem', color: 'var(--color-faint)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+              Situacion
+            </span>
+            <select
+              value={(form.situacion as string) ?? ''}
+              onChange={e => {
+                const v = e.target.value as Situacion
+                setForm(f => ({ ...f, situacion: v }))
+                saveField('situacion', v)
+              }}
+              style={inputStyle}
+            >
+              {SITUACIONES.map(s => <option key={s} value={s}>{s || '—'}</option>)}
+            </select>
+          </label>
         </div>
 
         {/* Notas */}
