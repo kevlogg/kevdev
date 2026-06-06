@@ -111,10 +111,8 @@ export default function Hero() {
           transition={{ duration: 0.9, delay: T.bottom, ease: EASE }}
           style={{
             display:        'flex',
-            alignItems:     'flex-end',
-            justifyContent: 'space-between',
+            flexDirection:  'column',
             gap:            '2rem',
-            flexWrap:       'wrap',
             paddingTop:     'clamp(2rem, 4vw, 3rem)',
           }}
         >
@@ -147,9 +145,9 @@ export default function Hero() {
             </p>
           </div>
 
-          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexShrink: 0, flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
             <CTADark onClick={() => scrollTo('#proyectos')}>Ver proyectos</CTADark>
-            <CTADiagnostico href="/diagnostico">¿Cómo mejoro mi negocio? - Diagnóstico gratis</CTADiagnostico>
+            <CTADiagnostico href="/diagnostico">Diagnóstico gratis</CTADiagnostico>
             <CTAArrow href="https://wa.me/542235851419?text=Hola%20Kevin%2C%20quiero%20solicitar%20una%20demo%20sin%20cargo%20para%20mi%20negocio." />
           </div>
         </motion.div>
