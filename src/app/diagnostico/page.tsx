@@ -7,84 +7,84 @@ import Link from 'next/link'
 const WA_NUM = "542235851419"
 
 const questions = [
-  { cat:"Situación actual", icon:"🏢", area:"general",
+  { cat:"Situación actual", icon:"🏢", area:"general", img:"startup business",
     q:"¿En qué etapa está tu negocio hoy?",
     opts:[
       {t:"Recién arrancando, buscando mis primeros clientes", s:0},
       {t:"Ya tengo clientes pero quiero crecer y ordenarme", s:1},
       {t:"Tengo un negocio establecido y quiero profesionalizarlo", s:2}
     ]},
-  { cat:"Presencia digital", icon:"🌐", area:"presencia",
+  { cat:"Presencia digital", icon:"🌐", area:"presencia", img:"website design",
     q:"¿Tenés sitio web propio?",
     opts:[
       {t:"Sí, activo y actualizado", s:2},
       {t:"Tengo uno pero desactualizado o incompleto", s:1},
       {t:"No tengo sitio web", s:0}
     ]},
-  { cat:"Presencia digital", icon:"📍", area:"presencia",
+  { cat:"Presencia digital", icon:"📍", area:"presencia", img:"Google Maps business",
     q:"¿Tu negocio aparece en Google Maps / Google Mi Negocio?",
     opts:[
       {t:"Sí, con ficha completa, fotos y reseñas activas", s:2},
       {t:"Aparezco pero no gestiono la ficha", s:1},
       {t:"No estoy registrado en Google", s:0}
     ]},
-  { cat:"Redes sociales", icon:"📲", area:"presencia",
+  { cat:"Redes sociales", icon:"📲", area:"presencia", img:"social media content",
     q:"¿Cómo manejás las redes del negocio?",
     opts:[
       {t:"Publicamos con frecuencia y estrategia", s:2},
       {t:"Publicamos cuando podemos, sin plan", s:1},
       {t:"Sin presencia activa en redes", s:0}
     ]},
-  { cat:"Imagen de marca", icon:"🎨", area:"identidad",
+  { cat:"Imagen de marca", icon:"🎨", area:"identidad", img:"brand identity logo design",
     q:"¿Tenés logo e identidad visual definida?",
     opts:[
       {t:"Sí: logo, colores y tipografía coherentes", s:2},
       {t:"Tengo logo pero sin identidad visual completa", s:1},
       {t:"Sin identidad visual profesional", s:0}
     ]},
-  { cat:"Comunicación", icon:"💬", area:"presencia",
+  { cat:"Comunicación", icon:"💬", area:"presencia", img:"customer communication",
     q:"¿Cómo recibís consultas de clientes?",
     opts:[
       {t:"Múltiples canales organizados (WA Business, email, web)", s:2},
       {t:"Solo WhatsApp personal o Instagram", s:1},
       {t:"Solo presencial o por llamada", s:0}
     ]},
-  { cat:"Comunicación", icon:"📧", area:"identidad",
+  { cat:"Comunicación", icon:"📧", area:"identidad", img:"professional email",
     q:"¿Usás email profesional con tu dominio?",
     opts:[
       {t:"Sí, email con mi propio dominio (hola@minegocio.com)", s:2},
       {t:"Uso Gmail o Hotmail personal para el negocio", s:1},
       {t:"Sin email dedicado para el negocio", s:0}
     ]},
-  { cat:"Gestión", icon:"📊", area:"integral",
+  { cat:"Gestión", icon:"📊", area:"integral", img:"CRM business management",
     q:"¿Cómo organizás clientes, pedidos o ventas?",
     opts:[
       {t:"Uso CRM o software de gestión", s:2},
       {t:"Uso planillas de Excel o Google Sheets", s:1},
       {t:"De memoria o con anotaciones sueltas", s:0}
     ]},
-  { cat:"Ventas", icon:"📋", area:"presencia",
+  { cat:"Ventas", icon:"📋", area:"presencia", img:"product catalog ecommerce",
     q:"¿Tenés catálogo o lista de precios digital?",
     opts:[
       {t:"Sí, online y siempre actualizado", s:2},
       {t:"Tengo algo pero desactualizado", s:1},
       {t:"Sin catálogo o precios digitales", s:0}
     ]},
-  { cat:"Marketing", icon:"📣", area:"integral",
+  { cat:"Marketing", icon:"📣", area:"integral", img:"digital marketing advertising",
     q:"¿Invertís en publicidad digital?",
     opts:[
       {t:"Sí, con presupuesto y estrategia definida", s:2},
       {t:"Lo hice alguna vez, sin continuidad", s:1},
       {t:"No, nunca invertí en publicidad digital", s:0}
     ]},
-  { cat:"Reputación", icon:"⭐", area:"integral",
+  { cat:"Reputación", icon:"⭐", area:"integral", img:"customer reviews testimonials",
     q:"¿Gestionás reseñas o testimonios de clientes?",
     opts:[
       {t:"Sí, pedimos reseñas y las respondemos", s:2},
       {t:"Tengo algunas pero no las gestiono", s:1},
       {t:"No tengo reseñas activas", s:0}
     ]},
-  { cat:"Administración", icon:"🧾", area:"identidad",
+  { cat:"Administración", icon:"🧾", area:"identidad", img:"invoice accounting documents",
     q:"¿Emitís facturas o comprobantes digitales?",
     opts:[
       {t:"Sí, siempre de forma digital y organizada", s:2},
@@ -282,39 +282,68 @@ function Intro({ onStart }: { onStart: () => void }) {
 }
 
 function Pregunta({ q, idx, selected, onSelect, onNext, onPrev, isLast }: any) {
+  const [imgUrl, setImgUrl] = useState<string>('')
+
+  useEffect(() => {
+    const key = process.env.NEXT_PUBLIC_UNSPLASH_KEY
+    if (!key || !q.img) return
+    const url = `https://api.unsplash.com/search/photos?query=${encodeURIComponent(q.img)}&client_id=${key}&per_page=1`
+    fetch(url)
+      .then(r => r.json())
+      .then(d => d.results?.[0]?.urls?.regular && setImgUrl(d.results[0].urls.regular))
+      .catch(() => {})
+  }, [q.img])
+
   return (
-    <motion.div key={`q-${idx}`} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }} style={{ maxWidth: '640px', margin: '2rem auto' }}>
-      <div style={{ marginBottom: '2rem' }}>
-        <div style={{ fontSize: '0.75rem', color: 'var(--cyan)', fontWeight: 600, marginBottom: '0.5rem' }}>{q.icon} {q.cat}</div>
-        <h2 style={{ fontSize: '1.5rem', fontWeight: 800, lineHeight: 1.3, marginBottom: '2rem' }}>{q.q}</h2>
-      </div>
+    <motion.div key={`q-${idx}`} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }} style={{
+      position: 'relative',
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      overflow: 'hidden'
+    }}>
+      {imgUrl && (
+        <div style={{
+          position: 'absolute', inset: 0, zIndex: 0,
+          backgroundImage: `url(${imgUrl})`,
+          backgroundSize: 'cover', backgroundPosition: 'center',
+          opacity: 0.12, filter: 'blur(1px)'
+        }} aria-hidden />
+      )}
+      <div style={{ position: 'relative', zIndex: 1, maxWidth: '640px', margin: '2rem', width: '100%' }}>
+        <div style={{ marginBottom: '2rem' }}>
+          <div style={{ fontSize: '0.75rem', color: 'var(--cyan)', fontWeight: 600, marginBottom: '0.5rem' }}>{q.icon} {q.cat}</div>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 800, lineHeight: 1.3, marginBottom: '2rem' }}>{q.q}</h2>
+        </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem' }}>
-        {q.opts.map((opt: any, i: number) => (
-          <button key={i} onClick={() => onSelect(i)} style={{
-            padding: '1.25rem', textAlign: 'left', border: `1px solid ${selected === i ? 'rgba(79,195,247,0.4)' : 'rgba(79,195,247,0.1)'}`, background: selected === i ? 'rgba(79,195,247,0.08)' : 'transparent', borderRadius: 3, color: 'var(--white)', cursor: 'pointer', transition: 'all 0.25s', fontSize: '0.95rem', lineHeight: 1.5,
-          }} onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(79,195,247,0.3)', e.currentTarget.style.background = 'rgba(79,195,247,0.04)')} onMouseLeave={e => (selected !== i && (e.currentTarget.style.borderColor = 'rgba(79,195,247,0.1)', e.currentTarget.style.background = 'transparent'))}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <div style={{ width: '16px', height: '16px', border: '2px solid', borderColor: selected === i ? 'var(--cyan)' : 'rgba(79,195,247,0.3)', borderRadius: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                {selected === i && <div style={{ width: '8px', height: '8px', background: 'var(--cyan)', borderRadius: 1 }} />}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem' }}>
+          {q.opts.map((opt: any, i: number) => (
+            <button key={i} onClick={() => onSelect(i)} style={{
+              padding: '1.25rem', textAlign: 'left', border: `1px solid ${selected === i ? 'rgba(79,195,247,0.4)' : 'rgba(79,195,247,0.1)'}`, background: selected === i ? 'rgba(79,195,247,0.08)' : 'transparent', borderRadius: 3, color: 'var(--white)', cursor: 'pointer', transition: 'all 0.25s', fontSize: '0.95rem', lineHeight: 1.5,
+            }} onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(79,195,247,0.3)', e.currentTarget.style.background = 'rgba(79,195,247,0.04)')} onMouseLeave={e => (selected !== i && (e.currentTarget.style.borderColor = 'rgba(79,195,247,0.1)', e.currentTarget.style.background = 'transparent'))}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <div style={{ width: '16px', height: '16px', border: '2px solid', borderColor: selected === i ? 'var(--cyan)' : 'rgba(79,195,247,0.3)', borderRadius: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  {selected === i && <div style={{ width: '8px', height: '8px', background: 'var(--cyan)', borderRadius: 1 }} />}
+                </div>
+                {opt.t}
               </div>
-              {opt.t}
-            </div>
-          </button>
-        ))}
-      </div>
+            </button>
+          ))}
+        </div>
 
-      <div style={{ display: 'flex', gap: '1rem', justifyContent: 'space-between' }}>
-        <button onClick={onPrev} style={{
-          padding: '0.875rem 1.75rem', border: '1px solid var(--cyan)', background: 'transparent', color: 'var(--cyan)', borderRadius: 99, cursor: 'pointer', fontWeight: 600, fontSize: '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase', transition: 'all 0.25s',
-        }} onMouseEnter={e => (e.currentTarget.style.background = 'rgba(79,195,247,0.08)')} onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
-          ← Anterior
-        </button>
-        <button onClick={onNext} disabled={selected === -1} style={{
-          padding: '0.875rem 1.75rem', border: '1px solid var(--cyan)', background: selected === -1 ? 'transparent' : 'var(--cyan)', color: selected === -1 ? 'rgba(79,195,247,0.4)' : 'var(--bg-page)', borderRadius: 99, cursor: selected === -1 ? 'not-allowed' : 'pointer', fontWeight: 600, fontSize: '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase', opacity: selected === -1 ? 0.5 : 1, transition: 'all 0.25s',
-        }} onMouseEnter={e => !selected === -1 && (e.currentTarget.style.boxShadow = '0 4px 16px rgba(79,195,247,0.24)')} onMouseLeave={e => (e.currentTarget.style.boxShadow = 'none')}>
-          {isLast ? 'Ver mi plan →' : 'Siguiente →'}
-        </button>
+        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'space-between' }}>
+          <button onClick={onPrev} style={{
+            padding: '0.875rem 1.75rem', border: '1px solid var(--cyan)', background: 'transparent', color: 'var(--cyan)', borderRadius: 99, cursor: 'pointer', fontWeight: 600, fontSize: '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase', transition: 'all 0.25s',
+          }} onMouseEnter={e => (e.currentTarget.style.background = 'rgba(79,195,247,0.08)')} onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
+            ← Anterior
+          </button>
+          <button onClick={onNext} disabled={selected === -1} style={{
+            padding: '0.875rem 1.75rem', border: '1px solid var(--cyan)', background: selected === -1 ? 'transparent' : 'var(--cyan)', color: selected === -1 ? 'rgba(79,195,247,0.4)' : 'var(--bg-page)', borderRadius: 99, cursor: selected === -1 ? 'not-allowed' : 'pointer', fontWeight: 600, fontSize: '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase', opacity: selected === -1 ? 0.5 : 1, transition: 'all 0.25s',
+          }} onMouseEnter={e => !selected === -1 && (e.currentTarget.style.boxShadow = '0 4px 16px rgba(79,195,247,0.24)')} onMouseLeave={e => (e.currentTarget.style.boxShadow = 'none')}>
+            {isLast ? 'Ver mi plan →' : 'Siguiente →'}
+          </button>
+        </div>
       </div>
     </motion.div>
   )
