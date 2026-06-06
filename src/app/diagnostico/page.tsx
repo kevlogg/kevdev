@@ -241,7 +241,7 @@ Generá diagnóstico en JSON puro (sin markdown, sin backticks):
             q={questions[current]}
             idx={current}
             selected={answers[current]}
-            onSelect={(i) => setAnswers(a => [...a.slice(0, current), i, ...a.slice(current + 1)])}
+            onSelect={(i: number) => setAnswers(a => [...a.slice(0, current), i, ...a.slice(current + 1)])}
             onNext={() => current < questions.length - 1 ? setCurrent(c => c + 1) : finish()}
             onPrev={() => setCurrent(c => Math.max(0, c - 1))}
             isLast={current === questions.length - 1}
