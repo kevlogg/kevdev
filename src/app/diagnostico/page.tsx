@@ -340,7 +340,7 @@ function Pregunta({ q, idx, selected, onSelect, onNext, onPrev, isLast }: any) {
           </button>
           <button onClick={onNext} disabled={selected === -1} style={{
             padding: '0.875rem 1.75rem', border: '1px solid var(--cyan)', background: selected === -1 ? 'transparent' : 'var(--cyan)', color: selected === -1 ? 'rgba(79,195,247,0.4)' : 'var(--bg-page)', borderRadius: 99, cursor: selected === -1 ? 'not-allowed' : 'pointer', fontWeight: 600, fontSize: '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase', opacity: selected === -1 ? 0.5 : 1, transition: 'all 0.25s',
-          }} onMouseEnter={e => !selected === -1 && (e.currentTarget.style.boxShadow = '0 4px 16px rgba(79,195,247,0.24)')} onMouseLeave={e => (e.currentTarget.style.boxShadow = 'none')}>
+          }} onMouseEnter={e => selected !== -1 && (e.currentTarget.style.boxShadow = '0 4px 16px rgba(79,195,247,0.24)')} onMouseLeave={e => (e.currentTarget.style.boxShadow = 'none')}>
             {isLast ? 'Ver mi plan →' : 'Siguiente →'}
           </button>
         </div>
