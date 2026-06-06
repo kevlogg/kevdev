@@ -147,8 +147,9 @@ export default function Hero() {
             </p>
           </div>
 
-          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexShrink: 0 }}>
+          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexShrink: 0, flexWrap: 'wrap' }}>
             <CTADark onClick={() => scrollTo('#proyectos')}>Ver proyectos</CTADark>
+            <CTADiagnostico href="/diagnostico">¿Cómo mejoro mi negocio? - Diagnóstico gratis</CTADiagnostico>
             <CTAArrow href="https://wa.me/542235851419?text=Hola%20Kevin%2C%20quiero%20solicitar%20una%20demo%20sin%20cargo%20para%20mi%20negocio." />
           </div>
         </motion.div>
@@ -177,6 +178,30 @@ function CTADark({ children, onClick }: { children: React.ReactNode; onClick: ()
       }}>
       {children}
     </button>
+  )
+}
+
+function CTADiagnostico({ href, children }: { href: string; children: React.ReactNode }) {
+  const [hov, setHov] = useState(false)
+  return (
+    <a href={href}
+      onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+      style={{
+        fontFamily:     'var(--font-ui)', fontWeight: 600,
+        fontSize:       '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase',
+        padding:        '0.875rem 1.75rem',
+        border:         `1px solid rgba(79,195,247,${hov ? '0.4' : '0.2'})`,
+        borderRadius:   99, cursor: 'pointer',
+        background:     hov ? 'rgba(79,195,247,0.08)' : 'rgba(79,195,247,0.04)',
+        backdropFilter: 'blur(16px)',
+        color:          hov ? 'var(--cyan)' : 'rgba(79,195,247,0.7)',
+        textDecoration: 'none',
+        transition:     'all 0.25s var(--ease-expo)',
+        transform:      hov ? 'translateY(-1px)' : 'none',
+        display:        'inline-block',
+      }}>
+      {children}
+    </a>
   )
 }
 
