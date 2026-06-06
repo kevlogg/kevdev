@@ -306,13 +306,13 @@ function Pregunta({ q, idx, selected, onSelect, onNext, onPrev, isLast }: any) {
 
       <div style={{ display: 'flex', gap: '1rem', justifyContent: 'space-between' }}>
         <button onClick={onPrev} style={{
-          padding: '0.875rem 1.75rem', border: '1px solid rgba(255,255,255,0.1)', background: 'transparent', color: 'var(--muted)', borderRadius: 99, cursor: 'pointer', fontWeight: 600, fontSize: '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase', transition: 'all 0.25s',
-        }}>
+          padding: '0.875rem 1.75rem', border: '1px solid var(--cyan)', background: 'transparent', color: 'var(--cyan)', borderRadius: 99, cursor: 'pointer', fontWeight: 600, fontSize: '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase', transition: 'all 0.25s',
+        }} onMouseEnter={e => (e.currentTarget.style.background = 'rgba(79,195,247,0.08)')} onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
           ← Anterior
         </button>
         <button onClick={onNext} disabled={selected === -1} style={{
-          padding: '0.875rem 1.75rem', border: '1px solid rgba(79,195,247,0.2)', background: 'rgba(79,195,247,0.08)', color: selected === -1 ? 'rgba(79,195,247,0.3)' : 'var(--cyan)', borderRadius: 99, cursor: selected === -1 ? 'not-allowed' : 'pointer', fontWeight: 600, fontSize: '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase', opacity: selected === -1 ? 0.3 : 1, transition: 'all 0.25s',
-        }}>
+          padding: '0.875rem 1.75rem', border: '1px solid var(--cyan)', background: selected === -1 ? 'transparent' : 'var(--cyan)', color: selected === -1 ? 'rgba(79,195,247,0.4)' : 'var(--bg-page)', borderRadius: 99, cursor: selected === -1 ? 'not-allowed' : 'pointer', fontWeight: 600, fontSize: '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase', opacity: selected === -1 ? 0.5 : 1, transition: 'all 0.25s',
+        }} onMouseEnter={e => !selected === -1 && (e.currentTarget.style.boxShadow = '0 4px 16px rgba(79,195,247,0.24)')} onMouseLeave={e => (e.currentTarget.style.boxShadow = 'none')}>
           {isLast ? 'Ver mi plan →' : 'Siguiente →'}
         </button>
       </div>
@@ -395,8 +395,8 @@ function Resultados({ data }: { data: any }) {
                 ))}
               </ul>
               <a href={`https://wa.me/${WA_NUM}?text=${encodeURIComponent(p.msg)}`} target="_blank" rel="noreferrer" style={{
-                padding: '0.75rem 1.5rem', border: '1px solid rgba(79,195,247,0.2)', background: 'transparent', color: 'var(--cyan)', borderRadius: 99, fontWeight: 600, cursor: 'pointer', fontSize: '0.75rem', textDecoration: 'none', transition: 'all 0.22s', textAlign: 'center',
-              }} onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(79,195,247,0.4)', e.currentTarget.style.background = 'rgba(79,195,247,0.04)')} onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(79,195,247,0.2)', e.currentTarget.style.background = 'transparent')}>
+                padding: '0.75rem 1.5rem', border: '1px solid var(--cyan)', background: 'transparent', color: 'var(--cyan)', borderRadius: 99, fontWeight: 600, cursor: 'pointer', fontSize: '0.75rem', textDecoration: 'none', transition: 'all 0.22s', textAlign: 'center',
+              }} onMouseEnter={e => (e.currentTarget.style.background = 'rgba(79,195,247,0.08)')} onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
                 Más info
               </a>
             </div>
@@ -412,8 +412,8 @@ function Resultados({ data }: { data: any }) {
 
       <div style={{ textAlign: 'center', marginTop: '2rem' }}>
         <button onClick={() => window.location.reload()} style={{
-          padding: '0.75rem 1.5rem', border: '1px solid rgba(79,195,247,0.2)', background: 'transparent', color: 'var(--cyan)', borderRadius: 99, fontWeight: 600, cursor: 'pointer', fontSize: '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase', transition: 'all 0.22s',
-        }}>
+          padding: '0.75rem 1.5rem', border: '1px solid var(--cyan)', background: 'transparent', color: 'var(--cyan)', borderRadius: 99, fontWeight: 600, cursor: 'pointer', fontSize: '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase', transition: 'all 0.22s',
+        }} onMouseEnter={e => (e.currentTarget.style.background = 'rgba(79,195,247,0.08)')} onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
           ↺ Reiniciar
         </button>
       </div>
