@@ -76,6 +76,17 @@ const GRUPOS: GrupoPlantilla[] = [
       },
     ],
   },
+  {
+    titulo: 'Integración Mercado Pago',
+    variantes: [
+      {
+        label: 'A',
+        tono: 'Tono cercano',
+        texto: (_nombre, _demo) =>
+          `¡Hola! Para integrar el pago con Mercado Pago en el sitio necesito que hagas dos cosas desde tu cuenta. Te explico paso a paso:\n\n*1. Obtener las credenciales de tu cuenta* 🔑\nEstas son las claves que conecto al sitio para que los pagos entren a tu cuenta.\n\n• Entrá a mercadopago.com.ar/developers\n• Hacé clic en "Tus integraciones" → "Crear aplicación"\n• Ponerle un nombre cualquiera (ej: "Mi Sitio Web") y seleccioná "Checkout Pro"\n• Una vez creada, andá a la sección "Credenciales de producción"\n• Copiame las dos claves: *Public Key* y *Access Token*\n\n*2. Configurar las cuotas sin interés* 💳\nEsto es opcional, pero si querés ofrecerle cuotas sin interés a tus clientes, lo hacés así:\n\n• En tu cuenta de Mercado Pago entrá a "Tu negocio" → "Costos y cuotas"\n• Arriba seleccioná "Checkout"\n• Entrá a la pestaña "Por ofrecer cuotas"\n• Al lado de "Cuotas sin interés" hacé clic en "Ofrecer"\n• Activá el botón y elegí hasta cuántas cuotas querés ofrecer (3, 6, 12…)\n\nTené en cuenta que al ofrecer cuotas sin interés, el costo de financiación lo absorbés vos (MP te descuenta la diferencia de cada venta). Los bancos también tienen sus propias promociones de cuotas sin interés que aparecen automáticamente sin costo extra para vos.\n\nCon eso ya puedo dejarte el checkout funcionando. Cualquier duda avisame! 🙌`,
+      },
+    ],
+  },
 ]
 
 function GrupoCard({ grupo, nombre, demo }: { grupo: GrupoPlantilla; nombre: string; demo: string }) {
