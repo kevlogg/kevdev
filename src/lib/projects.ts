@@ -72,16 +72,16 @@ export const PROJECTS: Project[] = [
     color: '#f472b6',
   },
   {
-    name: 'Tienda de Astillas',
+    name: 'Dulce Hogar',
     status: 'En producción',
     statusDot: 'var(--color-accent)',
-    tagline: 'E-commerce de productos artesanales en madera.',
+    tagline: 'Tienda online de muebles y decoración premium.',
     description:
-      'Tienda online para una marca de productos de madera trabajada a mano. Catálogo de productos, carrito de compras y flujo de pago integrado. Identidad visual cálida y artesanal que transmite el valor del trabajo manual.',
-    tags: ['Next.js', 'E-commerce', 'Landing', 'Branding'],
+      'Sitio para una tienda de muebles y deco de Moreno, Buenos Aires. Catálogo de productos, integración con WhatsApp y MercadoPago, diseño cálido y elegante que transmite el estilo premium de la marca.',
+    tags: ['Next.js', 'E-commerce', 'MercadoPago', 'Branding'],
     year: '2025',
-    href: 'https://tiendadeastillas.com.ar',
-    color: '#fb923c',
+    href: 'https://dulcehogardye.com.ar',
+    color: '#C9A87C',
   },
   {
     name: 'Mundialito',
