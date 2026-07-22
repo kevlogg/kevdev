@@ -106,4 +106,16 @@ export const PROJECTS: Project[] = [
     year: '2025',
     color: '#c9a97a',
   },
+  {
+    name: 'La Rodante del Desierto',
+    status: 'En producción',
+    statusDot: 'var(--color-accent)',
+    tagline: 'Landing para réplicas impresas en 3D de la RV de una serie de culto.',
+    description:
+      'Sitio de venta para una réplica miniatura hecha a pedido, con pintura a mano y sin usar assets oficiales de la producción. Estética de laboratorio clandestino y desierto nocturno, con video y fotos de producto en cada sección.',
+    tags: ['Next.js', 'Framer Motion', 'Tailwind', 'E-commerce'],
+    year: '2025',
+    href: 'https://la-rodante-del-desierto.vercel.app',
+    color: '#c8d94a',
+  },
 ]

@@ -190,7 +190,7 @@ function IntroState({ onEnter }: { onEnter: () => void }) {
           margin: 0,
         }}
       >
-        8 productos reales. En produccion. Sin demos, sin relleno.
+        9 productos reales. En produccion. Sin demos, sin relleno.
       </motion.p>
 
       <motion.button
