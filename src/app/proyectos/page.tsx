@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import Navbar from '@/components/layout/Navbar'
+import TechSpecModal from '@/components/ui/TechSpecModal'
 import { PROJECTS, type Project } from '@/lib/projects'
 
 type PageState = 'intro' | 'carousel'
@@ -293,6 +294,8 @@ function CarouselState({ currentIndex, direction, onNavigate }: {
 /* ─── Project Card ───────────────────────────────────────────────────── */
 function ProjectCard({ project, direction }: { project: Project; direction: 1 | -1 }) {
   const colorAlpha = project.color + '4D'
+  const [showSpec, setShowSpec] = useState(false)
+  const [hovSpec, setHovSpec] = useState(false)
 
   return (
     <motion.div
@@ -415,6 +418,39 @@ function ProjectCard({ project, direction }: { project: Project; direction: 1 | 
         >
           Ver proyecto ↗
         </a>
+      )}
+
+      {project.techSpec && (
+        <div style={{ marginTop: '1rem' }}>
+          <button
+            onClick={() => setShowSpec(true)}
+            onMouseEnter={() => setHovSpec(true)}
+            onMouseLeave={() => setHovSpec(false)}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              padding: '0.5rem 1.25rem',
+              border: '1px solid rgba(255,255,255,0.15)',
+              borderRadius: 99,
+              background: 'none',
+              color: hovSpec ? 'var(--color-star)' : 'var(--color-faint)',
+              fontFamily: 'var(--font-ui)',
+              fontSize: '0.75rem',
+              fontWeight: 600,
+              letterSpacing: '0.04em',
+              cursor: 'pointer',
+              transition: 'color 0.25s, border-color 0.25s',
+              borderColor: hovSpec ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.15)',
+            }}
+          >
+            Especificación técnica ⚙
+          </button>
+        </div>
+      )}
+
+      {showSpec && project.techSpec && (
+        <TechSpecModal project={project} onClose={() => setShowSpec(false)} />
       )}
     </motion.div>
   )
