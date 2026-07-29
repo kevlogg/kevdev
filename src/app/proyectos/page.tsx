@@ -57,7 +57,8 @@ export default function ProyectosPage() {
             top: 0 !important;
             left: 0 !important;
             width: 100% !important;
-            height: 45vh !important;
+            aspect-ratio: 16 / 9;
+            height: auto !important;
             border-radius: 0 0 16px 16px;
           }
           .project-bg-video {
@@ -508,22 +509,25 @@ function ArrowButton({ direction, onClick }: {
       aria-label={direction === 'left' ? 'Proyecto anterior' : 'Proyecto siguiente'}
       style={{
         position: 'absolute',
-        [side]: 'clamp(1.5rem, 4vw, 3rem)',
+        [side]: 'clamp(1rem, 4vw, 3rem)',
         top: '50%',
-        transform: 'translateY(-50%)',
-        width: 48,
-        height: 48,
+        transform: `translateY(-50%) scale(${hov ? 1.06 : 1})`,
+        width: 52,
+        height: 52,
         borderRadius: '50%',
-        border: `1px solid ${hov ? 'rgba(255,255,255,0.25)' : 'rgba(255,255,255,0.1)'}`,
-        background: 'none',
-        color: hov ? 'var(--color-star)' : 'var(--color-faint)',
-        fontSize: '1.125rem',
+        border: `1.5px solid ${hov ? 'var(--color-star)' : 'rgba(255,255,255,0.45)'}`,
+        background: hov ? 'rgba(255,255,255,0.16)' : 'rgba(10,12,20,0.45)',
+        backdropFilter: 'blur(6px)',
+        boxShadow: hov ? '0 4px 20px rgba(0,0,0,0.35)' : '0 2px 12px rgba(0,0,0,0.25)',
+        color: 'var(--color-star)',
+        fontSize: '1.375rem',
         cursor: 'pointer',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        transition: 'border-color 0.25s, color 0.25s',
+        transition: 'border-color 0.25s, color 0.25s, background 0.25s, transform 0.25s, box-shadow 0.25s',
         flexShrink: 0,
+        zIndex: 20,
       }}
     >
       {direction === 'left' ? '←' : '→'}
