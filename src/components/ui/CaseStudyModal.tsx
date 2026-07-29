@@ -6,19 +6,15 @@ import type { Project } from '@/lib/projects'
 
 const EASE_OUT: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
-const FIELDS: { key: keyof NonNullable<Project['techSpec']>; label: string }[] = [
-  { key: 'architecture', label: 'Arquitectura' },
-  { key: 'frameworks', label: 'Frameworks' },
-  { key: 'languages', label: 'Lenguajes' },
-  { key: 'auth', label: 'Autenticación' },
-  { key: 'payments', label: 'Pagos' },
-  { key: 'database', label: 'Base de datos / Backend' },
-  { key: 'seo', label: 'SEO' },
-  { key: 'hosting', label: 'Hosting / Deploy' },
-  { key: 'other', label: 'Otras tecnologías' },
+const FIELDS: { key: keyof NonNullable<Project['caseStudy']>; label: string }[] = [
+  { key: 'problem', label: 'Problema' },
+  { key: 'solution', label: 'Solución' },
+  { key: 'process', label: 'Proceso' },
+  { key: 'result', label: 'Resultado' },
+  { key: 'learning', label: 'Aprendizaje' },
 ]
 
-export default function TechSpecModal({
+export default function CaseStudyModal({
   project,
   onClose,
 }: {
@@ -37,13 +33,8 @@ export default function TechSpecModal({
     }
   }, [onClose])
 
-  const specGroups: { label?: string; spec: NonNullable<Project['techSpec']> }[] = project.techSpecs
-    ? project.techSpecs.map(({ label, spec }) => ({ label, spec }))
-    : project.techSpec
-      ? [{ spec: project.techSpec }]
-      : []
-
-  if (specGroups.length === 0) return null
+  const study = project.caseStudy
+  if (!study) return null
 
   return (
     <AnimatePresence>
@@ -70,7 +61,7 @@ export default function TechSpecModal({
           key="panel"
           role="dialog"
           aria-modal="true"
-          aria-label={`Especificación técnica de ${project.name}`}
+          aria-label={`Caso de estudio de ${project.name}`}
           initial={{ opacity: 0, y: 24, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 16, scale: 0.98 }}
@@ -102,7 +93,7 @@ export default function TechSpecModal({
                 textTransform: 'uppercase',
                 color: project.color,
               }}>
-                Especificación técnica
+                Caso de estudio
               </span>
               <h3 style={{
                 fontFamily: 'var(--font-display)',
@@ -139,54 +130,34 @@ export default function TechSpecModal({
             </button>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-            {specGroups.map((group, groupIdx) => (
-              <div key={group.label ?? groupIdx}>
-                {group.label && (
-                  <h4 style={{
-                    fontFamily: 'var(--font-ui)',
-                    fontSize: '0.8125rem',
-                    fontWeight: 700,
-                    letterSpacing: '0.02em',
-                    color: 'var(--color-star)',
-                    margin: '0 0 1rem',
-                    paddingBottom: '0.5rem',
-                    borderBottom: `1px solid ${project.color}33`,
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.125rem' }}>
+            {FIELDS.map(({ key, label }) => {
+              const value = study[key]
+              if (!value) return null
+              return (
+                <div key={key}>
+                  <div style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.625rem',
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                    color: project.color,
+                    marginBottom: '0.3rem',
                   }}>
-                    {group.label}
-                  </h4>
-                )}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.125rem' }}>
-                  {FIELDS.map(({ key, label }) => {
-                    const value = group.spec[key]
-                    if (!value) return null
-                    return (
-                      <div key={key}>
-                        <div style={{
-                          fontFamily: 'var(--font-mono)',
-                          fontSize: '0.625rem',
-                          letterSpacing: '0.08em',
-                          textTransform: 'uppercase',
-                          color: project.color,
-                          marginBottom: '0.3rem',
-                        }}>
-                          {label}
-                        </div>
-                        <p style={{
-                          fontFamily: 'var(--font-ui)',
-                          fontSize: '0.9375rem',
-                          lineHeight: 1.6,
-                          color: 'var(--color-muted)',
-                          margin: 0,
-                        }}>
-                          {value}
-                        </p>
-                      </div>
-                    )
-                  })}
+                    {label}
+                  </div>
+                  <p style={{
+                    fontFamily: 'var(--font-ui)',
+                    fontSize: '0.9375rem',
+                    lineHeight: 1.6,
+                    color: 'var(--color-muted)',
+                    margin: 0,
+                  }}>
+                    {value}
+                  </p>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </motion.div>
       </motion.div>
