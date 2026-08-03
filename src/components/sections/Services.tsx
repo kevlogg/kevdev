@@ -5,47 +5,33 @@ import {
   motion, AnimatePresence,
   useScroll, useTransform, useMotionValueEvent,
 } from 'framer-motion'
+import { useTranslations } from 'next-intl'
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
-const SERVICES = [
-  {
-    num: '01',
-    title: 'Landing pages',
-    desc: 'Páginas de aterrizaje claras y de alto impacto. Diseño centrado en transmitir el mensaje correcto y convertir desde el primer scroll.',
-    detail: 'Cada landing es una pieza estratégica: copy alineado al negocio, jerarquía visual que guía la atención y performance optimizada. Sin templates. Sin relleno visual.',
-    stack: 'Next.js  ·  Figma  ·  Framer Motion',
-    tag: 'Conversión',
-  },
-  {
-    num: '02',
-    title: 'Web apps & paneles',
-    desc: 'Aplicaciones web y dashboards para gestionar datos, usuarios o procesos. Interfaces útiles, rápidas y escalables desde el día uno.',
-    detail: 'Arquitectura pensada para crecer: autenticación, roles, base de datos en tiempo real y UX que reduce la curva de aprendizaje del usuario final desde el primer día.',
-    stack: 'React  ·  Node.js  ·  Firebase',
-    tag: 'Producto',
-  },
-  {
-    num: '03',
-    title: 'Automatizaciones con IA',
-    desc: 'Flujos que combinan APIs, integraciones e IA para eliminar tareas manuales y mejorar la operación del negocio.',
-    detail: 'Desde notificaciones automáticas hasta pipelines de datos. Integración con OpenAI, webhooks y las herramientas que el equipo ya usa — sin reemplazar lo que funciona.',
-    stack: 'n8n  ·  OpenAI  ·  Make',
-    tag: 'Eficiencia',
-  },
-  {
-    num: '04',
-    title: 'MVPs para validar',
-    desc: 'Versiones mínimas viables para probar hipótesis con usuarios reales antes de invertir en algo más grande.',
-    detail: 'El objetivo no es el código: es la hipótesis validada. Construyo lo mínimo necesario para obtener feedback real y decidir con datos, no con suposiciones ni presentaciones.',
-    stack: 'FlutterFlow  ·  Firebase  ·  IA',
-    tag: 'Validación',
-  },
+const SERVICES_META = [
+  { num: '01', stack: 'Next.js  ·  Figma  ·  Framer Motion' },
+  { num: '02', stack: 'React  ·  Node.js  ·  Firebase' },
+  { num: '03', stack: 'n8n  ·  OpenAI  ·  Make' },
+  { num: '04', stack: 'FlutterFlow  ·  Firebase  ·  IA' },
 ]
 
-const N = SERVICES.length   // 4
+type ServiceItem = {
+  num: string
+  stack: string
+  title: string
+  desc: string
+  detail: string
+  tag: string
+}
+
+const N = SERVICES_META.length   // 4
 
 export default function Services() {
+  const t = useTranslations('services')
+  const items = t.raw('items') as { title: string; desc: string; detail: string; tag: string }[]
+  const SERVICES: ServiceItem[] = SERVICES_META.map((meta, i) => ({ ...meta, ...items[i] }))
+
   const [active, setActive] = useState(0)
   const containerRef = useRef<HTMLElement>(null)
 
@@ -108,7 +94,7 @@ export default function Services() {
             {/* Header */}
             <div style={{ marginBottom: 'clamp(1.5rem, 3vw, 2.5rem)' }}>
               <span className="type-label" style={{ display: 'block', marginBottom: '0.75rem' }}>
-                Qué hago
+                {t('label')}
               </span>
               <h2 style={{
                 fontFamily: 'var(--font-display)', fontWeight: 800,
@@ -116,11 +102,11 @@ export default function Services() {
                 lineHeight: 1.0, letterSpacing: '-0.03em',
                 color: 'var(--color-star)', margin: 0,
               }}>
-                Cuatro formas de{' '}
+                {t('headingPre')}{' '}
                 <span style={{
                   fontFamily: 'var(--font-serif)', fontStyle: 'italic',
                   fontWeight: 400, color: 'var(--color-accent)',
-                }}>sumar valor real.</span>
+                }}>{t('headingItalic')}</span>
               </h2>
             </div>
 
@@ -196,7 +182,7 @@ export default function Services() {
 function ServiceItem({
   service, active, done, isLast, scrollYProgress, index,
 }: {
-  service: typeof SERVICES[0]
+  service: ServiceItem
   active: boolean
   done: boolean
   isLast: boolean
@@ -279,7 +265,7 @@ function ServiceItem({
 }
 
 /* ─── Right detail panel ─────────────────────────────────────────────── */
-function ServiceDetail({ service }: { service: typeof SERVICES[0] }) {
+function ServiceDetail({ service }: { service: ServiceItem }) {
   return (
     <div style={{
       position: 'relative',

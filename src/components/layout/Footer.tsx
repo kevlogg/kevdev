@@ -1,4 +1,7 @@
-export default function Footer() {
+import { getTranslations } from 'next-intl/server'
+
+export default async function Footer() {
+  const t = await getTranslations('footer')
   const year = new Date().getFullYear()
   return (
     <footer style={{
@@ -13,13 +16,13 @@ export default function Footer() {
           fontFamily: 'var(--font-ui)', fontSize: '0.75rem',
           letterSpacing: '0.08em', color: 'var(--color-faint)',
         }}>
-          © {year} kev.dev · Kevin Loggia
+          {t('copyright', { year })}
         </span>
         <span style={{
           fontFamily: 'var(--font-mono)', fontSize: '0.6875rem',
           color: 'var(--color-faint)', letterSpacing: '0.04em',
         }}>
-          Digital Product Builder
+          {t('role')}
         </span>
       </div>
     </footer>

@@ -2,25 +2,21 @@
 
 import { useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import type { Project } from '@/lib/projects'
+import { useTranslations } from 'next-intl'
+import type { ProjectText, CaseStudy } from '@/lib/projects'
 
 const EASE_OUT: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
-const FIELDS: { key: keyof NonNullable<Project['caseStudy']>; label: string }[] = [
-  { key: 'problem', label: 'Problema' },
-  { key: 'solution', label: 'Solución' },
-  { key: 'process', label: 'Proceso' },
-  { key: 'result', label: 'Resultado' },
-  { key: 'learning', label: 'Aprendizaje' },
-]
+const FIELD_KEYS: (keyof CaseStudy)[] = ['problem', 'solution', 'process', 'result', 'learning']
 
 export default function CaseStudyModal({
   project,
   onClose,
 }: {
-  project: Project
+  project: ProjectText
   onClose: () => void
 }) {
+  const t = useTranslations('projectFields')
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
@@ -61,7 +57,7 @@ export default function CaseStudyModal({
           key="panel"
           role="dialog"
           aria-modal="true"
-          aria-label={`Caso de estudio de ${project.name}`}
+          aria-label={t('caseStudyAriaOf', { name: project.name })}
           initial={{ opacity: 0, y: 24, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 16, scale: 0.98 }}
@@ -93,7 +89,7 @@ export default function CaseStudyModal({
                 textTransform: 'uppercase',
                 color: project.color,
               }}>
-                Caso de estudio
+                {t('caseStudyLabel')}
               </span>
               <h3 style={{
                 fontFamily: 'var(--font-display)',
@@ -110,7 +106,7 @@ export default function CaseStudyModal({
 
             <button
               onClick={onClose}
-              aria-label="Cerrar"
+              aria-label={t('closeAria')}
               style={{
                 flexShrink: 0,
                 width: 36,
@@ -131,7 +127,7 @@ export default function CaseStudyModal({
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.125rem' }}>
-            {FIELDS.map(({ key, label }) => {
+            {FIELD_KEYS.map(key => {
               const value = study[key]
               if (!value) return null
               return (
@@ -144,7 +140,7 @@ export default function CaseStudyModal({
                     color: project.color,
                     marginBottom: '0.3rem',
                   }}>
-                    {label}
+                    {t(`caseStudy.${key}`)}
                   </div>
                   <p style={{
                     fontFamily: 'var(--font-ui)',

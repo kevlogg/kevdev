@@ -1,159 +1,63 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
+import { useTranslations, useLocale } from 'next-intl'
 
 const WA_NUM = "542235851419"
 
-const questions = [
-  { cat:"Situación actual", icon:"🏢", area:"general", img:"startup business",
-    q:"¿En qué etapa está tu negocio hoy?",
-    opts:[
-      {t:"Recién arrancando, buscando mis primeros clientes", s:0},
-      {t:"Ya tengo clientes pero quiero crecer y ordenarme", s:1},
-      {t:"Tengo un negocio establecido y quiero profesionalizarlo", s:2}
-    ]},
-  { cat:"Presencia digital", icon:"🌐", area:"presencia", img:"website design",
-    q:"¿Tenés sitio web propio?",
-    opts:[
-      {t:"Sí, activo y actualizado", s:2},
-      {t:"Tengo uno pero desactualizado o incompleto", s:1},
-      {t:"No tengo sitio web", s:0}
-    ]},
-  { cat:"Presencia digital", icon:"📍", area:"presencia", img:"Google Maps business",
-    q:"¿Tu negocio aparece en Google Maps / Google Mi Negocio?",
-    opts:[
-      {t:"Sí, con ficha completa, fotos y reseñas activas", s:2},
-      {t:"Aparezco pero no gestiono la ficha", s:1},
-      {t:"No estoy registrado en Google", s:0}
-    ]},
-  { cat:"Redes sociales", icon:"📲", area:"presencia", img:"social media content",
-    q:"¿Cómo manejás las redes del negocio?",
-    opts:[
-      {t:"Publicamos con frecuencia y estrategia", s:2},
-      {t:"Publicamos cuando podemos, sin plan", s:1},
-      {t:"Sin presencia activa en redes", s:0}
-    ]},
-  { cat:"Imagen de marca", icon:"🎨", area:"identidad", img:"brand identity logo design",
-    q:"¿Tenés logo e identidad visual definida?",
-    opts:[
-      {t:"Sí: logo, colores y tipografía coherentes", s:2},
-      {t:"Tengo logo pero sin identidad visual completa", s:1},
-      {t:"Sin identidad visual profesional", s:0}
-    ]},
-  { cat:"Comunicación", icon:"💬", area:"presencia", img:"customer communication",
-    q:"¿Cómo recibís consultas de clientes?",
-    opts:[
-      {t:"Múltiples canales organizados (WA Business, email, web)", s:2},
-      {t:"Solo WhatsApp personal o Instagram", s:1},
-      {t:"Solo presencial o por llamada", s:0}
-    ]},
-  { cat:"Comunicación", icon:"📧", area:"identidad", img:"professional email",
-    q:"¿Usás email profesional con tu dominio?",
-    opts:[
-      {t:"Sí, email con mi propio dominio (hola@minegocio.com)", s:2},
-      {t:"Uso Gmail o Hotmail personal para el negocio", s:1},
-      {t:"Sin email dedicado para el negocio", s:0}
-    ]},
-  { cat:"Gestión", icon:"📊", area:"integral", img:"CRM business management",
-    q:"¿Cómo organizás clientes, pedidos o ventas?",
-    opts:[
-      {t:"Uso CRM o software de gestión", s:2},
-      {t:"Uso planillas de Excel o Google Sheets", s:1},
-      {t:"De memoria o con anotaciones sueltas", s:0}
-    ]},
-  { cat:"Ventas", icon:"📋", area:"presencia", img:"product catalog ecommerce",
-    q:"¿Tenés catálogo o lista de precios digital?",
-    opts:[
-      {t:"Sí, online y siempre actualizado", s:2},
-      {t:"Tengo algo pero desactualizado", s:1},
-      {t:"Sin catálogo o precios digitales", s:0}
-    ]},
-  { cat:"Marketing", icon:"📣", area:"integral", img:"digital marketing advertising",
-    q:"¿Invertís en publicidad digital?",
-    opts:[
-      {t:"Sí, con presupuesto y estrategia definida", s:2},
-      {t:"Lo hice alguna vez, sin continuidad", s:1},
-      {t:"No, nunca invertí en publicidad digital", s:0}
-    ]},
-  { cat:"Reputación", icon:"⭐", area:"integral", img:"customer reviews testimonials",
-    q:"¿Gestionás reseñas o testimonios de clientes?",
-    opts:[
-      {t:"Sí, pedimos reseñas y las respondemos", s:2},
-      {t:"Tengo algunas pero no las gestiono", s:1},
-      {t:"No tengo reseñas activas", s:0}
-    ]},
-  { cat:"Administración", icon:"🧾", area:"identidad", img:"invoice accounting documents",
-    q:"¿Emitís facturas o comprobantes digitales?",
-    opts:[
-      {t:"Sí, siempre de forma digital y organizada", s:2},
-      {t:"A veces o solo cuando me lo piden", s:1},
-      {t:"Sin comprobantes formales actualmente", s:0}
-    ]}
+const QUESTIONS_META = [
+  { icon: "🏢", area: "general", img: "startup business", scores: [0, 1, 2] },
+  { icon: "🌐", area: "presencia", img: "website design", scores: [2, 1, 0] },
+  { icon: "📍", area: "presencia", img: "Google Maps business", scores: [2, 1, 0] },
+  { icon: "📲", area: "presencia", img: "social media content", scores: [2, 1, 0] },
+  { icon: "🎨", area: "identidad", img: "brand identity logo design", scores: [2, 1, 0] },
+  { icon: "💬", area: "presencia", img: "customer communication", scores: [2, 1, 0] },
+  { icon: "📧", area: "identidad", img: "professional email", scores: [2, 1, 0] },
+  { icon: "📊", area: "integral", img: "CRM business management", scores: [2, 1, 0] },
+  { icon: "📋", area: "presencia", img: "product catalog ecommerce", scores: [2, 1, 0] },
+  { icon: "📣", area: "integral", img: "digital marketing advertising", scores: [2, 1, 0] },
+  { icon: "⭐", area: "integral", img: "customer reviews testimonials", scores: [2, 1, 0] },
+  { icon: "🧾", area: "identidad", img: "invoice accounting documents", scores: [2, 1, 0] },
 ]
 
-const PLANES = {
-  presencia: {
-    nombre: "Plan Presencia",
-    tag: "Poné tu negocio en el mapa digital",
-    items: [
-      "Google Mi Negocio configurado y optimizado",
-      "Perfiles profesionales en redes sociales",
-      "Catálogo o menú digital compartible",
-      "WhatsApp Business con respuestas automáticas",
-      "Bio y links unificados profesionalmente"
-    ],
-    msg: "Hola! Hice el diagnóstico de profesionalismo de kevdev y me interesa el Plan Presencia. ¿Me podés dar más info y armar un presupuesto?"
-  },
-  identidad: {
-    nombre: "Plan Identidad",
-    tag: "Una marca que genera confianza y diferencia",
-    items: [
-      "Diseño de logo profesional",
-      "Manual de marca: colores, tipografías y usos",
-      "Pack de plantillas para redes sociales",
-      "Fotos de perfil y portadas profesionales",
-      "Guía de comunicación visual"
-    ],
-    msg: "Hola! Hice el diagnóstico de profesionalismo de kevdev y me interesa el Plan Identidad. ¿Me podés dar más info y armar un presupuesto?"
-  },
-  integral: {
-    nombre: "Plan Integral",
-    tag: "De informal a profesional, todo en uno",
-    items: [
-      "Todo Plan Presencia + Plan Identidad",
-      "Landing page / sitio web profesional",
-      "Email corporativo con tu dominio",
-      "Estrategia de contenido para el primer mes",
-      "Configuración inicial de publicidad digital"
-    ],
-    msg: "Hola! Hice el diagnóstico de profesionalismo de kevdev y me interesa el Plan Integral. ¿Me podés dar más info y armar un presupuesto?"
-  }
+const LOCALE_NAMES: Record<string, string> = {
+  es: "español, con tono directo, argentino y tuteo",
+  en: "English, with a direct, friendly tone",
+  pt: "português, com um tom direto e próximo",
+  fr: "français, avec un ton direct et chaleureux",
+  de: "Deutsch, in einem direkten, freundlichen Ton",
 }
 
 export default function Diagnostico() {
+  const t = useTranslations('diagnostico')
+  const locale = useLocale()
   const [state, setState] = useState<'intro' | 'pregunta' | 'loading' | 'resultados'>('intro')
   const [current, setCurrent] = useState(0)
-  const [answers, setAnswers] = useState<number[]>(new Array(questions.length).fill(-1))
   const [resultado, setResultado] = useState<any>(null)
   const [loadMsg, setLoadMsg] = useState(0)
 
-  const msgs = [
-    "Analizando tu presencia digital...",
-    "Evaluando tu imagen de marca...",
-    "Calculando tus oportunidades de mejora...",
-    "Preparando tu plan personalizado..."
-  ]
+  const rawQuestions = t.raw('questions') as { cat: string; q: string; opts: string[] }[]
+  const questions = QUESTIONS_META.map((meta, i) => ({
+    ...meta,
+    cat: rawQuestions[i].cat,
+    q: rawQuestions[i].q,
+    opts: rawQuestions[i].opts.map((text, oi) => ({ t: text, s: meta.scores[oi] })),
+  }))
+
+  const [answers, setAnswers] = useState<number[]>(new Array(questions.length).fill(-1))
+
+  const msgs = t.raw('loading.messages') as string[]
 
   useEffect(() => {
     if (state !== 'loading') return
     const interval = setInterval(() => setLoadMsg(m => (m + 1) % msgs.length), 1800)
     return () => clearInterval(interval)
-  }, [state])
+  }, [state, msgs.length])
 
   function calcRec(ans: number[]) {
-    const areas: any = { presencia:0, identidad:0, integral:0, presenciaM:0, identidadM:0, integralM:0 }
+    const areas: any = { presencia: 0, identidad: 0, integral: 0, presenciaM: 0, identidadM: 0, integralM: 0 }
     questions.forEach((q, i) => {
       if (q.area !== 'general') {
         areas[q.area] += q.opts[ans[i]]?.s || 0
@@ -181,15 +85,16 @@ export default function Diagnostico() {
     const { total, pct, rec, pP, iP } = calcRec(answers)
 
     const resumen = questions.map((q, i) => `${q.q}\nRespuesta: ${q.opts[answers[i]]?.t}`).join('\n\n')
+    const languageInstruction = LOCALE_NAMES[locale] || LOCALE_NAMES.es
 
     const prompt = `Sos un consultor de negocios digitales. Un dueño respondió este diagnóstico:
 ${resumen}
 Puntaje: ${total}/${questions.length * 2} (${pct}%)
 
-Generá diagnóstico en JSON puro (sin markdown, sin backticks):
+Generá diagnóstico en JSON puro (sin markdown, sin backticks). Respondé en ${languageInstruction}:
 {
-  "nivel": "Negocio en Construcción | En Crecimiento | En Desarrollo | Profesional",
-  "descripcion": "2 oraciones: reconocé algo positivo, señalá qué le falta. Tono directo, argentino, tuteo.",
+  "nivel": "una etiqueta corta de 2-3 palabras para el nivel de profesionalismo del negocio, en el idioma de respuesta (equivalente a algo como 'Negocio en Construcción', 'En Crecimiento', 'En Desarrollo' o 'Profesional')",
+  "descripcion": "2 oraciones: reconocé algo positivo, señalá qué le falta.",
   "pitch": "1-2 oraciones que generen urgencia real de actuar. Sin mencionar los planes.",
   "cierre": "1 oración final motivadora corta."
 }`
@@ -228,10 +133,10 @@ Generá diagnóstico en JSON puro (sin markdown, sin backticks):
         {/* Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem' }}>
           <Link href="/" style={{ textDecoration: 'none', fontSize: '0.875rem', color: 'var(--cyan)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            ← Volver
+            {t('back')}
           </Link>
           {state !== 'intro' && <div style={{ fontSize: '0.75rem', color: 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
-            {state === 'pregunta' && `${current + 1} / ${questions.length}`}
+            {state === 'pregunta' && t('progress', { current: current + 1, total: questions.length })}
           </div>}
         </div>
 
@@ -255,33 +160,37 @@ Generá diagnóstico en JSON puro (sin markdown, sin backticks):
 }
 
 function Intro({ onStart }: { onStart: () => void }) {
+  const t = useTranslations('diagnostico.intro')
+  const meta = t.raw('meta') as string[]
   return (
     <motion.div key="intro" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }} style={{ textAlign: 'center', paddingTop: '4rem' }}>
       <div style={{ marginBottom: '2rem' }}>
-        <div style={{ fontSize: '0.75rem', color: 'var(--cyan)', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '1rem' }}>Diagnóstico gratuito</div>
+        <div style={{ fontSize: '0.75rem', color: 'var(--cyan)', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '1rem' }}>{t('label')}</div>
         <div style={{ width: '36px', height: '2px', background: 'var(--cyan)', margin: '1rem auto 2rem' }} />
-        <h1 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: 800, lineHeight: 1.2, marginBottom: '1rem' }}>¿Qué tan profesional es tu negocio?</h1>
-        <p style={{ fontSize: '1rem', color: 'var(--dim)', maxWidth: '48ch', margin: '0 auto 2rem', lineHeight: 1.6 }}>Respondé 12 preguntas rápidas y descubrí qué necesitás para llevar tu negocio al siguiente nivel.</p>
+        <h1 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: 800, lineHeight: 1.2, marginBottom: '1rem' }}>{t('title')}</h1>
+        <p style={{ fontSize: '1rem', color: 'var(--dim)', maxWidth: '48ch', margin: '0 auto 2rem', lineHeight: 1.6 }}>{t('subtitle')}</p>
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', marginBottom: '3rem', fontSize: '0.875rem', color: 'var(--muted)' }}>
-        <span>12 preguntas</span>
-        <span>•</span>
-        <span>3 minutos</span>
-        <span>•</span>
-        <span>100% gratis</span>
+        {meta.map((m, i) => (
+          <Fragment key={m}>
+            {i > 0 && <span>•</span>}
+            <span>{m}</span>
+          </Fragment>
+        ))}
       </div>
 
       <button onClick={onStart} style={{
         padding: '1rem 2.5rem', background: 'var(--cyan)', color: 'var(--bg-page)', border: 'none', borderRadius: 3, fontWeight: 700, cursor: 'pointer', fontSize: '0.875rem', letterSpacing: '0.05em', transition: 'all 0.22s',
       }} onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.04)', e.currentTarget.style.boxShadow = '0 6px 28px rgba(79,195,247,0.32)')} onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)', e.currentTarget.style.boxShadow = 'none')}>
-        Empezar diagnóstico →
+        {t('cta')}
       </button>
     </motion.div>
   )
 }
 
 function Pregunta({ q, idx, selected, onSelect, onNext, onPrev, isLast }: any) {
+  const t = useTranslations('diagnostico.nav')
   const [imgUrl, setImgUrl] = useState<string>('')
 
   useEffect(() => {
@@ -336,12 +245,12 @@ function Pregunta({ q, idx, selected, onSelect, onNext, onPrev, isLast }: any) {
           <button onClick={onPrev} style={{
             padding: '0.875rem 1.75rem', border: '1px solid var(--cyan)', background: 'transparent', color: 'var(--cyan)', borderRadius: 99, cursor: 'pointer', fontWeight: 600, fontSize: '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase', transition: 'all 0.25s',
           }} onMouseEnter={e => (e.currentTarget.style.background = 'rgba(79,195,247,0.08)')} onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
-            ← Anterior
+            {t('prev')}
           </button>
           <button onClick={onNext} disabled={selected === -1} style={{
             padding: '0.875rem 1.75rem', border: '1px solid var(--cyan)', background: selected === -1 ? 'transparent' : 'var(--cyan)', color: selected === -1 ? 'rgba(79,195,247,0.4)' : 'var(--bg-page)', borderRadius: 99, cursor: selected === -1 ? 'not-allowed' : 'pointer', fontWeight: 600, fontSize: '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase', opacity: selected === -1 ? 0.5 : 1, transition: 'all 0.25s',
           }} onMouseEnter={e => selected !== -1 && (e.currentTarget.style.boxShadow = '0 4px 16px rgba(79,195,247,0.24)')} onMouseLeave={e => (e.currentTarget.style.boxShadow = 'none')}>
-            {isLast ? 'Ver mi plan →' : 'Siguiente →'}
+            {isLast ? t('last') : t('next')}
           </button>
         </div>
       </div>
@@ -360,6 +269,8 @@ function Loading({ msg }: { msg: string }) {
 }
 
 function Resultados({ data }: { data: any }) {
+  const t = useTranslations('diagnostico')
+  const PLANES = t.raw('planes') as Record<'presencia' | 'identidad' | 'integral', { nombre: string; tag: string; items: string[]; msg: string }>
   const plan = PLANES[data.rec as keyof typeof PLANES]
   const otros = Object.entries(PLANES).filter(([k]) => k !== data.rec)
 
@@ -376,7 +287,7 @@ function Resultados({ data }: { data: any }) {
         </motion.div>
 
         <div style={{ fontSize: '0.75rem', color: 'var(--cyan)', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>{data.nivel}</div>
-        <h1 style={{ fontSize: '2rem', fontWeight: 800, marginBottom: '1rem' }}>Tu diagnóstico está listo.</h1>
+        <h1 style={{ fontSize: '2rem', fontWeight: 800, marginBottom: '1rem' }}>{t('results.title')}</h1>
         <p style={{ color: 'var(--dim)', lineHeight: 1.6, maxWidth: '56ch', margin: '0 auto' }}>{data.descripcion}</p>
       </div>
 
@@ -387,7 +298,7 @@ function Resultados({ data }: { data: any }) {
 
       {/* Plan recomendado */}
       <div style={{ background: 'rgba(79,195,247,0.04)', border: '2px solid var(--cyan)', padding: '2rem', marginBottom: '2rem', borderRadius: 3, position: 'relative' }}>
-        <div style={{ position: 'absolute', top: '-1px', left: '16px', fontSize: '0.75rem', background: 'var(--bg-page)', padding: '0.25rem 0.75rem', color: 'var(--cyan)', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase' }}>⭐ Recomendado para vos</div>
+        <div style={{ position: 'absolute', top: '-1px', left: '16px', fontSize: '0.75rem', background: 'var(--bg-page)', padding: '0.25rem 0.75rem', color: 'var(--cyan)', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase' }}>{t('results.recommendedBadge')}</div>
         <div style={{ marginTop: '1.5rem' }}>
           <h3 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '0.5rem' }}>{plan.nombre}</h3>
           <p style={{ color: 'var(--dim)', marginBottom: '1.5rem', fontSize: '0.95rem' }}>{plan.tag}</p>
@@ -401,14 +312,14 @@ function Resultados({ data }: { data: any }) {
           <a href={`https://wa.me/${WA_NUM}?text=${encodeURIComponent(plan.msg)}`} target="_blank" rel="noreferrer" style={{
             display: 'inline-block', padding: '0.875rem 1.75rem', background: 'var(--cyan)', color: 'var(--bg-page)', border: 'none', borderRadius: 99, fontWeight: 700, cursor: 'pointer', fontSize: '0.875rem', textDecoration: 'none', transition: 'all 0.22s',
           }} onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.04)', e.currentTarget.style.boxShadow = '0 6px 28px rgba(79,195,247,0.32)')} onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)', e.currentTarget.style.boxShadow = 'none')}>
-            Quiero este plan — Consultar precio
+            {t('results.ctaThisPlan')}
           </a>
         </div>
       </div>
 
       {/* Otros planes */}
       <div>
-        <h4 style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '1rem', letterSpacing: '0.05em' }}>// también disponibles</h4>
+        <h4 style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '1rem', letterSpacing: '0.05em' }}>{t('results.otherPlansLabel')}</h4>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
           {otros.map(([key, p]: any) => (
             <div key={key} style={{ border: '1px solid rgba(79,195,247,0.1)', padding: '1.5rem', borderRadius: 3, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -426,7 +337,7 @@ function Resultados({ data }: { data: any }) {
               <a href={`https://wa.me/${WA_NUM}?text=${encodeURIComponent(p.msg)}`} target="_blank" rel="noreferrer" style={{
                 padding: '0.75rem 1.5rem', border: '1px solid var(--cyan)', background: 'transparent', color: 'var(--cyan)', borderRadius: 99, fontWeight: 600, cursor: 'pointer', fontSize: '0.75rem', textDecoration: 'none', transition: 'all 0.22s', textAlign: 'center',
               }} onMouseEnter={e => (e.currentTarget.style.background = 'rgba(79,195,247,0.08)')} onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
-                Más info
+                {t('results.ctaMoreInfo')}
               </a>
             </div>
           ))}
@@ -436,14 +347,14 @@ function Resultados({ data }: { data: any }) {
       {/* Footer */}
       <div style={{ textAlign: 'center', marginTop: '3rem', paddingTop: '2rem', borderTop: '1px solid rgba(79,195,247,0.1)' }}>
         <p style={{ color: 'var(--dim)', fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>{data.cierre}</p>
-        <p style={{ color: 'var(--muted)', fontSize: '0.85rem', margin: 0 }}>— <span style={{ color: 'var(--cyan)' }}>kevdev</span></p>
+        <p style={{ color: 'var(--muted)', fontSize: '0.85rem', margin: 0 }}>— <span style={{ color: 'var(--cyan)' }}>{t('results.signature')}</span></p>
       </div>
 
       <div style={{ textAlign: 'center', marginTop: '2rem' }}>
         <button onClick={() => window.location.reload()} style={{
           padding: '0.75rem 1.5rem', border: '1px solid var(--cyan)', background: 'transparent', color: 'var(--cyan)', borderRadius: 99, fontWeight: 600, cursor: 'pointer', fontSize: '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase', transition: 'all 0.22s',
         }} onMouseEnter={e => (e.currentTarget.style.background = 'rgba(79,195,247,0.08)')} onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
-          ↺ Reiniciar
+          {t('results.restart')}
         </button>
       </div>
     </motion.div>

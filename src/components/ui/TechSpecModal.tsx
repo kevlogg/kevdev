@@ -2,29 +2,23 @@
 
 import { useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import type { Project } from '@/lib/projects'
+import { useTranslations } from 'next-intl'
+import type { ProjectText, TechSpec } from '@/lib/projects'
 
 const EASE_OUT: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
-const FIELDS: { key: keyof NonNullable<Project['techSpec']>; label: string }[] = [
-  { key: 'architecture', label: 'Arquitectura' },
-  { key: 'frameworks', label: 'Frameworks' },
-  { key: 'languages', label: 'Lenguajes' },
-  { key: 'auth', label: 'Autenticación' },
-  { key: 'payments', label: 'Pagos' },
-  { key: 'database', label: 'Base de datos / Backend' },
-  { key: 'seo', label: 'SEO' },
-  { key: 'hosting', label: 'Hosting / Deploy' },
-  { key: 'other', label: 'Otras tecnologías' },
+const FIELD_KEYS: (keyof TechSpec)[] = [
+  'architecture', 'frameworks', 'languages', 'auth', 'payments', 'database', 'seo', 'hosting', 'other',
 ]
 
 export default function TechSpecModal({
   project,
   onClose,
 }: {
-  project: Project
+  project: ProjectText
   onClose: () => void
 }) {
+  const t = useTranslations('projectFields')
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
@@ -37,7 +31,7 @@ export default function TechSpecModal({
     }
   }, [onClose])
 
-  const specGroups: { label?: string; spec: NonNullable<Project['techSpec']> }[] = project.techSpecs
+  const specGroups: { label?: string; spec: TechSpec }[] = project.techSpecs
     ? project.techSpecs.map(({ label, spec }) => ({ label, spec }))
     : project.techSpec
       ? [{ spec: project.techSpec }]
@@ -70,7 +64,7 @@ export default function TechSpecModal({
           key="panel"
           role="dialog"
           aria-modal="true"
-          aria-label={`Especificación técnica de ${project.name}`}
+          aria-label={t('techSpecAriaOf', { name: project.name })}
           initial={{ opacity: 0, y: 24, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 16, scale: 0.98 }}
@@ -102,7 +96,7 @@ export default function TechSpecModal({
                 textTransform: 'uppercase',
                 color: project.color,
               }}>
-                Especificación técnica
+                {t('techSpecLabel')}
               </span>
               <h3 style={{
                 fontFamily: 'var(--font-display)',
@@ -119,7 +113,7 @@ export default function TechSpecModal({
 
             <button
               onClick={onClose}
-              aria-label="Cerrar"
+              aria-label={t('closeAria')}
               style={{
                 flexShrink: 0,
                 width: 36,
@@ -157,7 +151,7 @@ export default function TechSpecModal({
                   </h4>
                 )}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.125rem' }}>
-                  {FIELDS.map(({ key, label }) => {
+                  {FIELD_KEYS.map(key => {
                     const value = group.spec[key]
                     if (!value) return null
                     return (
@@ -170,7 +164,7 @@ export default function TechSpecModal({
                           color: project.color,
                           marginBottom: '0.3rem',
                         }}>
-                          {label}
+                          {t(`techSpec.${key}`)}
                         </div>
                         <p style={{
                           fontFamily: 'var(--font-ui)',

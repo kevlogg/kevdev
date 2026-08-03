@@ -2,6 +2,9 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { motion, useMotionValue, useSpring, useTransform, useScroll } from 'framer-motion'
+import { useTranslations } from 'next-intl'
+import { Link } from '@/i18n/navigation'
+import LanguageSwitcher from '@/components/ui/LanguageSwitcher'
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
@@ -12,6 +15,7 @@ const T = {
 }
 
 export default function Hero() {
+  const t = useTranslations('hero')
   const sectionRef = useRef<HTMLElement>(null)
 
   const mouseX  = useMotionValue(0)
@@ -76,6 +80,16 @@ export default function Hero() {
           y: contentY,
         }}
       >
+        {/* Language switcher — visible top-right of the Hero */}
+        <motion.div
+          initial={{ opacity: 0, y: -12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.5, ease: EASE }}
+          style={{ position: 'absolute', top: 'clamp(1.5rem, 4vw, 2rem)', right: 'var(--gutter)', zIndex: 20 }}
+        >
+          <LanguageSwitcher />
+        </motion.div>
+
         {/* Headline — enter animation + scroll fade handled by parent */}
         <motion.div
           style={{ flex: 1, display: 'flex', alignItems: 'flex-end' }}
@@ -92,15 +106,15 @@ export default function Hero() {
             color:         'var(--color-star)',
             maxWidth:      '16ch',
           }}>
-            Construyo{' '}
+            {t('headlinePre')}{' '}
             <span style={{
               fontFamily: 'var(--font-serif)',
               fontStyle:  'italic',
               fontWeight: 400,
               color:      'var(--color-accent)',
-            }}>productos</span>
+            }}>{t('headlineItalic')}</span>
             <br />
-            que funcionan.
+            {t('headlinePost')}
           </h1>
         </motion.div>
 
@@ -118,7 +132,7 @@ export default function Hero() {
         >
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-              {['Landing pages', 'Web apps', 'MVPs', 'Automatizaciones'].map(chip => (
+              {t.raw('chips').map((chip: string) => (
                 <span key={chip} style={{
                   fontFamily:    'var(--font-mono)',
                   fontSize:      'clamp(0.625rem, 0.9vw, 0.75rem)',
@@ -141,14 +155,14 @@ export default function Hero() {
               maxWidth:   '36ch',
               margin:     0,
             }}>
-              Con foco en negocio, validación y ejecución real.
+              {t('subcopy')}
             </p>
           </div>
 
           <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
-            <CTADark onClick={() => scrollTo('#proyectos')}>Ver proyectos</CTADark>
-            <CTADiagnostico href="/diagnostico">Diagnóstico gratis</CTADiagnostico>
-            <CTAArrow href="https://wa.me/542235851419?text=Hola%20Kevin%2C%20quiero%20solicitar%20una%20demo%20sin%20cargo%20para%20mi%20negocio." />
+            <CTADark onClick={() => scrollTo('#proyectos')}>{t('ctaProjects')}</CTADark>
+            <CTADiagnostico href="/diagnostico">{t('ctaDiagnostico')}</CTADiagnostico>
+            <CTAArrow href={`https://wa.me/542235851419?text=${encodeURIComponent(t('whatsappMessage'))}`}>{t('ctaDemo')}</CTAArrow>
           </div>
         </motion.div>
       </motion.div>
@@ -182,7 +196,7 @@ function CTADark({ children, onClick }: { children: React.ReactNode; onClick: ()
 function CTADiagnostico({ href, children }: { href: string; children: React.ReactNode }) {
   const [hov, setHov] = useState(false)
   return (
-    <a href={href}
+    <Link href={href}
       onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
       style={{
         fontFamily:     'var(--font-ui)', fontWeight: 600,
@@ -199,11 +213,11 @@ function CTADiagnostico({ href, children }: { href: string; children: React.Reac
         display:        'inline-block',
       }}>
       {children}
-    </a>
+    </Link>
   )
 }
 
-function CTAArrow({ href }: { href: string }) {
+function CTAArrow({ href, children }: { href: string; children: React.ReactNode }) {
   const [hov, setHov] = useState(false)
   return (
     <a href={href} target="_blank" rel="noreferrer"
@@ -226,7 +240,7 @@ function CTAArrow({ href }: { href: string }) {
         boxShadow:    hov ? '0 6px 28px rgba(34,211,238,0.32)' : '0 0 0 transparent',
         flexShrink:   0,
       }}>
-      Solicitar demo sin cargo ↗
+      {children}
     </a>
   )
 }

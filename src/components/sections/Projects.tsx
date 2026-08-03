@@ -1,15 +1,17 @@
 'use client'
 
-import Link from 'next/link'
+import { useTranslations } from 'next-intl'
+import { Link } from '@/i18n/navigation'
 import TunnelReveal from '@/components/ui/TunnelReveal'
 import { PROJECTS } from '@/lib/projects'
 
 export default function Projects() {
+  const t = useTranslations('projectsHome')
   return (
     <section id="proyectos" style={{ position: 'relative', zIndex: 10, padding: 'clamp(5rem, 10vw, 9rem) 0' }}>
       <div style={{ maxWidth: 680, marginInline: 'auto', paddingInline: 'var(--gutter)', textAlign: 'center' }}>
         <TunnelReveal style={{ marginBottom: '1rem' }}>
-          <span className="type-label">Proyectos reales</span>
+          <span className="type-label">{t('label')}</span>
         </TunnelReveal>
 
         <TunnelReveal delay={0.08} style={{ marginBottom: '1.5rem' }}>
@@ -18,13 +20,13 @@ export default function Projects() {
             fontSize: 'clamp(2.25rem, 5vw, 4rem)', lineHeight: 0.95,
             letterSpacing: '-0.03em', color: 'var(--color-star)',
           }}>
-            Ejecución real,<br />no portfolios ficticios.
+            {t('headingLine1')}<br />{t('headingLine2')}
           </h2>
         </TunnelReveal>
 
         <TunnelReveal delay={0.16} style={{ marginBottom: '2.5rem' }}>
           <p style={{ fontFamily: 'var(--font-ui)', fontSize: '1rem', color: 'var(--color-muted)', lineHeight: 1.6 }}>
-            8 productos en producción. Sin demos, sin relleno.
+            {t('subcopy')}
           </p>
         </TunnelReveal>
 
@@ -73,7 +75,7 @@ export default function Projects() {
               transition: 'opacity 0.2s',
             }}
           >
-            Ver mis proyectos →
+            {t('cta')}
           </Link>
         </TunnelReveal>
       </div>

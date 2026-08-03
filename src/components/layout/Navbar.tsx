@@ -1,31 +1,20 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { useRouter, usePathname } from 'next/navigation'
+import { useTranslations, useLocale } from 'next-intl'
+import { useRouter, usePathname } from '@/i18n/navigation'
+import { routing } from '@/i18n/routing'
 import { motion, AnimatePresence } from 'framer-motion'
+import LanguageSwitcher from '@/components/ui/LanguageSwitcher'
 
 /* ─── Data ──────────────────────────────────────────────────────────── */
-const NAV_ITEMS = [
-  { href: '#servicios', label: 'Servicios', index: '01' },
-  { href: '/proyectos', label: 'Proyectos', index: '02' },
-  { href: '#enfoque',   label: 'Enfoque',   index: '03' },
-  { href: '#contacto',  label: 'Contacto',  index: '04' },
-]
+const CONTACT_HREFS = [
+  { key: 'whatsapp', href: 'https://wa.me/542235851419' },
+  { key: 'linkedin',  href: 'https://www.linkedin.com/in/kevin-loggia/' },
+  { key: 'email',     href: 'mailto:loggia.1996@gmail.com' },
+] as const
 
-const CONTACT_LINKS = [
-  { label: 'WhatsApp', href: 'https://wa.me/542235851419', arrow: true },
-  { label: 'LinkedIn',  href: 'https://www.linkedin.com/in/kevin-loggia/', arrow: true },
-  { label: 'Email',     href: 'mailto:loggia.1996@gmail.com', arrow: true },
-]
-
-const STACK_TAGS = [
-  { label: 'React',          accent: true  },
-  { label: 'Node.js',        accent: false },
-  { label: 'Firebase',       accent: false },
-  { label: 'FlutterFlow',    accent: false },
-  { label: 'IA',             accent: false },
-  { label: 'Automatización', accent: false },
-]
+const STACK_ACCENT = [true, false, false, false, false, false]
 
 /* ─── Variants ──────────────────────────────────────────────────────── */
 const EASE_EXPO: [number,number,number,number] = [0.76, 0, 0.24, 1]
@@ -73,12 +62,29 @@ const footerV = {
 
 /* ─── Component ─────────────────────────────────────────────────────── */
 export default function Navbar() {
+  const t = useTranslations('nav')
+  const locale = useLocale()
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen]         = useState(false)
   const [hovered, setHovered]   = useState<number | null>(null)
 
   const router   = useRouter()
   const pathname = usePathname()
+
+  const NAV_ITEMS = [
+    { href: '#servicios', label: t('items.servicios'), index: '01' },
+    { href: '/proyectos', label: t('items.proyectos'), index: '02' },
+    { href: '#enfoque',   label: t('items.enfoque'),   index: '03' },
+    { href: '#contacto',  label: t('items.contacto'),  index: '04' },
+  ]
+
+  const CONTACT_LINKS = CONTACT_HREFS.map(({ key, href }) => ({
+    label: t(`contactLinks.${key}`),
+    href,
+  }))
+
+  const stackLabels = t.raw('stackTags') as string[]
+  const STACK_TAGS = stackLabels.map((label, i) => ({ label, accent: STACK_ACCENT[i] ?? false }))
 
   /* Scroll detection */
   useEffect(() => {
@@ -122,7 +128,8 @@ export default function Navbar() {
     // Anchor (e.g., #servicios)
     if (pathname !== '/') {
       // Hard navigation so browser handles hash scroll natively (Lenis-safe)
-      window.location.href = '/' + href
+      const prefix = locale === routing.defaultLocale ? '' : `/${locale}`
+      window.location.href = prefix + '/' + href
       return
     }
     // Same page: smooth scroll
@@ -135,7 +142,7 @@ export default function Navbar() {
     } else {
       el.scrollIntoView({ behavior: 'smooth' })
     }
-  }, [pathname, router])
+  }, [pathname, router, locale])
 
   return (
     <>
@@ -171,7 +178,7 @@ export default function Navbar() {
           {/* Menu trigger */}
           <motion.button
             onClick={() => setOpen(v => !v)}
-            aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
+            aria-label={open ? t('closeAria') : t('openAria')}
             aria-expanded={open}
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1,  y: 0 }}
@@ -198,7 +205,7 @@ export default function Navbar() {
                   transition={{ duration: 0.22, ease: EASE_OUT }}
                   style={{ display: 'inline-block' }}
                 >
-                  {open ? 'Cerrar' : 'Menú'}
+                  {open ? t('closeLabel') : t('menuLabel')}
                 </motion.span>
               </AnimatePresence>
             </span>
@@ -355,7 +362,7 @@ export default function Navbar() {
                       className="type-label"
                       style={{ marginBottom: '1.25rem', color: 'rgba(221,232,255,0.3)' }}
                     >
-                      Contacto
+                      {t('contactLabel')}
                     </motion.p>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                       {CONTACT_LINKS.map((link, i) => (
@@ -394,7 +401,7 @@ export default function Navbar() {
                       className="type-label"
                       style={{ marginBottom: '1rem', color: 'rgba(221,232,255,0.3)' }}
                     >
-                      Stack
+                      {t('stackLabel')}
                     </motion.p>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
                       {STACK_TAGS.map((tag, i) => (
@@ -417,6 +424,11 @@ export default function Navbar() {
                       ))}
                     </div>
                   </div>
+
+                  {/* Language */}
+                  <motion.div custom={11} variants={rightV}>
+                    <LanguageSwitcher />
+                  </motion.div>
                 </div>
               </div>
             </div>
@@ -438,13 +450,13 @@ export default function Navbar() {
                 fontFamily: 'var(--font-mono)', fontSize: '0.6875rem',
                 color: 'rgba(221,232,255,0.25)', letterSpacing: '0.08em',
               }}>
-                Kevin Loggia · Digital Product Builder
+                Kevin Loggia · {t('role')}
               </span>
               <span style={{
                 fontFamily: 'var(--font-mono)', fontSize: '0.6875rem',
                 color: 'rgba(34,211,238,0.35)', letterSpacing: '0.08em',
               }}>
-                Buenos Aires · {new Date().getFullYear()}
+                {t('location')} · {new Date().getFullYear()}
               </span>
             </motion.div>
           </motion.div>

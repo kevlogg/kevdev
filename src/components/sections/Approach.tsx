@@ -1,21 +1,20 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import TunnelReveal from '@/components/ui/TunnelReveal'
 
-const PILLARS = [
-  { label: 'Producto',   desc: 'Pienso en el usuario y en el negocio antes de tocar código.' },
-  { label: 'Validación', desc: 'Construyo lo mínimo necesario para probar una hipótesis real.' },
-  { label: 'Ejecución',  desc: 'Entrego productos que funcionan, no prototipos ni demos.' },
-]
+type Pillar = { label: string; desc: string }
 
 export default function Approach() {
+  const t = useTranslations('approach')
+  const PILLARS = t.raw('pillars') as Pillar[]
   return (
     <section id="enfoque" style={{ position: 'relative', zIndex: 10, padding: 'clamp(5rem, 10vw, 9rem) 0' }}>
       <div style={{ maxWidth: 640, marginInline: 'auto', paddingInline: 'var(--gutter)', textAlign: 'center' }}>
 
         <TunnelReveal style={{ marginBottom: '1rem' }}>
-          <span className="type-label">Mi enfoque</span>
+          <span className="type-label">{t('label')}</span>
         </TunnelReveal>
 
         <TunnelReveal delay={0.08} style={{ marginBottom: '1.5rem' }}>
@@ -24,7 +23,7 @@ export default function Approach() {
             fontSize: 'clamp(2rem, 4.5vw, 3.5rem)', lineHeight: 1,
             letterSpacing: '-0.03em', color: 'var(--color-star)',
           }}>
-            No trabajo solo<br />desde lo técnico.
+            {t('heading')}
           </h2>
         </TunnelReveal>
 
@@ -34,10 +33,11 @@ export default function Approach() {
             color: 'var(--color-muted)', lineHeight: 1.75,
             maxWidth: '42ch', marginInline: 'auto',
           }}>
-            Pienso producto, negocio y validación antes de escribir la primera línea de código.{' '}
+            {t('paragraphPre')}
             <span style={{ color: 'var(--color-star)' }}>
-              Construyo productos para usarse, no solo para verse bien.
+              {t('paragraphHighlight')}
             </span>
+            {t('paragraphPost')}
           </p>
         </TunnelReveal>
 
@@ -51,7 +51,7 @@ export default function Approach() {
   )
 }
 
-function PillarRow({ pillar, last }: { pillar: typeof PILLARS[0]; last: boolean }) {
+function PillarRow({ pillar, last }: { pillar: Pillar; last: boolean }) {
   const [hov, setHov] = useState(false)
   return (
     <TunnelReveal style={{ borderBottom: last ? 'none' : '1px solid var(--color-border)' }}>

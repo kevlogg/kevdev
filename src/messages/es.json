@@ -1,0 +1,290 @@
+{
+  "meta": {
+    "title": "kevdev — Digital Product Builder",
+    "description": "Kevin Loggia — Construyo productos digitales y herramientas web para negocios reales. Landing pages, web apps, MVPs y automatizaciones con foco en negocio y ejecución.",
+    "ogDescription": "Productos digitales reales. No demos."
+  },
+  "nav": {
+    "menuLabel": "Menú",
+    "closeLabel": "Cerrar",
+    "openAria": "Abrir menú",
+    "closeAria": "Cerrar menú",
+    "items": {
+      "servicios": "Servicios",
+      "proyectos": "Proyectos",
+      "enfoque": "Enfoque",
+      "contacto": "Contacto"
+    },
+    "stackLabel": "Stack",
+    "contactLabel": "Contacto",
+    "contactLinks": {
+      "whatsapp": "WhatsApp",
+      "linkedin": "LinkedIn",
+      "email": "Email"
+    },
+    "role": "Digital Product Builder",
+    "location": "Buenos Aires",
+    "stackTags": ["React", "Node.js", "Firebase", "FlutterFlow", "IA", "Automatización"]
+  },
+  "languageSwitcher": {
+    "label": "Idioma"
+  },
+  "hero": {
+    "headlinePre": "Construyo",
+    "headlineItalic": "productos",
+    "headlinePost": "que funcionan.",
+    "chips": ["Landing pages", "Web apps", "MVPs", "Automatizaciones"],
+    "subcopy": "Con foco en negocio, validación y ejecución real.",
+    "ctaProjects": "Ver proyectos",
+    "ctaDiagnostico": "Diagnóstico gratis",
+    "ctaDemo": "Solicitar demo sin cargo ↗",
+    "whatsappMessage": "Hola Kevin, quiero solicitar una demo sin cargo para mi negocio."
+  },
+  "services": {
+    "label": "Qué hago",
+    "headingPre": "Cuatro formas de sumar",
+    "headingItalic": "valor real.",
+    "items": [
+      {
+        "title": "Landing pages",
+        "desc": "Páginas de alta conversión para captar clientes.",
+        "detail": "Diseño y desarrollo de landings enfocadas en conversión real: copy claro, carga rápida y llamados a la acción que funcionan.",
+        "tag": "Conversión"
+      },
+      {
+        "title": "Web apps & paneles",
+        "desc": "Herramientas a medida para gestionar tu negocio.",
+        "detail": "Paneles administrativos, sistemas de gestión y herramientas internas hechas a medida de cómo trabaja realmente tu negocio.",
+        "tag": "Producto"
+      },
+      {
+        "title": "Automatizaciones con IA",
+        "desc": "Procesos que se ejecutan solos, sin intervención manual.",
+        "detail": "Automatización de tareas repetitivas y flujos con IA para que tu equipo se enfoque en lo que agrega valor real.",
+        "tag": "Eficiencia"
+      },
+      {
+        "title": "MVPs para validar",
+        "desc": "Versiones mínimas para probar una idea rápido.",
+        "detail": "Desarrollo ágil de MVPs para validar una idea de negocio con usuarios reales antes de invertir en una versión completa.",
+        "tag": "Validación"
+      }
+    ]
+  },
+  "projectsHome": {
+    "label": "Proyectos reales",
+    "headingLine1": "Ejecución real,",
+    "headingLine2": "no portfolios ficticios.",
+    "subcopy": "9 productos en producción. Sin demos, sin relleno.",
+    "cta": "Ver mis proyectos →"
+  },
+  "approach": {
+    "label": "Mi enfoque",
+    "heading": "No trabajo solo desde lo técnico.",
+    "paragraphPre": "Construyo productos para ",
+    "paragraphHighlight": "usarse, no solo para verse bien.",
+    "paragraphPost": "",
+    "pillars": [
+      {
+        "label": "Producto",
+        "desc": "Pienso cada feature desde el impacto real que tiene en el negocio, no solo en el código."
+      },
+      {
+        "label": "Validación",
+        "desc": "Prefiero lanzar rápido y aprender con usuarios reales antes que perfeccionar en el vacío."
+      },
+      {
+        "label": "Ejecución",
+        "desc": "Entrego productos funcionando, no prototipos eternos ni promesas sin fecha."
+      }
+    ]
+  },
+  "contact": {
+    "label": "Hablemos",
+    "headingPre": "Tenés una idea. ",
+    "headingItalic": "Construyámosla.",
+    "paragraph": "Si tenés una idea, un proceso para mejorar o un producto por lanzar, escribime. Sin formularios. Sin fricción.",
+    "whatsappCta": "Escribime por WhatsApp",
+    "whatsappMessage": "Hola Kevin, te escribo desde kevdev.com",
+    "links": {
+      "whatsapp": "WhatsApp",
+      "linkedin": "LinkedIn",
+      "email": "Email"
+    }
+  },
+  "footer": {
+    "copyright": "© {year} kev.dev · Kevin Loggia",
+    "role": "Digital Product Builder"
+  },
+  "projectFields": {
+    "caseStudyLabel": "Caso de estudio",
+    "techSpecLabel": "Especificación técnica",
+    "closeAria": "Cerrar",
+    "caseStudyAriaOf": "Caso de estudio de {name}",
+    "techSpecAriaOf": "Especificación técnica de {name}",
+    "caseStudy": {
+      "problem": "Problema",
+      "solution": "Solución",
+      "process": "Proceso",
+      "result": "Resultado",
+      "learning": "Aprendizaje"
+    },
+    "techSpec": {
+      "architecture": "Arquitectura",
+      "frameworks": "Frameworks",
+      "languages": "Lenguajes",
+      "auth": "Autenticación",
+      "payments": "Pagos",
+      "database": "Base de datos / Backend",
+      "seo": "SEO",
+      "hosting": "Hosting / Deploy",
+      "other": "Otras tecnologías"
+    }
+  },
+  "proyectosPage": {
+    "intro": {
+      "label": "Proyectos",
+      "heading": "Lo que construyo habla por si solo.",
+      "subcopy": "9 productos reales. En producción. Sin demos, sin relleno.",
+      "cta": "Entrar a la galería →"
+    },
+    "prevAria": "Proyecto anterior",
+    "nextAria": "Proyecto siguiente",
+    "viewProject": "Ver proyecto ↗",
+    "techSpecBtn": "Especificación técnica ⚙",
+    "caseStudyBtn": "Caso de estudio ◆"
+  },
+  "diagnostico": {
+    "back": "← Volver",
+    "progress": "{current} / {total}",
+    "intro": {
+      "label": "Diagnóstico gratuito",
+      "title": "¿Qué tan profesional es tu negocio?",
+      "subtitle": "Respondé 12 preguntas rápidas y descubrí qué necesitás para llevar tu negocio al siguiente nivel.",
+      "meta": ["12 preguntas", "3 minutos", "100% gratis"],
+      "cta": "Empezar diagnóstico →"
+    },
+    "nav": {
+      "prev": "← Anterior",
+      "next": "Siguiente →",
+      "last": "Ver mi plan →"
+    },
+    "loading": {
+      "messages": [
+        "Analizando tu presencia digital...",
+        "Evaluando tu imagen de marca...",
+        "Calculando tus oportunidades de mejora...",
+        "Preparando tu plan personalizado..."
+      ]
+    },
+    "results": {
+      "title": "Tu diagnóstico está listo.",
+      "recommendedBadge": "⭐ Recomendado para vos",
+      "ctaThisPlan": "Quiero este plan — Consultar precio",
+      "otherPlansLabel": "// también disponibles",
+      "ctaMoreInfo": "Más info",
+      "signature": "kevdev",
+      "restart": "↺ Reiniciar"
+    },
+    "questions": [
+      {
+        "cat": "Situación actual",
+        "q": "¿En qué etapa está tu negocio hoy?",
+        "opts": ["Recién arrancando, buscando mis primeros clientes", "Ya tengo clientes pero quiero crecer y ordenarme", "Tengo un negocio establecido y quiero profesionalizarlo"]
+      },
+      {
+        "cat": "Presencia digital",
+        "q": "¿Tenés sitio web propio?",
+        "opts": ["Sí, activo y actualizado", "Tengo uno pero desactualizado o incompleto", "No tengo sitio web"]
+      },
+      {
+        "cat": "Presencia digital",
+        "q": "¿Tu negocio aparece en Google Maps / Google Mi Negocio?",
+        "opts": ["Sí, con ficha completa, fotos y reseñas activas", "Aparezco pero no gestiono la ficha", "No estoy registrado en Google"]
+      },
+      {
+        "cat": "Redes sociales",
+        "q": "¿Cómo manejás las redes del negocio?",
+        "opts": ["Publicamos con frecuencia y estrategia", "Publicamos cuando podemos, sin plan", "Sin presencia activa en redes"]
+      },
+      {
+        "cat": "Imagen de marca",
+        "q": "¿Tenés logo e identidad visual definida?",
+        "opts": ["Sí: logo, colores y tipografía coherentes", "Tengo logo pero sin identidad visual completa", "Sin identidad visual profesional"]
+      },
+      {
+        "cat": "Comunicación",
+        "q": "¿Cómo recibís consultas de clientes?",
+        "opts": ["Múltiples canales organizados (WA Business, email, web)", "Solo WhatsApp personal o Instagram", "Solo presencial o por llamada"]
+      },
+      {
+        "cat": "Comunicación",
+        "q": "¿Usás email profesional con tu dominio?",
+        "opts": ["Sí, email con mi propio dominio (hola@minegocio.com)", "Uso Gmail o Hotmail personal para el negocio", "Sin email dedicado para el negocio"]
+      },
+      {
+        "cat": "Gestión",
+        "q": "¿Cómo organizás clientes, pedidos o ventas?",
+        "opts": ["Uso CRM o software de gestión", "Uso planillas de Excel o Google Sheets", "De memoria o con anotaciones sueltas"]
+      },
+      {
+        "cat": "Ventas",
+        "q": "¿Tenés catálogo o lista de precios digital?",
+        "opts": ["Sí, online y siempre actualizado", "Tengo algo pero desactualizado", "Sin catálogo o precios digitales"]
+      },
+      {
+        "cat": "Marketing",
+        "q": "¿Invertís en publicidad digital?",
+        "opts": ["Sí, con presupuesto y estrategia definida", "Lo hice alguna vez, sin continuidad", "No, nunca invertí en publicidad digital"]
+      },
+      {
+        "cat": "Reputación",
+        "q": "¿Gestionás reseñas o testimonios de clientes?",
+        "opts": ["Sí, pedimos reseñas y las respondemos", "Tengo algunas pero no las gestiono", "No tengo reseñas activas"]
+      },
+      {
+        "cat": "Administración",
+        "q": "¿Emitís facturas o comprobantes digitales?",
+        "opts": ["Sí, siempre de forma digital y organizada", "A veces o solo cuando me lo piden", "Sin comprobantes formales actualmente"]
+      }
+    ],
+    "planes": {
+      "presencia": {
+        "nombre": "Plan Presencia",
+        "tag": "Poné tu negocio en el mapa digital",
+        "items": [
+          "Google Mi Negocio configurado y optimizado",
+          "Perfiles profesionales en redes sociales",
+          "Catálogo o menú digital compartible",
+          "WhatsApp Business con respuestas automáticas",
+          "Bio y links unificados profesionalmente"
+        ],
+        "msg": "Hola! Hice el diagnóstico de profesionalismo de kevdev y me interesa el Plan Presencia. ¿Me podés dar más info y armar un presupuesto?"
+      },
+      "identidad": {
+        "nombre": "Plan Identidad",
+        "tag": "Una marca que genera confianza y diferencia",
+        "items": [
+          "Diseño de logo profesional",
+          "Manual de marca: colores, tipografías y usos",
+          "Pack de plantillas para redes sociales",
+          "Fotos de perfil y portadas profesionales",
+          "Guía de comunicación visual"
+        ],
+        "msg": "Hola! Hice el diagnóstico de profesionalismo de kevdev y me interesa el Plan Identidad. ¿Me podés dar más info y armar un presupuesto?"
+      },
+      "integral": {
+        "nombre": "Plan Integral",
+        "tag": "De informal a profesional, todo en uno",
+        "items": [
+          "Todo Plan Presencia + Plan Identidad",
+          "Landing page / sitio web profesional",
+          "Email corporativo con tu dominio",
+          "Estrategia de contenido para el primer mes",
+          "Configuración inicial de publicidad digital"
+        ],
+        "msg": "Hola! Hice el diagnóstico de profesionalismo de kevdev y me interesa el Plan Integral. ¿Me podés dar más info y armar un presupuesto?"
+      }
+    }
+  }
+}

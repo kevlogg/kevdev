@@ -2,10 +2,11 @@
 
 import { useState, useCallback, useRef, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { useTranslations, useLocale } from 'next-intl'
 import Navbar from '@/components/layout/Navbar'
 import TechSpecModal from '@/components/ui/TechSpecModal'
 import CaseStudyModal from '@/components/ui/CaseStudyModal'
-import { PROJECTS, type Project } from '@/lib/projects'
+import { PROJECTS, getProjectText, type Project, type Locale } from '@/lib/projects'
 
 type PageState = 'intro' | 'carousel'
 
@@ -135,6 +136,7 @@ export default function ProyectosPage() {
 
 /* ─── Intro ──────────────────────────────────────────────────────────── */
 function IntroState({ onEnter }: { onEnter: () => void }) {
+  const t = useTranslations('proyectosPage.intro')
   const [hov, setHov] = useState(false)
 
   return (
@@ -161,7 +163,7 @@ function IntroState({ onEnter }: { onEnter: () => void }) {
         transition={{ duration: 0.7, delay: 0.2, ease: EASE_OUT }}
         style={{ color: 'var(--color-accent)' }}
       >
-        Proyectos
+        {t('label')}
       </motion.span>
 
       <motion.h1
@@ -178,7 +180,7 @@ function IntroState({ onEnter }: { onEnter: () => void }) {
           margin: 0,
         }}
       >
-        Lo que construyo<br />habla por si solo.
+        {t('heading')}
       </motion.h1>
 
       <motion.p
@@ -193,7 +195,7 @@ function IntroState({ onEnter }: { onEnter: () => void }) {
           margin: 0,
         }}
       >
-        9 productos reales. En produccion. Sin demos, sin relleno.
+        {t('subcopy')}
       </motion.p>
 
       <motion.button
@@ -218,7 +220,7 @@ function IntroState({ onEnter }: { onEnter: () => void }) {
           transition: 'background 0.25s, color 0.25s',
         }}
       >
-        Entrar a la galeria →
+        {t('cta')}
       </motion.button>
     </motion.div>
   )
@@ -294,7 +296,10 @@ function CarouselState({ currentIndex, direction, onNavigate }: {
 }
 
 /* ─── Project Card ───────────────────────────────────────────────────── */
-function ProjectCard({ project, direction }: { project: Project; direction: 1 | -1 }) {
+function ProjectCard({ project: rawProject, direction }: { project: Project; direction: 1 | -1 }) {
+  const t = useTranslations('proyectosPage')
+  const locale = useLocale() as Locale
+  const project = getProjectText(rawProject, locale)
   const colorAlpha = project.color + '4D'
   const [showSpec, setShowSpec] = useState(false)
   const [hovSpec, setHovSpec] = useState(false)
@@ -420,7 +425,7 @@ function ProjectCard({ project, direction }: { project: Project; direction: 1 | 
             transition: 'background 0.25s',
           }}
         >
-          Ver proyecto ↗
+          {t('viewProject')}
         </a>
       )}
 
@@ -449,7 +454,7 @@ function ProjectCard({ project, direction }: { project: Project; direction: 1 | 
                 borderColor: hovSpec ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.15)',
               }}
             >
-              Especificación técnica ⚙
+              {t('techSpecBtn')}
             </button>
           )}
 
@@ -476,7 +481,7 @@ function ProjectCard({ project, direction }: { project: Project; direction: 1 | 
                 borderColor: hovCase ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.15)',
               }}
             >
-              Caso de estudio ◆
+              {t('caseStudyBtn')}
             </button>
           )}
         </div>
@@ -498,6 +503,7 @@ function ArrowButton({ direction, onClick }: {
   direction: 'left' | 'right'
   onClick: () => void
 }) {
+  const t = useTranslations('proyectosPage')
   const [hov, setHov] = useState(false)
   const side = direction === 'left' ? 'left' : 'right'
 
@@ -506,7 +512,7 @@ function ArrowButton({ direction, onClick }: {
       onClick={onClick}
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
-      aria-label={direction === 'left' ? 'Proyecto anterior' : 'Proyecto siguiente'}
+      aria-label={direction === 'left' ? t('prevAria') : t('nextAria')}
       style={{
         position: 'absolute',
         [side]: 'clamp(1rem, 4vw, 3rem)',
