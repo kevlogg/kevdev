@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, useMotionValue, useSpring, useTransform, useScroll } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
-import LanguageSwitcher from '@/components/ui/LanguageSwitcher'
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
@@ -80,16 +79,6 @@ export default function Hero() {
           y: contentY,
         }}
       >
-        {/* Language switcher — visible top-right of the Hero */}
-        <motion.div
-          initial={{ opacity: 0, y: -12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.5, ease: EASE }}
-          style={{ position: 'absolute', top: 'calc(68px + clamp(0.75rem, 2vw, 1.25rem))', right: 'var(--gutter)', zIndex: 20 }}
-        >
-          <LanguageSwitcher />
-        </motion.div>
-
         {/* Headline — enter animation + scroll fade handled by parent */}
         <motion.div
           style={{ flex: 1, display: 'flex', alignItems: 'flex-end' }}

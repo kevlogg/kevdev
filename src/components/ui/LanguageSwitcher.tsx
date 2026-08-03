@@ -16,12 +16,58 @@ const LOCALE_LABEL: Record<Locale, string> = {
   de: 'Deutsch',
 }
 
-const LOCALE_FLAG: Record<Locale, string> = {
-  es: '🇪🇸',
-  en: '🇬🇧',
-  pt: '🇵🇹',
-  fr: '🇫🇷',
-  de: '🇩🇪',
+function Flag({ locale, size = 16 }: { locale: Locale; size?: number }) {
+  const w = size
+  const h = Math.round(size * 0.72)
+  const common = {
+    width: w, height: h, viewBox: '0 0 20 14',
+    style: { display: 'block', borderRadius: 2, flexShrink: 0 },
+    'aria-hidden': true,
+  } as const
+
+  switch (locale) {
+    case 'es':
+      return (
+        <svg {...common}>
+          <rect width="20" height="14" fill="#AA151B" />
+          <rect y="3.5" width="20" height="7" fill="#F1BF00" />
+        </svg>
+      )
+    case 'en':
+      return (
+        <svg {...common}>
+          <rect width="20" height="14" fill="#012169" />
+          <path d="M0 0L20 14M20 0L0 14" stroke="#fff" strokeWidth="2.4" />
+          <path d="M0 0L20 14M20 0L0 14" stroke="#C8102E" strokeWidth="1" />
+          <path d="M10 0V14M0 7H20" stroke="#fff" strokeWidth="4" />
+          <path d="M10 0V14M0 7H20" stroke="#C8102E" strokeWidth="2.4" />
+        </svg>
+      )
+    case 'pt':
+      return (
+        <svg {...common}>
+          <rect width="20" height="14" fill="#FF0000" />
+          <rect width="8" height="14" fill="#046A38" />
+          <circle cx="8" cy="7" r="2.6" fill="#F1BF00" stroke="#fff" strokeWidth="0.4" />
+        </svg>
+      )
+    case 'fr':
+      return (
+        <svg {...common}>
+          <rect width="20" height="14" fill="#fff" />
+          <rect width="6.67" height="14" fill="#0055A4" />
+          <rect x="13.33" width="6.67" height="14" fill="#EF4135" />
+        </svg>
+      )
+    case 'de':
+      return (
+        <svg {...common}>
+          <rect y="0" width="20" height="4.67" fill="#000" />
+          <rect y="4.67" width="20" height="4.67" fill="#DD0000" />
+          <rect y="9.33" width="20" height="4.67" fill="#FFCE00" />
+        </svg>
+      )
+  }
 }
 
 export default function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
@@ -76,9 +122,7 @@ export default function LanguageSwitcher({ compact = false }: { compact?: boolea
           if (!open) e.currentTarget.style.color = 'var(--color-star)'
         }}
       >
-        <span aria-hidden style={{ fontSize: '1em', lineHeight: 1 }}>
-          {LOCALE_FLAG[locale]}
-        </span>
+        <Flag locale={locale} size={16} />
         {locale.toUpperCase()}
       </button>
 
@@ -130,7 +174,7 @@ export default function LanguageSwitcher({ compact = false }: { compact?: boolea
                 }}
               >
                 <span style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                  <span aria-hidden style={{ fontSize: '1.1em', lineHeight: 1 }}>{LOCALE_FLAG[l]}</span>
+                  <Flag locale={l} size={18} />
                   {LOCALE_LABEL[l]}
                 </span>
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', opacity: 0.6 }}>

@@ -177,45 +177,53 @@ export default function Navbar() {
             <img src="/kevdev-icono.png" alt="kevdev" style={{ height: 42, width: 'auto', display: 'block' }} />
           </motion.a>
 
-          {/* Menu trigger */}
-          <motion.button
-            onClick={() => setOpen(v => !v)}
-            aria-label={open ? t('closeAria') : t('openAria')}
-            aria-expanded={open}
+          {/* Right group — language switcher + menu trigger, aligned together */}
+          <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1,  y: 0 }}
-            transition={{ duration: 0.7, delay: 1.2, ease: EASE_OUT }}
+            transition={{ duration: 0.7, delay: 1.15, ease: EASE_OUT }}
             style={{
-              background: 'none', border: 'none', cursor: 'pointer',
               position: 'relative', zIndex: 101,
-              display: 'flex', alignItems: 'center', gap: '0.6rem',
-              padding: '0.5rem 0',
+              display: 'flex', alignItems: 'center', gap: '1rem',
               pointerEvents: 'auto',
             }}
           >
-            {/* Label */}
-            <span style={{
-              fontFamily: 'var(--font-ui)', fontSize: '0.6875rem',
-              fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase',
-              color: 'var(--color-muted)', transition: 'color 0.25s',
-            }}>
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.span
-                  key={open ? 'close' : 'menu'}
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{    opacity: 0, y: -6 }}
-                  transition={{ duration: 0.22, ease: EASE_OUT }}
-                  style={{ display: 'inline-block' }}
-                >
-                  {open ? t('closeLabel') : t('menuLabel')}
-                </motion.span>
-              </AnimatePresence>
-            </span>
+            {!open && <LanguageSwitcher compact />}
 
-            {/* Animated icon */}
-            <BurgerIcon open={open} />
-          </motion.button>
+            <button
+              onClick={() => setOpen(v => !v)}
+              aria-label={open ? t('closeAria') : t('openAria')}
+              aria-expanded={open}
+              style={{
+                background: 'none', border: 'none', cursor: 'pointer',
+                display: 'flex', alignItems: 'center', gap: '0.6rem',
+                padding: '0.5rem 0',
+              }}
+            >
+              {/* Label */}
+              <span style={{
+                fontFamily: 'var(--font-ui)', fontSize: '0.6875rem',
+                fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase',
+                color: 'var(--color-muted)', transition: 'color 0.25s',
+              }}>
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.span
+                    key={open ? 'close' : 'menu'}
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{    opacity: 0, y: -6 }}
+                    transition={{ duration: 0.22, ease: EASE_OUT }}
+                    style={{ display: 'inline-block' }}
+                  >
+                    {open ? t('closeLabel') : t('menuLabel')}
+                  </motion.span>
+                </AnimatePresence>
+              </span>
+
+              {/* Animated icon */}
+              <BurgerIcon open={open} />
+            </button>
+          </motion.div>
         </nav>
       </header>
 
