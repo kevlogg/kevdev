@@ -16,6 +16,14 @@ const LOCALE_LABEL: Record<Locale, string> = {
   de: 'Deutsch',
 }
 
+const LOCALE_FLAG: Record<Locale, string> = {
+  es: '🇪🇸',
+  en: '🇬🇧',
+  pt: '🇵🇹',
+  fr: '🇫🇷',
+  de: '🇩🇪',
+}
+
 export default function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
   const locale = useLocale() as Locale
   const pathname = usePathname()
@@ -68,8 +76,8 @@ export default function LanguageSwitcher({ compact = false }: { compact?: boolea
           if (!open) e.currentTarget.style.color = 'var(--color-star)'
         }}
       >
-        <span aria-hidden style={{ opacity: 0.6, fontSize: '0.7em' }}>
-          ◐
+        <span aria-hidden style={{ fontSize: '1em', lineHeight: 1 }}>
+          {LOCALE_FLAG[locale]}
         </span>
         {locale.toUpperCase()}
       </button>
@@ -121,7 +129,10 @@ export default function LanguageSwitcher({ compact = false }: { compact?: boolea
                   if (l !== locale) e.currentTarget.style.background = 'transparent'
                 }}
               >
-                <span>{LOCALE_LABEL[l]}</span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                  <span aria-hidden style={{ fontSize: '1.1em', lineHeight: 1 }}>{LOCALE_FLAG[l]}</span>
+                  {LOCALE_LABEL[l]}
+                </span>
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', opacity: 0.6 }}>
                   {l.toUpperCase()}
                 </span>

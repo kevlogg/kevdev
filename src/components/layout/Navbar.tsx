@@ -158,9 +158,11 @@ export default function Navbar() {
         borderBottom: !open && scrolled
           ? '1px solid rgba(255,255,255,0.06)'
           : '1px solid transparent',
+        pointerEvents: 'none',
       }}>
         <nav className="site-container" style={{
           height: 68, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          pointerEvents: 'none',
         }}>
 
           {/* Wordmark */}
@@ -170,7 +172,7 @@ export default function Navbar() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1,  y: 0 }}
             transition={{ duration: 0.7, delay: 1.1, ease: EASE_OUT }}
-            style={{ textDecoration: 'none', position: 'relative', zIndex: 101, display: 'flex', alignItems: 'center' }}
+            style={{ textDecoration: 'none', position: 'relative', zIndex: 101, display: 'flex', alignItems: 'center', pointerEvents: 'auto' }}
           >
             <img src="/kevdev-icono.png" alt="kevdev" style={{ height: 42, width: 'auto', display: 'block' }} />
           </motion.a>
@@ -188,6 +190,7 @@ export default function Navbar() {
               position: 'relative', zIndex: 101,
               display: 'flex', alignItems: 'center', gap: '0.6rem',
               padding: '0.5rem 0',
+              pointerEvents: 'auto',
             }}
           >
             {/* Label */}

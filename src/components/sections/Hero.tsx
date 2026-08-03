@@ -85,7 +85,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.5, ease: EASE }}
-          style={{ position: 'absolute', top: 'clamp(1.5rem, 4vw, 2rem)', right: 'var(--gutter)', zIndex: 20 }}
+          style={{ position: 'absolute', top: 'calc(68px + clamp(0.75rem, 2vw, 1.25rem))', right: 'var(--gutter)', zIndex: 20 }}
         >
           <LanguageSwitcher />
         </motion.div>
