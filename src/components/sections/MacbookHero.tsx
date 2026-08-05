@@ -64,9 +64,9 @@ export default function MacbookHero() {
           width: 150px;
           height: 96px;
           position: absolute;
-          left: 50%;
+          left: 0;
           top: 50%;
-          margin: -75px 0 0 -48px;
+          margin: -75px 0 0 0;
           perspective: 500px;
         }
         .shadow {
