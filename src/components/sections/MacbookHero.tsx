@@ -44,18 +44,17 @@ export default function MacbookHero() {
 
       <style jsx>{`
         .macbookHero {
-          position: absolute;
-          top: clamp(4.5rem, 9vw, 7rem);
-          right: clamp(1.5rem, 5vw, 5rem);
-          width: 220px;
-          height: 220px;
+          position: relative;
+          flex-shrink: 0;
+          width: clamp(140px, 16vw, 210px);
+          height: clamp(140px, 16vw, 210px);
+          margin-bottom: clamp(0.5rem, 2vw, 1.5rem);
           pointer-events: none;
-          z-index: 2;
-          transform: scale(1.35);
-          transform-origin: top right;
-          opacity: 0.9;
+          transform: scale(1.25);
+          transform-origin: center bottom;
+          opacity: 0.92;
         }
-        @media (max-width: 860px) {
+        @media (max-width: 900px) {
           .macbookHero {
             display: none;
           }
