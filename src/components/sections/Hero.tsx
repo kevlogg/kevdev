@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, useMotionValue, useSpring, useTransform, useScroll } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
+import MacbookHero from './MacbookHero'
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
@@ -66,6 +67,9 @@ export default function Hero() {
           y: useTransform(springY, v => v - 320),
         }}
       />
+
+      {/* Decorative CSS-only 3D MacBook — top-right, clear of the copy */}
+      <MacbookHero />
 
       {/* ── Content — fades + rises on scroll ─────────────────────── */}
       <motion.div
