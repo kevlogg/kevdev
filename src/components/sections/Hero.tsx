@@ -68,9 +68,6 @@ export default function Hero() {
         }}
       />
 
-      {/* Decorative CSS-only 3D MacBook — top-right, clear of the copy */}
-      <MacbookHero />
-
       {/* ── Content — fades + rises on scroll ─────────────────────── */}
       <motion.div
         style={{
@@ -85,7 +82,13 @@ export default function Hero() {
       >
         {/* Headline — enter animation + scroll fade handled by parent */}
         <motion.div
-          style={{ flex: 1, display: 'flex', alignItems: 'flex-end' }}
+          style={{
+            flex: 1,
+            display: 'flex',
+            alignItems: 'flex-end',
+            justifyContent: 'space-between',
+            gap: '1.5rem',
+          }}
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.4, delay: T.headline, ease: EASE }}
@@ -109,6 +112,9 @@ export default function Hero() {
             <br />
             {t('headlinePost')}
           </h1>
+
+          {/* Decorative CSS-only 3D MacBook — sits right beside the headline */}
+          <MacbookHero />
         </motion.div>
 
         {/* Bottom bar */}
