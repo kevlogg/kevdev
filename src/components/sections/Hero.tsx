@@ -86,8 +86,8 @@ export default function Hero() {
             flex: 1,
             display: 'flex',
             alignItems: 'flex-end',
-            justifyContent: 'space-between',
-            gap: '1.5rem',
+            justifyContent: 'flex-start',
+            gap: '0.25rem',
           }}
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
