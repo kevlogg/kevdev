@@ -14,6 +14,14 @@ const ESTADOS: EstadoCliente[] = [
 
 const SITUACIONES: Situacion[] = ['', 'NO RESPONDIO', 'EN ESPERA', 'EN PRODUCCION', 'RECHAZADA']
 
+/* Normaliza la url guardada y arma el link al panel de plan del sitio del cliente */
+function siteBase(url: string) {
+  return url.startsWith('http') ? url.replace(/\/$/, '') : `https://${url.replace(/\/$/, '')}`
+}
+function planUrl(url: string) {
+  return `${siteBase(url)}/admin/plan`
+}
+
 const ESTADO_LABELS: Record<EstadoCliente, string> = {
   prospecto:   'Prospecto',
   contactado:  'Contactado',
@@ -129,6 +137,20 @@ export default function ClienteDetailPage() {
           </p>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          {cliente.situacion === 'EN PRODUCCION' && cliente.url && (
+            <a
+              href={planUrl(cliente.url)}
+              target="_blank"
+              rel="noreferrer"
+              style={{
+                fontFamily: 'var(--font-ui)', fontSize: '0.8125rem', color: 'var(--color-accent)',
+                textDecoration: 'none', border: '1px solid var(--color-border)', borderRadius: 8,
+                padding: '8px 14px', whiteSpace: 'nowrap',
+              }}
+            >
+              Ver plan ↗
+            </a>
+          )}
           {saved && (
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: '#4ade80', letterSpacing: '0.06em' }}>
               Guardado

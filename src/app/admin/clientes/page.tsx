@@ -23,6 +23,14 @@ const SITUACION_COLORS: Record<Situacion, string> = {
 
 const SITUACIONES: Situacion[] = ['', 'NO RESPONDIO', 'EN ESPERA', 'EN PRODUCCION', 'RECHAZADA']
 
+/* Normaliza la url guardada y arma el link al panel de plan del sitio del cliente */
+function siteBase(url: string) {
+  return url.startsWith('http') ? url.replace(/\/$/, '') : `https://${url.replace(/\/$/, '')}`
+}
+function planUrl(url: string) {
+  return `${siteBase(url)}/admin/plan`
+}
+
 /* Orden por defecto de la tabla: "En producción" primero */
 const SITUACION_ORDER: Record<Situacion, number> = {
   'EN PRODUCCION': 0,
@@ -326,15 +334,33 @@ export default function ClientesPage() {
                         style={cellInputStyle}
                       />
                     ) : c.url ? (
-                      <a
-                        href={c.url.startsWith('http') ? c.url : `https://${c.url}`}
-                        target="_blank"
-                        rel="noreferrer"
-                        onClick={e => e.stopPropagation()}
-                        style={{ fontFamily: 'var(--font-ui)', fontSize: '0.8125rem', color: 'var(--color-accent)', textDecoration: 'none', cursor: 'pointer' }}
-                      >
-                        {c.url.replace(/^https?:\/\//, '')}
-                      </a>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <a
+                          href={siteBase(c.url)}
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={e => e.stopPropagation()}
+                          style={{ fontFamily: 'var(--font-ui)', fontSize: '0.8125rem', color: 'var(--color-accent)', textDecoration: 'none', cursor: 'pointer' }}
+                        >
+                          {c.url.replace(/^https?:\/\//, '')}
+                        </a>
+                        {c.situacion === 'EN PRODUCCION' && (
+                          <a
+                            href={planUrl(c.url)}
+                            target="_blank"
+                            rel="noreferrer"
+                            onClick={e => e.stopPropagation()}
+                            title="Ver /admin/plan de este cliente"
+                            style={{
+                              fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: 'var(--color-muted)',
+                              textDecoration: 'none', border: '1px solid var(--color-border)', borderRadius: 99,
+                              padding: '2px 8px', whiteSpace: 'nowrap',
+                            }}
+                          >
+                            Plan ↗
+                          </a>
+                        )}
+                      </div>
                     ) : (
                       <span style={{ color: 'var(--color-faint)', fontFamily: 'var(--font-ui)', fontSize: '0.875rem', cursor: 'pointer' }}>—</span>
                     )}
