@@ -23,6 +23,15 @@ const SITUACION_COLORS: Record<Situacion, string> = {
 
 const SITUACIONES: Situacion[] = ['', 'NO RESPONDIO', 'EN ESPERA', 'EN PRODUCCION', 'RECHAZADA']
 
+/* Orden por defecto de la tabla: "En producción" primero */
+const SITUACION_ORDER: Record<Situacion, number> = {
+  'EN PRODUCCION': 0,
+  'EN ESPERA':     1,
+  'NO RESPONDIO':  2,
+  'RECHAZADA':     3,
+  '':              4,
+}
+
 const EMPTY_FORM = {
   nombre: '', rubro: '', contacto: '', telefono: '', instagram: '',
   estado: 'prospecto' as const,
@@ -75,9 +84,9 @@ export default function ClientesPage() {
     setEditVal(current)
   }
 
-  const visible = filter === 'todos'
-    ? clientes
-    : clientes.filter(c => c.situacion === filter)
+  const visible = (filter === 'todos' ? clientes : clientes.filter(c => c.situacion === filter))
+    .slice()
+    .sort((a, b) => SITUACION_ORDER[a.situacion] - SITUACION_ORDER[b.situacion])
 
   const inputStyle = {
     background: 'rgba(221,232,255,0.04)',

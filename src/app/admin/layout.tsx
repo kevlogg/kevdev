@@ -5,7 +5,14 @@ import { useRouter, usePathname } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import AdminSidebar from '@/components/admin/AdminSidebar'
 import AdminHeader  from '@/components/admin/AdminHeader'
+import '../globals.css'
 
+/**
+ * `/admin` vive fuera del segmento `[locale]`, así que no hereda su layout
+ * raíz (que es el único que trae <html>/<body> y globals.css). Por eso este
+ * layout debe ser raíz también: sin <html>/<body> propios, Next renderiza
+ * el admin sin Tailwind, sin fuentes y sin los tokens de color del tema.
+ */
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth()
   const router   = useRouter()
@@ -19,9 +26,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     if (user  &&  isLoginPage) router.replace('/admin/dashboard')
   }, [user, loading, isLoginPage, router])
 
-  /* Spinner while Firebase resolves session */
+  let body: React.ReactNode
+
   if (loading) {
-    return (
+    /* Spinner while Firebase resolves session */
+    body = (
       <div style={{
         minHeight: '100vh',
         background: 'var(--color-void)',
@@ -42,29 +51,35 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         `}</style>
       </div>
     )
-  }
-
-  /* Render login page without chrome */
-  if (isLoginPage) {
-    return (
+  } else if (isLoginPage) {
+    /* Render login page without chrome */
+    body = (
       <div style={{ minHeight: '100vh', background: 'var(--color-void)' }}>
         {children}
       </div>
     )
+  } else if (!user) {
+    /* Block render until redirect fires for unauthenticated users */
+    body = null
+  } else {
+    body = (
+      <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--color-void)' }}>
+        <AdminSidebar />
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+          <AdminHeader />
+          <main style={{ flex: 1, padding: 24, overflowY: 'auto' }}>
+            {children}
+          </main>
+        </div>
+      </div>
+    )
   }
 
-  /* Block render until redirect fires for unauthenticated users */
-  if (!user) return null
-
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--color-void)' }}>
-      <AdminSidebar />
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
-        <AdminHeader />
-        <main style={{ flex: 1, padding: 24, overflowY: 'auto' }}>
-          {children}
-        </main>
-      </div>
-    </div>
+    <html lang="es" suppressHydrationWarning>
+      <body suppressHydrationWarning>
+        {body}
+      </body>
+    </html>
   )
 }
