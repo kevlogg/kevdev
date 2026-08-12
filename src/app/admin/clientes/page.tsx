@@ -16,6 +16,13 @@ function planUrl(url: string) {
   return `${siteBase(url)}/admin/plan`
 }
 
+/* yyyy-mm-dd -> dd/mm/aa */
+function formatDate(iso: string) {
+  if (!iso) return ''
+  const [y, m, d] = iso.split('-')
+  return `${d}/${m}/${y.slice(2)}`
+}
+
 /* Orden por defecto de la tabla: "En producción" primero */
 const SITUACION_ORDER: Record<Situacion, number> = {
   'EN PRODUCCION': 0,
@@ -204,11 +211,11 @@ export default function ClientesPage() {
       ) : visible.length === 0 ? (
         <p style={{ color: 'var(--color-faint)', fontFamily: 'var(--font-ui)', fontSize: '0.875rem' }}>Sin clientes.</p>
       ) : (
-        <div style={{ background: 'var(--color-depth)', border: '1px solid var(--color-border)', borderRadius: 12, overflow: 'hidden' }}>
+        <div style={{ background: 'var(--color-depth)', border: '1px solid var(--color-border)', borderRadius: 12, overflow: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--color-border)' }}>
-                {['Cliente', 'Demo', 'Situación', 'Plan', 'WSP', 'URL', 'Observaciones'].map(h => (
+                {['Cliente', 'Rubro', 'Demo', 'Fecha demo', 'Situación', 'Plan', 'Fecha inicio', 'WSP', 'URL', 'Observaciones'].map(h => (
                   <th key={h} style={{ padding: '12px 16px', textAlign: 'left', fontFamily: 'var(--font-ui)', fontSize: '0.6875rem', fontWeight: 600, color: 'var(--color-muted)', letterSpacing: '0.08em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
                     {h}
                   </th>
@@ -233,6 +240,24 @@ export default function ClientesPage() {
                     </Link>
                   </td>
 
+                  {/* Rubro */}
+                  <td style={{ padding: '8px 16px' }} onClick={() => editing?.id !== id && startEdit(id, 'rubro', c.rubro ?? '')}>
+                    {editing?.id === id && editing.field === 'rubro' ? (
+                      <input
+                        autoFocus
+                        value={editVal}
+                        onChange={e => setEditVal(e.target.value)}
+                        onBlur={e => saveInline(id, 'rubro', e.target.value)}
+                        onKeyDown={e => e.key === 'Enter' && saveInline(id, 'rubro', editVal)}
+                        style={cellInputStyle}
+                      />
+                    ) : (
+                      <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.875rem', color: 'var(--color-muted)', cursor: 'pointer' }}>
+                        {c.rubro || '—'}
+                      </span>
+                    )}
+                  </td>
+
                   {/* Demo */}
                   <td style={{ padding: '8px 16px' }} onClick={() => editing?.id !== id && startEdit(id, 'demo', c.demo ?? '')}>
                     {editing?.id === id && editing.field === 'demo' ? (
@@ -253,6 +278,24 @@ export default function ClientesPage() {
                       </span>
                     ) : (
                       <span style={{ color: 'var(--color-faint)', fontFamily: 'var(--font-ui)', fontSize: '0.875rem', cursor: 'pointer' }}>—</span>
+                    )}
+                  </td>
+
+                  {/* Fecha demo */}
+                  <td style={{ padding: '8px 16px' }} onClick={() => editing?.id !== id && startEdit(id, 'fechaPresentacionDemo', c.fechaPresentacionDemo ?? '')}>
+                    {editing?.id === id && editing.field === 'fechaPresentacionDemo' ? (
+                      <input
+                        type="date"
+                        autoFocus
+                        value={editVal}
+                        onChange={e => saveInline(id, 'fechaPresentacionDemo', e.target.value)}
+                        onBlur={() => setEditing(null)}
+                        style={cellInputStyle}
+                      />
+                    ) : (
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8125rem', color: 'var(--color-muted)', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+                        {formatDate(c.fechaPresentacionDemo) || '—'}
+                      </span>
                     )}
                   </td>
 
@@ -291,6 +334,24 @@ export default function ClientesPage() {
                     ) : (
                       <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.875rem', color: 'var(--color-muted)', cursor: 'pointer' }}>
                         {c.plan || '—'}
+                      </span>
+                    )}
+                  </td>
+
+                  {/* Fecha inicio */}
+                  <td style={{ padding: '8px 16px' }} onClick={() => editing?.id !== id && startEdit(id, 'fechaInicioProyecto', c.fechaInicioProyecto ?? '')}>
+                    {editing?.id === id && editing.field === 'fechaInicioProyecto' ? (
+                      <input
+                        type="date"
+                        autoFocus
+                        value={editVal}
+                        onChange={e => saveInline(id, 'fechaInicioProyecto', e.target.value)}
+                        onBlur={() => setEditing(null)}
+                        style={cellInputStyle}
+                      />
+                    ) : (
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8125rem', color: 'var(--color-muted)', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+                        {formatDate(c.fechaInicioProyecto) || '—'}
                       </span>
                     )}
                   </td>
