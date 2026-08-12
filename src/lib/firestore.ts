@@ -27,6 +27,8 @@ export interface Cliente {
   plan: string
   url: string
   notas: string
+  fechaPresentacionDemo: string
+  fechaInicioProyecto: string
 }
 
 export interface ChecklistProgreso {

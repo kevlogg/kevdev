@@ -6,22 +6,7 @@ import {
   getClientes, addCliente, updateCliente,
   type Cliente, type DemoEstado, type Situacion,
 } from '@/lib/firestore'
-
-const DEMO_COLORS: Record<DemoEstado, string> = {
-  PRESENTADA: '#4ade80',
-  HECHA:      '#fbbf24',
-  '':         'var(--color-faint)',
-}
-
-const SITUACION_COLORS: Record<Situacion, string> = {
-  'NO RESPONDIO':  '#a78bfa',
-  'EN ESPERA':     '#fbbf24',
-  'EN PRODUCCION': '#22d3ee',
-  'RECHAZADA':     '#f87171',
-  '':              'var(--color-faint)',
-}
-
-const SITUACIONES: Situacion[] = ['', 'NO RESPONDIO', 'EN ESPERA', 'EN PRODUCCION', 'RECHAZADA']
+import { SITUACIONES, SITUACION_COLORS, DEMO_COLORS } from '@/lib/cliente-ui'
 
 /* Normaliza la url guardada y arma el link al panel de plan del sitio del cliente */
 function siteBase(url: string) {
@@ -46,6 +31,7 @@ const EMPTY_FORM = {
   demo: '' as DemoEstado,
   situacion: '' as Situacion,
   plan: '', url: '', notas: '',
+  fechaPresentacionDemo: '', fechaInicioProyecto: '',
 }
 
 export default function ClientesPage() {
@@ -178,6 +164,7 @@ export default function ClientesPage() {
           }}
         >
           <input placeholder="Nombre *" required value={form.nombre}   onChange={e => setForm(f => ({ ...f, nombre:   e.target.value }))} style={inputStyle} />
+          <input placeholder="Rubro"              value={form.rubro}    onChange={e => setForm(f => ({ ...f, rubro:    e.target.value }))} style={inputStyle} />
           <input placeholder="Teléfono (WSP)"    value={form.telefono} onChange={e => setForm(f => ({ ...f, telefono: e.target.value }))} style={inputStyle} />
           <input placeholder="URL del sitio"     value={form.url}      onChange={e => setForm(f => ({ ...f, url:      e.target.value }))} style={inputStyle} />
           <input placeholder="Plan (Mensual / Único)" value={form.plan} onChange={e => setForm(f => ({ ...f, plan:    e.target.value }))} style={inputStyle} />
@@ -190,6 +177,18 @@ export default function ClientesPage() {
             <option value="">Situación: —</option>
             {SITUACIONES.filter(s => s !== '').map(s => <option key={s} value={s}>{s}</option>)}
           </select>
+          <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6875rem', color: 'var(--color-faint)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+              Fecha presentación demo
+            </span>
+            <input type="date" value={form.fechaPresentacionDemo} onChange={e => setForm(f => ({ ...f, fechaPresentacionDemo: e.target.value }))} style={inputStyle} />
+          </label>
+          <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6875rem', color: 'var(--color-faint)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+              Fecha inicio proyecto
+            </span>
+            <input type="date" value={form.fechaInicioProyecto} onChange={e => setForm(f => ({ ...f, fechaInicioProyecto: e.target.value }))} style={inputStyle} />
+          </label>
           <div style={{ gridColumn: '1 / -1', display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
             <button type="button" onClick={() => setShowForm(false)} style={{ ...inputStyle, width: 'auto', cursor: 'pointer', color: 'var(--color-muted)' }}>Cancelar</button>
             <button type="submit" disabled={saving} style={{ background: 'var(--color-accent)', color: 'var(--color-on-accent)', border: 'none', borderRadius: 8, padding: '8px 20px', fontFamily: 'var(--font-ui)', fontSize: '0.875rem', fontWeight: 600, cursor: saving ? 'not-allowed' : 'pointer' }}>

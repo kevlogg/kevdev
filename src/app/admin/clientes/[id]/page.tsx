@@ -7,12 +7,11 @@ import {
   type Cliente, type EstadoCliente, type DemoEstado, type Situacion,
 } from '@/lib/firestore'
 import { CHECKLIST_STEPS } from '@/lib/checklist-steps'
+import { SITUACIONES } from '@/lib/cliente-ui'
 
 const ESTADOS: EstadoCliente[] = [
   'prospecto', 'contactado', 'demo', 'negociacion', 'cerrado', 'entregado',
 ]
-
-const SITUACIONES: Situacion[] = ['', 'NO RESPONDIO', 'EN ESPERA', 'EN PRODUCCION', 'RECHAZADA']
 
 /* Normaliza la url guardada y arma el link al panel de plan del sitio del cliente */
 function siteBase(url: string) {
@@ -31,7 +30,7 @@ const ESTADO_LABELS: Record<EstadoCliente, string> = {
   entregado:   'Entregado',
 }
 
-type EditableField = 'nombre' | 'rubro' | 'contacto' | 'telefono' | 'instagram' | 'notas' | 'estado' | 'demo' | 'situacion' | 'plan' | 'url'
+type EditableField = 'nombre' | 'rubro' | 'contacto' | 'telefono' | 'instagram' | 'notas' | 'estado' | 'demo' | 'situacion' | 'plan' | 'url' | 'fechaPresentacionDemo' | 'fechaInicioProyecto'
 
 export default function ClienteDetailPage() {
   const params = useParams()
@@ -199,6 +198,34 @@ export default function ClienteDetailPage() {
               />
             </label>
           ))}
+
+          {/* Fecha presentación demo */}
+          <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6875rem', color: 'var(--color-faint)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+              Fecha presentación demo
+            </span>
+            <input
+              type="date"
+              value={(form.fechaPresentacionDemo as string) ?? ''}
+              onChange={e => setForm(f => ({ ...f, fechaPresentacionDemo: e.target.value }))}
+              onBlur={e => saveField('fechaPresentacionDemo', e.target.value)}
+              style={inputStyle}
+            />
+          </label>
+
+          {/* Fecha inicio proyecto */}
+          <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6875rem', color: 'var(--color-faint)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+              Fecha inicio proyecto
+            </span>
+            <input
+              type="date"
+              value={(form.fechaInicioProyecto as string) ?? ''}
+              onChange={e => setForm(f => ({ ...f, fechaInicioProyecto: e.target.value }))}
+              onBlur={e => saveField('fechaInicioProyecto', e.target.value)}
+              style={inputStyle}
+            />
+          </label>
 
           {/* Demo */}
           <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>

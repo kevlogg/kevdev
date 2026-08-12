@@ -47,6 +47,7 @@ export default function ImportPage() {
           rubro: '', contacto: '', instagram: '',
           estado: 'prospecto',
           notas: '',
+          fechaPresentacionDemo: '', fechaInicioProyecto: '',
         })
         ok++
         setLog(l => [...l, `✓ ${row.nombre}`])
