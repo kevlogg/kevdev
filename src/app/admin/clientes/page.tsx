@@ -215,7 +215,7 @@ export default function ClientesPage() {
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--color-border)' }}>
-                {['Cliente', 'Rubro', 'Demo', 'Fecha demo', 'Situación', 'Plan', 'Fecha inicio', 'WSP', 'URL', 'Observaciones'].map(h => (
+                {['Cliente', 'Demo', 'Situación', 'Plan', 'WSP', 'URL', 'Observaciones'].map(h => (
                   <th key={h} style={{ padding: '12px 16px', textAlign: 'left', fontFamily: 'var(--font-ui)', fontSize: '0.6875rem', fontWeight: 600, color: 'var(--color-muted)', letterSpacing: '0.08em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
                     {h}
                   </th>
@@ -233,91 +233,103 @@ export default function ClientesPage() {
                   onMouseEnter={e => { e.currentTarget.style.background = 'rgba(221,232,255,0.03)' }}
                   onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}
                 >
-                  {/* Cliente */}
+                  {/* Cliente (+ rubro) */}
                   <td style={{ padding: '12px 16px' }}>
-                    <Link href={`/admin/clientes/${id}`} style={{ fontFamily: 'var(--font-ui)', fontSize: '0.9375rem', color: 'var(--color-star)', textDecoration: 'none', fontWeight: 500 }}>
-                      {c.nombre}
-                    </Link>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                      <Link href={`/admin/clientes/${id}`} style={{ fontFamily: 'var(--font-ui)', fontSize: '0.9375rem', color: 'var(--color-star)', textDecoration: 'none', fontWeight: 500 }}>
+                        {c.nombre}
+                      </Link>
+                      {editing?.id === id && editing.field === 'rubro' ? (
+                        <input
+                          autoFocus
+                          value={editVal}
+                          onChange={e => setEditVal(e.target.value)}
+                          onBlur={e => saveInline(id, 'rubro', e.target.value)}
+                          onKeyDown={e => e.key === 'Enter' && saveInline(id, 'rubro', editVal)}
+                          style={{ ...cellInputStyle, fontSize: '0.75rem', padding: '2px 6px', minWidth: 0 }}
+                        />
+                      ) : (
+                        <span onClick={() => startEdit(id, 'rubro', c.rubro ?? '')} style={{ fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: 'var(--color-faint)', cursor: 'pointer' }}>
+                          {c.rubro || '—'}
+                        </span>
+                      )}
+                    </div>
                   </td>
 
-                  {/* Rubro */}
-                  <td style={{ padding: '8px 16px' }} onClick={() => editing?.id !== id && startEdit(id, 'rubro', c.rubro ?? '')}>
-                    {editing?.id === id && editing.field === 'rubro' ? (
-                      <input
-                        autoFocus
-                        value={editVal}
-                        onChange={e => setEditVal(e.target.value)}
-                        onBlur={e => saveInline(id, 'rubro', e.target.value)}
-                        onKeyDown={e => e.key === 'Enter' && saveInline(id, 'rubro', editVal)}
-                        style={cellInputStyle}
-                      />
-                    ) : (
-                      <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.875rem', color: 'var(--color-muted)', cursor: 'pointer' }}>
-                        {c.rubro || '—'}
-                      </span>
-                    )}
+                  {/* Demo (+ fecha presentación) */}
+                  <td style={{ padding: '8px 16px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 4, alignItems: 'flex-start' }}>
+                      {editing?.id === id && editing.field === 'demo' ? (
+                        <select
+                          autoFocus
+                          value={editVal}
+                          onChange={e => saveInline(id, 'demo', e.target.value)}
+                          onBlur={() => setEditing(null)}
+                          style={cellInputStyle}
+                        >
+                          <option value="">—</option>
+                          <option value="PRESENTADA">PRESENTADA</option>
+                          <option value="HECHA">HECHA</option>
+                        </select>
+                      ) : c.demo ? (
+                        <span onClick={() => startEdit(id, 'demo', c.demo ?? '')} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: DEMO_COLORS[c.demo], background: `${DEMO_COLORS[c.demo]}18`, border: `1px solid ${DEMO_COLORS[c.demo]}40`, borderRadius: 99, padding: '2px 10px', letterSpacing: '0.05em', cursor: 'pointer' }}>
+                          {c.demo}
+                        </span>
+                      ) : (
+                        <span onClick={() => startEdit(id, 'demo', '')} style={{ color: 'var(--color-faint)', fontFamily: 'var(--font-ui)', fontSize: '0.875rem', cursor: 'pointer' }}>—</span>
+                      )}
+                      {editing?.id === id && editing.field === 'fechaPresentacionDemo' ? (
+                        <input
+                          type="date"
+                          autoFocus
+                          value={editVal}
+                          onChange={e => saveInline(id, 'fechaPresentacionDemo', e.target.value)}
+                          onBlur={() => setEditing(null)}
+                          style={{ ...cellInputStyle, fontSize: '0.75rem', padding: '2px 6px' }}
+                        />
+                      ) : (
+                        <span onClick={() => startEdit(id, 'fechaPresentacionDemo', c.fechaPresentacionDemo ?? '')} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: 'var(--color-faint)', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+                          {formatDate(c.fechaPresentacionDemo) || '—'}
+                        </span>
+                      )}
+                    </div>
                   </td>
 
-                  {/* Demo */}
-                  <td style={{ padding: '8px 16px' }} onClick={() => editing?.id !== id && startEdit(id, 'demo', c.demo ?? '')}>
-                    {editing?.id === id && editing.field === 'demo' ? (
-                      <select
-                        autoFocus
-                        value={editVal}
-                        onChange={e => saveInline(id, 'demo', e.target.value)}
-                        onBlur={() => setEditing(null)}
-                        style={cellInputStyle}
-                      >
-                        <option value="">—</option>
-                        <option value="PRESENTADA">PRESENTADA</option>
-                        <option value="HECHA">HECHA</option>
-                      </select>
-                    ) : c.demo ? (
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: DEMO_COLORS[c.demo], background: `${DEMO_COLORS[c.demo]}18`, border: `1px solid ${DEMO_COLORS[c.demo]}40`, borderRadius: 99, padding: '2px 10px', letterSpacing: '0.05em', cursor: 'pointer' }}>
-                        {c.demo}
-                      </span>
-                    ) : (
-                      <span style={{ color: 'var(--color-faint)', fontFamily: 'var(--font-ui)', fontSize: '0.875rem', cursor: 'pointer' }}>—</span>
-                    )}
-                  </td>
-
-                  {/* Fecha demo */}
-                  <td style={{ padding: '8px 16px' }} onClick={() => editing?.id !== id && startEdit(id, 'fechaPresentacionDemo', c.fechaPresentacionDemo ?? '')}>
-                    {editing?.id === id && editing.field === 'fechaPresentacionDemo' ? (
-                      <input
-                        type="date"
-                        autoFocus
-                        value={editVal}
-                        onChange={e => saveInline(id, 'fechaPresentacionDemo', e.target.value)}
-                        onBlur={() => setEditing(null)}
-                        style={cellInputStyle}
-                      />
-                    ) : (
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8125rem', color: 'var(--color-muted)', cursor: 'pointer', whiteSpace: 'nowrap' }}>
-                        {formatDate(c.fechaPresentacionDemo) || '—'}
-                      </span>
-                    )}
-                  </td>
-
-                  {/* Situacion */}
-                  <td style={{ padding: '8px 16px' }} onClick={() => editing?.id !== id && startEdit(id, 'situacion', c.situacion ?? '')}>
-                    {editing?.id === id && editing.field === 'situacion' ? (
-                      <select
-                        autoFocus
-                        value={editVal}
-                        onChange={e => saveInline(id, 'situacion', e.target.value)}
-                        onBlur={() => setEditing(null)}
-                        style={cellInputStyle}
-                      >
-                        {SITUACIONES.map(s => <option key={s} value={s}>{s || '—'}</option>)}
-                      </select>
-                    ) : c.situacion ? (
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: SITUACION_COLORS[c.situacion], background: `${SITUACION_COLORS[c.situacion]}18`, border: `1px solid ${SITUACION_COLORS[c.situacion]}40`, borderRadius: 99, padding: '2px 10px', letterSpacing: '0.05em', whiteSpace: 'nowrap', cursor: 'pointer' }}>
-                        {c.situacion}
-                      </span>
-                    ) : (
-                      <span style={{ color: 'var(--color-faint)', fontFamily: 'var(--font-ui)', fontSize: '0.875rem', cursor: 'pointer' }}>—</span>
-                    )}
+                  {/* Situacion (+ fecha inicio proyecto) */}
+                  <td style={{ padding: '8px 16px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 4, alignItems: 'flex-start' }}>
+                      {editing?.id === id && editing.field === 'situacion' ? (
+                        <select
+                          autoFocus
+                          value={editVal}
+                          onChange={e => saveInline(id, 'situacion', e.target.value)}
+                          onBlur={() => setEditing(null)}
+                          style={cellInputStyle}
+                        >
+                          {SITUACIONES.map(s => <option key={s} value={s}>{s || '—'}</option>)}
+                        </select>
+                      ) : c.situacion ? (
+                        <span onClick={() => startEdit(id, 'situacion', c.situacion ?? '')} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: SITUACION_COLORS[c.situacion], background: `${SITUACION_COLORS[c.situacion]}18`, border: `1px solid ${SITUACION_COLORS[c.situacion]}40`, borderRadius: 99, padding: '2px 10px', letterSpacing: '0.05em', whiteSpace: 'nowrap', cursor: 'pointer' }}>
+                          {c.situacion}
+                        </span>
+                      ) : (
+                        <span onClick={() => startEdit(id, 'situacion', '')} style={{ color: 'var(--color-faint)', fontFamily: 'var(--font-ui)', fontSize: '0.875rem', cursor: 'pointer' }}>—</span>
+                      )}
+                      {editing?.id === id && editing.field === 'fechaInicioProyecto' ? (
+                        <input
+                          type="date"
+                          autoFocus
+                          value={editVal}
+                          onChange={e => saveInline(id, 'fechaInicioProyecto', e.target.value)}
+                          onBlur={() => setEditing(null)}
+                          style={{ ...cellInputStyle, fontSize: '0.75rem', padding: '2px 6px' }}
+                        />
+                      ) : (
+                        <span onClick={() => startEdit(id, 'fechaInicioProyecto', c.fechaInicioProyecto ?? '')} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: 'var(--color-faint)', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+                          {formatDate(c.fechaInicioProyecto) || '—'}
+                        </span>
+                      )}
+                    </div>
                   </td>
 
                   {/* Plan */}
@@ -334,24 +346,6 @@ export default function ClientesPage() {
                     ) : (
                       <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.875rem', color: 'var(--color-muted)', cursor: 'pointer' }}>
                         {c.plan || '—'}
-                      </span>
-                    )}
-                  </td>
-
-                  {/* Fecha inicio */}
-                  <td style={{ padding: '8px 16px' }} onClick={() => editing?.id !== id && startEdit(id, 'fechaInicioProyecto', c.fechaInicioProyecto ?? '')}>
-                    {editing?.id === id && editing.field === 'fechaInicioProyecto' ? (
-                      <input
-                        type="date"
-                        autoFocus
-                        value={editVal}
-                        onChange={e => saveInline(id, 'fechaInicioProyecto', e.target.value)}
-                        onBlur={() => setEditing(null)}
-                        style={cellInputStyle}
-                      />
-                    ) : (
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8125rem', color: 'var(--color-muted)', cursor: 'pointer', whiteSpace: 'nowrap' }}>
-                        {formatDate(c.fechaInicioProyecto) || '—'}
                       </span>
                     )}
                   </td>
