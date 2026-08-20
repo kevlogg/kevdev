@@ -461,7 +461,7 @@ export default function Navbar() {
                 fontFamily: 'var(--font-mono)', fontSize: '0.6875rem',
                 color: 'rgba(221,232,255,0.25)', letterSpacing: '0.08em',
               }}>
-                Kevin Loggia · {t('role')}
+                kev.dev · {t('role')}
               </span>
               <span style={{
                 fontFamily: 'var(--font-mono)', fontSize: '0.6875rem',

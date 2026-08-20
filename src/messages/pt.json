@@ -37,7 +37,7 @@
     "subcopy": "Com foco em negócio, validação e execução real.",
     "ctaProjects": "Ver projetos",
     "ctaDiagnostico": "Diagnóstico grátis",
-    "ctaDemo": "Solicitar demo sem custo ↗",
+    "ctaDemo": "Solicitar demo sem custo",
     "whatsappMessage": "Olá Kevin, quero solicitar uma demo sem custo para o meu negócio."
   },
   "services": {
@@ -113,7 +113,7 @@
     }
   },
   "footer": {
-    "copyright": "© {year} kev.dev · Kevin Loggia",
+    "copyright": "© {year} kev.dev",
     "role": "Digital Product Builder"
   },
   "projectFields": {
