@@ -22,6 +22,7 @@ export default function Approach() {
             fontFamily: 'var(--font-display)', fontWeight: 800, fontStyle: 'normal',
             fontSize: 'clamp(2rem, 4.5vw, 3.5rem)', lineHeight: 1,
             letterSpacing: '-0.03em', color: 'var(--color-star)',
+            textShadow: '0 4px 28px rgba(0,0,0,0.95), 0 1px 4px rgba(0,0,0,1)',
           }}>
             {t('heading')}
           </h2>
@@ -30,11 +31,12 @@ export default function Approach() {
         <TunnelReveal delay={0.16} style={{ marginBottom: 'clamp(2.5rem, 5vw, 4rem)' }}>
           <p style={{
             fontFamily: 'var(--font-ui)', fontSize: 'clamp(1rem, 1.5vw, 1.0625rem)',
-            color: 'var(--color-muted)', lineHeight: 1.75,
+            color: 'var(--color-star)', lineHeight: 1.75,
             maxWidth: '42ch', marginInline: 'auto',
+            textShadow: '0 2px 16px rgba(0,0,0,0.95)',
           }}>
             {t('paragraphPre')}
-            <span style={{ color: 'var(--color-star)' }}>
+            <span style={{ color: 'var(--color-accent)' }}>
               {t('paragraphHighlight')}
             </span>
             {t('paragraphPost')}

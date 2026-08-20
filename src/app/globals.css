@@ -1,36 +1,36 @@
 /* Google Fonts ─ must come first */
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Instrument+Serif:ital@1&family=DM+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Instrument+Serif:ital@1&display=swap');
 
 @import "tailwindcss";
 
-/* ─── Design tokens — Signal palette ────────────────────────────────── */
+/* ─── Design tokens — Kevdev Electric Palette ──────────────────────── */
 @theme inline {
   /* Backgrounds */
-  --color-void:         #060810;   /* deep navy-black          */
-  --color-depth:        #0b0d1a;   /* elevated surface          */
-  --color-surface:      rgba(34,211,238,0.04);
-  --color-border:       rgba(100,160,255,0.09);
-  --color-border-hover: rgba(100,200,255,0.18);
+  --color-void:         #121212;   /* kevdev signature background */
+  --color-depth:        #181818;   /* elevated surface          */
+  --color-surface:      rgba(0,229,255,0.04);
+  --color-border:       rgba(255,255,255,0.08);
+  --color-border-hover: rgba(0,229,255,0.25);
 
-  /* Text */
-  --color-star:         #dde8ff;   /* cool blue-white           */
-  --color-muted:        rgba(221,232,255,0.45);
-  --color-faint:        rgba(221,232,255,0.22);
+  /* Text — Silver / Plata */
+  --color-star:         #e8e8e8;   /* silver text               */
+  --color-muted:        rgba(232,232,232,0.65);
+  --color-faint:        rgba(232,232,232,0.35);
 
-  /* Accent — electric cyan */
-  --color-accent:       #22d3ee;   /* cyan-400                  */
-  --color-accent-hi:    #67e8f9;   /* cyan-300 (hover/glow)     */
-  --color-accent-dim:   rgba(34,211,238,0.14);
-  --color-accent-glow:  rgba(34,211,238,0.22);
+  /* Accent — Electric Cyan / Celeste Eléctrico */
+  --color-accent:       #00e5ff;   /* electric cyan             */
+  --color-accent-hi:    #33ebff;   /* bright cyan glow          */
+  --color-accent-dim:   rgba(0,229,255,0.14);
+  --color-accent-glow:  rgba(0,229,255,0.28);
 
-  /* On-accent text (dark bg on cyan button) */
-  --color-on-accent:    #030810;
+  /* On-accent text (dark bg on electric cyan button) */
+  --color-on-accent:    #0c0c0c;
 
   /* Typography */
-  --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;
-  --font-ui:      'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-display: 'Inter', 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-ui:      'Inter', 'Plus Jakarta Sans', system-ui, sans-serif;
   --font-serif:   'Instrument Serif', Georgia, serif;
-  --font-mono:    'DM Mono', monospace;
+  --font-mono:    'JetBrains Mono', 'DM Mono', monospace;
 }
 
 /* ─── Global vars ───────────────────────────────────────────────────── */
@@ -58,14 +58,15 @@ body {
   color: var(--color-star);
   font-family: var(--font-ui);
   line-height: 1.65;
+  letter-spacing: 0.02em;
   overflow-x: hidden;
 }
 
-::selection { background: rgba(34,211,238,0.18); color: #dde8ff; }
+::selection { background: rgba(0,229,255,0.2); color: #ffffff; }
 
 ::-webkit-scrollbar        { width: 3px; }
 ::-webkit-scrollbar-track  { background: var(--color-void); }
-::-webkit-scrollbar-thumb  { background: rgba(255,255,255,0.08); border-radius: 99px; }
+::-webkit-scrollbar-thumb  { background: rgba(255,255,255,0.12); border-radius: 99px; }
 
 /* ─── Utility classes ───────────────────────────────────────────────── */
 .site-container {
@@ -78,34 +79,35 @@ body {
 .section-y { padding-top: var(--section-y); padding-bottom: var(--section-y); }
 
 .type-label {
-  font-family: var(--font-ui);
+  font-family: var(--font-mono);
   font-size: 0.6875rem;
   font-weight: 600;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--color-faint);
+  color: var(--color-star);
+  text-shadow: 0 2px 12px rgba(0,0,0,0.9);
 }
 
 /* ─── Glass card mixin ──────────────────────────────────────────────── */
 .glass {
-  background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(18, 18, 18, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-card);
-  box-shadow: 0 8px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 /* ─── Ambient overlay layers ────────────────────────────────────────── */
 .grain {
-  position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: 0.03;
+  position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: 0.025;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 128px; mix-blend-mode: screen;
 }
 
 .vignette {
   position: fixed; inset: 0; pointer-events: none; z-index: 2;
-  background: radial-gradient(ellipse 85% 85% at 50% 50%, transparent 35%, rgba(6,8,16,0.68) 100%);
+  background: radial-gradient(ellipse 95% 95% at 50% 50%, transparent 75%, rgba(18,18,18,0.25) 100%);
 }
 
 /* ─── Reduced motion ────────────────────────────────────────────────── */

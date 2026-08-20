@@ -61,7 +61,7 @@ export default function Services() {
         aria-hidden
         style={{
           position: 'fixed', inset: 0, zIndex: 5,
-          background: 'rgba(6,8,16,1)',
+          background: 'rgba(18,18,18,1)',
           pointerEvents: 'none',
           opacity: overlayOpacity,
         }}
@@ -101,11 +101,13 @@ export default function Services() {
                 fontSize: 'clamp(1.875rem, 3.5vw, 2.875rem)',
                 lineHeight: 1.0, letterSpacing: '-0.03em',
                 color: 'var(--color-star)', margin: 0,
+                textShadow: '0 4px 24px rgba(0,0,0,0.95), 0 1px 4px rgba(0,0,0,1)',
               }}>
                 {t('headingPre')}{' '}
                 <span style={{
                   fontFamily: 'var(--font-serif)', fontStyle: 'italic',
                   fontWeight: 400, color: 'var(--color-accent)',
+                  textShadow: '0 0 32px rgba(0,229,255,0.4), 0 2px 16px rgba(0,0,0,0.95)',
                 }}>{t('headingItalic')}</span>
               </h2>
             </div>
@@ -270,9 +272,11 @@ function ServiceDetail({ service }: { service: ServiceItem }) {
     <div style={{
       position: 'relative',
       padding: 'clamp(2rem, 3.5vw, 3rem)',
-      background: 'rgba(255,255,255,0.028)',
-      border: '1px solid rgba(255,255,255,0.07)',
-      borderTop: '1px solid rgba(34,211,238,0.35)',
+      background: 'rgba(18,18,18,0.65)',
+      backdropFilter: 'blur(12px)',
+      WebkitBackdropFilter: 'blur(12px)',
+      border: '1px solid rgba(255,255,255,0.08)',
+      borderTop: '1px solid rgba(0,229,255,0.4)',
       borderRadius: 16,
       overflow: 'hidden',
     }}>

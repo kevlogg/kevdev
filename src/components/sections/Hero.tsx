@@ -61,7 +61,7 @@ export default function Hero() {
         style={{
           position: 'fixed', top: 0, left: 0,
           width: 640, height: 640, borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(34,211,238,0.05) 0%, transparent 65%)',
+          background: 'radial-gradient(circle, rgba(0,229,255,0.06) 0%, transparent 65%)',
           pointerEvents: 'none', zIndex: 3,
           x: useTransform(springX, v => v - 320),
           y: useTransform(springY, v => v - 320),
@@ -75,7 +75,7 @@ export default function Hero() {
           flex: 1,
           display: 'flex',
           flexDirection: 'column',
-          padding: `clamp(6rem, 10vw, 7.5rem) var(--gutter) clamp(2.5rem, 4vw, 3.5rem)`,
+          padding: `clamp(10rem, 16vh, 15rem) var(--gutter) clamp(2.5rem, 4vw, 3.5rem)`,
           opacity: contentOpacity,
           y: contentY,
         }}
@@ -101,6 +101,7 @@ export default function Hero() {
             letterSpacing: '-0.03em',
             color:         'var(--color-star)',
             maxWidth:      '16ch',
+            textShadow:    '0 4px 28px rgba(0,0,0,0.95), 0 1px 4px rgba(0,0,0,1)',
           }}>
             {t('headlinePre')}{' '}
             <span style={{
@@ -108,6 +109,7 @@ export default function Hero() {
               fontStyle:  'italic',
               fontWeight: 400,
               color:      'var(--color-accent)',
+              textShadow: '0 0 32px rgba(0,229,255,0.4), 0 2px 16px rgba(0,0,0,0.95)',
             }}>{t('headlineItalic')}</span>
             <br />
             {t('headlinePost')}
@@ -135,11 +137,14 @@ export default function Hero() {
                 <span key={chip} style={{
                   fontFamily:    'var(--font-mono)',
                   fontSize:      'clamp(0.625rem, 0.9vw, 0.75rem)',
-                  letterSpacing: '0.05em',
-                  color:         'rgba(221,232,255,0.55)',
-                  border:        '1px solid rgba(255,255,255,0.13)',
+                  letterSpacing: '0.08em',
+                  color:         'var(--color-star)',
+                  border:        '1px solid rgba(255,255,255,0.18)',
                   borderRadius:  99,
-                  padding:       '0.3rem 0.75rem',
+                  padding:       '0.35rem 0.85rem',
+                  background:    'rgba(18,18,18,0.72)',
+                  backdropFilter:'blur(16px)',
+                  boxShadow:     '0 4px 16px rgba(0,0,0,0.5)',
                 }}>
                   {chip}
                 </span>
@@ -148,11 +153,12 @@ export default function Hero() {
             <p style={{
               fontFamily: 'var(--font-ui)',
               fontWeight: 400,
-              fontSize:   'clamp(0.8rem, 1vw, 0.875rem)',
+              fontSize:   'clamp(0.875rem, 1.1vw, 0.95rem)',
               lineHeight: 1.6,
-              color:      'var(--color-muted)',
-              maxWidth:   '36ch',
+              color:      'var(--color-star)',
+              maxWidth:   '38ch',
               margin:     0,
+              textShadow: '0 2px 16px rgba(0,0,0,0.95)',
             }}>
               {t('subcopy')}
             </p>
@@ -176,13 +182,13 @@ function CTADark({ children, onClick }: { children: React.ReactNode; onClick: ()
     <button onClick={onClick}
       onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
       style={{
-        fontFamily:     'var(--font-ui)', fontWeight: 600,
+        fontFamily:     'var(--font-mono)', fontWeight: 600,
         fontSize:       '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase',
         padding:        '0.875rem 1.75rem',
-        border:         `1px solid ${hov ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.1)'}`,
+        border:         `1px solid ${hov ? 'rgba(255,255,255,0.25)' : 'rgba(255,255,255,0.12)'}`,
         borderRadius:   99, cursor: 'pointer',
-        background:     hov ? 'rgba(6,8,16,0.85)' : 'rgba(6,8,16,0.72)',
-        backdropFilter: 'blur(16px)',
+        background:     hov ? 'rgba(18,18,18,0.85)' : 'rgba(18,18,18,0.65)',
+        backdropFilter: 'blur(12px)',
         color:          hov ? 'var(--color-star)' : 'var(--color-muted)',
         transition:     'all 0.25s var(--ease-expo)',
         transform:      hov ? 'translateY(-1px)' : 'none',
@@ -198,14 +204,14 @@ function CTADiagnostico({ href, children }: { href: string; children: React.Reac
     <Link href={href}
       onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
       style={{
-        fontFamily:     'var(--font-ui)', fontWeight: 600,
+        fontFamily:     'var(--font-mono)', fontWeight: 600,
         fontSize:       '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase',
         padding:        '0.875rem 1.75rem',
-        border:         `1px solid rgba(79,195,247,${hov ? '0.4' : '0.2'})`,
+        border:         `1px solid rgba(0,229,255,${hov ? '0.5' : '0.25'})`,
         borderRadius:   99, cursor: 'pointer',
-        background:     hov ? 'rgba(79,195,247,0.08)' : 'rgba(79,195,247,0.04)',
-        backdropFilter: 'blur(16px)',
-        color:          hov ? 'var(--cyan)' : 'rgba(79,195,247,0.7)',
+        background:     hov ? 'rgba(0,229,255,0.1)' : 'rgba(0,229,255,0.04)',
+        backdropFilter: 'blur(12px)',
+        color:          hov ? 'var(--color-accent)' : 'rgba(0,229,255,0.85)',
         textDecoration: 'none',
         transition:     'all 0.25s var(--ease-expo)',
         transform:      hov ? 'translateY(-1px)' : 'none',
@@ -236,7 +242,7 @@ function CTAArrow({ href, children }: { href: string; children: React.ReactNode 
         whiteSpace:   'nowrap',
         transition:   'background 0.22s var(--ease-expo), transform 0.22s var(--ease-expo), box-shadow 0.22s',
         transform:    hov ? 'scale(1.04)' : 'scale(1)',
-        boxShadow:    hov ? '0 6px 28px rgba(34,211,238,0.32)' : '0 0 0 transparent',
+        boxShadow:    hov ? '0 6px 28px rgba(0,229,255,0.36)' : '0 0 0 transparent',
         flexShrink:   0,
       }}>
       <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden style={{ flexShrink: 0 }}>

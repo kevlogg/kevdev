@@ -152,20 +152,20 @@ export default function Navbar() {
         transition: 'background 0.45s var(--ease-expo), border-color 0.45s',
         background: open
           ? 'transparent'
-          : scrolled ? 'rgba(6,8,16,0.82)' : 'transparent',
-        backdropFilter: !open && scrolled ? 'blur(20px) saturate(1.3)' : 'none',
-        WebkitBackdropFilter: !open && scrolled ? 'blur(20px) saturate(1.3)' : 'none',
+          : scrolled ? 'rgba(18,18,18,0.72)' : 'transparent',
+        backdropFilter: !open && scrolled ? 'blur(12px)' : 'none',
+        WebkitBackdropFilter: !open && scrolled ? 'blur(12px)' : 'none',
         borderBottom: !open && scrolled
-          ? '1px solid rgba(255,255,255,0.06)'
+          ? '1px solid rgba(255,255,255,0.08)'
           : '1px solid transparent',
         pointerEvents: 'none',
       }}>
         <nav className="site-container" style={{
-          height: 68, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          height: 96, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           pointerEvents: 'none',
         }}>
 
-          {/* Wordmark */}
+          {/* Wordmark / Kevdev Logo */}
           <motion.a
             href="#"
             onClick={e => { e.preventDefault(); close(); if (pathname !== '/') { router.push('/') } else { (window as any).__lenis?.scrollTo(0) } }}
@@ -174,7 +174,18 @@ export default function Navbar() {
             transition={{ duration: 0.7, delay: 1.1, ease: EASE_OUT }}
             style={{ textDecoration: 'none', position: 'relative', zIndex: 101, display: 'flex', alignItems: 'center', pointerEvents: 'auto' }}
           >
-            <img src="/kevdev-icono.png" alt="kevdev" style={{ height: 42, width: 'auto', display: 'block' }} />
+            <img 
+              src="/kevdev-logo.png" 
+              alt="kevdev logo" 
+              style={{ 
+                height: 'clamp(68px, 8vw, 96px)', 
+                width: 'auto', 
+                maxHeight: 96,
+                display: 'block',
+                objectFit: 'contain',
+                filter: 'drop-shadow(0 6px 24px rgba(0,229,255,0.35)) brightness(1.1)',
+              }} 
+            />
           </motion.a>
 
           {/* Right group — language switcher + menu trigger, aligned together */}
@@ -202,7 +213,7 @@ export default function Navbar() {
             >
               {/* Label */}
               <span style={{
-                fontFamily: 'var(--font-ui)', fontSize: '0.6875rem',
+                fontFamily: 'var(--font-mono)', fontSize: '0.6875rem',
                 fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase',
                 color: 'var(--color-muted)', transition: 'color 0.25s',
               }}>
@@ -238,7 +249,7 @@ export default function Navbar() {
             exit="closed"
             style={{
               position: 'fixed', inset: 0, zIndex: 99,
-              background: '#060810',
+              background: '#121212',
               display: 'flex', flexDirection: 'column',
               overflow: 'hidden',
             }}

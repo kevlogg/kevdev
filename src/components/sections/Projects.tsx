@@ -19,13 +19,18 @@ export default function Projects() {
             fontFamily: 'var(--font-display)', fontWeight: 800,
             fontSize: 'clamp(2.25rem, 5vw, 4rem)', lineHeight: 0.95,
             letterSpacing: '-0.03em', color: 'var(--color-star)',
+            textShadow: '0 4px 28px rgba(0,0,0,0.95), 0 1px 4px rgba(0,0,0,1)',
           }}>
             {t('headingLine1')}<br />{t('headingLine2')}
           </h2>
         </TunnelReveal>
 
         <TunnelReveal delay={0.16} style={{ marginBottom: '2.5rem' }}>
-          <p style={{ fontFamily: 'var(--font-ui)', fontSize: '1rem', color: 'var(--color-muted)', lineHeight: 1.6 }}>
+          <p style={{
+            fontFamily: 'var(--font-ui)', fontSize: '1rem',
+            color: 'var(--color-star)', lineHeight: 1.6,
+            textShadow: '0 2px 16px rgba(0,0,0,0.95)',
+          }}>
             {t('subcopy')}
           </p>
         </TunnelReveal>

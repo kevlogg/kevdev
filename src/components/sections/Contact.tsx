@@ -32,11 +32,13 @@ export default function Contact() {
             fontFamily: 'var(--font-display)', fontWeight: 800, fontStyle: 'normal',
             fontSize: 'clamp(2.5rem, 7vw, 5.5rem)', lineHeight: 0.96,
             letterSpacing: '-0.03em', color: 'var(--color-star)',
+            textShadow: '0 4px 28px rgba(0,0,0,0.95), 0 1px 4px rgba(0,0,0,1)',
           }}>
             {t('headingPre')}<br />
             <span style={{
               fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontWeight: 400,
               color: 'var(--color-accent)',
+              textShadow: '0 0 32px rgba(0,229,255,0.4), 0 2px 16px rgba(0,0,0,0.95)',
             }}>{t('headingItalic')}</span>
           </h2>
         </div>
@@ -44,8 +46,9 @@ export default function Contact() {
         <div style={{ marginBottom: 'clamp(2rem, 4vw, 3rem)' }}>
           <p style={{
             fontFamily: 'var(--font-ui)', fontSize: 'clamp(0.9375rem, 1.5vw, 1.0625rem)',
-            color: 'var(--color-muted)', lineHeight: 1.7,
+            color: 'var(--color-star)', lineHeight: 1.7,
             maxWidth: '42ch', marginInline: 'auto',
+            textShadow: '0 2px 16px rgba(0,0,0,0.95)',
           }}>
             {t('paragraph')}
           </p>
@@ -65,19 +68,19 @@ export default function Contact() {
               borderRadius: 99,
               background: 'var(--color-accent)',
               color: 'var(--color-on-accent)',
-              boxShadow: '0 0 32px rgba(34,211,238,0.25)',
+              boxShadow: '0 0 32px rgba(0,229,255,0.25)',
               transition: 'background 0.22s, box-shadow 0.22s, transform 0.22s',
             }}
             onMouseEnter={e => {
               const el = e.currentTarget
               el.style.background = 'var(--color-accent-hi)'
-              el.style.boxShadow = '0 0 48px rgba(34,211,238,0.4)'
+              el.style.boxShadow = '0 0 48px rgba(0,229,255,0.4)'
               el.style.transform = 'translateY(-2px)'
             }}
             onMouseLeave={e => {
               const el = e.currentTarget
               el.style.background = 'var(--color-accent)'
-              el.style.boxShadow = '0 0 32px rgba(34,211,238,0.25)'
+              el.style.boxShadow = '0 0 32px rgba(0,229,255,0.25)'
               el.style.transform = 'none'
             }}
           >
