@@ -57,10 +57,15 @@ export default function VideoBackground() {
       ctx.drawImage(img, offsetX, offsetY, renderW, renderH)
     }
 
+    let lastDrawnIdx = -1
+
     const renderCurrentFrame = () => {
       let idx = Math.round(currentFrame)
       idx = Math.max(0, Math.min(FRAME_COUNT - 1, idx))
       
+      if (idx === lastDrawnIdx) return
+      lastDrawnIdx = idx
+
       let drawIdx = idx
       while (drawIdx > 0 && (!images[drawIdx] || !images[drawIdx].complete)) {
         drawIdx--
@@ -96,11 +101,11 @@ export default function VideoBackground() {
     resizeCanvas()
     onScroll()
 
-    // Ultra-soft exponential decay (extremely slow & smooth coasting deceleration, zero bounce)
+    // Smooth & responsive exponential decay LERP (0.085 = silky momentum without braking lag)
     const loop = () => {
       const distance = targetFrame - currentFrame
-      if (Math.abs(distance) > 0.002) {
-        currentFrame += distance * 0.018
+      if (Math.abs(distance) > 0.0005) {
+        currentFrame += distance * 0.085
         renderCurrentFrame()
       }
       animationFrameId = requestAnimationFrame(loop)
