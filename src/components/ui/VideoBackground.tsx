@@ -90,6 +90,10 @@ export default function VideoBackground() {
       images[i] = img
     }
 
+    let velocity = 0
+    const springStiffness = 0.08
+    const frictionDamping = 0.82
+
     const onScroll = () => {
       const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight)
       const progress = Math.min(1, Math.max(0, window.scrollY / maxScroll))
@@ -101,11 +105,14 @@ export default function VideoBackground() {
     resizeCanvas()
     onScroll()
 
-    // Smooth & responsive exponential decay LERP (0.085 = silky momentum without braking lag)
+    // Liquid Spring Velocity Physics (Kinetic momentum & coasting glide — zero abrupt braking)
     const loop = () => {
       const distance = targetFrame - currentFrame
-      if (Math.abs(distance) > 0.0005) {
-        currentFrame += distance * 0.085
+      velocity += distance * springStiffness
+      velocity *= frictionDamping
+      currentFrame += velocity
+
+      if (Math.abs(velocity) > 0.0001 || Math.abs(distance) > 0.001) {
         renderCurrentFrame()
       }
       animationFrameId = requestAnimationFrame(loop)
