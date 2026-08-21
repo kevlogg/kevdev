@@ -9,7 +9,7 @@ import LanguageSwitcher from '@/components/ui/LanguageSwitcher'
 
 /* ─── Data ──────────────────────────────────────────────────────────── */
 const CONTACT_HREFS = [
-  { key: 'whatsapp', href: 'https://wa.me/542235851419' },
+  { key: 'instagram', href: 'https://www.instagram.com/kevdev.ok/' },
   { key: 'linkedin',  href: 'https://www.linkedin.com/in/kevin-loggia/' },
   { key: 'email',     href: 'mailto:loggia.1996@gmail.com' },
 ] as const

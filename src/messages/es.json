@@ -18,7 +18,7 @@
     "stackLabel": "Stack",
     "contactLabel": "Contacto",
     "contactLinks": {
-      "whatsapp": "WhatsApp",
+      "instagram": "Instagram",
       "linkedin": "LinkedIn",
       "email": "Email"
     },
@@ -107,7 +107,7 @@
     "whatsappCta": "Escribime por WhatsApp",
     "whatsappMessage": "Hola Kevin, te escribo desde kevdev.com",
     "links": {
-      "whatsapp": "WhatsApp",
+      "instagram": "Instagram",
       "linkedin": "LinkedIn",
       "email": "Email"
     }
