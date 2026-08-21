@@ -9,9 +9,9 @@ import LanguageSwitcher from '@/components/ui/LanguageSwitcher'
 
 /* ─── Data ──────────────────────────────────────────────────────────── */
 const CONTACT_HREFS = [
-  { key: 'instagram', href: 'https://www.instagram.com/kevdev.ok/' },
+  { key: 'instagram', href: 'https://www.instagram.com/kevd3v/' },
   { key: 'linkedin',  href: 'https://www.linkedin.com/in/kevin-loggia/' },
-  { key: 'email',     href: 'mailto:loggia.1996@gmail.com' },
+  { key: 'email',     href: 'mailto:kevdev.info@gmail.com' },
 ] as const
 
 const STACK_ACCENT = [true, false, false, false, false, false]

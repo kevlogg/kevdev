@@ -4,9 +4,9 @@ import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 
 const LINK_HREFS = [
-  { key: 'instagram', href: 'https://www.instagram.com/kevdev.ok/', external: true },
+  { key: 'instagram', href: 'https://www.instagram.com/kevd3v/', external: true },
   { key: 'linkedin',  href: 'https://www.linkedin.com/in/kevin-loggia/', external: true },
-  { key: 'email',     href: 'mailto:loggia.1996@gmail.com', external: false },
+  { key: 'email',     href: 'mailto:kevdev.info@gmail.com', external: false },
 ] as const
 
 export default function Contact() {
