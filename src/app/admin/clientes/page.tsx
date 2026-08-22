@@ -123,6 +123,34 @@ export default function ClientesPage() {
     'RECHAZADA': 'Rechazada',
   }
 
+  const [syncingAll, setSyncingAll] = useState(false)
+  const [syncAllMsg, setSyncAllMsg] = useState('')
+
+  async function handleSyncAllClients() {
+    setSyncingAll(true)
+    setSyncAllMsg('Sincronizando...')
+    try {
+      const activeClients = clientes.filter(c => c.url && c.id)
+      let count = 0
+      for (const c of activeClients) {
+        if (!c.id) continue
+        await fetch('/api/admin/sync-client', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ clienteId: c.id }),
+        })
+        count++
+      }
+      setSyncAllMsg(`Sincronizadas ${count} webs.`)
+      await load()
+    } catch {
+      setSyncAllMsg('Error durante sincronización.')
+    } finally {
+      setSyncingAll(false)
+      setTimeout(() => setSyncAllMsg(''), 4000)
+    }
+  }
+
   return (
     <div style={{ maxWidth: 1080 }}>
       {/* Toolbar */}
@@ -148,16 +176,36 @@ export default function ClientesPage() {
             </button>
           ))}
         </div>
-        <button
-          onClick={() => setShowForm(v => !v)}
-          style={{
-            background: 'var(--color-accent)', color: 'var(--color-on-accent)',
-            border: 'none', borderRadius: 8, padding: '8px 16px',
-            fontFamily: 'var(--font-ui)', fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer',
-          }}
-        >
-          + Nuevo cliente
-        </button>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          {syncAllMsg && (
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: '#4ade80' }}>
+              {syncAllMsg}
+            </span>
+          )}
+          <button
+            onClick={handleSyncAllClients}
+            disabled={syncingAll}
+            title="Sincronizar planes y pagos automáticamente desde las webs de los clientes"
+            style={{
+              background: 'var(--color-accent-dim)', color: 'var(--color-accent)',
+              border: '1px solid var(--color-accent)', borderRadius: 8, padding: '8px 14px',
+              fontFamily: 'var(--font-ui)', fontSize: '0.875rem', fontWeight: 600, cursor: syncingAll ? 'wait' : 'pointer',
+            }}
+          >
+            {syncingAll ? '⌛ Sincronizando...' : '⚡ Sincronizar Webs'}
+          </button>
+          <button
+            onClick={() => setShowForm(v => !v)}
+            style={{
+              background: 'var(--color-accent)', color: 'var(--color-on-accent)',
+              border: 'none', borderRadius: 8, padding: '8px 16px',
+              fontFamily: 'var(--font-ui)', fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer',
+            }}
+          >
+            + Nuevo cliente
+          </button>
+        </div>
       </div>
 
       {/* Add form */}
@@ -196,6 +244,13 @@ export default function ClientesPage() {
             </span>
             <input type="date" value={form.fechaInicioProyecto} onChange={e => setForm(f => ({ ...f, fechaInicioProyecto: e.target.value }))} style={inputStyle} />
           </label>
+          <textarea
+            placeholder="Observaciones (Ctrl+Enter para salto de línea)"
+            value={form.notas}
+            onChange={e => setForm(f => ({ ...f, notas: e.target.value }))}
+            rows={2}
+            style={{ ...inputStyle, gridColumn: '1 / -1', resize: 'vertical', lineHeight: 1.4 }}
+          />
           <div style={{ gridColumn: '1 / -1', display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
             <button type="button" onClick={() => setShowForm(false)} style={{ ...inputStyle, width: 'auto', cursor: 'pointer', color: 'var(--color-muted)' }}>Cancelar</button>
             <button type="submit" disabled={saving} style={{ background: 'var(--color-accent)', color: 'var(--color-on-accent)', border: 'none', borderRadius: 8, padding: '8px 20px', fontFamily: 'var(--font-ui)', fontSize: '0.875rem', fontWeight: 600, cursor: saving ? 'not-allowed' : 'pointer' }}>
@@ -344,9 +399,26 @@ export default function ClientesPage() {
                         style={cellInputStyle}
                       />
                     ) : (
-                      <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.875rem', color: 'var(--color-muted)', cursor: 'pointer' }}>
-                        {c.plan || '—'}
-                      </span>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'flex-start' }}>
+                        <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.875rem', color: 'var(--color-muted)', cursor: 'pointer' }}>
+                          {c.plan || (c.montoMensual ? `$${c.montoMensual.toLocaleString('es-AR')}/mes` : '—')}
+                        </span>
+                        {c.estadoPago === 'AL_DIA' && (
+                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: '#4ade80', background: 'rgba(74, 222, 128, 0.1)', border: '1px solid rgba(74, 222, 128, 0.3)', borderRadius: 99, padding: '1px 6px' }}>
+                            Al día
+                          </span>
+                        )}
+                        {c.estadoPago === 'PENDIENTE' && (
+                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: '#f59e0b', background: 'rgba(245, 158, 11, 0.1)', border: '1px solid rgba(245, 158, 11, 0.3)', borderRadius: 99, padding: '1px 6px' }}>
+                            Pendiente
+                          </span>
+                        )}
+                        {c.estadoPago === 'VENCIDO' && (
+                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: '#f87171', background: 'rgba(248, 113, 113, 0.1)', border: '1px solid rgba(248, 113, 113, 0.3)', borderRadius: 99, padding: '1px 6px' }}>
+                            Vencido
+                          </span>
+                        )}
+                      </div>
                     )}
                   </td>
 
@@ -421,20 +493,46 @@ export default function ClientesPage() {
                   </td>
 
                   {/* Observaciones */}
-                  <td style={{ padding: '8px 16px', maxWidth: 220 }} onClick={() => editing?.id !== id && startEdit(id, 'notas', c.notas ?? '')}>
+                  <td style={{ padding: '8px 16px', minWidth: 220, maxWidth: 300 }} onClick={() => editing?.id !== id && startEdit(id, 'notas', c.notas ?? '')}>
                     {editing?.id === id && editing.field === 'notas' ? (
-                      <input
+                      <textarea
                         autoFocus
                         value={editVal}
                         onChange={e => setEditVal(e.target.value)}
                         onBlur={e => saveInline(id, 'notas', e.target.value)}
-                        onKeyDown={e => e.key === 'Enter' && saveInline(id, 'notas', editVal)}
-                        style={{ ...cellInputStyle, minWidth: 180 }}
+                        onKeyDown={e => {
+                          if (e.key === 'Enter' && (e.ctrlKey || e.shiftKey)) {
+                            // Salto de linea con Ctrl+Enter o Shift+Enter
+                            e.stopPropagation()
+                          } else if (e.key === 'Enter' && !e.ctrlKey && !e.shiftKey) {
+                            // Guardar con Enter solo
+                            e.preventDefault()
+                            saveInline(id, 'notas', editVal)
+                          }
+                        }}
+                        rows={3}
+                        style={{
+                          ...cellInputStyle,
+                          width: '100%',
+                          minWidth: 200,
+                          resize: 'vertical',
+                          lineHeight: 1.4,
+                        }}
                       />
                     ) : (
-                      <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.8125rem', color: 'var(--color-muted)', cursor: 'pointer', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      <div style={{
+                        fontFamily: 'var(--font-ui)',
+                        fontSize: '0.8125rem',
+                        color: 'var(--color-muted)',
+                        cursor: 'pointer',
+                        whiteSpace: 'pre-wrap',
+                        wordBreak: 'break-word',
+                        maxHeight: 140,
+                        overflowY: 'auto',
+                        lineHeight: 1.4,
+                      }}>
                         {c.notas || '—'}
-                      </span>
+                      </div>
                     )}
                   </td>
                 </tr>

@@ -12,6 +12,7 @@ export type EstadoCliente =
 
 export type DemoEstado = 'PRESENTADA' | 'HECHA' | ''
 export type Situacion  = 'NO RESPONDIO' | 'EN ESPERA' | 'EN PRODUCCION' | 'RECHAZADA' | ''
+export type EstadoPago = 'AL_DIA' | 'PENDIENTE' | 'VENCIDO' | ''
 
 export interface Cliente {
   id?: string
@@ -29,6 +30,21 @@ export interface Cliente {
   notas: string
   fechaPresentacionDemo: string
   fechaInicioProyecto: string
+  montoMensual?: number
+  montoPagoUnico?: number
+  diaVencimiento?: number
+  estadoPago?: EstadoPago
+}
+
+export interface HistorialPago {
+  id?: string
+  clienteId: string
+  monto: number
+  fecha: string
+  concepto: string
+  medioPago?: string
+  confirmado: boolean
+  creadoEn?: Timestamp
 }
 
 export interface ChecklistProgreso {
@@ -144,3 +160,45 @@ export async function updatePresupuestoItem(
 export async function deletePresupuestoItem(id: string): Promise<void> {
   await deleteDoc(doc(db, 'presupuestoItems', id))
 }
+
+/* ─── Historial de Pagos ──────────────────────────────────────────────── */
+
+export async function getHistorialPagos(clienteId: string): Promise<HistorialPago[]> {
+  const q = query(
+    collection(db, 'historialPagos'),
+    where('clienteId', '==', clienteId)
+  )
+  const snap = await getDocs(q)
+  return snap.docs
+    .map(d => ({ id: d.id, ...d.data() } as HistorialPago))
+    .sort((a, b) => (b.fecha || '').localeCompare(a.fecha || ''))
+}
+
+export async function getAllHistorialPagos(): Promise<HistorialPago[]> {
+  const snap = await getDocs(collection(db, 'historialPagos'))
+  return snap.docs
+    .map(d => ({ id: d.id, ...d.data() } as HistorialPago))
+    .sort((a, b) => (b.fecha || '').localeCompare(a.fecha || ''))
+}
+
+export async function addHistorialPago(
+  data: Omit<HistorialPago, 'id' | 'creadoEn'>,
+): Promise<string> {
+  const ref = await addDoc(collection(db, 'historialPagos'), {
+    ...data,
+    creadoEn: serverTimestamp(),
+  })
+  return ref.id
+}
+
+export async function togglePagoConfirmado(
+  id: string,
+  confirmado: boolean,
+): Promise<void> {
+  await updateDoc(doc(db, 'historialPagos', id), { confirmado })
+}
+
+export async function deleteHistorialPago(id: string): Promise<void> {
+  await deleteDoc(doc(db, 'historialPagos', id))
+}
+

@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation'
 const NAV_ITEMS = [
   { href: '/admin/dashboard',   label: 'Dashboard',    icon: '▦' },
   { href: '/admin/clientes',    label: 'Clientes',     icon: '◈' },
+  { href: '/admin/estadisticas', label: 'Estadísticas', icon: '⬡' },
   { href: '/admin/presupuesto', label: 'Presupuesto',  icon: '◎' },
   { href: '/admin/mensajes',    label: 'Mensajes',     icon: '◇' },
 ]
