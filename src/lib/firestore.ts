@@ -34,6 +34,7 @@ export interface Cliente {
   montoPagoUnico?: number
   diaVencimiento?: number
   estadoPago?: EstadoPago
+  passwordAdmin?: string
 }
 
 export interface HistorialPago {

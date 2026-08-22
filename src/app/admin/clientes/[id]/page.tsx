@@ -41,7 +41,7 @@ const ESTADO_LABELS: Record<EstadoCliente, string> = {
   entregado:   'Entregado',
 }
 
-type EditableField = 'nombre' | 'rubro' | 'contacto' | 'telefono' | 'instagram' | 'notas' | 'estado' | 'demo' | 'situacion' | 'plan' | 'url' | 'fechaPresentacionDemo' | 'fechaInicioProyecto' | 'montoMensual' | 'montoPagoUnico' | 'diaVencimiento' | 'estadoPago'
+type EditableField = 'nombre' | 'rubro' | 'contacto' | 'telefono' | 'instagram' | 'notas' | 'estado' | 'demo' | 'situacion' | 'plan' | 'url' | 'fechaPresentacionDemo' | 'fechaInicioProyecto' | 'montoMensual' | 'montoPagoUnico' | 'diaVencimiento' | 'estadoPago' | 'passwordAdmin'
 
 export default function ClienteDetailPage() {
   const params = useParams()
@@ -55,6 +55,7 @@ export default function ClienteDetailPage() {
   const [saving,         setSaving]         = useState(false)
   const [saved,          setSaved]          = useState(false)
   const [form,           setForm]           = useState<Partial<Cliente>>({})
+  const [showPass,       setShowPass]       = useState(false)
   
   // Formulario nuevo pago
   const todayIso = new Date().toISOString().split('T')[0]
@@ -336,6 +337,42 @@ export default function ClienteDetailPage() {
               />
             </label>
           ))}
+
+          {/* Contraseña Admin con Ojo */}
+          <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6875rem', color: 'var(--color-faint)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+              Contraseña Admin
+            </span>
+            <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+              <input
+                type={showPass ? 'text' : 'password'}
+                placeholder="ej: admin123"
+                value={form.passwordAdmin ?? ''}
+                onChange={e => setForm(f => ({ ...f, passwordAdmin: e.target.value }))}
+                onBlur={e => saveField('passwordAdmin', e.target.value)}
+                style={{ ...inputStyle, paddingRight: 36, fontFamily: 'var(--font-mono)' }}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPass(v => !v)}
+                title={showPass ? 'Ocultar contraseña' : 'Ver contraseña'}
+                style={{
+                  position: 'absolute',
+                  right: 8,
+                  background: 'none',
+                  border: 'none',
+                  color: 'var(--color-muted)',
+                  cursor: 'pointer',
+                  fontSize: '0.9375rem',
+                  padding: 4,
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                {showPass ? '🙈' : '👁️'}
+              </button>
+            </div>
+          </label>
 
           {/* Fecha presentación demo */}
           <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>

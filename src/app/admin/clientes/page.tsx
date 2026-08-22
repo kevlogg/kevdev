@@ -39,6 +39,7 @@ const EMPTY_FORM = {
   situacion: '' as Situacion,
   plan: '', url: '', notas: '',
   fechaPresentacionDemo: '', fechaInicioProyecto: '',
+  passwordAdmin: '',
 }
 
 export default function ClientesPage() {
@@ -50,6 +51,7 @@ export default function ClientesPage() {
   const [saving,    setSaving]    = useState(false)
   const [editing,   setEditing]   = useState<{ id: string; field: string } | null>(null)
   const [editVal,   setEditVal]   = useState('')
+  const [showPass,  setShowPass]  = useState<Record<string, boolean>>({})
 
   useEffect(() => { load() }, [])
 
@@ -223,6 +225,7 @@ export default function ClientesPage() {
           <input placeholder="Teléfono (WSP)"    value={form.telefono} onChange={e => setForm(f => ({ ...f, telefono: e.target.value }))} style={inputStyle} />
           <input placeholder="URL del sitio"     value={form.url}      onChange={e => setForm(f => ({ ...f, url:      e.target.value }))} style={inputStyle} />
           <input placeholder="Plan (Mensual / Único)" value={form.plan} onChange={e => setForm(f => ({ ...f, plan:    e.target.value }))} style={inputStyle} />
+          <input placeholder="Contraseña Admin" type="password" value={form.passwordAdmin} onChange={e => setForm(f => ({ ...f, passwordAdmin: e.target.value }))} style={inputStyle} />
           <select value={form.demo} onChange={e => setForm(f => ({ ...f, demo: e.target.value as DemoEstado }))} style={{ ...inputStyle }}>
             <option value="">Demo: —</option>
             <option value="PRESENTADA">PRESENTADA</option>
@@ -270,7 +273,7 @@ export default function ClientesPage() {
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--color-border)' }}>
-                {['Cliente', 'Demo', 'Situación', 'Plan', 'WSP', 'URL', 'Observaciones'].map(h => (
+                {['Cliente', 'Demo', 'Situación', 'Plan', 'Pass Admin', 'WSP', 'URL', 'Observaciones'].map(h => (
                   <th key={h} style={{ padding: '12px 16px', textAlign: 'left', fontFamily: 'var(--font-ui)', fontSize: '0.6875rem', fontWeight: 600, color: 'var(--color-muted)', letterSpacing: '0.08em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
                     {h}
                   </th>
@@ -417,6 +420,53 @@ export default function ClientesPage() {
                           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: '#f87171', background: 'rgba(248, 113, 113, 0.1)', border: '1px solid rgba(248, 113, 113, 0.3)', borderRadius: 99, padding: '1px 6px' }}>
                             Vencido
                           </span>
+                        )}
+                      </div>
+                    )}
+                  </td>
+
+                  {/* Pass Admin */}
+                  <td style={{ padding: '8px 16px' }} onClick={e => e.stopPropagation()}>
+                    {editing?.id === id && editing.field === 'passwordAdmin' ? (
+                      <input
+                        autoFocus
+                        value={editVal}
+                        onChange={e => setEditVal(e.target.value)}
+                        onBlur={e => saveInline(id, 'passwordAdmin', e.target.value)}
+                        onKeyDown={e => e.key === 'Enter' && saveInline(id, 'passwordAdmin', editVal)}
+                        style={{ ...cellInputStyle, minWidth: 100 }}
+                      />
+                    ) : (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <span
+                          onClick={() => startEdit(id, 'passwordAdmin', c.passwordAdmin ?? '')}
+                          style={{
+                            fontFamily: 'var(--font-mono)',
+                            fontSize: '0.8125rem',
+                            color: c.passwordAdmin ? 'var(--color-star)' : 'var(--color-faint)',
+                            cursor: 'pointer',
+                            letterSpacing: showPass[id] ? '0.02em' : '0.12em',
+                          }}
+                        >
+                          {c.passwordAdmin ? (showPass[id] ? c.passwordAdmin : '••••••••') : '—'}
+                        </span>
+                        {c.passwordAdmin && (
+                          <button
+                            type="button"
+                            onClick={() => setShowPass(prev => ({ ...prev, [id]: !prev[id] }))}
+                            title={showPass[id] ? 'Ocultar contraseña' : 'Ver contraseña'}
+                            style={{
+                              background: 'none',
+                              border: 'none',
+                              color: 'var(--color-muted)',
+                              cursor: 'pointer',
+                              fontSize: '0.8125rem',
+                              padding: '2px',
+                              lineHeight: 1,
+                            }}
+                          >
+                            {showPass[id] ? '🙈' : '👁️'}
+                          </button>
                         )}
                       </div>
                     )}
