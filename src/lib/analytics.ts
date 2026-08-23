@@ -40,70 +40,100 @@ export async function recordAnalyticsEvent(event: Omit<AnalyticsEvent, 'id' | 't
   }
 }
 
-/* Consultar métricas de analítica (integra eventos reales de Firestore + fallback representativo para primera visualización) */
+/* Consultar métricas de analítica (100% datos reales desde Firestore analyticsEvents) */
 export async function getAnalyticsSummary(periodDays: number = 30): Promise<AnalyticsSummary> {
   let events: AnalyticsEvent[] = []
   try {
     const snap = await getDocs(collection(db, 'analyticsEvents'))
     events = snap.docs.map(d => ({ id: d.id, ...d.data() } as AnalyticsEvent))
   } catch (e) {
-    console.warn('Leyendo eventos de Firestore (usando fallback acumulado):', e)
+    console.warn('Error leyendo eventos reales de Firestore:', e)
   }
 
-  const realCount = events.length
+  // Filtrar eventos por periodo de días si tienen fecha
+  const now = new Date()
+  const cutoff = new Date(now.getTime() - periodDays * 24 * 60 * 60 * 1000)
   
-  // Base realista combinada con datos reales registrados
-  const basePageviews = 1420 + realCount * 3
-  const baseUniqueVisitors = 680 + Math.floor(realCount * 1.5)
+  const filteredEvents = events.filter(ev => {
+    if (!ev.createdAt) return true
+    const evDate = new Date(ev.createdAt)
+    return evDate >= cutoff
+  })
 
-  // Clics en botones registrados vs base
-  const buttonCounts: Record<string, { label: string; count: number }> = {
-    wsp_contact: { label: 'Boton WhatsApp Directo', count: 184 },
-    demo_request: { label: 'Solicitar Demo Interactiva', count: 96 },
-    quote_calc: { label: 'Calculadora de Presupuesto', count: 142 },
-    portfolio_view: { label: 'Ver Casos de Éxito / Sitios', count: 215 },
-    instagram_link: { label: 'Perfil de Instagram', count: 78 },
-  }
+  const pageviewEvents = filteredEvents.filter(e => e.eventType === 'pageview')
+  const totalPageviews = pageviewEvents.length > 0 ? pageviewEvents.length : filteredEvents.length
 
-  // Sumar eventos reales
-  events.forEach(ev => {
-    if (ev.eventType === 'button_click' && ev.buttonId) {
-      if (buttonCounts[ev.buttonId]) {
-        buttonCounts[ev.buttonId].count += 1
-      } else {
-        buttonCounts[ev.buttonId] = { label: ev.buttonId, count: 1 }
+  // Calcular visitantes únicos basados en visitor_id o ids de evento
+  const visitorSet = new Set<string>()
+  filteredEvents.forEach(ev => {
+    const vId = ev.metadata?.visitorId || ev.id || Math.random().toString()
+    visitorSet.add(vId)
+  })
+  const uniqueVisitors = filteredEvents.length > 0 ? visitorSet.size : 0
+
+  // Desglose de dispositivos
+  const mobileCount = filteredEvents.filter(e => e.device === 'mobile').length
+  const desktopCount = filteredEvents.filter(e => e.device === 'desktop').length
+  const totalDev = mobileCount + desktopCount
+  const mobilePct = totalDev > 0 ? Math.round((mobileCount / totalDev) * 100) : 0
+  const desktopPct = totalDev > 0 ? 100 - mobilePct : 0
+
+  // Fuentes de tráfico reales
+  const sourcesCount: Record<string, number> = {}
+  filteredEvents.forEach(ev => {
+    const src = ev.source || 'directo'
+    sourcesCount[src] = (sourcesCount[src] || 0) + 1
+  })
+
+  const totalSrcEvents = filteredEvents.length || 1
+  const trafficSources = Object.entries(sourcesCount)
+    .map(([name, count]) => ({
+      name: name.charAt(0).toUpperCase() + name.slice(1),
+      count,
+      percentage: Math.round((count / totalSrcEvents) * 100),
+    }))
+    .sort((a, b) => b.count - a.count)
+
+  // Páginas más vistas reales
+  const pageMap: Record<string, number> = {}
+  filteredEvents.forEach(ev => {
+    const p = ev.path || '/'
+    pageMap[p] = (pageMap[p] || 0) + 1
+  })
+
+  const topPages = Object.entries(pageMap)
+    .map(([path, views]) => ({ path, views }))
+    .sort((a, b) => b.views - a.views)
+
+  // Clics en botones reales
+  const buttonMap: Record<string, { label: string; clicks: number }> = {}
+  filteredEvents.forEach(ev => {
+    if (ev.eventType === 'button_click' || ev.buttonId) {
+      const bId = ev.buttonId || 'boton_desconocido'
+      const label = ev.metadata?.label || ev.buttonId || 'Clic en Botón'
+      if (!buttonMap[bId]) {
+        buttonMap[bId] = { label, clicks: 0 }
       }
+      buttonMap[bId].clicks += 1
     }
   })
 
-  const topButtons = Object.entries(buttonCounts)
-    .map(([buttonId, data]) => ({ buttonId, label: data.label, clicks: data.count }))
+  const topButtons = Object.entries(buttonMap)
+    .map(([buttonId, data]) => ({ buttonId, label: data.label, clicks: data.clicks }))
     .sort((a, b) => b.clicks - a.clicks)
 
   return {
-    totalPageviews: basePageviews,
-    uniqueVisitors: baseUniqueVisitors,
-    desktopPct: 42,
-    mobilePct: 58,
-    trafficSources: [
-      { name: 'Instagram', count: 410, percentage: 45 },
-      { name: 'Google / SEO', count: 245, percentage: 27 },
-      { name: 'WhatsApp', count: 160, percentage: 18 },
-      { name: 'Directo', count: 95, percentage: 10 },
-    ],
-    topPages: [
-      { path: '/', views: 620 },
-      { path: '/#servicios', views: 340 },
-      { path: '/#casos-de-exito', views: 280 },
-      { path: '/presupuesto', views: 180 },
-    ],
+    totalPageviews,
+    uniqueVisitors,
+    desktopPct,
+    mobilePct,
+    trafficSources,
+    topPages,
     topButtons,
     conversionFunnel: [
-      { step: 'Visitas a la Web', count: baseUniqueVisitors, pct: 100 },
-      { step: 'Interacción / Presupuesto', count: 238, pct: Math.round((238 / baseUniqueVisitors) * 100) },
-      { step: 'Contacto por WhatsApp', count: 184, pct: Math.round((184 / baseUniqueVisitors) * 100) },
-      { step: 'Demo Presentada', count: 42, pct: Math.round((42 / baseUniqueVisitors) * 100) },
-      { step: 'Cliente en Producción', count: 18, pct: Math.round((18 / baseUniqueVisitors) * 100) },
+      { step: 'Visitas Totales', count: totalPageviews, pct: 100 },
+      { step: 'Visitantes Únicos', count: uniqueVisitors, pct: totalPageviews > 0 ? Math.round((uniqueVisitors / totalPageviews) * 100) : 0 },
+      { step: 'Clics en Botones / CTAs', count: topButtons.reduce((a, b) => a + b.clicks, 0), pct: uniqueVisitors > 0 ? Math.round((topButtons.reduce((a, b) => a + b.clicks, 0) / uniqueVisitors) * 100) : 0 },
     ],
   }
 }
