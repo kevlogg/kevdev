@@ -48,7 +48,7 @@ export default function EstadisticasPage() {
 
   // Cálculos Financieros
   const enProduccion = clientes.filter(c => c.situacion === 'EN PRODUCCION')
-  const mrrCalculado = enProduccion.reduce((acc, c) => acc + (c.montoMensual || 25000), 0)
+  const mrrCalculado = enProduccion.reduce((acc, c) => acc + (c.montoMensual || 0), 0)
   const cobradoHistorico = pagos.filter(p => p.confirmado).reduce((acc, p) => acc + p.monto, 0)
   const clientesAlDia = clientes.filter(c => c.estadoPago === 'AL_DIA').length
   const clientesPendientes = clientes.filter(c => c.estadoPago === 'PENDIENTE' || c.estadoPago === 'VENCIDO').length

@@ -26,8 +26,41 @@ export default function Hero() {
   useEffect(() => {
     const fn = (e: MouseEvent) => { mouseX.set(e.clientX); mouseY.set(e.clientY) }
     window.addEventListener('mousemove', fn, { passive: true })
+    
+    // Registrar vista real de la página principal de kevdev
+    try {
+      fetch('/api/analytics/track', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          site: 'kevdev',
+          eventType: 'pageview',
+          path: window.location.pathname,
+          device: window.innerWidth < 768 ? 'mobile' : 'desktop',
+          source: document.referrer.includes('instagram') ? 'instagram' : 'directo',
+        }),
+      }).catch(() => {})
+    } catch {}
+
     return () => window.removeEventListener('mousemove', fn)
   }, [mouseX, mouseY])
+
+  function trackBtnClick(buttonId: string, label: string) {
+    try {
+      fetch('/api/analytics/track', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          site: 'kevdev',
+          eventType: 'button_click',
+          buttonId,
+          path: window.location.pathname,
+          device: window.innerWidth < 768 ? 'mobile' : 'desktop',
+          metadata: { label },
+        }),
+      }).catch(() => {})
+    } catch {}
+  }
 
   /* Fade content as user scrolls away — prevents overlap with next section */
   const { scrollY } = useScroll()
@@ -165,9 +198,9 @@ export default function Hero() {
           </div>
 
           <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
-            <CTADark onClick={() => scrollTo('#proyectos')}>{t('ctaProjects')}</CTADark>
-            <CTADiagnostico href="/diagnostico">{t('ctaDiagnostico')}</CTADiagnostico>
-            <CTAArrow href={`https://wa.me/542235851419?text=${encodeURIComponent(t('whatsappMessage'))}`}>{t('ctaDemo')}</CTAArrow>
+            <CTADark onClick={() => { trackBtnClick('hero_cta_projects', 'Ver Proyectos'); scrollTo('#proyectos') }}>{t('ctaProjects')}</CTADark>
+            <CTADiagnostico href="/diagnostico" onClick={() => trackBtnClick('hero_cta_diagnostico', 'Diagnóstico Comercial')}>{t('ctaDiagnostico')}</CTADiagnostico>
+            <CTAArrow href={`https://wa.me/542235851419?text=${encodeURIComponent(t('whatsappMessage'))}`} onClick={() => trackBtnClick('hero_cta_whatsapp', 'Contacto WhatsApp')}>{t('ctaDemo')}</CTAArrow>
           </div>
         </motion.div>
       </motion.div>
@@ -198,10 +231,10 @@ function CTADark({ children, onClick }: { children: React.ReactNode; onClick: ()
   )
 }
 
-function CTADiagnostico({ href, children }: { href: string; children: React.ReactNode }) {
+function CTADiagnostico({ href, children, onClick }: { href: string; children: React.ReactNode; onClick?: () => void }) {
   const [hov, setHov] = useState(false)
   return (
-    <Link href={href}
+    <Link href={href} onClick={onClick}
       onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
       style={{
         fontFamily:     'var(--font-mono)', fontWeight: 600,
@@ -222,10 +255,10 @@ function CTADiagnostico({ href, children }: { href: string; children: React.Reac
   )
 }
 
-function CTAArrow({ href, children }: { href: string; children: React.ReactNode }) {
+function CTAArrow({ href, children, onClick }: { href: string; children: React.ReactNode; onClick?: () => void }) {
   const [hov, setHov] = useState(false)
   return (
-    <a href={href} target="_blank" rel="noreferrer"
+    <a href={href} target="_blank" rel="noreferrer" onClick={onClick}
       onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
       style={{
         display:      'flex', alignItems: 'center', gap: '0.5rem',
