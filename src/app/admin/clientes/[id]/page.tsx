@@ -212,7 +212,7 @@ export default function ClienteDetailPage() {
         if (c) { setCliente(c); setForm(c) }
         setPagos(h)
       } else {
-        setSyncMsg('No se pudo conectar con la web.')
+        setSyncMsg(data.error || 'No se pudo conectar con la web.')
       }
     } catch {
       setSyncMsg('Error de red al sincronizar.')
