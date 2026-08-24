@@ -152,7 +152,7 @@ export default function ClientesPage() {
                 clienteId: c.id,
                 monto: p.amount,
                 fecha: p.date || new Date().toISOString().split('T')[0],
-                concepto: p.concept || p.concepto || 'Cobro Automático Web',
+                concepto: p.concept || (p as any).concepto || 'Cobro Automático Web',
                 medioPago: 'MercadoPago / Web',
                 confirmado: p.confirmed ?? true,
               }).catch(() => {})
