@@ -2,7 +2,7 @@ import {
   collection, doc, getDocs, getDoc, addDoc, updateDoc, deleteDoc,
   query, orderBy, where, serverTimestamp, Timestamp,
 } from 'firebase/firestore'
-import { db } from '@/lib/firebase'
+import { db, ensureServerAuth } from '@/lib/firebase'
 
 /* ─── Types ─────────────────────────────────────────────────────────── */
 
@@ -68,12 +68,14 @@ export interface PresupuestoItem {
 /* ─── Clientes ───────────────────────────────────────────────────────── */
 
 export async function getClientes(): Promise<Cliente[]> {
+  await ensureServerAuth()
   const q = query(collection(db, 'clientes'), orderBy('creadoEn', 'desc'))
   const snap = await getDocs(q)
   return snap.docs.map(d => ({ id: d.id, ...d.data() } as Cliente))
 }
 
 export async function getCliente(id: string): Promise<Cliente | null> {
+  await ensureServerAuth()
   const snap = await getDoc(doc(db, 'clientes', id))
   if (!snap.exists()) return null
   return { id: snap.id, ...snap.data() } as Cliente
@@ -82,6 +84,7 @@ export async function getCliente(id: string): Promise<Cliente | null> {
 export async function addCliente(
   data: Omit<Cliente, 'id' | 'creadoEn'>,
 ): Promise<string> {
+  await ensureServerAuth()
   const ref = await addDoc(collection(db, 'clientes'), {
     ...data,
     creadoEn: serverTimestamp(),
@@ -93,6 +96,7 @@ export async function updateCliente(
   id: string,
   data: Partial<Omit<Cliente, 'id' | 'creadoEn'>>,
 ): Promise<void> {
+  await ensureServerAuth()
   await updateDoc(doc(db, 'clientes', id), data)
 }
 
@@ -168,6 +172,7 @@ export async function deletePresupuestoItem(id: string): Promise<void> {
 /* ─── Historial de Pagos ──────────────────────────────────────────────── */
 
 export async function getHistorialPagos(clienteId: string): Promise<HistorialPago[]> {
+  await ensureServerAuth()
   const snap = await getDocs(collection(db, 'historialPagos'))
   const allPagos = snap.docs.map(d => ({ id: d.id, ...d.data() } as HistorialPago))
 
@@ -185,6 +190,7 @@ export async function getHistorialPagos(clienteId: string): Promise<HistorialPag
 }
 
 export async function getAllHistorialPagos(): Promise<HistorialPago[]> {
+  await ensureServerAuth()
   const snap = await getDocs(collection(db, 'historialPagos'))
   return snap.docs
     .map(d => ({ id: d.id, ...d.data() } as HistorialPago))
@@ -194,6 +200,7 @@ export async function getAllHistorialPagos(): Promise<HistorialPago[]> {
 export async function addHistorialPago(
   data: Omit<HistorialPago, 'id' | 'creadoEn'>,
 ): Promise<string> {
+  await ensureServerAuth()
   const ref = await addDoc(collection(db, 'historialPagos'), {
     ...data,
     creadoEn: serverTimestamp(),

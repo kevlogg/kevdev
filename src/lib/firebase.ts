@@ -1,5 +1,5 @@
 import { initializeApp, getApps } from 'firebase/app'
-import { getAuth } from 'firebase/auth'
+import { getAuth, signInAnonymously } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
 
 function cleanEnv(val?: string) {
@@ -19,3 +19,13 @@ const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig)
 
 export const auth = getAuth(app)
 export const db   = getFirestore(app)
+
+export async function ensureServerAuth() {
+  if (typeof window === 'undefined' && !auth.currentUser) {
+    try {
+      await signInAnonymously(auth)
+    } catch (e) {
+      console.warn('Server Firebase Auth sign-in warning:', e)
+    }
+  }
+}
