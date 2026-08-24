@@ -143,6 +143,35 @@ export default function EstadisticasPage() {
         </div>
       </div>
 
+      {/* Banner de Integraciones Profesionales */}
+      <section style={{ ...cardStyle, background: 'rgba(0, 229, 255, 0.03)', borderColor: 'rgba(0, 229, 255, 0.2)', padding: 16 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <span style={{ fontSize: '1.25rem' }}>🚀</span>
+            <div>
+              <h2 style={{ fontFamily: 'var(--font-ui)', fontSize: '0.875rem', fontWeight: 600, color: 'var(--color-star)', margin: 0 }}>
+                Analítica Empresarial Profesional Conectada
+              </h2>
+              <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: 'var(--color-muted)', margin: '2px 0 0' }}>
+                Medición en tiempo real respaldada por Google Analytics 4, Vercel Web Analytics y Firebase Firestore.
+              </p>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: '#4ade80', background: 'rgba(74, 222, 128, 0.1)', border: '1px solid rgba(74, 222, 128, 0.3)', borderRadius: 99, padding: '3px 10px' }}>
+              ● Vercel Analytics Activo
+            </span>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: '#38bdf8', background: 'rgba(56, 189, 248, 0.1)', border: '1px solid rgba(56, 189, 248, 0.3)', borderRadius: 99, padding: '3px 10px' }}>
+              ● GA4 Tracking Listo
+            </span>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: '#f59e0b', background: 'rgba(245, 158, 11, 0.1)', border: '1px solid rgba(245, 158, 11, 0.3)', borderRadius: 99, padding: '3px 10px' }}>
+              ● Firebase Realtime OK
+            </span>
+          </div>
+        </div>
+      </section>
+
       {/* Grid 1: KPIs Financieros */}
       <section style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16 }}>
         <div style={cardStyle}>

@@ -16,6 +16,15 @@ function getVisitorId(): string {
   }
 }
 
+// Enviar evento a Google Analytics 4 si está disponible
+function trackGA4(eventName: string, params: Record<string, any>) {
+  try {
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      ;(window as any).gtag('event', eventName, params)
+    }
+  } catch {}
+}
+
 export default function AnalyticsTracker() {
   const pathname = usePathname()
 
@@ -23,6 +32,12 @@ export default function AnalyticsTracker() {
   useEffect(() => {
     try {
       const visitorId = getVisitorId()
+      const path = pathname || window.location.pathname
+
+      // GA4
+      trackGA4('page_view', { page_path: path, visitor_id: visitorId })
+
+      // Servidor
       fetch('/api/analytics/track', {
         method: 'POST',
         keepalive: true,
@@ -30,7 +45,7 @@ export default function AnalyticsTracker() {
         body: JSON.stringify({
           site: 'kevdev',
           eventType: 'pageview',
-          path: pathname || window.location.pathname,
+          path,
           device: window.innerWidth < 768 ? 'mobile' : 'desktop',
           source: document.referrer.includes('instagram') ? 'instagram' : 'directo',
           metadata: { visitorId },
@@ -77,6 +92,11 @@ export default function AnalyticsTracker() {
 
         if (buttonId) {
           const visitorId = getVisitorId()
+
+          // GA4
+          trackGA4('select_content', { content_type: 'button', item_id: buttonId, label })
+
+          // Servidor
           fetch('/api/analytics/track', {
             method: 'POST',
             keepalive: true,

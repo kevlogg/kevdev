@@ -53,7 +53,9 @@ export async function generateMetadata({
   }
 }
 
+import { Analytics as VercelAnalytics } from '@vercel/analytics/react'
 import AnalyticsTracker from '@/components/AnalyticsTracker'
+import GoogleAnalytics from '@/components/GoogleAnalytics'
 
 export default async function RootLayout({
   children,
@@ -72,7 +74,9 @@ export default async function RootLayout({
     <html lang={locale} suppressHydrationWarning>
       <body suppressHydrationWarning>
         <NextIntlClientProvider messages={messages}>
+          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
           <AnalyticsTracker />
+          <VercelAnalytics />
           {children}
         </NextIntlClientProvider>
       </body>
