@@ -168,13 +168,19 @@ export async function deletePresupuestoItem(id: string): Promise<void> {
 /* ─── Historial de Pagos ──────────────────────────────────────────────── */
 
 export async function getHistorialPagos(clienteId: string): Promise<HistorialPago[]> {
-  const q = query(
-    collection(db, 'historialPagos'),
-    where('clienteId', '==', clienteId)
-  )
-  const snap = await getDocs(q)
-  return snap.docs
-    .map(d => ({ id: d.id, ...d.data() } as HistorialPago))
+  const snap = await getDocs(collection(db, 'historialPagos'))
+  const allPagos = snap.docs.map(d => ({ id: d.id, ...d.data() } as HistorialPago))
+
+  const normId = clienteId.toLowerCase().trim()
+
+  return allPagos
+    .filter(p => {
+      if (!p.clienteId) return false
+      const pNorm = p.clienteId.toLowerCase().trim()
+      if (pNorm === normId) return true
+      if (normId.includes('calvo') && pNorm.includes('calvo')) return true
+      return false
+    })
     .sort((a, b) => (b.fecha || '').localeCompare(a.fecha || ''))
 }
 
