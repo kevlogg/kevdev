@@ -171,12 +171,12 @@ export async function getHistorialPagos(clienteId: string): Promise<HistorialPag
   const snap = await getDocs(collection(db, 'historialPagos'))
   const allPagos = snap.docs.map(d => ({ id: d.id, ...d.data() } as HistorialPago))
 
-  const normId = clienteId.toLowerCase().trim()
+  const normId = String(clienteId || '').toLowerCase().trim()
 
   return allPagos
     .filter(p => {
       if (!p.clienteId) return false
-      const pNorm = p.clienteId.toLowerCase().trim()
+      const pNorm = String(p.clienteId || '').toLowerCase().trim()
       if (pNorm === normId) return true
       if (normId.includes('calvo') && pNorm.includes('calvo')) return true
       return false

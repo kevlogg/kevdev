@@ -13,7 +13,7 @@ function siteBase(url: string) {
   return url.startsWith('http') ? url.replace(/\/$/, '') : `https://${url.replace(/\/$/, '')}`
 }
 function planUrl(url: string) {
-  return `${siteBase(url)}/admin/plan`
+  return `${siteBase(url)}/admin`
 }
 
 /* yyyy-mm-dd -> dd/mm/aa */
@@ -526,7 +526,7 @@ export default function ClientesPage() {
                             target="_blank"
                             rel="noreferrer"
                             onClick={e => e.stopPropagation()}
-                            title="Ver /admin/plan de este cliente"
+                            title="Ver /admin de este cliente"
                             style={{
                               fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: 'var(--color-muted)',
                               textDecoration: 'none', border: '1px solid var(--color-border)', borderRadius: 99,

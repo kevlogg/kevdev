@@ -29,7 +29,7 @@ function siteBase(url: string) {
   return url.startsWith('http') ? url.replace(/\/$/, '') : `https://${url.replace(/\/$/, '')}`
 }
 function planUrl(url: string) {
-  return `${siteBase(url)}/admin/plan`
+  return `${siteBase(url)}/admin`
 }
 
 const ESTADO_LABELS: Record<EstadoCliente, string> = {
