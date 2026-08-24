@@ -19,14 +19,15 @@ export default function EstadisticasPage() {
     async function loadData(showSpinner = false) {
       if (showSpinner) setLoading(true)
       try {
-        const [clis, pgs, stats] = await Promise.all([
+        const [clis, pgs, statsRes] = await Promise.all([
           getClientes(),
           getAllHistorialPagos(),
-          getAnalyticsSummary(period),
+          fetch(`/api/analytics/summary?period=${period}`, { cache: 'no-store' }),
         ])
+        const stats = statsRes.ok ? await statsRes.json() : null
         setClientes(clis)
         setPagos(pgs)
-        setAnalytics(stats)
+        if (stats) setAnalytics(stats)
       } catch (err) {
         console.error('Error cargando estadísticas:', err)
       } finally {

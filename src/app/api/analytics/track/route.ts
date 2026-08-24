@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { recordAnalyticsEvent } from '@/lib/analytics'
+import { addAnalyticsEvent } from '@/lib/analyticsStore'
 
 export const dynamic = 'force-dynamic'
 
@@ -22,7 +22,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Faltan campos requeridos (site, eventType)' }, { status: 400, headers: corsHeaders })
     }
 
-    const eventId = await recordAnalyticsEvent({
+    const eventId = await addAnalyticsEvent({
       site,
       eventType,
       buttonId: buttonId || '',
