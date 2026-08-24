@@ -26,7 +26,9 @@ export interface AnalyticsSummary {
   conversionFunnel: { step: string; count: number; pct: number }[]
 }
 
-const FILE_PATH = path.join(process.cwd(), 'tmp_analytics_events.json')
+import os from 'os'
+
+const FILE_PATH = path.join(os.tmpdir(), 'kevdev_analytics_events.json')
 
 // Leer eventos persistidos del servidor
 function readLocalEvents(): AnalyticsEvent[] {
@@ -46,7 +48,6 @@ function saveLocalEvent(event: AnalyticsEvent) {
   try {
     const events = readLocalEvents()
     events.push(event)
-    // Mantener los últimos 5000 eventos para no sobrecargar el almacenamiento
     const trimmed = events.slice(-5000)
     fs.writeFileSync(FILE_PATH, JSON.stringify(trimmed, null, 2), 'utf8')
   } catch (e) {
@@ -62,15 +63,17 @@ export async function addAnalyticsEvent(eventData: Omit<AnalyticsEvent, 'id' | '
     createdAt: new Date().toISOString(),
   }
 
-  // 1. Guardar localmente
+  // 1. Guardar en directorio temporal del sistema (garantizado de escritura en Vercel y Windows)
   saveLocalEvent(newEvent)
 
-  // 2. Intentar guardar en Firestore en segundo plano (si las reglas lo permiten)
+  // 2. Await guardado en Firestore para que Serverless no congele la promesa
   try {
-    addDoc(collection(db, 'analyticsEvents'), {
+    await addDoc(collection(db, 'analyticsEvents'), {
       ...newEvent,
-    }).catch(() => {})
-  } catch {}
+    })
+  } catch (e) {
+    console.warn('Advertencia guardando en Firestore (usando fallback en servidor):', e)
+  }
 
   return newEvent.id || ''
 }
