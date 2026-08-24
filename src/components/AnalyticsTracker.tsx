@@ -3,12 +3,26 @@
 import { useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 
+function getVisitorId(): string {
+  try {
+    let vId = localStorage.getItem('kevdev_visitor_id')
+    if (!vId) {
+      vId = 'v_' + Math.random().toString(36).substring(2, 10) + Date.now().toString(36)
+      localStorage.setItem('kevdev_visitor_id', vId)
+    }
+    return vId
+  } catch {
+    return 'v_anon'
+  }
+}
+
 export default function AnalyticsTracker() {
   const pathname = usePathname()
 
   // Track pageview en cada cambio de ruta
   useEffect(() => {
     try {
+      const visitorId = getVisitorId()
       fetch('/api/analytics/track', {
         method: 'POST',
         keepalive: true,
@@ -19,6 +33,7 @@ export default function AnalyticsTracker() {
           path: pathname || window.location.pathname,
           device: window.innerWidth < 768 ? 'mobile' : 'desktop',
           source: document.referrer.includes('instagram') ? 'instagram' : 'directo',
+          metadata: { visitorId },
         }),
       }).catch(() => {})
     } catch {}
@@ -61,6 +76,7 @@ export default function AnalyticsTracker() {
         }
 
         if (buttonId) {
+          const visitorId = getVisitorId()
           fetch('/api/analytics/track', {
             method: 'POST',
             keepalive: true,
@@ -71,7 +87,7 @@ export default function AnalyticsTracker() {
               buttonId,
               path: window.location.pathname,
               device: window.innerWidth < 768 ? 'mobile' : 'desktop',
-              metadata: { label },
+              metadata: { label, visitorId },
             }),
           }).catch(() => {})
         }

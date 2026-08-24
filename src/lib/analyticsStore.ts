@@ -110,7 +110,7 @@ export async function getStoreAnalyticsSummary(periodDays: number = 30): Promise
 
   const visitorSet = new Set<string>()
   filteredEvents.forEach(ev => {
-    const vId = ev.metadata?.visitorId || ev.id || Math.random().toString()
+    const vId = ev.metadata?.visitorId || 'visitante_unico_default'
     visitorSet.add(vId)
   })
   const uniqueVisitors = filteredEvents.length > 0 ? visitorSet.size : 0
