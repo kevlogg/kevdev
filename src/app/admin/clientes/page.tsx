@@ -3,7 +3,7 @@
 import { useEffect, useState, FormEvent } from 'react'
 import Link from 'next/link'
 import {
-  getClientes, addCliente, updateCliente,
+  getClientes, addCliente, updateCliente, addHistorialPago,
   type Cliente, type DemoEstado, type Situacion,
 } from '@/lib/firestore'
 import { SITUACIONES, SITUACION_COLORS, DEMO_COLORS } from '@/lib/cliente-ui'
