@@ -53,6 +53,8 @@ export async function generateMetadata({
   }
 }
 
+import AnalyticsTracker from '@/components/AnalyticsTracker'
+
 export default async function RootLayout({
   children,
   params,
@@ -69,7 +71,10 @@ export default async function RootLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <body suppressHydrationWarning>
-        <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider messages={messages}>
+          <AnalyticsTracker />
+          {children}
+        </NextIntlClientProvider>
       </body>
     </html>
   )

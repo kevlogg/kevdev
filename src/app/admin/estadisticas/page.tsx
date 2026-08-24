@@ -16,8 +16,8 @@ export default function EstadisticasPage() {
   const [analytics, setAnalytics] = useState<AnalyticsSummary | null>(null)
 
   useEffect(() => {
-    async function loadData() {
-      setLoading(true)
+    async function loadData(showSpinner = false) {
+      if (showSpinner) setLoading(true)
       try {
         const [clis, pgs, stats] = await Promise.all([
           getClientes(),
@@ -30,10 +30,13 @@ export default function EstadisticasPage() {
       } catch (err) {
         console.error('Error cargando estadísticas:', err)
       } finally {
-        setLoading(false)
+        if (showSpinner) setLoading(false)
       }
     }
-    loadData()
+
+    loadData(true)
+    const interval = setInterval(() => loadData(false), 5000)
+    return () => clearInterval(interval)
   }, [period])
 
   if (loading || !analytics) {
