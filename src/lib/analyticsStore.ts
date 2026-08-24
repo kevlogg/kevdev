@@ -63,37 +63,50 @@ export async function addAnalyticsEvent(eventData: Omit<AnalyticsEvent, 'id' | '
     createdAt: new Date().toISOString(),
   }
 
-  // 1. Guardar en directorio temporal del sistema (garantizado de escritura en Vercel y Windows)
+  // 1. Guardar en memoria/tmp local
   saveLocalEvent(newEvent)
 
-  // 2. Await guardado en Firestore para que Serverless no congele la promesa
+  // 2. Guardar permanentemente en Firestore
   try {
     await addDoc(collection(db, 'analyticsEvents'), {
       ...newEvent,
     })
   } catch (e) {
-    console.warn('Advertencia guardando en Firestore (usando fallback en servidor):', e)
+    console.warn('Advertencia guardando evento en Firestore:', e)
   }
 
   return newEvent.id || ''
 }
 
+// Memory cache to preserve metrics across transient cold starts or Firestore hiccups
+let memoryEventsCache: AnalyticsEvent[] = []
+
 // Obtener resumen de analítica
 export async function getStoreAnalyticsSummary(periodDays: number = 30): Promise<AnalyticsSummary> {
   let events = readLocalEvents()
 
-  // Intentar fusionar con eventos de Firestore si están disponibles
-  try {
-    const snap = await getDocs(collection(db, 'analyticsEvents'))
-    const firestoreEvents = snap.docs.map(d => ({ id: d.id, ...d.data() } as AnalyticsEvent))
-    
-    // Unificar evitando duplicados por ID
+  // Fusionar con cache en memoria
+  if (memoryEventsCache.length > 0) {
     const eventMap = new Map<string, AnalyticsEvent>()
     events.forEach(e => e.id && eventMap.set(e.id, e))
-    firestoreEvents.forEach(e => e.id && eventMap.set(e.id, e))
+    memoryEventsCache.forEach(e => e.id && eventMap.set(e.id, e))
     events = Array.from(eventMap.values())
+  }
+
+  // Intentar consultar eventos reales de Firestore
+  try {
+    const snap = await getDocs(collection(db, 'analyticsEvents'))
+    if (!snap.empty) {
+      const firestoreEvents = snap.docs.map(d => ({ id: d.id, ...d.data() } as AnalyticsEvent))
+      const eventMap = new Map<string, AnalyticsEvent>()
+      events.forEach(e => e.id && eventMap.set(e.id, e))
+      firestoreEvents.forEach(e => e.id && eventMap.set(e.id, e))
+      events = Array.from(eventMap.values())
+      // Actualizar cache en memoria
+      memoryEventsCache = events
+    }
   } catch (e) {
-    // Si Firestore no responde o requiere auth, se usan los eventos locales
+    console.warn('Usando respaldo de analítica en memoria/local:', e)
   }
 
   const now = new Date()
