@@ -30,14 +30,19 @@ export async function POST(req: Request) {
       ) || null
     }
 
-    if (!cliente || !cliente.url) {
+    let rawUrl = cliente?.url || ''
+    if (!rawUrl && clienteId.toLowerCase().includes('calvo')) {
+      rawUrl = 'https://loscalvoscompresores.com'
+    }
+
+    if (!cliente || !rawUrl) {
       return NextResponse.json(
         { error: `El cliente '${clienteId}' no tiene URL configurada` },
         { status: 400 }
       )
     }
 
-    const baseUrl = siteBase(cliente.url)
+    const baseUrl = siteBase(rawUrl)
     const secret = process.env.KEVDEV_PAYMENTS_SECRET || 'kevdev_payments_sec_2026_key'
 
     const updates: Record<string, any> = {}
