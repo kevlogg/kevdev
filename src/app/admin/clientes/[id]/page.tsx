@@ -199,7 +199,7 @@ export default function ClienteDetailPage() {
       const res = await fetch('/api/admin/sync-client', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ clienteId: cliente.id }),
+        body: JSON.stringify({ clienteId: cliente.id, url: cliente.url || form.url || '' }),
       })
       const data = await res.json()
       if (data.success) {

@@ -11,7 +11,7 @@ function siteBase(url: string) {
 export async function POST(req: Request) {
   try {
     const body = await req.json().catch(() => ({}))
-    const { clienteId } = body
+    const { clienteId, url: providedUrl } = body
 
     if (!clienteId) {
       return NextResponse.json({ error: 'Falta clienteId en la solicitud' }, { status: 400 })
@@ -30,9 +30,14 @@ export async function POST(req: Request) {
       ) || null
     }
 
-    let rawUrl = cliente?.url || ''
-    if (!rawUrl && clienteId.toLowerCase().includes('calvo')) {
-      rawUrl = 'https://loscalvoscompresores.com'
+    let rawUrl = providedUrl || cliente?.url || ''
+    const normSearch = (clienteId + ' ' + (cliente?.nombre || '')).toLowerCase()
+    if (!rawUrl || rawUrl.trim() === '') {
+      if (normSearch.includes('calvo') || normSearch.includes('compresor')) {
+        rawUrl = 'https://loscalvoscompresores.com'
+      } else if (normSearch.includes('dulce') || normSearch.includes('hogar')) {
+        rawUrl = 'https://dulcehogarmuebles.com.ar'
+      }
     }
 
     if (!cliente || !rawUrl) {
