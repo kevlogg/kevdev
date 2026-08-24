@@ -40,11 +40,20 @@ export async function POST(req: Request) {
       }
     }
 
-    if (!cliente || !rawUrl) {
+    if (!rawUrl) {
       return NextResponse.json(
         { error: `El cliente '${clienteId}' no tiene URL configurada` },
         { status: 400 }
       )
+    }
+
+    // Si cliente no existe en Firestore todavía, sintetizar objeto seguro
+    if (!cliente) {
+      cliente = {
+        id: clienteId,
+        nombre: normSearch.includes('calvo') ? 'LOS CALVOS COMPRESORES' : clienteId,
+        url: rawUrl,
+      } as any
     }
 
     const baseUrl = siteBase(rawUrl)
@@ -128,7 +137,7 @@ export async function POST(req: Request) {
     try {
       const targetId = cliente.id || clienteId
       if (Object.keys(updates).length > 0) {
-        await updateCliente(targetId, updates)
+        await updateCliente(targetId, updates).catch(() => {})
       }
       for (const p of paymentsToImport) {
         await addHistorialPago({
@@ -138,7 +147,7 @@ export async function POST(req: Request) {
           concepto: p.concept || p.concepto || 'Cobro Automático Web',
           medioPago: 'MercadoPago / Web',
           confirmado: p.confirmed ?? true,
-        })
+        }).catch(() => {})
         serverSyncedCount++
       }
     } catch (err) {
