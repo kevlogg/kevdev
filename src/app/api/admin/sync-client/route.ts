@@ -10,25 +10,47 @@ function siteBase(url: string) {
 
 export async function POST(req: Request) {
   try {
-    const { clienteId } = await req.json()
+    const body = await req.json().catch(() => ({}))
+    const { clienteId } = body
+
     if (!clienteId) {
-      return NextResponse.json({ error: 'Falta clienteId' }, { status: 400 })
+      return NextResponse.json({ error: 'Falta clienteId en la solicitud' }, { status: 400 })
     }
 
-    const cliente = await getCliente(clienteId)
+    // 1. Buscar cliente en Firestore (por ID directo o por coincidencia en URL/nombre)
+    let cliente = await getCliente(clienteId)
+    if (!cliente) {
+      const { getClientes } = require('@/lib/firestore')
+      const allClis = await getClientes()
+      const searchNorm = clienteId.toLowerCase()
+      cliente = allClis.find(
+        (c: any) =>
+          c.id === clienteId ||
+          (c.url && c.url.toLowerCase().includes(searchNorm)) ||
+          (c.nombre && c.nombre.toLowerCase().includes(searchNorm))
+      ) || null
+    }
+
     if (!cliente || !cliente.url) {
-      return NextResponse.json({ error: 'El cliente no existe o no tiene URL configurada' }, { status: 400 })
+      return NextResponse.json(
+        { error: `El cliente '${clienteId}' no existe o no tiene URL configurada` },
+        { status: 400 }
+      )
     }
 
     const baseUrl = siteBase(cliente.url)
+    const secret = process.env.KEVDEV_PAYMENTS_SECRET || 'kevdev_payments_sec_2026_key'
     let syncCount = 0
     let configUpdated = false
 
+    // 2. Fetch config de billing desde la web en producción del cliente
     try {
-      // 1. Fetch config de billing desde la web en producción del cliente
       const cfgRes = await fetch(`${baseUrl}/api/admin/billing`, {
-        headers: { 'Accept': 'application/json' },
-        next: { revalidate: 0 },
+        headers: {
+          'Accept': 'application/json',
+          'x-kevdev-secret': secret,
+        },
+        cache: 'no-store',
       })
 
       if (cfgRes.ok) {
@@ -59,7 +81,7 @@ export async function POST(req: Request) {
         }
 
         if (Object.keys(updates).length > 0) {
-          await updateCliente(clienteId, updates)
+          await updateCliente(cliente.id || clienteId, updates)
           configUpdated = true
         }
       }
@@ -67,26 +89,30 @@ export async function POST(req: Request) {
       console.warn(`No se pudo consultar /api/admin/billing en ${baseUrl}:`, e)
     }
 
+    // 3. Fetch pagos guardados en la web del cliente
     try {
-      // 2. Fetch pagos guardados en la web del cliente
       const payRes = await fetch(`${baseUrl}/api/admin/billing/payments`, {
-        headers: { 'Accept': 'application/json' },
-        next: { revalidate: 0 },
+        headers: {
+          'Accept': 'application/json',
+          'x-kevdev-secret': secret,
+        },
+        cache: 'no-store',
       })
 
       if (payRes.ok) {
         const payData = await payRes.json()
         const clientPayments: Array<{ date: string; amount: number; concept?: string; concepto?: string; confirmed: boolean }> = payData.payments || []
 
-        const existingPagos = await getHistorialPagos(clienteId)
+        const targetId = cliente.id || clienteId
+        const existingPagos = await getHistorialPagos(targetId)
 
         for (const p of clientPayments) {
           const alreadyExists = existingPagos.some(
-            ep => ep.fecha === p.date && ep.monto === p.amount && ep.concepto === (p.concept || p.concepto)
+            ep => ep.fecha === p.date && ep.monto === p.amount
           )
           if (!alreadyExists && p.amount > 0) {
             await addHistorialPago({
-              clienteId,
+              clienteId: targetId,
               monto: p.amount,
               fecha: p.date || new Date().toISOString().split('T')[0],
               concepto: p.concept || p.concepto || 'Cobro Automático Web',
@@ -105,10 +131,13 @@ export async function POST(req: Request) {
       success: true,
       configUpdated,
       syncedPayments: syncCount,
-      message: `Sincronización completada. ${syncCount} pagos nuevos importados.`,
+      message: `Sincronización completada para ${cliente.nombre}. ${syncCount} pagos importados.`,
     })
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error en /api/admin/sync-client:', error)
-    return NextResponse.json({ error: 'Error durante la sincronización' }, { status: 500 })
+    return NextResponse.json(
+      { error: 'Error durante la sincronización: ' + (error?.message || 'Error interno') },
+      { status: 500 }
+    )
   }
 }
