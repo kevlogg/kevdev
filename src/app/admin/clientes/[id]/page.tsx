@@ -203,6 +203,22 @@ export default function ClienteDetailPage() {
       })
       const data = await res.json()
       if (data.success) {
+        // Aplicar actualizaciones y nuevos pagos con la sesión autenticada del navegador
+        if (data.updates && Object.keys(data.updates).length > 0) {
+          await updateCliente(cliente.id, data.updates).catch(() => {})
+        }
+        if (data.paymentsToImport && Array.isArray(data.paymentsToImport)) {
+          for (const p of data.paymentsToImport) {
+            await addHistorialPago({
+              clienteId: cliente.id,
+              monto: p.amount,
+              fecha: p.date || new Date().toISOString().split('T')[0],
+              concepto: p.concept || p.concepto || 'Cobro Automático Web',
+              medioPago: 'MercadoPago / Web',
+              confirmado: p.confirmed ?? true,
+            }).catch(() => {})
+          }
+        }
         setSyncMsg(data.message || '¡Sincronización exitosa!')
         // Recargar cliente e historial
         const [c, h] = await Promise.all([

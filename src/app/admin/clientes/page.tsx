@@ -136,12 +136,30 @@ export default function ClientesPage() {
       let count = 0
       for (const c of activeClients) {
         if (!c.id) continue
-        await fetch('/api/admin/sync-client', {
+        const res = await fetch('/api/admin/sync-client', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ clienteId: c.id }),
         })
-        count++
+        const data = await res.json().catch(() => ({}))
+        if (data.success) {
+          if (data.updates && Object.keys(data.updates).length > 0) {
+            await updateCliente(c.id, data.updates).catch(() => {})
+          }
+          if (data.paymentsToImport && Array.isArray(data.paymentsToImport)) {
+            for (const p of data.paymentsToImport) {
+              await addHistorialPago({
+                clienteId: c.id,
+                monto: p.amount,
+                fecha: p.date || new Date().toISOString().split('T')[0],
+                concepto: p.concept || p.concepto || 'Cobro Automático Web',
+                medioPago: 'MercadoPago / Web',
+                confirmado: p.confirmed ?? true,
+              }).catch(() => {})
+            }
+          }
+          count++
+        }
       }
       setSyncAllMsg(`Sincronizadas ${count} webs.`)
       await load()

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { updateCliente, addHistorialPago, getHistorialPagos, getCliente } from '@/lib/firestore'
+import { getCliente, getClientes, updateCliente, addHistorialPago, getHistorialPagos } from '@/lib/firestore'
 
 export const dynamic = 'force-dynamic'
 
@@ -17,12 +17,11 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Falta clienteId en la solicitud' }, { status: 400 })
     }
 
-    // 1. Buscar cliente en Firestore (por ID directo o por coincidencia en URL/nombre)
-    let cliente = await getCliente(clienteId)
+    // 1. Buscar cliente por ID directo o por coincidencia de nombre/url
+    let cliente = await getCliente(clienteId).catch(() => null)
     if (!cliente) {
-      const { getClientes } = require('@/lib/firestore')
-      const allClis = await getClientes()
-      const searchNorm = clienteId.toLowerCase()
+      const allClis = await getClientes().catch(() => [])
+      const searchNorm = clienteId.toLowerCase().trim()
       cliente = allClis.find(
         (c: any) =>
           c.id === clienteId ||
@@ -33,15 +32,16 @@ export async function POST(req: Request) {
 
     if (!cliente || !cliente.url) {
       return NextResponse.json(
-        { error: `El cliente '${clienteId}' no existe o no tiene URL configurada` },
+        { error: `El cliente '${clienteId}' no tiene URL configurada` },
         { status: 400 }
       )
     }
 
     const baseUrl = siteBase(cliente.url)
     const secret = process.env.KEVDEV_PAYMENTS_SECRET || 'kevdev_payments_sec_2026_key'
-    let syncCount = 0
-    let configUpdated = false
+
+    const updates: Record<string, any> = {}
+    let paymentsToImport: Array<{ date: string; amount: number; concept?: string; concepto?: string; confirmed: boolean }> = []
 
     // 2. Fetch config de billing desde la web en producción del cliente
     try {
@@ -57,7 +57,6 @@ export async function POST(req: Request) {
         const cfgData = await cfgRes.json()
         const config = cfgData.config || cfgData
 
-        const updates: Record<string, any> = {}
         if (config.monthly_amount) {
           updates.montoMensual = config.monthly_amount
         }
@@ -79,14 +78,9 @@ export async function POST(req: Request) {
             updates.estadoPago = 'AL_DIA'
           }
         }
-
-        if (Object.keys(updates).length > 0) {
-          await updateCliente(cliente.id || clienteId, updates)
-          configUpdated = true
-        }
       }
     } catch (e) {
-      console.warn(`No se pudo consultar /api/admin/billing en ${baseUrl}:`, e)
+      console.warn(`[Sync] No se pudo consultar /api/admin/billing en ${baseUrl}:`, e)
     }
 
     // 3. Fetch pagos guardados en la web del cliente
@@ -104,39 +98,55 @@ export async function POST(req: Request) {
         const clientPayments: Array<{ date: string; amount: number; concept?: string; concepto?: string; confirmed: boolean }> = payData.payments || []
 
         const targetId = cliente.id || clienteId
-        const existingPagos = await getHistorialPagos(targetId)
+        const existingPagos = await getHistorialPagos(targetId).catch(() => [])
 
         for (const p of clientPayments) {
           const alreadyExists = existingPagos.some(
             ep => ep.fecha === p.date && ep.monto === p.amount
           )
           if (!alreadyExists && p.amount > 0) {
-            await addHistorialPago({
-              clienteId: targetId,
-              monto: p.amount,
-              fecha: p.date || new Date().toISOString().split('T')[0],
-              concepto: p.concept || p.concepto || 'Cobro Automático Web',
-              medioPago: 'MercadoPago / Web',
-              confirmado: p.confirmed ?? true,
-            })
-            syncCount++
+            paymentsToImport.push(p)
           }
         }
       }
     } catch (e) {
-      console.warn(`No se pudo consultar /api/admin/billing/payments en ${baseUrl}:`, e)
+      console.warn(`[Sync] No se pudo consultar /api/admin/billing/payments en ${baseUrl}:`, e)
+    }
+
+    // Intentar aplicar cambios desde el servidor si Firestore lo permite
+    let serverSyncedCount = 0
+    try {
+      const targetId = cliente.id || clienteId
+      if (Object.keys(updates).length > 0) {
+        await updateCliente(targetId, updates)
+      }
+      for (const p of paymentsToImport) {
+        await addHistorialPago({
+          clienteId: targetId,
+          monto: p.amount,
+          fecha: p.date || new Date().toISOString().split('T')[0],
+          concepto: p.concept || p.concepto || 'Cobro Automático Web',
+          medioPago: 'MercadoPago / Web',
+          confirmado: p.confirmed ?? true,
+        })
+        serverSyncedCount++
+      }
+    } catch (err) {
+      console.warn('[Sync] Fallback a aplicación de cliente en el navegador:', err)
     }
 
     return NextResponse.json({
       success: true,
-      configUpdated,
-      syncedPayments: syncCount,
-      message: `Sincronización completada para ${cliente.nombre}. ${syncCount} pagos importados.`,
+      clienteId: cliente.id || clienteId,
+      updates,
+      paymentsToImport,
+      serverSyncedCount,
+      message: `Sincronización completada para ${cliente.nombre}.`,
     })
   } catch (error: any) {
     console.error('Error en /api/admin/sync-client:', error)
     return NextResponse.json(
-      { error: 'Error durante la sincronización: ' + (error?.message || 'Error interno') },
+      { error: 'Error durante la sincronización: ' + (error?.message || 'Error de conexión') },
       { status: 500 }
     )
   }
