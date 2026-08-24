@@ -46,6 +46,9 @@ export interface HistorialPago {
   medioPago?: string
   confirmado: boolean
   creadoEn?: Timestamp
+  metodo?: 'manual' | 'pasarela' | string
+  referencia?: string
+  origen?: 'MANUAL' | 'WEBHOOK'
 }
 
 export interface ChecklistProgreso {
@@ -201,5 +204,22 @@ export async function togglePagoConfirmado(
 
 export async function deleteHistorialPago(id: string): Promise<void> {
   await deleteDoc(doc(db, 'historialPagos', id))
+}
+
+export function getPagosMesActual(pagos: HistorialPago[]): number {
+  const now = new Date()
+  const year = now.getFullYear()
+  const month = String(now.getMonth() + 1).padStart(2, '0')
+  const prefix = `${year}-${month}`
+
+  return pagos
+    .filter(p => p.confirmado && p.fecha && p.fecha.startsWith(prefix))
+    .reduce((sum, p) => sum + (p.monto || 0), 0)
+}
+
+export function getPagosAcumuladosGlobal(pagos: HistorialPago[]): number {
+  return pagos
+    .filter(p => p.confirmado)
+    .reduce((sum, p) => sum + (p.monto || 0), 0)
 }
 

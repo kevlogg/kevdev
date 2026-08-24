@@ -567,7 +567,7 @@ export default function ClienteDetailPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--color-border)' }}>
-                  {['Fecha', 'Concepto', 'Medio', 'Monto', 'Estado', 'Acciones'].map(h => (
+                  {['Fecha', 'Concepto', 'Medio / Origen', 'Monto', 'Ref / ID', 'Estado', 'Acciones'].map(h => (
                     <th key={h} style={{ padding: '8px 12px', textAlign: 'left', fontFamily: 'var(--font-ui)', fontSize: '0.6875rem', color: 'var(--color-muted)', textTransform: 'uppercase' }}>
                       {h}
                     </th>
@@ -575,45 +575,58 @@ export default function ClienteDetailPage() {
                 </tr>
               </thead>
               <tbody>
-                {pagos.map(p => (
-                  <tr key={p.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
-                    <td style={{ padding: '10px 12px', fontFamily: 'var(--font-mono)', fontSize: '0.8125rem', color: 'var(--color-star)' }}>
-                      {p.fecha}
-                    </td>
-                    <td style={{ padding: '10px 12px', fontFamily: 'var(--font-ui)', fontSize: '0.8125rem', color: 'var(--color-star)' }}>
-                      {p.concepto}
-                    </td>
-                    <td style={{ padding: '10px 12px', fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: 'var(--color-muted)' }}>
-                      {p.medioPago || 'Transferencia'}
-                    </td>
-                    <td style={{ padding: '10px 12px', fontFamily: 'var(--font-mono)', fontSize: '0.875rem', fontWeight: 600, color: 'var(--color-star)' }}>
-                      {formatARS(p.monto)}
-                    </td>
-                    <td style={{ padding: '10px 12px' }}>
-                      <button
-                        onClick={() => p.id && handleTogglePago(p.id, p.confirmado)}
-                        style={{
-                          background: p.confirmado ? 'rgba(74, 222, 128, 0.12)' : 'rgba(245, 158, 11, 0.12)',
-                          color: p.confirmado ? '#4ade80' : '#f59e0b',
-                          border: `1px solid ${p.confirmado ? '#4ade8040' : '#f59e0b40'}`,
-                          borderRadius: 99, padding: '2px 8px', fontSize: '0.6875rem', fontFamily: 'var(--font-mono)',
-                          cursor: 'pointer'
-                        }}
-                      >
-                        {p.confirmado ? '✓ Confirmado' : '⏳ Pendiente'}
-                      </button>
-                    </td>
-                    <td style={{ padding: '10px 12px' }}>
-                      <button
-                        onClick={() => p.id && handleDeletePago(p.id)}
-                        title="Eliminar registro"
-                        style={{ background: 'none', border: 'none', color: '#f87171', cursor: 'pointer', fontSize: '0.75rem' }}
-                      >
-                        ✕
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                {pagos.map(p => {
+                  const isWebhook = p.origen === 'WEBHOOK' || p.metodo === 'pasarela'
+                  return (
+                    <tr key={p.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
+                      <td style={{ padding: '10px 12px', fontFamily: 'var(--font-mono)', fontSize: '0.8125rem', color: 'var(--color-star)' }}>
+                        {p.fecha}
+                      </td>
+                      <td style={{ padding: '10px 12px', fontFamily: 'var(--font-ui)', fontSize: '0.8125rem', color: 'var(--color-star)' }}>
+                        {p.concepto}
+                      </td>
+                      <td style={{ padding: '10px 12px', fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: 'var(--color-muted)' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                          <span>{p.medioPago || 'Transferencia'}</span>
+                          {isWebhook && (
+                            <span style={{ fontSize: '0.625rem', color: '#38bdf8', background: 'rgba(56,189,248,0.1)', border: '1px solid rgba(56,189,248,0.3)', padding: '1px 6px', borderRadius: 99, fontFamily: 'var(--font-mono)' }}>
+                              ⚡ Pasarela
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                      <td style={{ padding: '10px 12px', fontFamily: 'var(--font-mono)', fontSize: '0.875rem', fontWeight: 600, color: 'var(--color-star)' }}>
+                        {formatARS(p.monto)}
+                      </td>
+                      <td style={{ padding: '10px 12px', fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: 'var(--color-faint)' }}>
+                        {p.referencia || '—'}
+                      </td>
+                      <td style={{ padding: '10px 12px' }}>
+                        <button
+                          onClick={() => p.id && handleTogglePago(p.id, p.confirmado)}
+                          style={{
+                            background: p.confirmado ? 'rgba(74, 222, 128, 0.12)' : 'rgba(245, 158, 11, 0.12)',
+                            color: p.confirmado ? '#4ade80' : '#f59e0b',
+                            border: `1px solid ${p.confirmado ? '#4ade8040' : '#f59e0b40'}`,
+                            borderRadius: 99, padding: '2px 8px', fontSize: '0.6875rem', fontFamily: 'var(--font-mono)',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          {p.confirmado ? '✓ Confirmado' : '⏳ Pendiente'}
+                        </button>
+                      </td>
+                      <td style={{ padding: '10px 12px' }}>
+                        <button
+                          onClick={() => p.id && handleDeletePago(p.id)}
+                          title="Eliminar registro"
+                          style={{ background: 'none', border: 'none', color: '#f87171', cursor: 'pointer', fontSize: '0.75rem' }}
+                        >
+                          ✕
+                        </button>
+                      </td>
+                    </tr>
+                  )
+                })}
               </tbody>
             </table>
           </div>

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { getClientes, getAllHistorialPagos, type Cliente, type HistorialPago } from '@/lib/firestore'
+import { getClientes, getAllHistorialPagos, getPagosMesActual, getPagosAcumuladosGlobal, type Cliente, type HistorialPago } from '@/lib/firestore'
 import { getAnalyticsSummary, type AnalyticsSummary } from '@/lib/analytics'
 
 function formatARS(n: number) {
@@ -53,9 +53,14 @@ export default function EstadisticasPage() {
   // Cálculos Financieros
   const enProduccion = clientes.filter(c => c.situacion === 'EN PRODUCCION')
   const mrrCalculado = enProduccion.reduce((acc, c) => acc + (c.montoMensual || 0), 0)
-  const cobradoHistorico = pagos.filter(p => p.confirmado).reduce((acc, p) => acc + p.monto, 0)
+  const cobradoMesActual = getPagosMesActual(pagos)
+  const cobradoHistoricoGlobal = getPagosAcumuladosGlobal(pagos)
   const clientesAlDia = clientes.filter(c => c.estadoPago === 'AL_DIA').length
   const clientesPendientes = clientes.filter(c => c.estadoPago === 'PENDIENTE' || c.estadoPago === 'VENCIDO').length
+
+  const pagosConfirmados = pagos.filter(p => p.confirmado)
+  const pagosWebhookCount = pagosConfirmados.filter(p => p.origen === 'WEBHOOK' || p.metodo === 'pasarela').length
+  const pagosManualesCount = pagosConfirmados.length - pagosWebhookCount
 
   const cardStyle: React.CSSProperties = {
     background: 'var(--color-depth)',
@@ -175,18 +180,26 @@ export default function EstadisticasPage() {
       {/* Grid 1: KPIs Financieros */}
       <section style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16 }}>
         <div style={cardStyle}>
-          <span style={kpiLabelStyle}>MRR (Ingreso Mensual Recurrente)</span>
-          <p style={{ ...kpiValueStyle, color: 'var(--color-accent)' }}>{formatARS(mrrCalculado)}</p>
+          <span style={kpiLabelStyle}>Cobrado Mes Actual</span>
+          <p style={{ ...kpiValueStyle, color: '#4ade80' }}>{formatARS(cobradoMesActual)}</p>
           <span style={{ fontSize: '0.75rem', color: 'var(--color-faint)', fontFamily: 'var(--font-ui)' }}>
-            Basado en {enProduccion.length} clientes en producción
+            Ingresos confirmados este mes
           </span>
         </div>
 
         <div style={cardStyle}>
-          <span style={kpiLabelStyle}>Recaudación Histórica</span>
-          <p style={kpiValueStyle}>{formatARS(cobradoHistorico)}</p>
-          <span style={{ fontSize: '0.75rem', color: '#4ade80', fontFamily: 'var(--font-mono)' }}>
-            {pagos.filter(p => p.confirmado).length} pagos confirmados
+          <span style={kpiLabelStyle}>Historial Acumulado Global</span>
+          <p style={kpiValueStyle}>{formatARS(cobradoHistoricoGlobal)}</p>
+          <span style={{ fontSize: '0.75rem', color: '#38bdf8', fontFamily: 'var(--font-mono)' }}>
+            {pagosConfirmados.length} cobros ({pagosWebhookCount} por pasarela / {pagosManualesCount} manuales)
+          </span>
+        </div>
+
+        <div style={cardStyle}>
+          <span style={kpiLabelStyle}>MRR (Ingreso Mensual Recurrente)</span>
+          <p style={{ ...kpiValueStyle, color: 'var(--color-accent)' }}>{formatARS(mrrCalculado)}</p>
+          <span style={{ fontSize: '0.75rem', color: 'var(--color-faint)', fontFamily: 'var(--font-ui)' }}>
+            Basado en {enProduccion.length} clientes en producción
           </span>
         </div>
 
@@ -203,16 +216,6 @@ export default function EstadisticasPage() {
           </div>
           <span style={{ fontSize: '0.75rem', color: 'var(--color-faint)', fontFamily: 'var(--font-ui)' }}>
             Total clientes registrados: {clientes.length}
-          </span>
-        </div>
-
-        <div style={cardStyle}>
-          <span style={kpiLabelStyle}>Tasa de Conversión a Venta</span>
-          <p style={{ ...kpiValueStyle, color: '#a78bfa' }}>
-            {clientes.length > 0 ? Math.round((enProduccion.length / clientes.length) * 100) : 0}%
-          </p>
-          <span style={{ fontSize: '0.75rem', color: 'var(--color-faint)', fontFamily: 'var(--font-ui)' }}>
-            {enProduccion.length} de {clientes.length} prospectos cerrados
           </span>
         </div>
       </section>
