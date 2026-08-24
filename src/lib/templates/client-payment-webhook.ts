@@ -22,12 +22,12 @@ export interface KevDevPaymentNotification {
  * Envía una notificación de pago al endpoint webhook de KevDev.
  * 
  * @param data Datos del pago del cliente
- * @param kevdevUrl URL del panel KevDev (por defecto https://kevdev.app o tu dominio Vercel)
+ * @param kevdevUrl URL del panel KevDev (por defecto https://www.kevdev.net.ar o tu dominio Vercel)
  * @param secret Clave de seguridad compartida (KEVDEV_PAYMENTS_SECRET)
  */
 export async function sendPaymentToKevDev(
   data: KevDevPaymentNotification,
-  kevdevUrl: string = process.env.KEVDEV_API_URL || 'https://kevdev.app',
+  kevdevUrl: string = process.env.KEVDEV_API_URL || 'https://www.kevdev.net.ar',
   secret: string = process.env.KEVDEV_PAYMENTS_SECRET || 'kevdev_payments_sec_2026_key'
 ): Promise<{ success: boolean; pagoId?: string; message?: string }> {
   try {
