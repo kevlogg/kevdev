@@ -116,7 +116,7 @@ export async function POST(req: Request) {
         const payData = await payRes.json()
         const clientPayments: Array<{ date: string; amount: number; concept?: string; concepto?: string; confirmed: boolean }> = payData.payments || []
 
-        const targetId = cliente.id || clienteId
+        const targetId = cliente?.id || clienteId
         const existingPagos = await getHistorialPagos(targetId).catch(() => [])
 
         for (const p of clientPayments) {
@@ -135,7 +135,7 @@ export async function POST(req: Request) {
     // Intentar aplicar cambios desde el servidor si Firestore lo permite
     let serverSyncedCount = 0
     try {
-      const targetId = cliente.id || clienteId
+      const targetId = cliente?.id || clienteId
       if (Object.keys(updates).length > 0) {
         await updateCliente(targetId, updates).catch(() => {})
       }
@@ -156,11 +156,11 @@ export async function POST(req: Request) {
 
     return NextResponse.json({
       success: true,
-      clienteId: cliente.id || clienteId,
+      clienteId: cliente?.id || clienteId,
       updates,
       paymentsToImport,
       serverSyncedCount,
-      message: `Sincronización completada para ${cliente.nombre}.`,
+      message: `Sincronización completada para ${cliente?.nombre || clienteId}.`,
     })
   } catch (error: any) {
     console.error('Error en /api/admin/sync-client:', error)
