@@ -31,6 +31,7 @@ export default function Hero() {
     try {
       fetch('/api/analytics/track', {
         method: 'POST',
+        keepalive: true,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           site: 'kevdev',
@@ -49,6 +50,7 @@ export default function Hero() {
     try {
       fetch('/api/analytics/track', {
         method: 'POST',
+        keepalive: true,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           site: 'kevdev',

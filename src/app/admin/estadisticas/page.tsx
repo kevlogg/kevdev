@@ -94,7 +94,29 @@ export default function EstadisticasPage() {
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: 6 }}>
+        <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+          <button
+            onClick={() => {
+              setLoading(true)
+              Promise.all([getClientes(), getAllHistorialPagos(), getAnalyticsSummary(period)])
+                .then(([clis, pgs, stats]) => { setClientes(clis); setPagos(pgs); setAnalytics(stats) })
+                .finally(() => setLoading(false))
+            }}
+            style={{
+              padding: '6px 14px',
+              borderRadius: 8,
+              border: '1px solid var(--color-accent)',
+              background: 'var(--color-accent-dim)',
+              color: 'var(--color-accent)',
+              fontFamily: 'var(--font-ui)',
+              fontSize: '0.75rem',
+              fontWeight: 600,
+              cursor: 'pointer',
+              marginRight: 6,
+            }}
+          >
+            🔄 Actualizar
+          </button>
           {[7, 30, 90].map(p => (
             <button
               key={p}
@@ -222,21 +244,27 @@ export default function EstadisticasPage() {
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            {analytics.topButtons.map(btn => (
-              <div key={btn.buttonId} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', background: 'rgba(221,232,255,0.03)', border: '1px solid var(--color-border)', borderRadius: 8 }}>
-                <div>
-                  <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.8125rem', fontWeight: 500, color: 'var(--color-star)', margin: 0 }}>
-                    {btn.label}
-                  </p>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: 'var(--color-faint)' }}>
-                    ID: {btn.buttonId}
+            {analytics.topButtons.length === 0 ? (
+              <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.8125rem', color: 'var(--color-faint)', margin: 0 }}>
+                Sin interacciones registradas en este período.
+              </p>
+            ) : (
+              analytics.topButtons.map(btn => (
+                <div key={btn.buttonId} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', background: 'rgba(221,232,255,0.03)', border: '1px solid var(--color-border)', borderRadius: 8 }}>
+                  <div>
+                    <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.8125rem', fontWeight: 500, color: 'var(--color-star)', margin: 0 }}>
+                      {btn.label}
+                    </p>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: 'var(--color-faint)' }}>
+                      ID: {btn.buttonId}
+                    </span>
+                  </div>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.9375rem', fontWeight: 700, color: 'var(--color-accent)', background: 'var(--color-accent-dim)', padding: '2px 10px', borderRadius: 99 }}>
+                    {btn.clicks} clics
                   </span>
                 </div>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.9375rem', fontWeight: 700, color: 'var(--color-accent)', background: 'var(--color-accent-dim)', padding: '2px 10px', borderRadius: 99 }}>
-                  {btn.clicks} clics
-                </span>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </section>
       </div>
