@@ -159,7 +159,14 @@ export default function ClienteDetailPage() {
               confirmed: pagoForm.confirmado,
             }
           })
-        }).catch(err => console.warn('Push a web del cliente falló:', err))
+        })
+        .then(async (r) => {
+          if (!r.ok) {
+            const data = await r.json().catch(() => ({}))
+            alert(`Sincronización fallida con la web del cliente: ${data.error || 'Código ' + r.status}`)
+          }
+        })
+        .catch(err => console.warn('Push a web del cliente falló:', err))
       }
 
       setPagos(prev => [
@@ -233,7 +240,14 @@ export default function ClienteDetailPage() {
               amount: pagoToDelete.monto,
             }
           })
-        }).catch(err => console.warn('Fallo al solicitar eliminación en cliente:', err))
+        })
+        .then(async (r) => {
+          if (!r.ok) {
+            const data = await r.json().catch(() => ({}))
+            alert(`No se pudo eliminar el pago en la web del cliente: ${data.error || 'Código ' + r.status}`)
+          }
+        })
+        .catch(err => console.warn('Fallo al solicitar eliminación en cliente:', err))
       }
 
       await deleteHistorialPago(pagoId)
