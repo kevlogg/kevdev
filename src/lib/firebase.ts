@@ -1,5 +1,5 @@
 import { initializeApp, getApps } from 'firebase/app'
-import { getAuth, signInAnonymously } from 'firebase/auth'
+import { getAuth, signInAnonymously, signInWithEmailAndPassword } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
 
 function cleanEnv(val?: string) {
@@ -22,6 +22,13 @@ export const db   = getFirestore(app)
 
 export async function ensureServerAuth() {
   if (!auth.currentUser) {
-    await signInAnonymously(auth)
+    const email = process.env.FIREBASE_ADMIN_EMAIL || 'kevdev.info@gmail.com'
+    const password = process.env.FIREBASE_ADMIN_PASSWORD || 'kevdev2026'
+    try {
+      await signInWithEmailAndPassword(auth, email, password)
+    } catch (e) {
+      console.warn('Firebase Auth Admin sign-in failed, trying anonymous fallback:', e)
+      await signInAnonymously(auth)
+    }
   }
 }
