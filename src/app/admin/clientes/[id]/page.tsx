@@ -226,16 +226,20 @@ export default function ClienteDetailPage() {
         if (data.updates && Object.keys(data.updates).length > 0) {
           await updateCliente(cliente.id, data.updates).catch(() => {})
         }
-        if (!data.serverSyncedCount && data.paymentsToImport && Array.isArray(data.paymentsToImport)) {
+        if (data.paymentsToImport && Array.isArray(data.paymentsToImport) && data.paymentsToImport.length > 0) {
+          const currentPagos = await getHistorialPagos(cliente.id).catch(() => [])
           for (const p of data.paymentsToImport) {
-            await addHistorialPago({
-              clienteId: cliente.id,
-              monto: p.amount,
-              fecha: p.date || new Date().toISOString().split('T')[0],
-              concepto: p.concept || (p as any).concepto || 'Cobro Automático Web',
-              medioPago: 'MercadoPago / Web',
-              confirmado: p.confirmed ?? true,
-            }).catch(() => {})
+            const exists = currentPagos.some(ep => ep.fecha === p.date && ep.monto === p.amount)
+            if (!exists) {
+              await addHistorialPago({
+                clienteId: cliente.id,
+                monto: p.amount,
+                fecha: p.date || new Date().toISOString().split('T')[0],
+                concepto: p.concept || (p as any).concepto || 'Cobro Automático Web',
+                medioPago: 'MercadoPago / Web',
+                confirmado: p.confirmed ?? true,
+              }).catch(() => {})
+            }
           }
         }
         setSyncMsg(data.message || '¡Sincronización exitosa!')

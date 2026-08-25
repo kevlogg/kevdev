@@ -140,15 +140,19 @@ export async function POST(req: Request) {
         await updateCliente(targetId, updates).catch(() => {})
       }
       for (const p of paymentsToImport) {
-        await addHistorialPago({
-          clienteId: targetId,
-          monto: p.amount,
-          fecha: p.date || new Date().toISOString().split('T')[0],
-          concepto: p.concept || p.concepto || 'Cobro Automático Web',
-          medioPago: 'MercadoPago / Web',
-          confirmado: p.confirmed ?? true,
-        }).catch(() => {})
-        serverSyncedCount++
+        try {
+          await addHistorialPago({
+            clienteId: targetId,
+            monto: p.amount,
+            fecha: p.date || new Date().toISOString().split('T')[0],
+            concepto: p.concept || p.concepto || 'Cobro Automático Web',
+            medioPago: 'MercadoPago / Web',
+            confirmado: p.confirmed ?? true,
+          })
+          serverSyncedCount++
+        } catch (e) {
+          console.warn('[Sync] Falló addHistorialPago en servidor:', e)
+        }
       }
     } catch (err) {
       console.warn('[Sync] Fallback a aplicación de cliente en el navegador:', err)
