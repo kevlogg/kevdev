@@ -172,6 +172,7 @@ export async function deletePresupuestoItem(id: string): Promise<void> {
 /* ─── Historial de Pagos ──────────────────────────────────────────────── */
 
 const CALVOS_IDS = ['calvoscompresores', 'calvos-compresores', 'fx25djbynqynowq361jv', 'o5su65lqkz2k6ujl7o08']
+const DULCE_HOGAR_IDS = ['dulcehogar', 'dulce-hogar', 'dulce_hogar']
 
 export async function getHistorialPagos(clienteId: string): Promise<HistorialPago[]> {
   try {
@@ -181,6 +182,7 @@ export async function getHistorialPagos(clienteId: string): Promise<HistorialPag
 
     const normId = String(clienteId || '').toLowerCase().trim()
     const isCalvosQuery = CALVOS_IDS.includes(normId) || normId.includes('calvo')
+    const isDulceHogarQuery = DULCE_HOGAR_IDS.includes(normId) || normId.includes('dulce')
 
     return allPagos
       .filter(p => {
@@ -189,6 +191,8 @@ export async function getHistorialPagos(clienteId: string): Promise<HistorialPag
         if (pNorm === normId) return true
         const isCalvosPago = CALVOS_IDS.includes(pNorm) || pNorm.includes('calvo')
         if (isCalvosQuery && isCalvosPago) return true
+        const isDulceHogarPago = DULCE_HOGAR_IDS.includes(pNorm) || pNorm.includes('dulce')
+        if (isDulceHogarQuery && isDulceHogarPago) return true
         return false
       })
       .sort((a, b) => (b.fecha || '').localeCompare(a.fecha || ''))
