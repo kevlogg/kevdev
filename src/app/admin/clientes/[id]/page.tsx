@@ -143,21 +143,21 @@ export default function ClienteDetailPage() {
         medioPago: pagoForm.medioPago || 'Transferencia',
         confirmado: pagoForm.confirmado,
       })
-      // Push directo a la web del cliente para actualizar su DB local
+      // Push directo a la web del cliente a través del servidor (evita CORS)
       if (cliente?.url) {
-        const clientSiteUrl = cliente.url.startsWith('http') ? cliente.url.replace(/\/$/, '') : `https://${cliente.url.replace(/\/$/, '')}`
-        fetch(`${clientSiteUrl}/api/admin/billing/payments`, {
+        fetch('/api/admin/push-payment', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-kevdev-secret': 'kevdev_payments_sec_2026_key'
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            amount: montoNum,
-            date: pagoForm.fecha,
-            concept: pagoForm.concepto || 'Cuota Mensual',
-            medioPago: pagoForm.medioPago || 'Transferencia',
-            confirmed: pagoForm.confirmado,
+            action: 'add',
+            clientUrl: cliente.url,
+            paymentData: {
+              amount: montoNum,
+              date: pagoForm.fecha,
+              concept: pagoForm.concepto || 'Cuota Mensual',
+              medioPago: pagoForm.medioPago || 'Transferencia',
+              confirmed: pagoForm.confirmado,
+            }
           })
         }).catch(err => console.warn('Push a web del cliente falló:', err))
       }
@@ -218,7 +218,24 @@ export default function ClienteDetailPage() {
 
   async function handleDeletePago(pagoId: string) {
     if (!confirm('¿Eliminar este registro de pago?')) return
+    const pagoToDelete = pagos.find(p => p.id === pagoId)
     try {
+      // Eliminar el pago en el proyecto del cliente también (vía backend)
+      if (cliente?.url && pagoToDelete) {
+        fetch('/api/admin/push-payment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'delete',
+            clientUrl: cliente.url,
+            paymentData: {
+              date: pagoToDelete.fecha,
+              amount: pagoToDelete.monto,
+            }
+          })
+        }).catch(err => console.warn('Fallo al solicitar eliminación en cliente:', err))
+      }
+
       await deleteHistorialPago(pagoId)
       setPagos(prev => prev.filter(p => p.id !== pagoId))
     } catch (err) {
