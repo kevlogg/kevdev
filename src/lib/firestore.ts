@@ -198,7 +198,7 @@ export async function getHistorialPagos(clienteId: string): Promise<HistorialPag
       .sort((a, b) => (b.fecha || '').localeCompare(a.fecha || ''))
   } catch (err) {
     console.warn('[getHistorialPagos] Error al consultar Firestore en el servidor:', err)
-    throw err
+    return []
   }
 }
 
