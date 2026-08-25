@@ -5,6 +5,11 @@ export const dynamic = 'force-dynamic'
 function getCanonicalApiUrl(clientUrl: string): string {
   let url = clientUrl.trim().replace(/\/$/, '')
 
+  // Ensure it starts with https://
+  if (!/^https?:\/\//i.test(url)) {
+    url = `https://${url}`
+  }
+
   // 1. Dulce Hogar redirects to www canonical domain on Vercel
   if (url.includes('dulcehogar.com.ar') && !url.includes('www.')) {
     url = url.replace('dulcehogar.com.ar', 'www.dulcehogar.com.ar')
