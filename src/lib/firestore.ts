@@ -172,7 +172,7 @@ export async function deletePresupuestoItem(id: string): Promise<void> {
 /* ─── Historial de Pagos ──────────────────────────────────────────────── */
 
 const CALVOS_IDS = ['calvoscompresores', 'calvos-compresores', 'fx25djbynqynowq361jv', 'o5su65lqkz2k6ujl7o08']
-const DULCE_HOGAR_IDS = ['dulcehogar', 'dulce-hogar', 'dulce_hogar', 'gz3g7r0ld4z3g3k5m7n9']
+const DULCE_HOGAR_IDS = ['dulcehogar', 'dulce-hogar', 'dulce_hogar', 'gz3g7r0ld4z3g3k5m7n9', 'q6h68vtjro2cd2qwtslj']
 
 export async function getHistorialPagos(clienteId: string): Promise<HistorialPago[]> {
   try {
