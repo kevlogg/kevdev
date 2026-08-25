@@ -143,6 +143,25 @@ export default function ClienteDetailPage() {
         medioPago: pagoForm.medioPago || 'Transferencia',
         confirmado: pagoForm.confirmado,
       })
+      // Push directo a la web del cliente para actualizar su DB local
+      if (cliente?.url) {
+        const clientSiteUrl = cliente.url.startsWith('http') ? cliente.url.replace(/\/$/, '') : `https://${cliente.url.replace(/\/$/, '')}`
+        fetch(`${clientSiteUrl}/api/admin/billing/payments`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-kevdev-secret': 'kevdev_payments_sec_2026_key'
+          },
+          body: JSON.stringify({
+            amount: montoNum,
+            date: pagoForm.fecha,
+            concept: pagoForm.concepto || 'Cuota Mensual',
+            medioPago: pagoForm.medioPago || 'Transferencia',
+            confirmed: pagoForm.confirmado,
+          })
+        }).catch(err => console.warn('Push a web del cliente falló:', err))
+      }
+
       setPagos(prev => [
         {
           id: newId,
