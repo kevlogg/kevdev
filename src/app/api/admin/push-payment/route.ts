@@ -2,6 +2,27 @@ import { NextResponse } from 'next/server'
 
 export const dynamic = 'force-dynamic'
 
+function getCanonicalApiUrl(clientUrl: string): string {
+  let url = clientUrl.trim().replace(/\/$/, '')
+
+  // 1. Dulce Hogar redirects to www canonical domain on Vercel
+  if (url.includes('dulcehogar.com.ar') && !url.includes('www.')) {
+    url = url.replace('dulcehogar.com.ar', 'www.dulcehogar.com.ar')
+  }
+  if (url.includes('dulcehogardye.com.ar') && !url.includes('www.')) {
+    url = url.replace('dulcehogardye.com.ar', 'www.dulcehogardye.com.ar')
+  }
+
+  let apiUrl = `${url}/api/admin/billing/payments`
+
+  // 2. Calvos Compresores uses strict trailing slash
+  if (url.includes('loscalvoscompresores') || url.includes('calvos-compresores')) {
+    apiUrl += '/'
+  }
+
+  return apiUrl
+}
+
 export async function POST(req: Request) {
   try {
     const body = await req.json().catch(() => ({}))
@@ -11,7 +32,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Faltan parámetros requeridos' }, { status: 400 })
     }
 
-    const targetUrl = `${clientUrl.replace(/\/$/, '')}/api/admin/billing/payments`
+    const targetUrl = getCanonicalApiUrl(clientUrl)
     const secret = process.env.KEVDEV_PAYMENTS_SECRET || 'kevdev_payments_sec_2026_key'
 
     let res
