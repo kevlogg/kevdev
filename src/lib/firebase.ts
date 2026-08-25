@@ -22,10 +22,6 @@ export const db   = getFirestore(app)
 
 export async function ensureServerAuth() {
   if (!auth.currentUser) {
-    try {
-      await signInAnonymously(auth)
-    } catch (e) {
-      console.warn('Firebase Auth sign-in warning:', e)
-    }
+    await signInAnonymously(auth)
   }
 }
