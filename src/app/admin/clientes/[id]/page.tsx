@@ -171,10 +171,19 @@ export default function ClienteDetailPage() {
 
   async function handleTogglePago(pagoId: string, actual: boolean) {
     try {
-      await togglePagoConfirmado(pagoId, !actual)
-      setPagos(prev => prev.map(p => p.id === pagoId ? { ...p, confirmado: !actual } : p))
+      const nuevoEstado = !actual;
+      await togglePagoConfirmado(pagoId, nuevoEstado);
+      const nuevosPagos = pagos.map(p => p.id === pagoId ? { ...p, confirmado: nuevoEstado } : p);
+      setPagos(nuevosPagos);
+
+      if (cliente?.id) {
+        const hayPendientes = nuevosPagos.some(p => !p.confirmado);
+        const nuevoEstadoPago = hayPendientes ? 'PENDIENTE' : 'AL_DIA';
+        await updateCliente(cliente.id, { estadoPago: nuevoEstadoPago }).catch(() => {});
+        setCliente(prev => prev ? { ...prev, estadoPago: nuevoEstadoPago } : null);
+      }
     } catch (err) {
-      console.error('Error al actualizar pago:', err)
+      console.error('Error al actualizar pago:', err);
     }
   }
 
