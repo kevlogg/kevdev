@@ -135,14 +135,33 @@ export default function ClienteDetailPage() {
     setSavingPago(true)
     try {
       const montoNum = parseFloat(pagoForm.monto) || 0
-      const newId = await addHistorialPago({
-        clienteId: id,
-        monto: montoNum,
-        fecha: pagoForm.fecha,
-        concepto: pagoForm.concepto || 'Cuota Mensual',
-        medioPago: pagoForm.medioPago || 'Transferencia',
-        confirmado: pagoForm.confirmado,
+
+      // Usar API server-side para evitar problemas de auth en Firestore cliente
+      const apiRes = await fetch('/api/payments/receive', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-kevdev-secret': 'kevdev_payments_sec_2026_key',
+        },
+        body: JSON.stringify({
+          clienteId: id,
+          monto: montoNum,
+          fecha: pagoForm.fecha,
+          concepto: pagoForm.concepto || 'Cuota Mensual',
+          medioPago: pagoForm.medioPago || 'Transferencia',
+          metodo: 'manual',
+          confirmado: pagoForm.confirmado,
+        }),
       })
+
+      if (!apiRes.ok) {
+        const errData = await apiRes.json().catch(() => ({}))
+        throw new Error(errData.error || `Error ${apiRes.status}`)
+      }
+
+      const { pagoId } = await apiRes.json()
+      const newId = pagoId || String(Date.now())
+
       setPagos(prev => [
         {
           id: newId,
@@ -155,23 +174,6 @@ export default function ClienteDetailPage() {
         },
         ...prev,
       ])
-      // Notificar al cliente web inmediatamente en segundo plano
-      if (cliente?.url) {
-        fetch(`${cliente.url.replace(/\/$/, '')}/api/admin/billing/payments`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-kevdev-secret': 'kevdev_payments_sec_2026_key'
-          },
-          body: JSON.stringify({
-            date: pagoForm.fecha,
-            amount: montoNum,
-            concept: pagoForm.concepto || 'Cuota Mensual',
-            medioPago: pagoForm.medioPago || 'Transferencia',
-            confirmed: pagoForm.confirmado
-          })
-        }).catch(() => {})
-      }
 
       setPagoForm({
         monto: '',
@@ -182,6 +184,7 @@ export default function ClienteDetailPage() {
       })
     } catch (err) {
       console.error('Error al guardar pago:', err)
+      alert('Error al registrar el pago. Revisá la consola.')
     } finally {
       setSavingPago(false)
     }
