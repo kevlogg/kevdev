@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { collection, addDoc, getDocs, query, where, doc, getDoc, serverTimestamp } from 'firebase/firestore'
-import { db } from '@/lib/firebase'
+import { db, auth } from '@/lib/firebase'
+import { signInAnonymously } from 'firebase/auth'
 
 export const dynamic = 'force-dynamic'
 
@@ -35,6 +36,11 @@ export async function POST(req: Request) {
         { error: 'No autorizado. Clave de seguridad (x-kevdev-secret) inválida o ausente.' },
         { status: 401, headers: corsHeaders }
       )
+    }
+
+    // Autenticar en Firebase antes de escribir (requerido por reglas de Firestore)
+    if (!auth.currentUser) {
+      await signInAnonymously(auth).catch(() => {})
     }
 
     const { clienteId, monto, concepto, fecha, medioPago, metodo, referencia, confirmado } = body
