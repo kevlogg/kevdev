@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server'
-import { collection, addDoc, getDocs, query, where, doc, getDoc, serverTimestamp } from 'firebase/firestore'
-import { db, auth } from '@/lib/firebase'
-import { signInAnonymously } from 'firebase/auth'
+import { collection, addDoc, getDocs, doc, getDoc, serverTimestamp } from 'firebase/firestore'
+import { db, ensureServerAuth } from '@/lib/firebase'
 
 export const dynamic = 'force-dynamic'
 
@@ -38,11 +37,6 @@ export async function POST(req: Request) {
       )
     }
 
-    // Autenticar en Firebase antes de escribir (requerido por reglas de Firestore)
-    if (!auth.currentUser) {
-      await signInAnonymously(auth).catch(() => {})
-    }
-
     const { clienteId, monto, concepto, fecha, medioPago, metodo, referencia, confirmado } = body
 
     if (!clienteId || !monto || isNaN(Number(monto))) {
@@ -52,6 +46,8 @@ export async function POST(req: Request) {
       )
     }
 
+    await ensureServerAuth()
+
     let targetClienteId = String(clienteId).trim()
     let clienteNombre = 'Cliente Remoto'
 
@@ -59,11 +55,10 @@ export async function POST(req: Request) {
     try {
       const snap = await getDoc(doc(db, 'clientes', targetClienteId))
       if (snap.exists()) {
-        clienteNombre = snap.data().nombre || targetClienteId
+        clienteNombre = snap.data()?.nombre || targetClienteId
       } else {
-        // 2. Buscar por URL o nombre si el ID pasado es un dominio o slug
-        const qUrl = query(collection(db, 'clientes'))
-        const allClisSnap = await getDocs(qUrl)
+        // 2. Buscar por URL o nombre si el ID pasado es un slug
+        const allClisSnap = await getDocs(collection(db, 'clientes'))
         const matched = allClisSnap.docs.find(d => {
           const data = d.data()
           const urlStr = (data.url || '').toLowerCase()
@@ -71,14 +66,13 @@ export async function POST(req: Request) {
           const searchStr = targetClienteId.toLowerCase()
           return urlStr.includes(searchStr) || nameStr.includes(searchStr) || d.id === targetClienteId
         })
-
         if (matched) {
           targetClienteId = matched.id
-          clienteNombre = matched.data().nombre
+          clienteNombre = matched.data()?.nombre
         }
       }
     } catch (err) {
-      console.warn('Advertencia buscando cliente por ID en Webhook:', err)
+      console.warn('Advertencia buscando cliente:', err)
     }
 
     const fechaFinal = fecha && /^\d{4}-\d{2}-\d{2}$/.test(fecha)
@@ -95,7 +89,7 @@ export async function POST(req: Request) {
       metodo: metodo || 'pasarela',
       referencia: referencia || `TX-${Date.now()}`,
       confirmado: confirmado !== false,
-      origen: 'WEBHOOK',
+      origen: metodo === 'manual' ? 'MANUAL' : 'WEBHOOK',
       creadoEn: serverTimestamp(),
     }
 
