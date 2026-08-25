@@ -155,6 +155,24 @@ export default function ClienteDetailPage() {
         },
         ...prev,
       ])
+      // Notificar al cliente web inmediatamente en segundo plano
+      if (cliente?.url) {
+        fetch(`${cliente.url.replace(/\/$/, '')}/api/admin/billing/payments`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-kevdev-secret': 'kevdev_payments_sec_2026_key'
+          },
+          body: JSON.stringify({
+            date: pagoForm.fecha,
+            amount: montoNum,
+            concept: pagoForm.concepto || 'Cuota Mensual',
+            medioPago: pagoForm.medioPago || 'Transferencia',
+            confirmed: pagoForm.confirmado
+          })
+        }).catch(() => {})
+      }
+
       setPagoForm({
         monto: '',
         fecha: todayIso,
@@ -181,6 +199,15 @@ export default function ClienteDetailPage() {
         const nuevoEstadoPago = hayPendientes ? 'PENDIENTE' : 'AL_DIA';
         await updateCliente(cliente.id, { estadoPago: nuevoEstadoPago }).catch(() => {});
         setCliente(prev => prev ? { ...prev, estadoPago: nuevoEstadoPago } : null);
+
+        // Notificar cambio al cliente web
+        if (cliente.url) {
+          fetch('/api/admin/sync-client', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ clienteId: cliente.id, url: cliente.url })
+          }).catch(() => {})
+        }
       }
     } catch (err) {
       console.error('Error al actualizar pago:', err);
