@@ -6,8 +6,7 @@ export async function GET() {
   const keys = Object.keys(process.env)
   const firebaseKeys = keys.filter(k => k.toLowerCase().includes('firebase') || k.toLowerCase().includes('service') || k.toLowerCase().includes('secret'))
   const envStatus = firebaseKeys.reduce((acc, k) => {
-    const val = process.env[k];
-    acc[k] = val ? `DEFINED (len: ${val.length})` : 'UNDEFINED'
+    acc[k] = process.env[k] || 'UNDEFINED'
     return acc
   }, {} as Record<string, string>)
 
