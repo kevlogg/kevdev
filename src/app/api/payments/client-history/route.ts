@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getHistorialPagos } from '@/lib/firestore'
+import { db } from '@/lib/firebase'
+import { collection, getDocs } from 'firebase/firestore'
 
 export const dynamic = 'force-dynamic'
 
@@ -27,6 +29,26 @@ export async function GET(req: Request) {
 
     const pagos = await getHistorialPagos(clienteId)
 
+    let estadoPago = 'AL_DIA'
+    try {
+      const snap = await getDocs(collection(db, 'clientes'))
+      const normId = clienteId.toLowerCase().trim()
+      const DULCE_HOGAR_IDS = ['dulcehogar', 'dulce-hogar', 'dulce_hogar', 'gz3g7r0ld4z3g3k5m7n9']
+      const CALVOS_IDS = ['calvoscompresores', 'calvos-compresores', 'fx25djbynqynowq361jv', 'o5su65lqkz2k6ujl7o08']
+
+      const match = snap.docs.find(d => {
+        const dId = d.id.toLowerCase().trim()
+        if (dId === normId) return true
+        if (DULCE_HOGAR_IDS.includes(normId) && DULCE_HOGAR_IDS.includes(dId)) return true
+        if (CALVOS_IDS.includes(normId) && CALVOS_IDS.includes(dId)) return true
+        return false
+      })
+
+      if (match) {
+        estadoPago = match.data().estadoPago || 'AL_DIA'
+      }
+    } catch (e) {}
+
     const formattedPayments = pagos.map(p => ({
       id: p.id || '',
       date: p.fecha || '',
@@ -42,6 +64,7 @@ export async function GET(req: Request) {
       {
         success: true,
         clienteId,
+        estadoPago,
         payments: formattedPayments,
       },
       { headers: corsHeaders }
