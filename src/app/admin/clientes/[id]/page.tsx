@@ -209,8 +209,35 @@ export default function ClienteDetailPage() {
         await updateCliente(cliente.id, { estadoPago: nuevoEstadoPago }).catch(() => {});
         setCliente(prev => prev ? { ...prev, estadoPago: nuevoEstadoPago } : null);
 
-        // Notificar cambio al cliente web
+        // Sincronizar el cambio de estado del pago en la web del cliente
         if (cliente.url) {
+          const pagoToggled = nuevosPagos.find(p => p.id === pagoId)
+          if (pagoToggled) {
+            fetch('/api/admin/push-payment', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                action: 'add',
+                clientUrl: cliente.url,
+                paymentData: {
+                  amount: pagoToggled.monto,
+                  date: pagoToggled.fecha,
+                  concept: pagoToggled.concepto || 'Cuota Mensual',
+                  medioPago: pagoToggled.medioPago || 'Transferencia',
+                  confirmed: pagoToggled.confirmado,
+                }
+              })
+            })
+            .then(async (r) => {
+              if (!r.ok) {
+                const data = await r.json().catch(() => ({}))
+                alert(`No se pudo sincronizar el cambio de estado con la web del cliente: ${data.error || 'Código ' + r.status}`)
+              }
+            })
+            .catch(err => console.warn('Fallo al sincronizar toggle en cliente:', err))
+          }
+
+          // Notificar cambio general de estado de cuenta
           fetch('/api/admin/sync-client', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
