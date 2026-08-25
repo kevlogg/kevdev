@@ -207,7 +207,7 @@ export default function ClienteDetailPage() {
         if (data.updates && Object.keys(data.updates).length > 0) {
           await updateCliente(cliente.id, data.updates).catch(() => {})
         }
-        if (data.paymentsToImport && Array.isArray(data.paymentsToImport)) {
+        if (!data.serverSyncedCount && data.paymentsToImport && Array.isArray(data.paymentsToImport)) {
           for (const p of data.paymentsToImport) {
             await addHistorialPago({
               clienteId: cliente.id,
