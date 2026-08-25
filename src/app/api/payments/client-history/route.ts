@@ -72,7 +72,7 @@ export async function GET(req: Request) {
   } catch (error: any) {
     console.error('Error al consultar historial de pagos para cliente:', error)
     return NextResponse.json(
-      { error: 'Error interno del servidor' },
+      { error: error?.message || 'Error interno del servidor' },
       { status: 500, headers: corsHeaders }
     )
   }

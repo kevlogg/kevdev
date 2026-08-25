@@ -198,19 +198,7 @@ export async function getHistorialPagos(clienteId: string): Promise<HistorialPag
       .sort((a, b) => (b.fecha || '').localeCompare(a.fecha || ''))
   } catch (err) {
     console.warn('[getHistorialPagos] Error al consultar Firestore en el servidor:', err)
-    const normId = String(clienteId || '').toLowerCase().trim()
-    if (CALVOS_IDS.includes(normId) || normId.includes('calvo')) {
-      return [{
-        id: 'vU6Yf0A30hK6c6f60049',
-        clienteId: 'Fx25DjbyNqYNOWq361Jv',
-        fecha: '2026-08-12',
-        monto: 33000,
-        concepto: 'Pago Primer Mes (Suscripción Web)',
-        medioPago: 'Transferencia Bancaria',
-        confirmado: true,
-      }]
-    }
-    return []
+    throw err
   }
 }
 
