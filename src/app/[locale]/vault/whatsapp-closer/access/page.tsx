@@ -78,33 +78,47 @@ export default function AccessDashboardPage() {
     <div style={{ background: 'var(--color-void)', color: 'var(--color-star)', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Navbar />
 
-      <main style={{ flex: 1, paddingTop: 'calc(76px + clamp(2rem, 5vw, 4rem))', paddingBottom: 'clamp(4rem, 8vw, 6rem)' }}>
+      <main style={{ flex: 1, paddingTop: 'calc(76px + clamp(3rem, 6vw, 5rem))', paddingBottom: 'clamp(5rem, 10vw, 8rem)' }}>
         <div className="site-container" style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(2rem, 4vw, 3.5rem)', maxWidth: 1100, marginInline: 'auto' }}>
           
           {/* SUCCESS BANNER */}
           <div style={{
-            padding: 'clamp(1.75rem, 3vw, 2.5rem)',
-            borderRadius: 20,
-            background: 'linear-gradient(135deg, rgba(6,78,59,0.5) 0%, rgba(18,18,18,0.9) 50%, rgba(8,145,178,0.3) 100%)',
-            border: '1px solid rgba(52,211,153,0.3)',
-            boxShadow: '0 16px 48px rgba(0,0,0,0.5), 0 0 32px rgba(52,211,153,0.1)',
+            padding: 'clamp(2rem, 3.5vw, 3rem)',
+            background: 'rgba(18, 18, 18, 0.75)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            borderTop: '2px solid var(--color-accent)',
+            borderRadius: 'var(--radius-card)',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08)',
             display: 'flex',
             flexDirection: 'column',
             gap: '1.25rem',
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#34d399', display: 'inline-block', boxShadow: '0 0 10px #34d399' }} />
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', fontWeight: 800, color: '#34d399', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--color-accent)', display: 'inline-block', boxShadow: '0 0 10px var(--color-accent)' }} />
+              <span className="type-label" style={{ color: 'var(--color-accent)' }}>
                 ACCESO AUTORIZADO // KEVDEV VAULT
               </span>
             </div>
             
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1.5rem' }}>
               <div>
-                <h1 style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 'clamp(1.5rem, 3vw, 2.25rem)', color: 'var(--color-star)', margin: 0, lineHeight: 1.2 }}>
-                  ¡Felicitaciones! Tu acceso a WhatsApp AI Closer está activo.
+                <h1 style={{
+                  fontFamily: 'var(--font-display)',
+                  fontWeight: 800,
+                  fontSize: 'clamp(1.5rem, 3vw, 2.25rem)',
+                  lineHeight: 1.1,
+                  letterSpacing: '-0.025em',
+                  color: 'var(--color-star)',
+                  margin: 0,
+                }}>
+                  ¡Felicitaciones! Tu acceso a WhatsApp AI Closer está{' '}
+                  <span style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontWeight: 400, color: 'var(--color-accent)' }}>
+                    activo.
+                  </span>
                 </h1>
-                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.875rem', color: 'var(--color-muted)', margin: '0.5rem 0 0' }}>
+                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.9375rem', color: 'var(--color-muted)', margin: '0.5rem 0 0' }}>
                   Descargá los recursos oficiales e iniciá tu setup en 5 minutos.
                 </p>
               </div>
@@ -116,17 +130,21 @@ export default function AccessDashboardPage() {
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '0.6rem',
-                  padding: '0.85rem 1.35rem',
-                  borderRadius: 12,
-                  background: 'linear-gradient(135deg, #6366f1 0%, #00e5ff 100%)',
-                  color: '#0c0c0c',
-                  fontWeight: 800,
-                  fontSize: '0.8125rem',
-                  fontFamily: 'var(--font-mono)',
+                  gap: '0.5rem',
+                  height: '3.25rem',
+                  padding: '0 1.75rem',
+                  borderRadius: 99,
+                  border: 'none',
+                  cursor: 'pointer',
+                  background: 'var(--color-accent)',
+                  color: 'var(--color-on-accent, #0c0c0c)',
+                  fontFamily: 'var(--font-ui)',
+                  fontSize: '0.875rem',
+                  fontWeight: 700,
+                  letterSpacing: '0.01em',
                   textDecoration: 'none',
                   whiteSpace: 'nowrap',
-                  boxShadow: '0 4px 20px rgba(0,229,255,0.25)',
+                  boxShadow: '0 6px 28px rgba(0,229,255,0.32)',
                 }}
               >
                 <span>ABRIR TUTOR IA (NOTEBOOKLM)</span>
@@ -144,12 +162,13 @@ export default function AccessDashboardPage() {
             
             {/* RECURSO 1: WORKFLOW CORE JSON */}
             <div style={{
-              padding: 'clamp(1.75rem, 3vw, 2.25rem)',
-              background: 'rgba(18,18,18,0.85)',
+              padding: 'clamp(2rem, 3.5vw, 3rem)',
+              background: 'rgba(18, 18, 18, 0.75)',
               backdropFilter: 'blur(16px)',
               WebkitBackdropFilter: 'blur(16px)',
-              border: '1px solid rgba(255,255,255,0.08)',
-              borderRadius: 20,
+              border: '1px solid rgba(255, 255, 255, 0.08)',
+              borderRadius: 'var(--radius-card)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
@@ -158,10 +177,10 @@ export default function AccessDashboardPage() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '0.85rem' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                    <span style={{ padding: '0.25rem 0.5rem', borderRadius: 6, background: 'rgba(0,229,255,0.1)', color: 'var(--color-accent)', fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', fontWeight: 800 }}>JSON #01</span>
+                    <span style={{ padding: '0.35rem 0.65rem', borderRadius: 99, background: 'rgba(0,229,255,0.1)', color: 'var(--color-accent)', fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', fontWeight: 800 }}>JSON #01</span>
                     <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '1.125rem', color: 'var(--color-star)', margin: 0 }}>Workflow n8n Principal</h2>
                   </div>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: '#34d399', fontWeight: 700 }}>READY TO IMPORT</span>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: 'var(--color-accent)', fontWeight: 700 }}>READY TO IMPORT</span>
                 </div>
 
                 <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.875rem', color: 'var(--color-muted)', lineHeight: 1.6, margin: 0 }}>
@@ -170,8 +189,8 @@ export default function AccessDashboardPage() {
 
                 <div style={{
                   padding: '1rem',
-                  borderRadius: 12,
-                  background: '#090a0f',
+                  borderRadius: 14,
+                  background: 'rgba(0,0,0,0.4)',
                   border: '1px solid rgba(255,255,255,0.06)',
                   fontFamily: 'var(--font-mono)',
                   fontSize: '0.75rem',
@@ -188,11 +207,11 @@ export default function AccessDashboardPage() {
                   onClick={handleDownloadJson}
                   style={{
                     flex: 1,
-                    padding: '0.85rem 1rem',
-                    borderRadius: 10,
-                    background: 'rgba(0,229,255,0.1)',
-                    border: '1px solid rgba(0,229,255,0.3)',
-                    color: 'var(--color-accent)',
+                    height: '2.75rem',
+                    borderRadius: 99,
+                    background: 'var(--color-accent)',
+                    border: 'none',
+                    color: 'var(--color-on-accent, #0c0c0c)',
                     fontFamily: 'var(--font-mono)',
                     fontSize: '0.8125rem',
                     fontWeight: 800,
@@ -205,10 +224,11 @@ export default function AccessDashboardPage() {
                   type="button"
                   onClick={handleCopy}
                   style={{
-                    padding: '0.85rem 1.25rem',
-                    borderRadius: 10,
-                    background: 'rgba(255,255,255,0.07)',
-                    border: '1px solid rgba(255,255,255,0.14)',
+                    height: '2.75rem',
+                    padding: '0 1.25rem',
+                    borderRadius: 99,
+                    background: 'rgba(18,18,18,0.72)',
+                    border: '1px solid rgba(255,255,255,0.18)',
                     color: 'var(--color-star)',
                     fontFamily: 'var(--font-mono)',
                     fontSize: '0.8125rem',
@@ -223,12 +243,13 @@ export default function AccessDashboardPage() {
 
             {/* RECURSO 2: TUTOR PRIVADO Y BLUEPRINTS */}
             <div style={{
-              padding: 'clamp(1.75rem, 3vw, 2.25rem)',
-              background: 'rgba(18,18,18,0.85)',
+              padding: 'clamp(2rem, 3.5vw, 3rem)',
+              background: 'rgba(18, 18, 18, 0.75)',
               backdropFilter: 'blur(16px)',
               WebkitBackdropFilter: 'blur(16px)',
-              border: '1px solid rgba(255,255,255,0.08)',
-              borderRadius: 20,
+              border: '1px solid rgba(255, 255, 255, 0.08)',
+              borderRadius: 'var(--radius-card)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
@@ -237,7 +258,7 @@ export default function AccessDashboardPage() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '0.85rem' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                    <span style={{ padding: '0.25rem 0.5rem', borderRadius: 6, background: 'rgba(99,102,241,0.15)', color: '#a5b4fc', fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', fontWeight: 800 }}>AI TUTOR</span>
+                    <span style={{ padding: '0.35rem 0.65rem', borderRadius: 99, background: 'rgba(99,102,241,0.15)', color: '#a5b4fc', fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', fontWeight: 800 }}>AI TUTOR</span>
                     <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '1.125rem', color: 'var(--color-star)', margin: 0 }}>NotebookLM Tutor Privado</h2>
                   </div>
                   <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: '#a5b4fc', fontWeight: 700 }}>GOOGLE AI</span>
@@ -249,9 +270,9 @@ export default function AccessDashboardPage() {
 
                 <div style={{
                   padding: '1rem',
-                  borderRadius: 12,
-                  background: 'rgba(99,102,241,0.06)',
-                  border: '1px solid rgba(99,102,241,0.2)',
+                  borderRadius: 14,
+                  background: 'rgba(0,0,0,0.3)',
+                  border: '1px solid rgba(255,255,255,0.06)',
                   fontFamily: 'var(--font-mono)',
                   fontSize: '0.75rem',
                   display: 'flex',
@@ -277,14 +298,16 @@ export default function AccessDashboardPage() {
                   justifyContent: 'center',
                   gap: '0.6rem',
                   width: '100%',
-                  padding: '0.85rem 1rem',
-                  borderRadius: 10,
-                  background: 'rgba(99,102,241,0.2)',
-                  border: '1px solid rgba(99,102,241,0.4)',
-                  color: '#a5b4fc',
+                  height: '2.75rem',
+                  borderRadius: 99,
+                  background: 'rgba(255,255,255,0.07)',
+                  border: '1px solid rgba(255,255,255,0.18)',
+                  color: 'var(--color-star)',
                   fontFamily: 'var(--font-mono)',
-                  fontSize: '0.8125rem',
-                  fontWeight: 800,
+                  fontSize: '0.75rem',
+                  fontWeight: 600,
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
                   textDecoration: 'none',
                   marginTop: '0.5rem',
                 }}
@@ -297,30 +320,22 @@ export default function AccessDashboardPage() {
 
           {/* STEP-BY-STEP IMPLEMENTATION GUIDE */}
           <div style={{
-            padding: 'clamp(1.75rem, 3vw, 2.5rem)',
-            background: 'rgba(18,18,18,0.75)',
-            border: '1px solid rgba(255,255,255,0.08)',
-            borderRadius: 20,
+            padding: 'clamp(2rem, 3.5vw, 3rem)',
+            background: 'rgba(18, 18, 18, 0.75)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            borderRadius: 'var(--radius-card)',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
             display: 'flex',
             flexDirection: 'column',
             gap: '1.5rem',
           }}>
             <div style={{ borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '1rem' }}>
-              <span style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.625rem',
-                fontWeight: 800,
-                letterSpacing: '0.12em',
-                color: 'var(--color-accent)',
-                textTransform: 'uppercase',
-                background: 'rgba(0,229,255,0.08)',
-                border: '1px solid rgba(0,229,255,0.25)',
-                padding: '0.25rem 0.6rem',
-                borderRadius: 6,
-              }}>
+              <span className="type-label" style={{ color: 'var(--color-accent)' }}>
                 GUÍA DE DESPLIEGUE PASO A PASO
               </span>
-              <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '1.375rem', color: 'var(--color-star)', margin: '0.6rem 0 0' }}>
+              <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '1.5rem', color: 'var(--color-star)', margin: '0.5rem 0 0', letterSpacing: '-0.02em' }}>
                 Cómo desplegar en tu propio servidor n8n
               </h2>
             </div>
@@ -332,21 +347,21 @@ export default function AccessDashboardPage() {
               fontFamily: 'var(--font-mono)',
               fontSize: '0.8125rem',
             }}>
-              <div style={{ padding: '1.25rem', borderRadius: 14, background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.06)', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <div style={{ padding: '1.25rem', borderRadius: 16, background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.06)', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                 <div style={{ color: 'var(--color-accent)', fontWeight: 800 }}>PASO 1: Importar JSON</div>
                 <p style={{ color: 'var(--color-muted)', fontSize: '0.75rem', lineHeight: 1.6, margin: 0 }}>
                   Abrí tu panel de n8n, hacé clic en "Workflows" &gt; "Import from File" y selecciona el archivo JSON descargado.
                 </p>
               </div>
 
-              <div style={{ padding: '1.25rem', borderRadius: 14, background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.06)', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <div style={{ padding: '1.25rem', borderRadius: 16, background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.06)', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                 <div style={{ color: '#a5b4fc', fontWeight: 800 }}>PASO 2: Claves de API</div>
                 <p style={{ color: 'var(--color-muted)', fontSize: '0.75rem', lineHeight: 1.6, margin: 0 }}>
                   Configurá tus credenciales en n8n: OpenAI (o Anthropic Claude) y tu instancia de WhatsApp API (Evolution API o Meta).
                 </p>
               </div>
 
-              <div style={{ padding: '1.25rem', borderRadius: 14, background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.06)', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <div style={{ padding: '1.25rem', borderRadius: 16, background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.06)', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                 <div style={{ color: '#c084fc', fontWeight: 800 }}>PASO 3: Activar Webhook</div>
                 <p style={{ color: 'var(--color-muted)', fontSize: '0.75rem', lineHeight: 1.6, margin: 0 }}>
                   Copiá la URL del Webhook Inbound de n8n y pegala en los eventos de mensajes entrantes de tu API de WhatsApp.

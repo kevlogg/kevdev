@@ -10,34 +10,20 @@ export default function VaultRootPage() {
     <div style={{ background: 'var(--color-void)', color: 'var(--color-star)', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Navbar />
 
-      <main style={{ flex: 1, paddingTop: 'calc(76px + clamp(2rem, 5vw, 4rem))', paddingBottom: 'clamp(4rem, 8vw, 6rem)' }}>
-        <div className="site-container" style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(2.5rem, 5vw, 4rem)' }}>
+      <main style={{ flex: 1, paddingTop: 'calc(76px + clamp(3rem, 6vw, 5rem))', paddingBottom: 'clamp(5rem, 10vw, 8rem)' }}>
+        <div className="site-container" style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(3rem, 6vw, 5rem)' }}>
           
           {/* HEADER */}
-          <section style={{ textAlign: 'center', maxWidth: 780, marginInline: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.25rem' }}>
+          <section style={{ textAlign: 'center', maxWidth: 760, marginInline: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.6875rem',
-                fontWeight: 700,
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                color: 'var(--color-accent)',
-                background: 'rgba(0,229,255,0.08)',
-                border: '1px solid rgba(0,229,255,0.25)',
-                padding: '0.4rem 1.125rem',
-                borderRadius: 99,
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                boxShadow: '0 0 24px rgba(0,229,255,0.15)',
-              }}
             >
-              <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--color-accent)', display: 'inline-block', boxShadow: '0 0 10px var(--color-accent)' }} />
-              KEVDEV VAULT // PRODUCTOS DIGITALES &amp; AUTOMATIZACIÓN
+              <span className="type-label" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: 'var(--color-accent)' }}>
+                <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--color-accent)', display: 'inline-block', boxShadow: '0 0 10px var(--color-accent)' }} />
+                Vault ⚡ productos digitales
+              </span>
             </motion.div>
 
             <motion.h1
@@ -47,14 +33,24 @@ export default function VaultRootPage() {
               style={{
                 fontFamily: 'var(--font-display)',
                 fontWeight: 800,
-                fontSize: 'clamp(2.25rem, 4.5vw, 3.5rem)',
-                lineHeight: 1.1,
+                fontSize: 'clamp(2.25rem, 5vw, 4rem)',
+                lineHeight: 0.96,
                 letterSpacing: '-0.03em',
                 color: 'var(--color-star)',
                 margin: 0,
+                textShadow: '0 4px 28px rgba(0,0,0,0.95), 0 1px 4px rgba(0,0,0,1)',
               }}
             >
-              Sistemas Listos para Producción
+              Sistemas listos para{' '}
+              <span style={{
+                fontFamily: 'var(--font-serif)',
+                fontStyle: 'italic',
+                fontWeight: 400,
+                color: 'var(--color-accent)',
+                textShadow: '0 0 32px rgba(0,229,255,0.4), 0 2px 16px rgba(0,0,0,0.95)',
+              }}>
+                producción.
+              </span>
             </motion.h1>
 
             <motion.p
@@ -63,11 +59,13 @@ export default function VaultRootPage() {
               transition={{ duration: 0.6, delay: 0.2 }}
               style={{
                 fontFamily: 'var(--font-ui)',
-                fontSize: 'clamp(0.9375rem, 1.5vw, 1.125rem)',
-                color: 'var(--color-muted)',
-                lineHeight: 1.7,
-                maxWidth: 620,
+                fontSize: 'clamp(0.9375rem, 1.3vw, 1.125rem)',
+                color: 'var(--color-star)',
+                lineHeight: 1.65,
+                maxWidth: 580,
                 margin: 0,
+                opacity: 0.85,
+                textShadow: '0 2px 16px rgba(0,0,0,0.95)',
               }}
             >
               Arquitecturas en n8n, workflows probados y herramientas de Inteligencia Artificial para acelerar tu negocio.
@@ -91,14 +89,14 @@ export default function VaultRootPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
               style={{
-                padding: 'clamp(2rem, 3vw, 2.75rem)',
-                background: 'rgba(18,18,18,0.85)',
+                padding: 'clamp(2rem, 3.5vw, 3rem)',
+                background: 'rgba(18, 18, 18, 0.75)',
                 backdropFilter: 'blur(16px)',
                 WebkitBackdropFilter: 'blur(16px)',
-                border: '1px solid rgba(0,229,255,0.3)',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
                 borderTop: '2px solid var(--color-accent)',
-                borderRadius: 20,
-                boxShadow: '0 16px 48px rgba(0,0,0,0.6), 0 0 32px rgba(0,229,255,0.12)',
+                borderRadius: 'var(--radius-card)',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08)',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
@@ -113,20 +111,20 @@ export default function VaultRootPage() {
                     fontFamily: 'var(--font-mono)',
                     fontSize: '0.6875rem',
                     fontWeight: 700,
-                    letterSpacing: '0.06em',
-                    color: '#34d399',
-                    background: 'rgba(52,211,153,0.1)',
-                    border: '1px solid rgba(52,211,153,0.25)',
-                    padding: '0.35rem 0.85rem',
+                    letterSpacing: '0.08em',
+                    color: 'var(--color-accent)',
+                    border: '1px solid rgba(0,229,255,0.3)',
                     borderRadius: 99,
+                    padding: '0.35rem 0.85rem',
+                    background: 'rgba(0,229,255,0.07)',
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: '0.4rem',
                   }}>
-                    <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#34d399', display: 'inline-block' }} />
+                    <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--color-accent)', display: 'inline-block' }} />
                     DISPONIBLE AHORA
                   </span>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.875rem', fontWeight: 800, color: 'var(--color-accent)' }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.875rem', fontWeight: 800, color: 'var(--color-star)' }}>
                     $18.500 ARS
                   </span>
                 </div>
@@ -134,20 +132,23 @@ export default function VaultRootPage() {
                 <h2 style={{
                   fontFamily: 'var(--font-display)',
                   fontWeight: 800,
-                  fontSize: 'clamp(1.375rem, 2.2vw, 1.875rem)',
-                  lineHeight: 1.2,
-                  letterSpacing: '-0.02em',
+                  fontSize: 'clamp(1.5rem, 2.5vw, 2.125rem)',
+                  lineHeight: 1.1,
+                  letterSpacing: '-0.025em',
                   color: 'var(--color-star)',
                   margin: 0,
                 }}>
-                  WhatsApp AI Closer: Sistema Autónomo con n8n
+                  WhatsApp AI Closer:{' '}
+                  <span style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontWeight: 400, color: 'var(--color-accent)' }}>
+                    Sistema Autónomo
+                  </span>
                 </h2>
 
-                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.9375rem', color: 'var(--color-muted)', lineHeight: 1.65, margin: 0 }}>
+                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.9375rem', color: 'var(--color-muted)', lineHeight: 1.7, margin: 0 }}>
                   Sistema completo de cualificación y cierre automático de ventas en WhatsApp mediante agentes de Inteligencia Artificial en n8n y Firebase.
                 </p>
 
-                <div style={{ height: 1, background: 'rgba(255,255,255,0.08)', margin: '0.25rem 0' }} />
+                <div style={{ height: 1, background: 'rgba(255,255,255,0.07)', margin: '0.25rem 0' }} />
 
                 <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                   {[
@@ -156,7 +157,7 @@ export default function VaultRootPage() {
                     'Tutor Privado IA en NotebookLM',
                     'Order Bump: Pack de 15 Blueprints JSON',
                   ].map((feat, i) => (
-                    <li key={i} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8125rem', color: 'rgba(232,232,232,0.85)', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                    <li key={i} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8125rem', color: 'var(--color-muted)', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
                       <span style={{ color: 'var(--color-accent)', fontWeight: 800 }}>✓</span> {feat}
                     </li>
                   ))}
@@ -166,22 +167,24 @@ export default function VaultRootPage() {
               <Link
                 href="/vault/whatsapp-closer"
                 style={{
-                  display: 'flex',
+                  display: 'inline-flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  gap: '0.6rem',
+                  gap: '0.5rem',
                   width: '100%',
-                  padding: '1rem 1.5rem',
-                  borderRadius: 12,
-                  background: 'linear-gradient(135deg, #00e5ff 0%, #6366f1 100%)',
-                  color: '#0c0c0c',
-                  fontWeight: 800,
-                  fontSize: '0.875rem',
-                  fontFamily: 'var(--font-mono)',
-                  letterSpacing: '0.04em',
+                  height: '3.25rem',
+                  borderRadius: 99,
+                  border: 'none',
+                  cursor: 'pointer',
+                  background: 'var(--color-accent)',
+                  color: 'var(--color-on-accent, #0c0c0c)',
+                  fontFamily: 'var(--font-ui)',
+                  fontSize: '0.9375rem',
+                  fontWeight: 700,
+                  letterSpacing: '0.02em',
                   textDecoration: 'none',
-                  boxShadow: '0 4px 24px rgba(0,229,255,0.3)',
-                  transition: 'transform 0.25s var(--ease-expo), boxShadow 0.25s',
+                  boxShadow: '0 6px 28px rgba(0,229,255,0.32)',
+                  transition: 'background 0.22s var(--ease-expo), transform 0.22s var(--ease-expo)',
                 }}
               >
                 <span>VER LANDING &amp; CHECKOUT</span>
@@ -195,12 +198,13 @@ export default function VaultRootPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
               style={{
-                padding: 'clamp(2rem, 3vw, 2.75rem)',
-                background: 'rgba(18,18,18,0.45)',
+                padding: 'clamp(2rem, 3.5vw, 3rem)',
+                background: 'rgba(18, 18, 18, 0.45)',
                 backdropFilter: 'blur(12px)',
                 WebkitBackdropFilter: 'blur(12px)',
-                border: '1px solid rgba(255,255,255,0.08)',
-                borderRadius: 20,
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                borderRadius: 'var(--radius-card)',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
@@ -214,16 +218,16 @@ export default function VaultRootPage() {
                     fontFamily: 'var(--font-mono)',
                     fontSize: '0.6875rem',
                     fontWeight: 600,
-                    letterSpacing: '0.06em',
-                    color: 'rgba(232,232,232,0.5)',
+                    letterSpacing: '0.08em',
+                    color: 'var(--color-faint)',
                     background: 'rgba(255,255,255,0.05)',
                     border: '1px solid rgba(255,255,255,0.1)',
-                    padding: '0.35rem 0.85rem',
                     borderRadius: 99,
+                    padding: '0.35rem 0.85rem',
                   }}>
                     PRÓXIMAMENTE
                   </span>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'rgba(232,232,232,0.4)' }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--color-faint)' }}>
                     KEVDEV LABS
                   </span>
                 </div>
@@ -231,23 +235,24 @@ export default function VaultRootPage() {
                 <h2 style={{
                   fontFamily: 'var(--font-display)',
                   fontWeight: 800,
-                  fontSize: 'clamp(1.375rem, 2.2vw, 1.875rem)',
-                  lineHeight: 1.2,
-                  letterSpacing: '-0.02em',
-                  color: 'rgba(232,232,232,0.9)',
+                  fontSize: 'clamp(1.5rem, 2.5vw, 2.125rem)',
+                  lineHeight: 1.1,
+                  letterSpacing: '-0.025em',
+                  color: 'var(--color-star)',
                   margin: 0,
+                  opacity: 0.9,
                 }}>
-                  Sistemas de Automatización a Medida
+                  Automatización a Medida
                 </h2>
 
-                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.9375rem', color: 'var(--color-muted)', lineHeight: 1.65, margin: 0 }}>
+                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.9375rem', color: 'var(--color-muted)', lineHeight: 1.7, margin: 0 }}>
                   ¿Necesitás una integración personalizada con tu CRM, sistema contable o base de datos propia? Pudiendo adaptar cualquier flujo en n8n.
                 </p>
 
                 <div style={{
                   padding: '1.25rem',
-                  borderRadius: 14,
-                  background: 'rgba(0,0,0,0.4)',
+                  borderRadius: 16,
+                  background: 'rgba(0,0,0,0.3)',
                   border: '1px solid rgba(255,255,255,0.06)',
                   display: 'flex',
                   flexDirection: 'column',
@@ -268,22 +273,24 @@ export default function VaultRootPage() {
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
-                  display: 'flex',
+                  display: 'inline-flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  gap: '0.6rem',
+                  gap: '0.5rem',
                   width: '100%',
-                  padding: '1rem 1.5rem',
-                  borderRadius: 12,
-                  background: 'rgba(255,255,255,0.07)',
-                  border: '1px solid rgba(255,255,255,0.14)',
+                  height: '3.25rem',
+                  borderRadius: 99,
+                  border: '1px solid rgba(255,255,255,0.18)',
+                  background: 'rgba(18,18,18,0.72)',
+                  backdropFilter: 'blur(16px)',
                   color: 'var(--color-star)',
-                  fontWeight: 700,
-                  fontSize: '0.875rem',
                   fontFamily: 'var(--font-mono)',
-                  letterSpacing: '0.04em',
+                  fontSize: '0.75rem',
+                  fontWeight: 600,
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
                   textDecoration: 'none',
-                  transition: 'background 0.2s',
+                  transition: 'all 0.25s var(--ease-expo)',
                 }}
               >
                 <span>CONSULTAR POR WHATSAPP</span>

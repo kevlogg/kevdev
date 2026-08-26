@@ -62,8 +62,8 @@ export default function WhatsAppCloserPage() {
     <div style={{ background: 'var(--color-void)', color: 'var(--color-star)', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Navbar />
 
-      <main style={{ flex: 1, paddingTop: 'calc(76px + clamp(2rem, 5vw, 4rem))', paddingBottom: 'clamp(4rem, 8vw, 6rem)' }}>
-        <div className="site-container" style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(2.5rem, 5vw, 4rem)' }}>
+      <main style={{ flex: 1, paddingTop: 'calc(76px + clamp(3rem, 6vw, 5rem))', paddingBottom: 'clamp(5rem, 10vw, 8rem)' }}>
+        <div className="site-container" style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(3rem, 6vw, 5rem)' }}>
           
           {/* ── HEADER BADGE & TITLES ────────────────────────────────────── */}
           <section style={{ textAlign: 'center', maxWidth: 820, marginInline: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.25rem' }}>
@@ -71,25 +71,11 @@ export default function WhatsAppCloserPage() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.6875rem',
-                fontWeight: 700,
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                color: 'var(--color-accent)',
-                background: 'rgba(0,229,255,0.08)',
-                border: '1px solid rgba(0,229,255,0.25)',
-                padding: '0.4rem 1.125rem',
-                borderRadius: 99,
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                boxShadow: '0 0 24px rgba(0,229,255,0.15)',
-              }}
             >
-              <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--color-accent)', display: 'inline-block', boxShadow: '0 0 10px var(--color-accent)' }} />
-              KEVDEV VAULT // SISTEMA N8N + IA EN PRODUCCIÓN
+              <span className="type-label" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: 'var(--color-accent)' }}>
+                <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--color-accent)', display: 'inline-block', boxShadow: '0 0 10px var(--color-accent)' }} />
+                Vault ⚡ Sistema n8n + IA en producción
+              </span>
             </motion.div>
 
             <motion.h1
@@ -99,18 +85,21 @@ export default function WhatsAppCloserPage() {
               style={{
                 fontFamily: 'var(--font-display)',
                 fontWeight: 800,
-                fontSize: 'clamp(2.25rem, 4.5vw, 3.5rem)',
-                lineHeight: 1.1,
+                fontSize: 'clamp(2.25rem, 5vw, 4rem)',
+                lineHeight: 0.96,
                 letterSpacing: '-0.03em',
                 color: 'var(--color-star)',
                 margin: 0,
+                textShadow: '0 4px 28px rgba(0,0,0,0.95), 0 1px 4px rgba(0,0,0,1)',
               }}
             >
               WhatsApp AI Closer:<br />
               <span style={{
-                background: 'linear-gradient(135deg, #00e5ff 0%, #a5b4fc 50%, #c084fc 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
+                fontFamily: 'var(--font-serif)',
+                fontStyle: 'italic',
+                fontWeight: 400,
+                color: 'var(--color-accent)',
+                textShadow: '0 0 32px rgba(0,229,255,0.4), 0 2px 16px rgba(0,0,0,0.95)',
               }}>
                 Sistema Autónomo con n8n
               </span>
@@ -122,11 +111,13 @@ export default function WhatsAppCloserPage() {
               transition={{ duration: 0.6, delay: 0.2 }}
               style={{
                 fontFamily: 'var(--font-ui)',
-                fontSize: 'clamp(0.9375rem, 1.5vw, 1.125rem)',
-                color: 'var(--color-muted)',
-                lineHeight: 1.7,
+                fontSize: 'clamp(0.9375rem, 1.3vw, 1.125rem)',
+                color: 'var(--color-star)',
+                lineHeight: 1.65,
                 maxWidth: 680,
                 margin: 0,
+                opacity: 0.85,
+                textShadow: '0 2px 16px rgba(0,0,0,0.95)',
               }}
             >
               Convierte prospectos fríos en clientes calificados 24/7 en WhatsApp sin intervención humana.
@@ -138,7 +129,7 @@ export default function WhatsAppCloserPage() {
           <section style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
-            gap: 'clamp(2rem, 4vw, 3rem)',
+            gap: 'clamp(2rem, 4vw, 3.5rem)',
             alignItems: 'start',
             maxWidth: 1200,
             marginInline: 'auto',
@@ -157,14 +148,16 @@ export default function WhatsAppCloserPage() {
                 display: 'flex',
                 gap: '0.5rem',
                 padding: '0.4rem',
-                background: 'rgba(18,18,18,0.75)',
-                border: '1px solid rgba(255,255,255,0.08)',
-                borderRadius: 14,
+                background: 'rgba(18,18,18,0.72)',
+                backdropFilter: 'blur(16px)',
+                WebkitBackdropFilter: 'blur(16px)',
+                border: '1px solid rgba(255,255,255,0.12)',
+                borderRadius: 99,
               }}>
                 {[
                   { id: 'terminal', label: '>_ Terminal Stream' },
-                  { id: 'architecture', label: '⚙ Arquitectura n8n' },
-                  { id: 'features', label: '📦 Contenido Incluido' },
+                  { id: 'architecture', label: '⚙ Arquitectura' },
+                  { id: 'features', label: '📦 Contenido' },
                 ].map((tab) => (
                   <button
                     key={tab.id}
@@ -172,16 +165,17 @@ export default function WhatsAppCloserPage() {
                     onClick={() => setActiveTab(tab.id as any)}
                     style={{
                       flex: 1,
-                      padding: '0.6rem 0.75rem',
+                      padding: '0.6rem 0.85rem',
                       fontFamily: 'var(--font-mono)',
                       fontSize: '0.75rem',
-                      fontWeight: 700,
-                      borderRadius: 10,
-                      border: activeTab === tab.id ? '1px solid rgba(0,229,255,0.3)' : '1px solid transparent',
-                      background: activeTab === tab.id ? 'rgba(0,229,255,0.1)' : 'transparent',
+                      fontWeight: 600,
+                      letterSpacing: '0.06em',
+                      borderRadius: 99,
+                      border: activeTab === tab.id ? '1px solid var(--color-accent)' : '1px solid transparent',
+                      background: activeTab === tab.id ? 'rgba(0,229,255,0.12)' : 'transparent',
                       color: activeTab === tab.id ? 'var(--color-accent)' : 'var(--color-muted)',
                       cursor: 'pointer',
-                      transition: 'all 0.2s',
+                      transition: 'all 0.25s var(--ease-expo)',
                     }}
                   >
                     {tab.label}
@@ -191,30 +185,31 @@ export default function WhatsAppCloserPage() {
 
               {/* TAB PANEL CONTAINER */}
               <div style={{
-                padding: 'clamp(1.75rem, 2.5vw, 2.25rem)',
-                background: 'rgba(12,14,20,0.95)',
+                padding: 'clamp(2rem, 3.5vw, 3rem)',
+                background: 'rgba(18, 18, 18, 0.75)',
                 backdropFilter: 'blur(16px)',
                 WebkitBackdropFilter: 'blur(16px)',
-                border: '1px solid rgba(255,255,255,0.08)',
-                borderRadius: 20,
-                boxShadow: '0 12px 40px rgba(0,0,0,0.5)',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                borderTop: '2px solid var(--color-accent)',
+                borderRadius: 'var(--radius-card)',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08)',
                 minHeight: 420,
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
-                gap: '1.5rem',
+                gap: '1.75rem',
               }}>
                 
                 {activeTab === 'terminal' && (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', fontFamily: 'var(--font-mono)', fontSize: '0.8125rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '0.75rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '0.85rem' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#f43f5e', display: 'inline-block' }} />
-                        <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#f59e0b', display: 'inline-block' }} />
-                        <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#10b981', display: 'inline-block' }} />
+                        <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#f43f5e', display: 'inline-block' }} />
+                        <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#f59e0b', display: 'inline-block' }} />
+                        <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#10b981', display: 'inline-block' }} />
                         <span style={{ color: 'var(--color-faint)', fontSize: '0.75rem', marginLeft: '0.5rem' }}>n8n-live-webhook.log</span>
                       </div>
-                      <span style={{ color: '#34d399', fontSize: '0.75rem', fontWeight: 700 }}>● ACTIVE (200 OK)</span>
+                      <span style={{ color: 'var(--color-accent)', fontSize: '0.75rem', fontWeight: 700 }}>● ACTIVE (200 OK)</span>
                     </div>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
@@ -223,10 +218,10 @@ export default function WhatsAppCloserPage() {
                       </div>
                       <div style={{
                         padding: '0.85rem 1rem',
-                        borderRadius: 10,
-                        background: 'rgba(255,255,255,0.04)',
+                        borderRadius: 12,
+                        background: 'rgba(0,0,0,0.3)',
                         border: '1px solid rgba(255,255,255,0.06)',
-                        color: 'rgba(232,232,232,0.85)',
+                        color: 'var(--color-star)',
                       }}>
                         <span style={{ color: 'var(--color-faint)' }}>USER:</span> "Hola, vi el anuncio en Meta Ads. ¿De qué se trata el sistema y cuánto cuesta?"
                       </div>
@@ -238,10 +233,10 @@ export default function WhatsAppCloserPage() {
                       </div>
                       <div style={{
                         padding: '0.85rem 1rem',
-                        borderRadius: 10,
-                        background: 'rgba(52,211,153,0.08)',
-                        border: '1px solid rgba(52,211,153,0.2)',
-                        color: '#34d399',
+                        borderRadius: 12,
+                        background: 'rgba(0,229,255,0.06)',
+                        border: '1px solid rgba(0,229,255,0.2)',
+                        color: 'var(--color-accent)',
                       }}>
                         <span style={{ fontWeight: 800 }}>AI CLOSER:</span> "¡Hola! Excelente. El WhatsApp AI Closer es una arquitectura en n8n que responde, califica y cierra ventas de forma autónoma 24/7. Te muestro la demo en tiempo real y el enlace directo..."
                       </div>
@@ -254,9 +249,9 @@ export default function WhatsAppCloserPage() {
 
                 {activeTab === 'architecture' && (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                    <h3 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', fontWeight: 800, color: 'var(--color-accent)', textTransform: 'uppercase', letterSpacing: '0.1em', margin: 0 }}>
+                    <span className="type-label" style={{ color: 'var(--color-accent)' }}>
                       Flujo de Arquitectura del Workflow
-                    </h3>
+                    </span>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', fontFamily: 'var(--font-mono)', fontSize: '0.8125rem' }}>
                       {[
@@ -266,8 +261,8 @@ export default function WhatsAppCloserPage() {
                       ].map((item, i) => (
                         <div key={i} style={{
                           padding: '1rem 1.25rem',
-                          borderRadius: 12,
-                          background: 'rgba(255,255,255,0.03)',
+                          borderRadius: 14,
+                          background: 'rgba(0,0,0,0.3)',
                           border: '1px solid rgba(255,255,255,0.06)',
                           display: 'flex',
                           alignItems: 'center',
@@ -276,7 +271,7 @@ export default function WhatsAppCloserPage() {
                         }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                             <span style={{
-                              padding: '0.4rem 0.6rem',
+                              padding: '0.35rem 0.6rem',
                               borderRadius: 8,
                               background: 'rgba(0,229,255,0.1)',
                               color: 'var(--color-accent)',
@@ -287,7 +282,7 @@ export default function WhatsAppCloserPage() {
                               <div style={{ color: 'var(--color-faint)', fontSize: '0.75rem', marginTop: 2 }}>{item.sub}</div>
                             </div>
                           </div>
-                          <span style={{ fontSize: '0.6875rem', background: 'rgba(0,0,0,0.5)', padding: '0.25rem 0.6rem', borderRadius: 6, color: 'var(--color-accent)' }}>
+                          <span style={{ fontSize: '0.6875rem', background: 'rgba(0,0,0,0.5)', padding: '0.25rem 0.6rem', borderRadius: 99, color: 'var(--color-accent)', border: '1px solid rgba(0,229,255,0.2)' }}>
                             {item.tag}
                           </span>
                         </div>
@@ -298,9 +293,9 @@ export default function WhatsAppCloserPage() {
 
                 {activeTab === 'features' && (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                    <h3 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', fontWeight: 800, color: 'var(--color-accent)', textTransform: 'uppercase', letterSpacing: '0.1em', margin: 0 }}>
+                    <span className="type-label" style={{ color: 'var(--color-accent)' }}>
                       ¿Qué vas a recibir exactamente?
-                    </h3>
+                    </span>
                     <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '1rem', fontFamily: 'var(--font-ui)', fontSize: '0.9375rem', color: 'var(--color-muted)' }}>
                       {[
                         { title: 'Blueprint JSON n8n Completo', desc: 'Workflow probado e inyectable en tu instancia de n8n en 1 clic.' },
@@ -342,14 +337,14 @@ export default function WhatsAppCloserPage() {
               transition={{ duration: 0.6, delay: 0.4 }}
             >
               <div style={{
-                padding: 'clamp(2rem, 3.5vw, 2.75rem)',
-                background: 'rgba(18,18,18,0.85)',
+                padding: 'clamp(2rem, 3.5vw, 3rem)',
+                background: 'rgba(18, 18, 18, 0.75)',
                 backdropFilter: 'blur(16px)',
                 WebkitBackdropFilter: 'blur(16px)',
-                border: '1px solid rgba(0,229,255,0.35)',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
                 borderTop: '2px solid var(--color-accent)',
-                borderRadius: 20,
-                boxShadow: '0 16px 48px rgba(0,0,0,0.6), 0 0 32px rgba(0,229,255,0.12)',
+                borderRadius: 'var(--radius-card)',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08)',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '1.75rem',
@@ -358,22 +353,11 @@ export default function WhatsAppCloserPage() {
                 {/* CARD HEADER */}
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '1.25rem', gap: '1rem' }}>
                   <div>
-                    <span style={{
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.625rem',
-                      fontWeight: 800,
-                      letterSpacing: '0.12em',
-                      color: 'var(--color-accent)',
-                      textTransform: 'uppercase',
-                      background: 'rgba(0,229,255,0.08)',
-                      border: '1px solid rgba(0,229,255,0.25)',
-                      padding: '0.25rem 0.6rem',
-                      borderRadius: 6,
-                    }}>
+                    <span className="type-label" style={{ color: 'var(--color-accent)', fontSize: '0.625rem' }}>
                       OFERTA METAS ADS
                     </span>
-                    <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '1.25rem', color: 'var(--color-star)', margin: '0.6rem 0 0' }}>
-                      Acceso Inmediato al Vault
+                    <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '1.375rem', color: 'var(--color-star)', margin: '0.4rem 0 0', letterSpacing: '-0.02em' }}>
+                      Acceso Inmediato
                     </h2>
                   </div>
                   <div style={{ textAlign: 'right', flexShrink: 0 }}>
@@ -388,7 +372,7 @@ export default function WhatsAppCloserPage() {
                   
                   {/* EMAIL INPUT */}
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                    <label htmlFor="checkout-email" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-star)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                    <label htmlFor="checkout-email" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', fontWeight: 600, color: 'var(--color-star)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                       Tu Correo Electrónico (Donde recibirás el acceso)
                     </label>
                     <input
@@ -400,15 +384,15 @@ export default function WhatsAppCloserPage() {
                       placeholder="tu-email@dominio.com"
                       style={{
                         width: '100%',
-                        padding: '0.9rem 1.125rem',
-                        background: 'rgba(0,0,0,0.5)',
+                        padding: '0.9rem 1.25rem',
+                        background: 'rgba(0,0,0,0.4)',
                         border: '1px solid rgba(255,255,255,0.15)',
-                        borderRadius: 12,
+                        borderRadius: 14,
                         color: 'var(--color-star)',
                         fontFamily: 'var(--font-mono)',
                         fontSize: '0.875rem',
                         outline: 'none',
-                        transition: 'border-color 0.2s',
+                        transition: 'all 0.2s',
                       }}
                     />
                     <span style={{ fontSize: '0.75rem', color: 'var(--color-faint)', fontFamily: 'var(--font-ui)' }}>
@@ -421,11 +405,11 @@ export default function WhatsAppCloserPage() {
                     onClick={() => setIncludeBump(!includeBump)}
                     style={{
                       padding: '1.25rem',
-                      borderRadius: 14,
-                      background: includeBump ? 'rgba(0,229,255,0.08)' : 'rgba(255,255,255,0.03)',
+                      borderRadius: 16,
+                      background: includeBump ? 'rgba(0,229,255,0.08)' : 'rgba(0,0,0,0.3)',
                       border: includeBump ? '1px solid rgba(0,229,255,0.4)' : '1px solid rgba(255,255,255,0.08)',
                       cursor: 'pointer',
-                      transition: 'all 0.2s',
+                      transition: 'all 0.2s var(--ease-expo)',
                       display: 'flex',
                       alignItems: 'flex-start',
                       gap: '0.85rem',
@@ -460,7 +444,7 @@ export default function WhatsAppCloserPage() {
                           padding: '0.85rem 1rem',
                           background: 'rgba(244,63,94,0.1)',
                           border: '1px solid rgba(244,63,94,0.3)',
-                          borderRadius: 10,
+                          borderRadius: 12,
                           color: '#f43f5e',
                           fontFamily: 'var(--font-mono)',
                           fontSize: '0.8125rem',
@@ -477,23 +461,23 @@ export default function WhatsAppCloserPage() {
                     disabled={loading}
                     style={{
                       width: '100%',
-                      padding: '1.125rem 1.5rem',
-                      borderRadius: 12,
-                      background: 'linear-gradient(135deg, #00e5ff 0%, #6366f1 100%)',
-                      color: '#0c0c0c',
+                      height: '3.5rem',
+                      borderRadius: 99,
+                      background: 'var(--color-accent)',
+                      color: 'var(--color-on-accent, #0c0c0c)',
                       fontWeight: 800,
                       fontSize: '0.9375rem',
-                      fontFamily: 'var(--font-mono)',
-                      letterSpacing: '0.04em',
+                      fontFamily: 'var(--font-ui)',
+                      letterSpacing: '0.02em',
                       border: 'none',
                       cursor: loading ? 'not-allowed' : 'pointer',
                       opacity: loading ? 0.7 : 1,
-                      boxShadow: '0 6px 28px rgba(0,229,255,0.35)',
+                      boxShadow: '0 6px 28px rgba(0,229,255,0.36)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       gap: '0.6rem',
-                      transition: 'all 0.25s',
+                      transition: 'all 0.22s var(--ease-expo)',
                     }}
                   >
                     {loading ? (
