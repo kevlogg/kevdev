@@ -59,28 +59,28 @@ export default function WhatsAppCloserPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#07090e] text-slate-100 font-sans selection:bg-cyan-500/30 selection:text-cyan-200">
+    <div className="min-h-screen bg-[var(--color-void)] text-[var(--color-star)] font-sans selection:bg-cyan-500/30 selection:text-cyan-200">
       <Navbar />
 
-      <main className="pt-32 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-20">
+      <main className="site-container pt-36 sm:pt-44 pb-24 space-y-16">
         
         {/* ── HEADER BADGE & TITLES ────────────────────────────────────── */}
-        <section className="text-center space-y-6 max-w-4xl mx-auto">
+        <section className="text-center space-y-5 max-w-3xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono font-medium bg-cyan-950/70 text-cyan-400 border border-cyan-500/30 shadow-[0_0_20px_rgba(6,182,212,0.2)]"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono font-semibold tracking-wider text-cyan-400 bg-cyan-950/60 border border-cyan-500/30 shadow-[0_0_20px_rgba(0,229,255,0.15)] uppercase"
           >
-            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
             KEVDEV VAULT // SISTEMA N8N + IA EN PRODUCCIÓN
           </motion.div>
 
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl sm:text-6xl font-extrabold tracking-tight text-white leading-tight"
+            className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight"
           >
             WhatsApp AI Closer:<br />
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-indigo-300 to-purple-400">
@@ -89,7 +89,7 @@ export default function WhatsAppCloserPage() {
           </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed"
@@ -100,11 +100,11 @@ export default function WhatsAppCloserPage() {
         </section>
 
         {/* ── MAIN GRID: CHECKOUT FORM + INTERACTIVE SYSTEM DEMO ────── */}
-        <div className="grid lg:grid-cols-12 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start max-w-6xl mx-auto">
           
           {/* LEFT: TERMINAL & SYSTEM PREVIEW (7 COLS) */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
+            initial={{ opacity: 0, x: -15 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
             className="lg:col-span-7 space-y-6"
@@ -147,7 +147,7 @@ export default function WhatsAppCloserPage() {
             </div>
 
             {/* TAB CONTENT */}
-            <div className="bg-slate-950/90 border border-slate-800 rounded-2xl p-6 shadow-2xl backdrop-blur-xl relative overflow-hidden min-h-[420px] flex flex-col justify-between">
+            <div className="bg-slate-950/90 border border-slate-800 rounded-2xl p-6 shadow-2xl backdrop-blur-xl relative overflow-hidden min-h-[400px] flex flex-col justify-between">
               
               {activeTab === 'terminal' && (
                 <div className="space-y-4 font-mono text-xs">
@@ -177,8 +177,8 @@ export default function WhatsAppCloserPage() {
               )}
 
               {activeTab === 'architecture' && (
-                <div className="space-y-6">
-                  <h3 className="text-sm font-mono font-bold text-cyan-400 uppercase tracking-wider">Flujo de Arquitectura del Workflow</h3>
+                <div className="space-y-5">
+                  <h3 className="text-xs font-mono font-bold text-cyan-400 uppercase tracking-wider">Flujo de Arquitectura del Workflow</h3>
                   
                   <div className="grid gap-3 font-mono text-xs">
                     <div className="p-3 bg-slate-900/80 rounded-xl border border-slate-800 flex items-center justify-between">
@@ -219,8 +219,8 @@ export default function WhatsAppCloserPage() {
 
               {activeTab === 'features' && (
                 <div className="space-y-4">
-                  <h3 className="text-sm font-mono font-bold text-cyan-400 uppercase tracking-wider">¿Qué vas a recibir exactamente?</h3>
-                  <ul className="space-y-3 text-sm text-slate-300">
+                  <h3 className="text-xs font-mono font-bold text-cyan-400 uppercase tracking-wider">¿Qué vas a recibir exactamente?</h3>
+                  <ul className="space-y-3 text-xs text-slate-300">
                     <li className="flex items-start gap-2.5">
                       <span className="text-cyan-400 font-bold mt-0.5">✓</span>
                       <span><strong>Blueprint JSON n8n Completo:</strong> Workflow probado e inyectable en tu instancia de n8n en 1 clic.</span>
@@ -242,7 +242,7 @@ export default function WhatsAppCloserPage() {
               )}
 
               {/* BOTTOM FOOTER OF CARD */}
-              <div className="pt-4 border-t border-slate-800 flex items-center justify-between text-xs font-mono text-slate-500">
+              <div className="pt-4 border-t border-slate-800 flex items-center justify-between text-[11px] font-mono text-slate-500">
                 <span>KEVDEV VAULT PRODUCT #01</span>
                 <span className="text-cyan-400">GARANTÍA DE DESPLIEGUE</span>
               </div>
@@ -251,12 +251,12 @@ export default function WhatsAppCloserPage() {
 
           {/* RIGHT: CHECKOUT CARD & MERCADO PAGO FORM (5 COLS) */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
+            initial={{ opacity: 0, x: 15 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
             className="lg:col-span-5"
           >
-            <div className="bg-slate-900/90 border-2 border-cyan-500/40 rounded-2xl p-6 sm:p-8 shadow-[0_0_50px_rgba(6,182,212,0.15)] relative backdrop-blur-xl space-y-6">
+            <div className="bg-slate-900/90 border-2 border-cyan-500/40 rounded-2xl p-6 sm:p-8 shadow-[0_0_50px_rgba(0,229,255,0.15)] relative backdrop-blur-xl space-y-6">
               
               <div className="flex items-center justify-between border-b border-slate-800 pb-4">
                 <div>
@@ -293,8 +293,10 @@ export default function WhatsAppCloserPage() {
                 </div>
 
                 {/* ORDER BUMP CHECKBOX */}
-                <div className="p-4 rounded-xl bg-gradient-to-r from-slate-950 to-indigo-950/50 border border-indigo-500/30 space-y-2 hover:border-indigo-500/50 transition-all cursor-pointer"
-                     onClick={() => setIncludeBump(!includeBump)}>
+                <div 
+                  className="p-4 rounded-xl bg-gradient-to-r from-slate-950 to-indigo-950/50 border border-indigo-500/30 space-y-2 hover:border-indigo-500/50 transition-all cursor-pointer"
+                  onClick={() => setIncludeBump(!includeBump)}
+                >
                   <div className="flex items-start gap-3">
                     <input
                       type="checkbox"

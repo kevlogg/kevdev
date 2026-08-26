@@ -56,7 +56,7 @@ export default function AccessDashboardPage() {
 
   const notebookUrl =
     process.env.NOTEBOOKLM_PUBLIC_URL ||
-    'https://notebooklm.google.com/notebook/whatsapp-closer-tutor-demo'
+    'https://notebook.google.com/notebook/cd4b90b8-96b6-41b2-9ad8-da574a0dcbff?authuser=3'
 
   const handleCopy = () => {
     navigator.clipboard.writeText(SAMPLE_N8N_JSON)
@@ -75,10 +75,10 @@ export default function AccessDashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#07090e] text-slate-100 font-sans selection:bg-cyan-500/30 selection:text-cyan-200">
+    <div className="min-h-screen bg-[var(--color-void)] text-[var(--color-star)] font-sans selection:bg-cyan-500/30 selection:text-cyan-200">
       <Navbar />
 
-      <main className="pt-32 pb-24 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto space-y-12">
+      <main className="site-container pt-36 sm:pt-44 pb-24 space-y-12">
         
         {/* SUCCESS BANNER */}
         <div className="p-6 rounded-2xl bg-gradient-to-r from-emerald-950/80 via-slate-900 to-cyan-950/80 border border-emerald-500/30 shadow-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -109,7 +109,7 @@ export default function AccessDashboardPage() {
         </div>
 
         {/* ACCESS DASHBOARD CARDS */}
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           
           {/* RECURSO 1: WORKFLOW CORE JSON */}
           <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 space-y-4">
@@ -195,7 +195,7 @@ export default function AccessDashboardPage() {
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6 font-mono text-xs">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 font-mono text-xs">
             <div className="p-5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-2">
               <div className="text-cyan-400 font-bold text-sm">PASO 1: Importar JSON</div>
               <p className="text-slate-400 text-[11px] leading-relaxed">

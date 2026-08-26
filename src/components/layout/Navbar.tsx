@@ -162,7 +162,7 @@ export default function Navbar() {
         pointerEvents: 'none',
       }}>
         <nav className="site-container" style={{
-          height: 96, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          height: 76, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           pointerEvents: 'none',
         }}>
 
@@ -179,12 +179,12 @@ export default function Navbar() {
               src="/kevdev-logo.png" 
               alt="kevdev logo" 
               style={{ 
-                height: 'clamp(68px, 8vw, 96px)', 
+                height: 'clamp(36px, 4.5vw, 48px)', 
                 width: 'auto', 
-                maxHeight: 96,
+                maxHeight: 48,
                 display: 'block',
                 objectFit: 'contain',
-                filter: 'drop-shadow(0 6px 24px rgba(0,229,255,0.35)) brightness(1.1)',
+                filter: 'drop-shadow(0 4px 16px rgba(0,229,255,0.35)) brightness(1.1)',
               }} 
             />
           </motion.a>
