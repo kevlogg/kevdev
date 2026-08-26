@@ -13,11 +13,13 @@
       "servicios": "Leistungen",
       "proyectos": "Projekte",
       "enfoque": "Ansatz",
-      "contacto": "Kontakt"
+      "contacto": "Kontakt",
+      "vault": "Vault ⚡"
     },
     "stackLabel": "Stack",
     "contactLabel": "Kontakt",
     "contactLinks": {
+      "instagram": "Instagram",
       "whatsapp": "WhatsApp",
       "linkedin": "LinkedIn",
       "email": "Email"

@@ -76,6 +76,7 @@ export default function Navbar() {
     { href: '/proyectos', label: t('items.proyectos'), index: '02' },
     { href: '#enfoque',   label: t('items.enfoque'),   index: '03' },
     { href: '#contacto',  label: t('items.contacto'),  index: '04' },
+    { href: '/vault',     label: t('items.vault'),     index: '05' },
   ]
 
   const CONTACT_LINKS = CONTACT_HREFS.map(({ key, href }) => ({
@@ -199,6 +200,31 @@ export default function Navbar() {
               pointerEvents: 'auto',
             }}
           >
+            {!open && (
+              <button
+                type="button"
+                onClick={() => handleNav('/vault')}
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.75rem',
+                  fontWeight: 700,
+                  letterSpacing: '0.06em',
+                  color: '#22d3ee',
+                  background: 'rgba(6, 182, 212, 0.1)',
+                  border: '1px solid rgba(6, 182, 212, 0.3)',
+                  padding: '0.35rem 0.75rem',
+                  borderRadius: 99,
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                  transition: 'all 0.25s',
+                }}
+              >
+                <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#22d3ee', display: 'inline-block' }} />
+                VAULT
+              </button>
+            )}
             {!open && <LanguageSwitcher compact />}
 
             <button
