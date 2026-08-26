@@ -12,8 +12,8 @@ export default function WhatsAppCloserPage() {
   const [errorMessage, setErrorMessage] = useState('')
   const [activeTab, setActiveTab] = useState<'architecture' | 'terminal' | 'features'>('terminal')
 
-  const basePrice = 18500
-  const bumpPrice = 8500
+  const basePrice = 9999
+  const bumpPrice = 4999
   const totalPrice = includeBump ? basePrice + bumpPrice : basePrice
 
   const formattedTotal = new Intl.NumberFormat('es-AR', {
@@ -361,7 +361,7 @@ export default function WhatsAppCloserPage() {
                     </h2>
                   </div>
                   <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--color-faint)', textDecoration: 'line-through' }}>$35.000 ARS</div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--color-faint)', textDecoration: 'line-through' }}>$20.000 ARS</div>
                     <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.5rem', fontWeight: 800, color: 'var(--color-accent)' }}>
                       {formattedTotal} <span style={{ fontSize: '0.75rem', fontWeight: 400, color: 'var(--color-faint)' }}>ARS</span>
                     </div>
@@ -425,7 +425,7 @@ export default function WhatsAppCloserPage() {
                     />
                     <label htmlFor="order-bump" style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
                       <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8125rem', fontWeight: 800, color: 'var(--color-accent)' }}>
-                        ⚡ ORDER BUMP OPCIONAL (+ $8.500 ARS)
+                        ⚡ ORDER BUMP OPCIONAL (+ $4.999 ARS)
                       </div>
                       <div style={{ fontFamily: 'var(--font-ui)', fontSize: '0.8125rem', color: 'var(--color-muted)', lineHeight: 1.5 }}>
                         <strong style={{ color: 'var(--color-star)' }}>Pack de 15 Blueprints JSON Adicionales:</strong> Colección lista para importar de workflows de n8n (Atención al cliente, Agendamiento, Scraping y Notificaciones).

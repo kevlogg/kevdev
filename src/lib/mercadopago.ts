@@ -14,8 +14,8 @@ export const preferenceClient = new Preference(mpConfig)
 export const paymentClient = new Payment(mpConfig)
 
 export const PRODUCT_PRICES = {
-  BASE_VAULT: 18500,
-  ORDER_BUMP_BLUEPRINTS: 8500,
+  BASE_VAULT: 9999,
+  ORDER_BUMP_BLUEPRINTS: 4999,
 } as const
 
 export interface CreatePreferenceOptions {

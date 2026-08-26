@@ -125,7 +125,7 @@ export default function VaultRootPage() {
                     DISPONIBLE AHORA
                   </span>
                   <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.875rem', fontWeight: 800, color: 'var(--color-star)' }}>
-                    $18.500 ARS
+                    $9.999 ARS
                   </span>
                 </div>
 
