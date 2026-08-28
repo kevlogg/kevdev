@@ -2,6 +2,7 @@ import Navbar          from '@/components/layout/Navbar'
 import Footer          from '@/components/layout/Footer'
 import Hero            from '@/components/sections/Hero'
 import Services        from '@/components/sections/Services'
+import FAQ             from '@/components/sections/FAQ'
 import Projects        from '@/components/sections/Projects'
 import Approach        from '@/components/sections/Approach'
 import Contact         from '@/components/sections/Contact'
@@ -20,6 +21,7 @@ export default function Home() {
         <main>
           <Hero />
           <Services />
+          <FAQ />
           <Projects />
           <Approach />
           <Contact />
