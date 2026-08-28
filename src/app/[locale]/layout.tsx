@@ -90,7 +90,7 @@ export default async function RootLayout({
                 addressCountry: 'AR',
               },
               sameAs: [
-                'https://maps.google.com/?q=KevDev+Desarrollo+Web',
+                'https://share.google/Vmv20uo1V4pSFQY8h',
                 'https://www.instagram.com/kevd3v/',
                 'https://www.linkedin.com/in/kevin-loggia/',
               ],

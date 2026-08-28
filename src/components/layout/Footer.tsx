@@ -69,7 +69,7 @@ export default function Footer() {
           </div>
 
           <a
-            href="https://maps.google.com/?q=KevDev+Desarrollo+Web"
+            href="https://share.google/Vmv20uo1V4pSFQY8h"
             target="_blank"
             rel="noopener noreferrer"
             style={{
@@ -88,7 +88,7 @@ export default function Footer() {
               transition: 'transform 0.2s, background 0.2s',
             }}
           >
-            📍 <span>Ver Ficha en Google Maps</span>
+            📍 <span>Ver Ficha en Google</span>
           </a>
         </div>
 
@@ -161,7 +161,7 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="https://maps.google.com/?q=KevDev+Desarrollo+Web" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-muted)', fontSize: '0.8125rem', textDecoration: 'none' }}>
+                <a href="https://share.google/Vmv20uo1V4pSFQY8h" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-muted)', fontSize: '0.8125rem', textDecoration: 'none' }}>
                   Google Business Profile ↗
                 </a>
               </li>

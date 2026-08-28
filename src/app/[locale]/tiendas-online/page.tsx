@@ -23,7 +23,7 @@ export default function TiendasOnlinePage() {
       '@type': 'ProfessionalService',
       name: 'KevDev',
       url: 'https://kevdev.net.ar',
-      sameAs: 'https://maps.google.com/?q=KevDev+Desarrollo+Web',
+      sameAs: 'https://share.google/Vmv20uo1V4pSFQY8h',
     },
     areaServed: {
       '@type': 'Country',
@@ -111,7 +111,7 @@ export default function TiendasOnlinePage() {
                 Cotizar Mi Tienda Online
               </Link>
               <a
-                href="https://maps.google.com/?q=KevDev+Desarrollo+Web"
+                href="https://share.google/Vmv20uo1V4pSFQY8h"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
@@ -126,7 +126,7 @@ export default function TiendasOnlinePage() {
                   textDecoration: 'none',
                 }}
               >
-                Ficha Google Maps 📍
+                Ficha en Google 📍
               </a>
             </div>
           </section>
