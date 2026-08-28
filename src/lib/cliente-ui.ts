@@ -34,7 +34,7 @@ export const DEMO_LABELS: Record<DemoEstado, string> = {
 
 export const DEMO_COLORS: Record<DemoEstado, string> = {
   'SIN HACER': '#f87171',
-  PRESENTADA:  '#fbbf24',
-  HECHA:       '#4ade80',
+  PRESENTADA:  '#4ade80',
+  HECHA:       '#fbbf24',
   '':          'var(--color-faint)',
 }
