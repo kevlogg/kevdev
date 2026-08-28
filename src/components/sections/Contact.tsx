@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl'
 const LINK_HREFS = [
   { key: 'instagram', href: 'https://www.instagram.com/kevd3v/', external: true },
   { key: 'linkedin',  href: 'https://www.linkedin.com/in/kevin-loggia/', external: true },
+  { key: 'google',    href: 'https://share.google/Vmv20uo1V4pSFQY8h', external: true },
   { key: 'email',     href: 'mailto:kevdev.info@gmail.com', external: false },
 ] as const
 
@@ -14,7 +15,7 @@ export default function Contact() {
   const WA_HREF = `https://wa.me/542235851419?text=${encodeURIComponent(t('whatsappMessage'))}`
   const LINKS = LINK_HREFS.map(l => ({
     key: l.key,
-    label: t(`links.${l.key}`),
+    label: l.key === 'google' ? 'Google' : t(`links.${l.key}`),
     href: l.href,
     external: l.external,
   }))
@@ -130,6 +131,19 @@ const LINK_CONFIG = {
       </svg>
     ),
   },
+  google: {
+    color: '#34D399',
+    bg: '#12221C',
+    border: '1.5px solid rgba(52, 211, 153, 0.5)',
+    hoverBg: '#10B981',
+    hoverBorder: '1.5px solid #10B981',
+    shadow: '0 6px 28px rgba(16, 185, 129, 0.45)',
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden style={{ flexShrink: 0 }}>
+        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/>
+      </svg>
+    ),
+  },
   email: {
     color: '#F87171',
     bg: '#221418',
@@ -146,7 +160,7 @@ const LINK_CONFIG = {
   },
 } as const
 
-function ContactLink({ link }: { link: { key: 'instagram' | 'linkedin' | 'email'; label: string; href: string; external: boolean } }) {
+function ContactLink({ link }: { link: { key: 'instagram' | 'linkedin' | 'email' | 'google'; label: string; href: string; external: boolean } }) {
   const [hov, setHov] = useState(false)
   const config = LINK_CONFIG[link.key]
 
