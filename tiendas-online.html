@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tiendas Online & E-Commerce en Argentina | Mercado Pago & Mobbex | KevDev</title>
+  <meta name="description" content="Desarrollo de tiendas online autoadministrables. Integración nativa con Mercado Pago, Mobbex, Stripe, cálculo de envíos, cupones y catálogo de productos.">
+  <meta name="keywords" content="tiendas online argentina, ecommerce mercado pago, mobbex e-commerce, desarrollo e-commerce, tienda virtual argentina">
+  
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://kevdev.net.ar/tiendas-online.html">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brandDark: '#07090e',
+            brandCard: 'rgba(15, 23, 42, 0.7)',
+            brandCyan: '#06b6d4',
+            brandIndigo: '#6366f1',
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- JSON-LD Service & Breadcrumb Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Tiendas Online y E-Commerce",
+    "serviceType": "Desarrollo E-Commerce y Pasarelas de Pago",
+    "provider": {
+      "@type": "ProfessionalService",
+      "name": "KevDev",
+      "url": "https://kevdev.net.ar",
+      "sameAs": "https://maps.google.com/?q=KevDev+Desarrollo+Web"
+    },
+    "areaServed": {
+      "@type": "Country",
+      "name": "Argentina"
+    },
+    "description": "Desarrollo de e-commerce profesional con cobros en Mercado Pago, Mobbex, Stripe, cuotas sin interés y gestión de envíos.",
+    "offers": {
+      "@type": "Offer",
+      "priceCurrency": "ARS",
+      "price": "Consultar",
+      "availability": "https://schema.org/InStock"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Inicio",
+        "item": "https://kevdev.net.ar"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Tiendas Online E-Commerce",
+        "item": "https://kevdev.net.ar/tiendas-online.html"
+      }
+    ]
+  }
+  </script>
+</head>
+
+<body class="bg-brandDark text-slate-100 font-sans antialiased selection:bg-indigo-500/30 selection:text-indigo-200">
+
+  <!-- NAVBAR -->
+  <header class="fixed top-0 left-0 right-0 z-50 px-6 py-4 transition-all duration-300">
+    <div class="max-w-7xl mx-auto flex items-center justify-between glass-panel px-6 py-3">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-cyan-400 flex items-center justify-center font-extrabold text-lg text-white shadow-lg shadow-indigo-500/30">
+          KD
+        </div>
+        <span class="font-extrabold tracking-tight text-xl text-white">Kev<span class="text-cyan-400">Dev</span></span>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
+        <a href="index.html" class="hover:text-cyan-400 transition-colors">Inicio</a>
+        <a href="diseno-web.html" class="hover:text-cyan-400 transition-colors">Diseño Web</a>
+        <a href="tiendas-online.html" class="text-indigo-400 font-bold">Tiendas Online</a>
+        <a href="desarrollo-a-medida.html" class="hover:text-cyan-400 transition-colors">A Medida</a>
+        <a href="index.html#faq" class="hover:text-cyan-400 transition-colors">FAQ</a>
+      </nav>
+
+      <a href="#contacto" class="px-4 py-2 rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 font-bold text-xs hover:bg-indigo-500/20 transition-all">
+        Crear Mi Tienda
+      </a>
+    </div>
+  </header>
+
+  <!-- SUBPAGE HERO SECTION -->
+  <section class="subpage-hero px-6">
+    <div class="max-w-5xl mx-auto text-center">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 mb-6">
+        <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i> Integración Nativa de Pasarelas de Pago
+      </div>
+      <h1 class="text-4xl md:text-6xl font-extrabold text-white tracking-tight mb-6">
+        Tiendas Online y E-Commerce que <span class="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400">Venden las 24 Horas</span>
+      </h1>
+      <p class="text-slate-300 text-lg max-w-3xl mx-auto leading-relaxed mb-8">
+        Convertí visitantes en clientes frecuentes con un checkout fluido, cobros seguros en Mercado Pago, Mobbex y Stripe, y gestión simple de catálogo y envíos.
+      </p>
+      
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href="#contacto" class="px-6 py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold text-sm shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:scale-105 transition-all">
+          Cotizar Tienda Virtual
+        </a>
+        <a href="https://maps.google.com/?q=KevDev+Desarrollo+Web" target="_blank" class="px-6 py-3.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 font-bold text-sm hover:border-slate-700 transition-all flex items-center gap-2">
+          <i data-lucide="map-pin" class="w-4 h-4 text-rose-500"></i> Ficha Google Maps
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PASARELAS DE PAGO Y CARACTERÍSTICAS -->
+  <section class="py-20 px-6 max-w-7xl mx-auto">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <h2 class="text-3xl font-extrabold text-white">Todo lo que necesita tu E-Commerce para crecer</h2>
+      <p class="text-slate-400 text-sm mt-2">Tecnología de cobranza sin fricción configurada para el mercado argentino e internacional.</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-8 mb-16">
+      <!-- Feature 1 -->
+      <div class="glass-panel p-8">
+        <div class="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center mb-6 border border-cyan-500/20">
+          <i data-lucide="credit-card" class="w-6 h-6"></i>
+        </div>
+        <h3 class="text-xl font-bold text-white mb-3">Mercado Pago & Mobbex</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">
+          Cobrá con tarjetas de crédito, débito, cuotas y transferencia bancaria directa con descuento automático. Configuración instantánea de webhooks de notificación.
+        </p>
+      </div>
+
+      <!-- Feature 2 -->
+      <div class="glass-panel p-8">
+        <div class="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center mb-6 border border-indigo-500/20">
+          <i data-lucide="globe" class="w-6 h-6"></i>
+        </div>
+        <h3 class="text-xl font-bold text-white mb-3">Stripe & Ventas Internacionales</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">
+          Si vendés al exterior, integramos Stripe, PayPal o PayU para recibir pagos en dólares o euros con conversión automática de divisa.
+        </p>
+      </div>
+
+      <!-- Feature 3 -->
+      <div class="glass-panel p-8">
+        <div class="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center mb-6 border border-purple-500/20">
+          <i data-lucide="truck" class="w-6 h-6"></i>
+        </div>
+        <h3 class="text-xl font-bold text-white mb-3">Envíos & Logística</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">
+          Integración directa de cálculo de envío por código postal con Correo Argentino, Andreani, OCA o mensajería propia con tarifas personalizadas.
+        </p>
+      </div>
+    </div>
+
+    <!-- PANEL DE ADMINISTRACIÓN -->
+    <div class="glass-panel p-10 border border-indigo-500/30 relative overflow-hidden">
+      <div class="grid md:grid-cols-2 gap-8 items-center">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-widest text-indigo-400">Control Total</span>
+          <h3 class="text-2xl md:text-3xl font-extrabold text-white mt-2 mb-4">Panel Autoadministrable Intuitivo</h3>
+          <p class="text-slate-300 text-sm leading-relaxed mb-6">
+            Podrás agregar productos, modificar precios, gestionar variantes (talles, colores), crear cupones de descuento por temporada y revisar pedidos desde tu computadora o celular sin conocimientos técnicos.
+          </p>
+          <ul class="space-y-3 text-xs text-slate-300">
+            <li class="flex items-center gap-2">
+              <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
+              <span>Stock automatizado con alerta de agotado</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
+              <span>Reportes de ventas diarias y productos más buscados</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
+              <span>Notificaciones automáticas por email al comprador</span>
+            </li>
+          </ul>
+        </div>
+        <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 font-mono text-xs text-indigo-300">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
+            <span class="font-bold text-white">PROCESO DE CHECKOUT INTEGRADO</span>
+            <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-[10px]">EN VIVO</span>
+          </div>
+          <p class="text-slate-400 mb-2">// Estado del pedido #1042</p>
+          <p>✔ Producto: Remera KevDev Tech</p>
+          <p>✔ Pasarela: Mercado Pago (3 Cuotas)</p>
+          <p>✔ Envió: Correo Argentino a Domicilio</p>
+          <p class="text-emerald-400 font-bold mt-2">➜ Estado: PAGO APROBADO (SSL 256-bit)</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="contacto" class="py-16 px-6 border-t border-slate-900 bg-brandDark">
+    <div class="max-w-7xl mx-auto space-y-12">
+      <div class="google-business-card flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div class="space-y-2">
+          <div class="flex items-center gap-3">
+            <span class="w-3 h-3 rounded-full bg-emerald-500 animate-ping"></span>
+            <span class="text-sm font-extrabold uppercase tracking-wider text-slate-200">Google Business Profile Oficial</span>
+            <span class="star-rating text-sm font-bold">5.0 ★★★★★</span>
+          </div>
+          <p class="text-sm text-slate-400">
+            Ficha verificada en Google Maps para validación de entidad y posicionamiento SEO local.
+          </p>
+        </div>
+        <a href="https://maps.google.com/?q=KevDev+Desarrollo+Web" target="_blank" rel="noopener noreferrer" class="google-maps-link">
+          <i data-lucide="map-pin" class="w-5 h-5"></i>
+          <span>Ver Ficha en Google Maps</span>
+        </a>
+      </div>
+
+      <div class="flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-500 border-t border-slate-900 pt-6">
+        <p>© 2026 KevDev. Todos los derechos reservados.</p>
+        <a href="index.html" class="font-semibold text-cyan-400 hover:underline">Volver a la Portada Principal</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>
