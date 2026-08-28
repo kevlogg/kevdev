@@ -533,6 +533,7 @@ export default function ClienteDetailPage() {
               style={inputStyle}
             >
               <option value="">—</option>
+              <option value="SIN HACER">SIN HACER</option>
               <option value="PRESENTADA">PRESENTADA</option>
               <option value="HECHA">HECHA</option>
             </select>

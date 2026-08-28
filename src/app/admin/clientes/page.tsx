@@ -246,6 +246,7 @@ export default function ClientesPage() {
           <input placeholder="Contraseña Admin" type="password" value={form.passwordAdmin} onChange={e => setForm(f => ({ ...f, passwordAdmin: e.target.value }))} style={inputStyle} />
           <select value={form.demo} onChange={e => setForm(f => ({ ...f, demo: e.target.value as DemoEstado }))} style={{ ...inputStyle }}>
             <option value="">Demo: —</option>
+            <option value="SIN HACER">SIN HACER</option>
             <option value="PRESENTADA">PRESENTADA</option>
             <option value="HECHA">HECHA</option>
           </select>
@@ -344,6 +345,7 @@ export default function ClientesPage() {
                           style={cellInputStyle}
                         >
                           <option value="">—</option>
+                          <option value="SIN HACER">SIN HACER</option>
                           <option value="PRESENTADA">PRESENTADA</option>
                           <option value="HECHA">HECHA</option>
                         </select>

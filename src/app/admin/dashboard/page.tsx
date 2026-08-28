@@ -9,7 +9,7 @@ import {
 } from '@/lib/cliente-ui'
 import type { DemoEstado } from '@/lib/firestore'
 
-const DEMOS: DemoEstado[] = ['PRESENTADA', 'HECHA', '']
+const DEMOS: DemoEstado[] = ['SIN HACER', 'PRESENTADA', 'HECHA', '']
 
 function creadoMillis(c: Cliente): number {
   const ts = c.creadoEn as unknown as { toMillis?: () => number } | undefined

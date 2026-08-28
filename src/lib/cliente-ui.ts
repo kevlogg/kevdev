@@ -27,12 +27,14 @@ export const SITUACION_FUNNEL_ORDER: Situacion[] = ['NO RESPONDIO', 'EN ESPERA',
 
 export const DEMO_LABELS: Record<DemoEstado, string> = {
   '':           'Sin demo',
+  'SIN HACER':  'Sin hacer',
   PRESENTADA:   'Presentada',
   HECHA:        'Hecha',
 }
 
 export const DEMO_COLORS: Record<DemoEstado, string> = {
-  PRESENTADA: '#fbbf24',
-  HECHA:      '#4ade80',
-  '':         'var(--color-faint)',
+  'SIN HACER': '#f87171',
+  PRESENTADA:  '#fbbf24',
+  HECHA:       '#4ade80',
+  '':          'var(--color-faint)',
 }

@@ -10,7 +10,7 @@ export type EstadoCliente =
   | 'prospecto' | 'contactado' | 'demo'
   | 'negociacion' | 'cerrado' | 'entregado'
 
-export type DemoEstado = 'PRESENTADA' | 'HECHA' | ''
+export type DemoEstado = 'SIN HACER' | 'PRESENTADA' | 'HECHA' | ''
 export type Situacion  = 'NO RESPONDIO' | 'EN ESPERA' | 'EN PRODUCCION' | 'RECHAZADA' | ''
 export type EstadoPago = 'AL_DIA' | 'PENDIENTE' | 'VENCIDO' | ''
 
