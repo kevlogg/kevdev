@@ -10,18 +10,22 @@ export default function Footer() {
       style={{
         position: 'relative',
         zIndex: 10,
-        borderTop: '1px solid var(--color-border)',
+        borderTop: '1px solid rgba(255, 255, 255, 0.08)',
         padding: 'clamp(2.5rem, 5vw, 4rem) 0 2rem 0',
-        background: 'rgba(12, 12, 12, 0.95)',
+        background: 'rgba(7, 9, 14, 0.35)',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
       }}
     >
       <div className="site-container" style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
         
-        {/* Google Business Profile Badge & Cross Link */}
+        {/* Ficha de Google Business Profile con mayor transparencia glassmorphism */}
         <div
           style={{
-            background: 'linear-gradient(135deg, rgba(22, 27, 38, 0.9), rgba(15, 23, 42, 0.7))',
-            border: '1px solid rgba(255, 255, 255, 0.12)',
+            background: 'rgba(15, 23, 42, 0.35)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            border: '1px solid rgba(255, 255, 255, 0.09)',
             borderRadius: 16,
             padding: '1.25rem 1.5rem',
             display: 'flex',
@@ -29,6 +33,7 @@ export default function Footer() {
             justifyContent: 'space-between',
             flexWrap: 'wrap',
             gap: '1rem',
+            transition: 'all 0.3s ease',
           }}
         >
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
@@ -52,14 +57,14 @@ export default function Footer() {
                   color: 'var(--color-star)',
                 }}
               >
-                Ficha Oficial Google Business Profile
+                Google Business Profile Oficial
               </span>
               <span style={{ color: '#fbbc04', fontWeight: 700, fontSize: '0.8125rem' }}>
                 5.0 ★★★★★
               </span>
             </div>
             <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.8125rem', color: 'var(--color-muted)', margin: 0 }}>
-              Verificada en Google Maps para cruce de entidad y posicionamiento SEO local en Argentina.
+              Ficha verificada en Google Maps para cruce de datos SEO local en Argentina.
             </p>
           </div>
 
@@ -71,14 +76,15 @@ export default function Footer() {
               display: 'inline-flex',
               alignItems: 'center',
               gap: '0.5rem',
-              background: '#ea4335',
+              background: 'rgba(234, 67, 53, 0.85)',
+              backdropFilter: 'blur(8px)',
               color: '#ffffff',
               fontWeight: 700,
               fontSize: '0.8125rem',
               padding: '0.625rem 1.125rem',
               borderRadius: 10,
               textDecoration: 'none',
-              boxShadow: '0 4px 14px rgba(234, 67, 53, 0.3)',
+              boxShadow: '0 4px 14px rgba(234, 67, 53, 0.25)',
               transition: 'transform 0.2s, background 0.2s',
             }}
           >
@@ -108,22 +114,22 @@ export default function Footer() {
                 marginBottom: '0.75rem',
               }}
             >
-              Servicios Web
+              Páginas de Servicios
             </span>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <li>
-                <Link href="/diseno-web" style={{ color: 'var(--color-muted)', fontSize: '0.8125rem', textDecoration: 'none' }}>
-                  Diseño Web Profesional
+                <Link href="/diseno-web" style={{ color: '#38bdf8', fontSize: '0.8125rem', textDecoration: 'none', fontWeight: 600 }}>
+                  ➜ Diseño Web Profesional
                 </Link>
               </li>
               <li>
-                <Link href="/tiendas-online" style={{ color: 'var(--color-muted)', fontSize: '0.8125rem', textDecoration: 'none' }}>
-                  Tiendas Online E-Commerce
+                <Link href="/tiendas-online" style={{ color: '#818cf8', fontSize: '0.8125rem', textDecoration: 'none', fontWeight: 600 }}>
+                  ➜ Tiendas Online & E-Commerce
                 </Link>
               </li>
               <li>
-                <Link href="/desarrollo-a-medida" style={{ color: 'var(--color-muted)', fontSize: '0.8125rem', textDecoration: 'none' }}>
-                  Desarrollo a Medida
+                <Link href="/desarrollo-a-medida" style={{ color: '#c084fc', fontSize: '0.8125rem', textDecoration: 'none', fontWeight: 600 }}>
+                  ➜ Desarrollo Web a Medida
                 </Link>
               </li>
             </ul>
@@ -141,7 +147,7 @@ export default function Footer() {
                 marginBottom: '0.75rem',
               }}
             >
-              Navegación
+              Secciones
             </span>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <li>

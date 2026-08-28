@@ -73,10 +73,12 @@ export default function Navbar() {
 
   const NAV_ITEMS = [
     { href: '#servicios', label: t('items.servicios'), index: '01' },
-    { href: '/proyectos', label: t('items.proyectos'), index: '02' },
-    { href: '#enfoque',   label: t('items.enfoque'),   index: '03' },
-    { href: '#contacto',  label: t('items.contacto'),  index: '04' },
-    { href: '/vault',     label: t('items.vault'),     index: '05' },
+    { href: '/diseno-web', label: 'Diseño Web', index: '02' },
+    { href: '/tiendas-online', label: 'Tiendas Online', index: '03' },
+    { href: '/desarrollo-a-medida', label: 'A Medida', index: '04' },
+    { href: '/proyectos', label: t('items.proyectos'), index: '05' },
+    { href: '#contacto',  label: t('items.contacto'),  index: '06' },
+    { href: '/vault',     label: t('items.vault'),     index: '07' },
   ]
 
   const CONTACT_LINKS = CONTACT_HREFS.map(({ key, href }) => ({

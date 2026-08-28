@@ -266,8 +266,19 @@ function ServiceItem({
   )
 }
 
+import Link from 'next/link'
+
+const SERVICE_HREFS: Record<string, { href: string; label: string }> = {
+  '01': { href: '/diseno-web', label: 'Ver servicio de Diseño Web →' },
+  '02': { href: '/desarrollo-a-medida', label: 'Ver servicio de Desarrollo a Medida →' },
+  '03': { href: '/tiendas-online', label: 'Ver servicio de Tiendas Online →' },
+  '04': { href: '/desarrollo-a-medida', label: 'Ver servicio de MVPs →' },
+}
+
 /* ─── Right detail panel ─────────────────────────────────────────────── */
 function ServiceDetail({ service }: { service: ServiceItem }) {
+  const serviceTarget = SERVICE_HREFS[service.num] || { href: '/diseno-web', label: 'Ver detalles →' }
+
   return (
     <div style={{
       position: 'relative',
@@ -317,10 +328,33 @@ function ServiceDetail({ service }: { service: ServiceItem }) {
         <p style={{
           fontFamily: 'var(--font-ui)', fontSize: '0.9375rem',
           lineHeight: 1.8, color: 'var(--color-muted)',
-          margin: '0 0 2.5rem',
+          margin: '0 0 1.5rem',
         }}>
           {service.detail}
         </p>
+
+        <div style={{ marginBottom: '1.5rem' }}>
+          <Link
+            href={serviceTarget.href}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              background: 'rgba(34, 211, 238, 0.1)',
+              border: '1px solid rgba(34, 211, 238, 0.3)',
+              color: '#22d3ee',
+              fontFamily: 'var(--font-ui)',
+              fontWeight: 700,
+              fontSize: '0.875rem',
+              padding: '0.625rem 1.25rem',
+              borderRadius: 10,
+              textDecoration: 'none',
+              transition: 'all 0.2s ease',
+            }}
+          >
+            {serviceTarget.label}
+          </Link>
+        </div>
 
         <span style={{
           fontFamily: 'var(--font-mono)', fontSize: '0.6875rem',
