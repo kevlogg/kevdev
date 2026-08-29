@@ -1,0 +1,18 @@
+# Allow all crawlers including Googlebot & Googlebot-Image
+User-agent: *
+Allow: /
+
+# Explicit rules for Googlebot
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+Allow: /*.png$
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.gif$
+Allow: /*.svg$
+Allow: /*.ico$
+
+Sitemap: https://www.kevdev.net.ar/sitemap.xml

@@ -3,10 +3,49 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KevDev | Video Scroll Ultra-Suave (Solución 60 FPS)</title>
-  <meta name="description" content="Demostración y solución técnica para reproducción de video con scroll ultra-suave mediante interpolación LERP y optimización de GOP en KevDev.">
   
-  <!-- Tailwind CSS CDN -->
+  <!-- Primary Meta Tags -->
+  <title>Desarrollador Web &amp; Software a Medida Argentina | KevDev — Tiendas Online, Landing Pages &amp; SEO</title>
+  <meta name="title" content="Desarrollador Web &amp; Software a Medida Argentina | KevDev — Tiendas Online, Landing Pages &amp; SEO">
+  <meta name="description" content="Desarrollador web y software a medida en Argentina (Mar del Plata, CABA, Rosario, Córdoba, Mendoza). Especialista en creación de tiendas online e-commerce (Mercado Pago), landing pages de alta conversión y SEO técnico On-Page.">
+  <meta name="keywords" content="desarrollador web argentina, diseñador web argentina, desarrollo de software a medida, creacion de tiendas online, ecommerce mercado pago, landing pages alta conversion, seo local mar del plata, desarrollo web caba, programador rosario, desarrollo web cordoba, programador mendoza">
+  <meta name="author" content="KevDev — Kevin Loggia">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="google-site-verification" content="qXq4-oHopE6UqTER8KAoEFLAC7kLr0P8Y-oQNxQadNI" />
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://www.kevdev.net.ar/">
+
+  <!-- Standard Favicons for Googlebot & Browsers -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512x512.png">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <meta name="theme-color" content="#07090e">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.kevdev.net.ar/">
+  <meta property="og:title" content="Desarrollador Web &amp; Software a Medida Argentina | KevDev">
+  <meta property="og:description" content="Desarrollo web profesional, tiendas online e-commerce con Mercado Pago, landing pages de alta conversión y software a medida. Posicionamiento SEO en Argentina.">
+  <meta property="og:image" content="https://www.kevdev.net.ar/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="KevDev — Desarrollo Web &amp; Software a Medida Argentina">
+  <meta property="og:locale" content="es_AR">
+  <meta property="og:site_name" content="KevDev">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://www.kevdev.net.ar/">
+  <meta name="twitter:title" content="Desarrollador Web &amp; Software a Medida Argentina | KevDev">
+  <meta name="twitter:description" content="Desarrollo web profesional, tiendas online e-commerce con Mercado Pago, landing pages de alta conversión y software a medida. Posicionamiento SEO en Argentina.">
+  <meta name="twitter:image" content="https://www.kevdev.net.ar/og-image.png">
+
+  <!-- Tailwind CSS CDN & Lucide Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -26,65 +65,108 @@
       }
     }
   </script>
-
-  <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-
-  <!-- Custom Styles -->
   <link rel="stylesheet" href="css/styles.css">
 
-  <!-- JSON-LD LocalBusiness & FAQ Schema for Google SEO & AI Entity Matching -->
+  <!-- JSON-LD ProfessionalService / LocalBusiness / SoftwareApplication Schema -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "ProfessionalService",
-    "name": "KevDev - Desarrollo Web & Software",
-    "image": "https://kevdev.net.ar/assets/logo.png",
-    "@id": "https://kevdev.net.ar/#business",
-    "url": "https://kevdev.net.ar",
-    "telephone": "+54-9-11-0000-0000",
-    "priceRange": "$$",
-    "address": {
-      "@type": "PostalAddress",
-      "addressCountry": "AR"
-    },
-    "sameAs": [
-      "https://share.google/Vmv20uo1V4pSFQY8h",
-      "https://g.page/r/kevdev"
-    ],
-    "hasOfferCatalog": {
-      "@type": "OfferCatalog",
-      "name": "Servicios de Desarrollo Web",
-      "itemListElement": [
-        {
-          "@type": "Offer",
-          "itemOffered": {
-            "@type": "Service",
-            "name": "Diseño Web Profesional",
-            "url": "https://kevdev.net.ar/diseno-web.html"
-          }
+    "@graph": [
+      {
+        "@type": ["ProfessionalService", "LocalBusiness"],
+        "@id": "https://www.kevdev.net.ar/#business",
+        "name": "KevDev — Desarrollador Web & Software a Medida",
+        "alternateName": "KevDev Digital Builder",
+        "image": "https://www.kevdev.net.ar/og-image.png",
+        "logo": "https://www.kevdev.net.ar/favicon-512x512.png",
+        "url": "https://www.kevdev.net.ar/",
+        "telephone": "+54-9-11-0000-0000",
+        "priceRange": "$$",
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "AR",
+          "addressRegion": "Buenos Aires / Argentina"
         },
-        {
-          "@type": "Offer",
-          "itemOffered": {
-            "@type": "Service",
-            "name": "Tiendas Online y E-Commerce",
-            "url": "https://kevdev.net.ar/tiendas-online.html"
-          }
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": -38.0055,
+          "longitude": -57.5426
         },
-        {
-          "@type": "Offer",
-          "itemOffered": {
-            "@type": "Service",
-            "name": "Desarrollo Web a Medida",
-            "url": "https://kevdev.net.ar/desarrollo-a-medida.html"
-          }
+        "sameAs": [
+          "https://maps.google.com/?cid=8114234444718749965",
+          "https://share.google/Vmv20uo1V4pSFQY8h",
+          "https://www.instagram.com/kevd3v/",
+          "https://www.linkedin.com/in/kevin-loggia/"
+        ],
+        "areaServed": [
+          { "@type": "Country", "name": "Argentina" },
+          { "@type": "City", "name": "Mar del Plata" },
+          { "@type": "City", "name": "Buenos Aires (CABA)" },
+          { "@type": "City", "name": "Rosario" },
+          { "@type": "City", "name": "Córdoba" },
+          { "@type": "City", "name": "Mendoza" }
+        ],
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Servicios de Desarrollo Web y Software",
+          "itemListElement": [
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Diseño Web Profesional & Landing Pages",
+                "url": "https://www.kevdev.net.ar/diseno-web.html",
+                "description": "Diseño y desarrollo de sitios web institucionales y landing pages de alta conversión optimizadas para Google SEO."
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Creación de Tiendas Online & E-Commerce",
+                "url": "https://www.kevdev.net.ar/tiendas-online.html",
+                "description": "Desarrollo de e-commerce con cobros en Mercado Pago, Mobbex, Stripe y gestión de envíos."
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Desarrollo de Software a Medida & Web Apps",
+                "url": "https://www.kevdev.net.ar/desarrollo-a-medida.html",
+                "description": "Sistemas web a medida, plataformas SaaS, APIs personalizadas y desarrollo a 60 FPS."
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Optimización SEO Técnico On-Page & Auditoría",
+                "url": "https://www.kevdev.net.ar/",
+                "description": "Optimización de velocidad Core Web Vitals, metadatos, datos estructurados Schema.org e indexación en Google."
+              }
+            }
+          ]
         }
-      ]
-    }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://www.kevdev.net.ar/#software",
+        "name": "KevDev 60FPS LERP Smooth Video Scroll Engine",
+        "operatingSystem": "All Web Browsers",
+        "applicationCategory": "DeveloperApplication",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      }
+    ]
   }
   </script>
 
+  <!-- JSON-LD FAQPage Schema -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -92,42 +174,42 @@
     "mainEntity": [
       {
         "@type": "Question",
-        "name": "¿Cuánto demora el desarrollo de una web?",
+        "name": "¿Cuánto demora el desarrollo de una página web o tienda online?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Los tiempos de entrega varían según la complejidad del proyecto: una Landing Page se entrega entre 5 y 7 días hábiles, un Sitio Corporativo entre 10 y 15 días, y una Tienda Online o Sistema a Medida entre 2 y 4 semanas con etapas claras de prueba y revisión."
+          "text": "Los tiempos de entrega varían según el proyecto: una Landing Page de alta conversión se entrega entre 5 y 7 días hábiles, un Sitio Corporativo entre 10 y 15 días, y una Tienda Online E-Commerce o Sistema a Medida entre 2 y 4 semanas."
         }
       },
       {
         "@type": "Question",
-        "name": "¿Qué medios de pago integran en e-commerce?",
+        "name": "¿Qué pasarelas de pago integran en e-commerce para Argentina?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Integramos las principales pasarelas de pago locales e internacionales como Mercado Pago, Mobbex, Stripe y PayU. Además, configuramos opciones de transferencia bancaria directa con descuento automático y cobro con tarjetas de crédito/débito en cuotas."
+          "text": "Integramos Mercado Pago (cuotas sin interés, tarjetas de crédito/débito, dinero en cuenta), Mobbex, Stripe y transferencia bancaria directa con descuento automático."
         }
       },
       {
         "@type": "Question",
-        "name": "¿Incluye hosting y dominio?",
+        "name": "¿En qué ciudades de Argentina brindan servicio de desarrollo web?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "¡Sí! Todos nuestros desarrollos incluyen 1 año completo de hosting optimizado de ultra alta velocidad con certificado SSL de seguridad (HTTPS) y la gestión del registro de tu dominio personalizado (.com.ar o .com)."
+          "text": "Brindamos servicios a todo el país y el exterior, con foco en búsquedas locales de Mar del Plata, Ciudad Autónoma de Buenos Aires (CABA), Rosario, Córdoba, Mendoza y resto de Argentina."
         }
       },
       {
         "@type": "Question",
-        "name": "¿El sitio estará optimizado para Google (SEO)?",
+        "name": "¿Incluye hosting, dominio y certificado SSL de seguridad?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Absolutamente. Aplicamos optimización SEO técnico On-Page desde el código: estructura semántica HTML5, metadatos enriquecidos, esquema JSON-LD para Google AI, compresión de imágenes y velocidad de carga prioritaria (95+ en Google PageSpeed)."
+          "text": "Sí, todos los desarrollos incluyen 1 año de hosting optimizado de alta velocidad, registro de dominio personalizado (.com.ar o .com) y certificado de seguridad SSL (HTTPS)."
         }
       },
       {
         "@type": "Question",
-        "name": "¿Mi sitio web se verá bien en celulares y tablets?",
+        "name": "¿El sitio web estará optimizado para posicionar en Google (SEO)?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Sí, diseñamos bajo la filosofía Mobile-First. Tu sitio web responderá de manera fluida y adaptativa en smartphones, tablets, notebooks y pantallas de alta resolución 4K."
+          "text": "Totalmente. Aplicamos SEO Técnico On-Page completo: marcado semántico HTML5, metadatos enriquecidos, datos estructurados Schema.org para Google AI (Gemini), compresión de imágenes y velocidad 95+ en PageSpeed."
         }
       }
     ]
@@ -167,12 +249,15 @@
     <div class="sticky-hero-viewport">
 
       <!-- Titular flotante sobre el video -->
-      <div class="text-center z-10 max-w-3xl px-4 mb-6">
+      <div class="text-center z-10 max-w-4xl px-4 mb-6">
         <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-white mb-3">
-          Experiencia Video Scroll <span class="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-indigo-400 to-purple-400 glow-text-indigo">Ultra-Suave</span>
+          Desarrollador Web &amp; Software a Medida <span class="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-indigo-400 to-purple-400 glow-text-indigo">en Argentina</span>
         </h1>
-        <p class="text-slate-400 text-base md:text-lg">
-          Sin frenados bruscos ni tirones. Interpolación LERP en <code class="text-cyan-400 bg-slate-900 px-2 py-0.5 rounded font-mono text-sm">requestAnimationFrame</code> a 60 FPS.
+        <h2 class="text-lg md:text-xl font-bold text-cyan-300 mb-2">
+          Diseño Web Profesional, Tiendas Online E-Commerce &amp; Experiencia Video Scroll 60 FPS
+        </h2>
+        <p class="text-slate-400 text-sm md:text-base">
+          Desarrollos de alto rendimiento para negocios en Argentina (Mar del Plata, CABA, Rosario, Córdoba, Mendoza). Interpolación LERP a 60 FPS sin tirones.
         </p>
       </div>
 
@@ -479,6 +564,79 @@ requestAnimationFrame(updateLoop);</code></pre>
           <span>Ver servicio Desarrollo a Medida</span>
           <i data-lucide="arrow-right" class="w-4 h-4"></i>
         </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN COBERTURA REGIONAL Y DESARROLLO B2B -->
+  <section id="cobertura" class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-900/80">
+    <div class="glass-panel p-8 md:p-12 relative overflow-hidden bg-gradient-to-br from-slate-900/90 via-slate-950/80 to-brandDark border border-cyan-500/20">
+      <div class="grid lg:grid-cols-2 gap-10 items-center">
+        <div>
+          <span class="text-xs font-mono font-bold tracking-widest text-cyan-400 uppercase bg-cyan-950/60 px-3 py-1 rounded-full border border-cyan-500/30">
+            Alcance Local y Nacional
+          </span>
+          <h2 class="text-3xl md:text-4xl font-extrabold text-white mt-4 mb-4">
+            Desarrollo Web &amp; Software para Negocios en <span class="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-indigo-400">Argentina y el Exterior</span>
+          </h2>
+          <p class="text-slate-300 text-sm md:text-base leading-relaxed mb-6">
+            Como <strong>Desarrollador Web y Diseñador Web Freelance Senior</strong>, ayudo a empresas, marcas y agencias a construir su infraestructura digital. Ya sea que busques <strong>creación de tiendas online e-commerce con Mercado Pago</strong>, <strong>landing pages de alta conversión</strong> o <strong>desarrollo de software a medida</strong>, entregamos proyectos optimizados para convertir visitantes en clientes reales.
+          </p>
+          <div class="flex flex-wrap gap-2 text-xs font-semibold">
+            <span class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-cyan-300 flex items-center gap-1.5">
+              <i data-lucide="map-pin" class="w-3.5 h-3.5 text-rose-500"></i> Mar del Plata
+            </span>
+            <span class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-indigo-300 flex items-center gap-1.5">
+              <i data-lucide="map-pin" class="w-3.5 h-3.5 text-rose-500"></i> Buenos Aires (CABA)
+            </span>
+            <span class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-purple-300 flex items-center gap-1.5">
+              <i data-lucide="map-pin" class="w-3.5 h-3.5 text-rose-500"></i> Rosario
+            </span>
+            <span class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-emerald-300 flex items-center gap-1.5">
+              <i data-lucide="map-pin" class="w-3.5 h-3.5 text-rose-500"></i> Córdoba
+            </span>
+            <span class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-amber-300 flex items-center gap-1.5">
+              <i data-lucide="map-pin" class="w-3.5 h-3.5 text-rose-500"></i> Mendoza
+            </span>
+          </div>
+        </div>
+        <div class="space-y-4">
+          <div class="p-5 bg-slate-950/80 rounded-2xl border border-slate-800 flex items-start gap-4">
+            <div class="w-10 h-10 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center shrink-0 border border-cyan-500/20">
+              <i data-lucide="search-check" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 class="text-base font-bold text-white mb-1">SEO Técnico On-Page Integrado</h3>
+              <p class="text-xs text-slate-400 leading-relaxed">
+                Estructura semántica HTML5, Schema.org enriquecido para Google AI (Gemini), compresión WebP/SVG y velocidad de carga sub-segundo en Google PageSpeed.
+              </p>
+            </div>
+          </div>
+
+          <div class="p-5 bg-slate-950/80 rounded-2xl border border-slate-800 flex items-start gap-4">
+            <div class="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center shrink-0 border border-indigo-500/20">
+              <i data-lucide="credit-card" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 class="text-base font-bold text-white mb-1">Integración de Pasarelas de Pago</h3>
+              <p class="text-xs text-slate-400 leading-relaxed">
+                Cobros con Mercado Pago (cuotas sin interés), Mobbex, Stripe para cobros internacionales y transferencias bancarias directas automáticas.
+              </p>
+            </div>
+          </div>
+
+          <div class="p-5 bg-slate-950/80 rounded-2xl border border-slate-800 flex items-start gap-4">
+            <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center shrink-0 border border-purple-500/20">
+              <i data-lucide="cpu" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 class="text-base font-bold text-white mb-1">Automatizaciones e Inteligencia Artificial</h3>
+              <p class="text-xs text-slate-400 leading-relaxed">
+                Conexión con agentes de IA, CRM de ventas, webhooks en tiempo real y sistemas de gestión interna sin fricción.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
