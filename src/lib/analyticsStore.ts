@@ -134,6 +134,17 @@ export async function getStoreAnalyticsSummary(periodDays: number = 30): Promise
   const mobilePct = totalDev > 0 ? Math.round((mobileCount / totalDev) * 100) : 0
   const desktopPct = totalDev > 0 ? 100 - mobilePct : 0
 
+  const SOURCE_LABELS: Record<string, string> = {
+    google_organico: 'Google (Búsqueda Orgánica)',
+    buscador_organico: 'Buscador (Bing / DuckDuckGo)',
+    instagram: 'Instagram',
+    whatsapp: 'WhatsApp',
+    facebook: 'Facebook',
+    linkedin: 'LinkedIn',
+    twitter: 'Twitter / X',
+    directo: 'Directo (Navegador)',
+  }
+
   const sourcesCount: Record<string, number> = {}
   filteredEvents.forEach(ev => {
     const src = ev.source || 'directo'
@@ -143,7 +154,7 @@ export async function getStoreAnalyticsSummary(periodDays: number = 30): Promise
   const totalSrcEvents = filteredEvents.length || 1
   const trafficSources = Object.entries(sourcesCount)
     .map(([name, count]) => ({
-      name: name.charAt(0).toUpperCase() + name.slice(1),
+      name: SOURCE_LABELS[name] || (name.charAt(0).toUpperCase() + name.slice(1)),
       count,
       percentage: Math.round((count / totalSrcEvents) * 100),
     }))

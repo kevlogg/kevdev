@@ -25,6 +25,30 @@ function trackGA4(eventName: string, params: Record<string, any>) {
   } catch {}
 }
 
+function detectTrafficSource(): string {
+  if (typeof window === 'undefined') return 'directo'
+  try {
+    const urlParams = new URLSearchParams(window.location.search)
+    const utmSource = urlParams.get('utm_source')
+    if (utmSource) return utmSource.toLowerCase()
+
+    const ref = document.referrer.toLowerCase()
+    if (!ref) return 'directo'
+
+    if (ref.includes('google.')) return 'google_organico'
+    if (ref.includes('bing.') || ref.includes('duckduckgo.') || ref.includes('yahoo.')) return 'buscador_organico'
+    if (ref.includes('instagram.com')) return 'instagram'
+    if (ref.includes('whatsapp.com') || ref.includes('wa.me')) return 'whatsapp'
+    if (ref.includes('facebook.com') || ref.includes('fb.com')) return 'facebook'
+    if (ref.includes('linkedin.com')) return 'linkedin'
+    if (ref.includes('t.co') || ref.includes('twitter.com') || ref.includes('x.com')) return 'twitter'
+
+    const refHost = new URL(ref).hostname
+    if (refHost && !refHost.includes('kevdev')) return `referral (${refHost})`
+  } catch {}
+  return 'directo'
+}
+
 export default function AnalyticsTracker() {
   const pathname = usePathname()
 
@@ -33,9 +57,10 @@ export default function AnalyticsTracker() {
     try {
       const visitorId = getVisitorId()
       const path = pathname || window.location.pathname
+      const source = detectTrafficSource()
 
       // GA4
-      trackGA4('page_view', { page_path: path, visitor_id: visitorId })
+      trackGA4('page_view', { page_path: path, visitor_id: visitorId, traffic_source: source })
 
       // Servidor
       fetch('/api/analytics/track', {
@@ -47,8 +72,8 @@ export default function AnalyticsTracker() {
           eventType: 'pageview',
           path,
           device: window.innerWidth < 768 ? 'mobile' : 'desktop',
-          source: document.referrer.includes('instagram') ? 'instagram' : 'directo',
-          metadata: { visitorId },
+          source,
+          metadata: { visitorId, referrer: document.referrer },
         }),
       }).catch(() => {})
     } catch {}

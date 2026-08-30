@@ -34,6 +34,8 @@ export async function generateMetadata({
     languages[l] = l === routing.defaultLocale ? '/' : `/${l}`
   }
 
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kevdev.net.ar'
+
   return {
     metadataBase: new URL('https://www.kevdev.net.ar'),
     title: meta.title,
@@ -51,12 +53,12 @@ export async function generateMetadata({
       'Desarrollo web cordoba',
       'Programador mendoza',
     ],
+    verification: {
+      google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || 'qXq4-oHopE6UqTER8KAoEFLAC7kLr0P8Y-oQNxQadNI',
+    },
     alternates: {
       canonical: locale === routing.defaultLocale ? '/' : `/${locale}`,
       languages,
-    },
-    verification: {
-      google: 'qXq4-oHopE6UqTER8KAoEFLAC7kLr0P8Y-oQNxQadNI',
     },
     icons: {
       icon: [
@@ -73,7 +75,7 @@ export async function generateMetadata({
     openGraph: {
       title: meta.title,
       description: meta.ogDescription,
-      url: 'https://www.kevdev.net.ar',
+      url: baseUrl,
       siteName: 'KevDev',
       locale: OG_LOCALE[locale as Locale],
       type: 'website',
