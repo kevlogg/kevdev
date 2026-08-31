@@ -113,7 +113,7 @@ export default function ClientesPage() {
     color: 'var(--color-star)',
     outline: 'none',
     width: '100%',
-    minWidth: 110,
+    minWidth: 90,
   }
 
   const FILTER_LABELS: Record<Situacion | 'todos', string> = {
@@ -172,7 +172,7 @@ export default function ClientesPage() {
   }
 
   return (
-    <div style={{ maxWidth: 1080 }}>
+    <div style={{ width: '100%' }}>
       {/* Toolbar */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, gap: 12, flexWrap: 'wrap' }}>
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
@@ -293,7 +293,7 @@ export default function ClientesPage() {
             <thead>
               <tr style={{ borderBottom: '1px solid var(--color-border)' }}>
                 {['Cliente', 'Demo', 'Situación', 'Plan', 'Pass Admin', 'WSP', 'URL', 'Observaciones'].map(h => (
-                  <th key={h} style={{ padding: '12px 16px', textAlign: 'left', fontFamily: 'var(--font-ui)', fontSize: '0.6875rem', fontWeight: 600, color: 'var(--color-muted)', letterSpacing: '0.08em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
+                  <th key={h} style={{ padding: '12px 10px', textAlign: 'left', fontFamily: 'var(--font-ui)', fontSize: '0.6875rem', fontWeight: 600, color: 'var(--color-muted)', letterSpacing: '0.08em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
                     {h}
                   </th>
                 ))}
@@ -311,7 +311,7 @@ export default function ClientesPage() {
                   onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}
                 >
                   {/* Cliente (+ rubro) */}
-                  <td style={{ padding: '12px 16px' }}>
+                  <td style={{ padding: '10px 10px' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                       <Link href={`/admin/clientes/${id}`} style={{ fontFamily: 'var(--font-ui)', fontSize: '0.9375rem', color: 'var(--color-star)', textDecoration: 'none', fontWeight: 500 }}>
                         {c.nombre}
@@ -334,7 +334,7 @@ export default function ClientesPage() {
                   </td>
 
                   {/* Demo (+ fecha presentación) */}
-                  <td style={{ padding: '8px 16px' }}>
+                  <td style={{ padding: '8px 10px' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 4, alignItems: 'flex-start' }}>
                       {editing?.id === id && editing.field === 'demo' ? (
                         <select
@@ -374,7 +374,7 @@ export default function ClientesPage() {
                   </td>
 
                   {/* Situacion (+ fecha inicio proyecto) */}
-                  <td style={{ padding: '8px 16px' }}>
+                  <td style={{ padding: '8px 10px' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 4, alignItems: 'flex-start' }}>
                       {editing?.id === id && editing.field === 'situacion' ? (
                         <select
@@ -411,7 +411,7 @@ export default function ClientesPage() {
                   </td>
 
                   {/* Plan */}
-                  <td style={{ padding: '8px 16px' }} onClick={() => editing?.id !== id && startEdit(id, 'plan', c.plan ?? '')}>
+                  <td style={{ padding: '8px 10px' }} onClick={() => editing?.id !== id && startEdit(id, 'plan', c.plan ?? '')}>
                     {editing?.id === id && editing.field === 'plan' ? (
                       <input
                         autoFocus
@@ -446,7 +446,7 @@ export default function ClientesPage() {
                   </td>
 
                   {/* Pass Admin */}
-                  <td style={{ padding: '8px 16px' }} onClick={e => e.stopPropagation()}>
+                  <td style={{ padding: '8px 10px' }} onClick={e => e.stopPropagation()}>
                     {editing?.id === id && editing.field === 'passwordAdmin' ? (
                       <input
                         autoFocus
@@ -454,7 +454,7 @@ export default function ClientesPage() {
                         onChange={e => setEditVal(e.target.value)}
                         onBlur={e => saveInline(id, 'passwordAdmin', e.target.value)}
                         onKeyDown={e => e.key === 'Enter' && saveInline(id, 'passwordAdmin', editVal)}
-                        style={{ ...cellInputStyle, minWidth: 100 }}
+                        style={{ ...cellInputStyle, minWidth: 90 }}
                       />
                     ) : (
                       <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -493,7 +493,7 @@ export default function ClientesPage() {
                   </td>
 
                   {/* WSP */}
-                  <td style={{ padding: '8px 16px' }} onClick={() => editing?.id !== id && startEdit(id, 'telefono', c.telefono ?? '')}>
+                  <td style={{ padding: '8px 10px' }} onClick={() => editing?.id !== id && startEdit(id, 'telefono', c.telefono ?? '')}>
                     {editing?.id === id && editing.field === 'telefono' ? (
                       <input
                         autoFocus
@@ -519,7 +519,7 @@ export default function ClientesPage() {
                   </td>
 
                   {/* URL */}
-                  <td style={{ padding: '8px 16px' }} onClick={() => editing?.id !== id && startEdit(id, 'url', c.url ?? '')}>
+                  <td style={{ padding: '8px 10px' }} onClick={() => editing?.id !== id && startEdit(id, 'url', c.url ?? '')}>
                     {editing?.id === id && editing.field === 'url' ? (
                       <input
                         autoFocus
@@ -530,7 +530,7 @@ export default function ClientesPage() {
                         style={cellInputStyle}
                       />
                     ) : c.url ? (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                         <a
                           href={siteBase(c.url)}
                           target="_blank"
@@ -550,7 +550,7 @@ export default function ClientesPage() {
                             style={{
                               fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: 'var(--color-muted)',
                               textDecoration: 'none', border: '1px solid var(--color-border)', borderRadius: 99,
-                              padding: '2px 8px', whiteSpace: 'nowrap',
+                              padding: '2px 6px', whiteSpace: 'nowrap',
                             }}
                           >
                             Plan ↗
@@ -563,7 +563,7 @@ export default function ClientesPage() {
                   </td>
 
                   {/* Observaciones */}
-                  <td style={{ padding: '8px 16px', minWidth: 220, maxWidth: 300 }} onClick={() => editing?.id !== id && startEdit(id, 'notas', c.notas ?? '')}>
+                  <td style={{ padding: '8px 10px', minWidth: 160 }} onClick={() => editing?.id !== id && startEdit(id, 'notas', c.notas ?? '')}>
                     {editing?.id === id && editing.field === 'notas' ? (
                       <textarea
                         autoFocus
@@ -584,7 +584,7 @@ export default function ClientesPage() {
                         style={{
                           ...cellInputStyle,
                           width: '100%',
-                          minWidth: 200,
+                          minWidth: 150,
                           resize: 'vertical',
                           lineHeight: 1.4,
                         }}
