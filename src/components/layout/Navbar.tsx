@@ -279,18 +279,19 @@ export default function Navbar() {
               position: 'fixed', inset: 0, zIndex: 99,
               background: '#121212',
               display: 'flex', flexDirection: 'column',
-              overflow: 'hidden',
+              overflowY: 'auto',
             }}
           >
             {/* Inner grid */}
             <div style={{
               flex: 1, display: 'flex', flexDirection: 'column',
               paddingTop: 68, /* navbar height */
+              overflowY: 'auto',
             }}>
               <div style={{
                 flex: 1, display: 'grid',
                 gridTemplateColumns: '1fr',
-                padding: 'clamp(2rem, 5vw, 4rem)',
+                padding: 'clamp(1.25rem, 4vw, 3rem)',
                 gap: '0',
               }}
               className="menu-grid"
@@ -312,7 +313,7 @@ export default function Navbar() {
 
                       {/* Nav row */}
                       <motion.div
-                        style={{ overflow: 'hidden', padding: 'clamp(0.4rem, min(1.5vw, 1.8vh), 1rem) 0' }}
+                        style={{ overflow: 'hidden', padding: 'clamp(0.2rem, min(1vw, 1.2vh), 0.6rem) 0' }}
                         onMouseEnter={() => setHovered(i)}
                         onMouseLeave={() => setHovered(null)}
                       >
@@ -346,7 +347,7 @@ export default function Navbar() {
                           <span style={{
                             fontFamily: 'var(--font-display)',
                             fontStyle: 'normal',
-                            fontSize: 'clamp(2rem, min(8.5vw, 11vh), 7.5rem)',
+                            fontSize: 'clamp(1.5rem, min(7vw, 8vh), 5.5rem)',
                             fontWeight: 800,
                             lineHeight: 1.0,
                             letterSpacing: '-0.03em',
