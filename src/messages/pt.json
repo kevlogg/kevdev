@@ -108,6 +108,12 @@
     "paragraph": "Se você tem uma ideia, um processo para melhorar ou um produto para lançar, me escreva. Sem formulários. Sem fricção.",
     "whatsappCta": "Me chame no WhatsApp",
     "whatsappMessage": "Olá Kevin, estou entrando em contato pelo kevdev.com",
+    "contactLinks": {
+      "whatsapp": "WhatsApp 💬",
+      "instagram": "Instagram",
+      "linkedin": "LinkedIn",
+      "email": "Email"
+    },
     "links": {
       "whatsapp": "WhatsApp",
       "linkedin": "LinkedIn",

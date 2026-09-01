@@ -9,6 +9,7 @@ import LanguageSwitcher from '@/components/ui/LanguageSwitcher'
 
 /* ─── Data ──────────────────────────────────────────────────────────── */
 const CONTACT_HREFS = [
+  { key: 'whatsapp',  href: 'https://wa.me/5492235851419' },
   { key: 'instagram', href: 'https://www.instagram.com/kevd3v/' },
   { key: 'linkedin',  href: 'https://www.linkedin.com/in/kevin-loggia/' },
   { key: 'email',     href: 'mailto:kevdev.info@gmail.com' },
@@ -32,10 +33,13 @@ const overlayV = {
 }
 
 const itemV = {
-  closed: { y: 72, opacity: 0 },
+  closed: { y: 45, opacity: 0, filter: 'blur(8px)', rotateX: -12 },
   open: (i: number) => ({
-    y: 0, opacity: 1,
-    transition: { duration: 0.75, ease: EASE_OUT, delay: 0.18 + i * 0.09 },
+    y: 0,
+    opacity: 1,
+    filter: 'blur(0px)',
+    rotateX: 0,
+    transition: { duration: 0.55, ease: EASE_OUT, delay: 0.1 + i * 0.06 },
   }),
 }
 
@@ -313,7 +317,18 @@ export default function Navbar() {
 
                       {/* Nav row */}
                       <motion.div
-                        style={{ overflow: 'hidden', padding: 'clamp(0.2rem, min(1vw, 1.2vh), 0.6rem) 0' }}
+                        style={{
+                          position: 'relative',
+                          overflow: 'hidden',
+                          padding: 'clamp(0.25rem, min(1vw, 1.2vh), 0.65rem) 0.75rem',
+                          borderRadius: 12,
+                          transition: 'background 0.3s ease, border-color 0.3s ease, filter 0.3s ease',
+                          background: hovered === i
+                            ? 'linear-gradient(90deg, rgba(6,182,212,0.14) 0%, rgba(99,102,241,0.06) 60%, transparent 100%)'
+                            : 'transparent',
+                          borderLeft: hovered === i ? '3px solid #22d3ee' : '3px solid transparent',
+                          filter: hovered !== null && hovered !== i ? 'blur(1px)' : 'none',
+                        }}
                         onMouseEnter={() => setHovered(i)}
                         onMouseLeave={() => setHovered(null)}
                       >
@@ -323,22 +338,24 @@ export default function Navbar() {
                           onClick={() => handleNav(item.href, close)}
                           style={{
                             background: 'none', border: 'none', cursor: 'pointer',
-                            padding: 0, display: 'flex', alignItems: 'baseline',
+                            padding: 0, display: 'flex', alignItems: 'center',
                             gap: 'clamp(0.75rem, 2vw, 1.5rem)',
                             width: '100%', textAlign: 'left',
                             transition: 'opacity 0.35s',
-                            opacity: hovered === null || hovered === i ? 1 : 0.2,
+                            opacity: hovered === null || hovered === i ? 1 : 0.25,
                           }}
                         >
                           {/* Index */}
                           <span style={{
-                            fontFamily: 'var(--font-mono)', fontSize: 'clamp(0.625rem, 1.2vw, 0.75rem)',
-                            color: 'var(--color-accent)',
-                            letterSpacing: '0.06em',
-                            transition: 'opacity 0.3s',
-                            opacity: hovered === i ? 1 : 0.5,
+                            fontFamily: 'var(--font-mono)', fontSize: 'clamp(0.6875rem, 1.3vw, 0.8125rem)',
+                            color: hovered === i ? '#22d3ee' : 'var(--color-accent)',
+                            letterSpacing: '0.08em',
+                            fontWeight: 700,
+                            transition: 'all 0.3s ease',
+                            opacity: hovered === i ? 1 : 0.6,
                             flexShrink: 0,
-                            paddingBottom: '0.25rem',
+                            transform: hovered === i ? 'scale(1.15) translateX(2px)' : 'scale(1)',
+                            textShadow: hovered === i ? '0 0 12px rgba(34,211,238,0.6)' : 'none',
                           }}>
                             {item.index}
                           </span>
@@ -351,29 +368,36 @@ export default function Navbar() {
                             fontWeight: 800,
                             lineHeight: 1.0,
                             letterSpacing: '-0.03em',
-                            color: hovered === i
-                              ? 'var(--color-star)'
-                              : 'rgba(221,232,255,0.55)',
-                            transition: 'color 0.3s var(--ease-expo), transform 0.3s var(--ease-expo)',
-                            transform: hovered === i ? 'translateX(0.5rem)' : 'translateX(0)',
+                            color: hovered === i ? '#ffffff' : 'rgba(221,232,255,0.65)',
+                            transition: 'all 0.3s var(--ease-expo)',
+                            transform: hovered === i ? 'translateX(0.75rem)' : 'translateX(0)',
                             display: 'inline-block',
+                            textShadow: hovered === i ? '0 0 28px rgba(34,211,238,0.45)' : 'none',
                           }}>
                             {item.label}
                           </span>
 
-                          {/* Arrow */}
+                          {/* Arrow Badge */}
                           <span style={{
                             fontFamily: 'var(--font-ui)',
                             fontSize: 'clamp(0.875rem, 1.5vw, 1.125rem)',
-                            color: 'var(--color-accent)',
+                            color: '#22d3ee',
                             marginLeft: 'auto',
-                            transition: 'opacity 0.3s, transform 0.3s var(--ease-expo)',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            width: 34,
+                            height: 34,
+                            borderRadius: '50%',
+                            background: hovered === i ? 'rgba(34,211,238,0.15)' : 'transparent',
+                            border: hovered === i ? '1px solid rgba(34,211,238,0.4)' : '1px solid transparent',
+                            boxShadow: hovered === i ? '0 0 16px rgba(34,211,238,0.3)' : 'none',
+                            transition: 'all 0.3s var(--ease-expo)',
                             opacity: hovered === i ? 1 : 0,
-                            transform: hovered === i ? 'translate(0, 0)' : 'translate(-8px, 4px)',
-                            alignSelf: 'center',
+                            transform: hovered === i ? 'translate(0, 0) scale(1.05)' : 'translate(-12px, 0) scale(0.8)',
                             flexShrink: 0,
                           }}>
-                            ↗
+                            ➜
                           </span>
                         </motion.button>
                       </motion.div>
