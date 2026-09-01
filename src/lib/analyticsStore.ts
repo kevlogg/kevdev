@@ -23,6 +23,7 @@ export interface AnalyticsSummary {
   mobilePct: number
   conversionRate: number
   totalLeads: number
+  trackingSince: string
   trafficSources: { name: string; count: number; percentage: number }[]
   topPages: { path: string; views: number }[]
   topButtons: { buttonId: string; label: string; clicks: number }[]
@@ -31,68 +32,6 @@ export interface AnalyticsSummary {
 }
 
 const FILE_PATH = path.join(os.tmpdir(), 'kevdev_analytics_events.json')
-
-// Generador de telemetría inicial base
-function getSeedEvents(): AnalyticsEvent[] {
-  const seeds: AnalyticsEvent[] = []
-  const now = Date.now()
-  const dayMs = 24 * 60 * 60 * 1000
-
-  const paths = ['/', '/', '/', '/proyectos', '/contacto', '/diseno-web', '/tiendas-online', '/vault', '/diagnostico']
-  const sources = ['google_organico', 'google_organico', 'instagram', 'instagram', 'whatsapp', 'directo', 'linkedin']
-  const devices: ('mobile' | 'desktop')[] = ['mobile', 'mobile', 'desktop', 'mobile', 'desktop']
-
-  // Generar eventos de visitas de página distribuidos en los últimos 30 días
-  for (let i = 0; i < 480; i++) {
-    const daysAgo = Math.floor(Math.random() * 28)
-    const time = new Date(now - daysAgo * dayMs - Math.random() * dayMs).toISOString()
-    const path = paths[i % paths.length]
-    const source = sources[i % sources.length]
-    const device = devices[i % devices.length]
-    const visitorId = `v_seed_${(i % 120) + 1}`
-
-    seeds.push({
-      id: `ev_seed_${i}`,
-      site: 'kevdev',
-      eventType: 'pageview',
-      path,
-      device,
-      source,
-      metadata: { visitorId },
-      createdAt: time,
-    })
-  }
-
-  // Interacciones en botones y generación de leads
-  const buttonConfigs = [
-    { buttonId: 'wsp_contact', label: 'Contacto WhatsApp Directo', count: 42 },
-    { buttonId: 'quote_calc', label: 'Calculadora de Presupuesto', count: 28 },
-    { buttonId: 'demo_request', label: 'Solicitar Diagnóstico Web', count: 19 },
-    { buttonId: 'portfolio_view', label: 'Ver Proyectos / Casos de Éxito', count: 35 },
-    { buttonId: 'instagram_link', label: 'Perfil de Instagram', count: 15 },
-  ]
-
-  let btnIdx = 0
-  buttonConfigs.forEach(cfg => {
-    for (let c = 0; c < cfg.count; c++) {
-      const daysAgo = Math.floor(Math.random() * 28)
-      const time = new Date(now - daysAgo * dayMs - Math.random() * dayMs).toISOString()
-      seeds.push({
-        id: `ev_btn_seed_${btnIdx++}`,
-        site: 'kevdev',
-        eventType: 'button_click',
-        buttonId: cfg.buttonId,
-        path: cfg.buttonId === 'quote_calc' ? '/contacto' : '/',
-        device: c % 2 === 0 ? 'mobile' : 'desktop',
-        source: 'directo',
-        metadata: { label: cfg.label, visitorId: `v_seed_${(c % 60) + 1}` },
-        createdAt: time,
-      })
-    }
-  })
-
-  return seeds
-}
 
 // Leer eventos persistidos del servidor
 function readLocalEvents(): AnalyticsEvent[] {
@@ -173,12 +112,6 @@ export async function getStoreAnalyticsSummary(periodDays: number = 30): Promise
     }
   } catch (e) {
     console.warn('Usando respaldo de analítica en memoria/local:', e)
-  }
-
-  // Si no existen eventos registrados aún, usar semilla base de telemetría inicial
-  if (events.length === 0) {
-    events = getSeedEvents()
-    memoryEventsCache = events
   }
 
   const now = new Date()
@@ -274,6 +207,10 @@ export async function getStoreAnalyticsSummary(periodDays: number = 30): Promise
       label: ev.metadata?.label || ev.buttonId,
     }))
 
+  const earliestEventDate = events.length > 0 && events[0].createdAt
+    ? new Date(events.reduce((min, e) => (e.createdAt && e.createdAt < min ? e.createdAt : min), events[0].createdAt)).toLocaleDateString('es-AR', { day: 'numeric', month: 'long', year: 'numeric' })
+    : '1 de Septiembre de 2026'
+
   return {
     totalPageviews,
     uniqueVisitors,
@@ -281,6 +218,7 @@ export async function getStoreAnalyticsSummary(periodDays: number = 30): Promise
     mobilePct,
     conversionRate,
     totalLeads,
+    trackingSince: earliestEventDate,
     trafficSources,
     topPages,
     topButtons,

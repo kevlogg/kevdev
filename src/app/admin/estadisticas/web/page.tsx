@@ -99,7 +99,7 @@ export default function EstadisticasWebPage() {
       {/* ── 2. HEADER PRINCIPAL Y FILTROS DEDICADOS ───────────────────────────────── */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.25rem' }}>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.35rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.35rem', flexWrap: 'wrap' }}>
             <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '1.75rem', fontWeight: 800, color: '#ffffff', margin: 0, letterSpacing: '-0.02em' }}>
               Dashboard de Analítica & Telemetría Web
             </h1>
@@ -117,11 +117,24 @@ export default function EstadisticasWebPage() {
               fontWeight: 700,
             }}>
               <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#34d399', boxShadow: '0 0 8px #34d399' }} />
-              EN VIVO {lastUpdated && `(${lastUpdated})`}
+              100% REAL EN VIVO {lastUpdated && `(${lastUpdated})`}
             </span>
+            {analytics?.trackingSince && (
+              <span style={{
+                fontSize: '0.6875rem',
+                fontFamily: 'var(--font-mono)',
+                color: '#38bdf8',
+                background: 'rgba(56, 189, 248, 0.1)',
+                border: '1px solid rgba(56, 189, 248, 0.25)',
+                padding: '0.25rem 0.65rem',
+                borderRadius: 99,
+              }}>
+                🗓️ Registrando desde: {analytics.trackingSince}
+              </span>
+            )}
           </div>
           <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.875rem', color: 'var(--color-muted)', margin: 0 }}>
-            Visualización en tiempo real de tráfico, conversiones de leads y SEO orgánico de <strong style={{ color: '#ffffff' }}>kevdev.net.ar</strong>.
+            Telemetría 100% real de tráfico orgánico, conversiones de leads y comportamiento de usuarios en <strong style={{ color: '#ffffff' }}>kevdev.net.ar</strong>.
           </p>
         </div>
 
