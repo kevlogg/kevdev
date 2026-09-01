@@ -38,7 +38,10 @@ export async function generateMetadata({
 
   return {
     metadataBase: new URL('https://www.kevdev.net.ar'),
-    title: meta.title,
+    title: {
+      default: meta.title,
+      template: '%s | KevDev — Desarrollador Web & Software',
+    },
     description: meta.description,
     keywords: [
       'Desarrollador web argentina',

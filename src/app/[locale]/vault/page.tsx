@@ -261,7 +261,7 @@ export default function VaultRootPage() {
                   fontSize: '0.75rem',
                   color: 'var(--color-muted)',
                 }}>
-                  <div style={{ color: 'var(--color-accent)', fontWeight: 700 }}>// Servicios de integración</div>
+                  <div style={{ color: 'var(--color-accent)', fontWeight: 700 }}>{'// Servicios de integración'}</div>
                   <div>● Setup completo de servidor n8n en VPS</div>
                   <div>● Integraciones con WhatsApp API oficial</div>
                   <div>● Desarrollo de agentes IA personalizados</div>

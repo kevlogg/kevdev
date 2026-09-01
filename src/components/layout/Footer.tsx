@@ -161,14 +161,14 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <a href="/#servicios" style={{ color: 'var(--color-muted)', fontSize: '0.8125rem', textDecoration: 'none' }}>
+                <Link href="/#servicios" style={{ color: 'var(--color-muted)', fontSize: '0.8125rem', textDecoration: 'none' }}>
                   Servicios
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/#faq" style={{ color: 'var(--color-muted)', fontSize: '0.8125rem', textDecoration: 'none' }}>
+                <Link href="/#faq" style={{ color: 'var(--color-muted)', fontSize: '0.8125rem', textDecoration: 'none' }}>
                   Preguntas Frecuentes (FAQ)
-                </a>
+                </Link>
               </li>
               <li>
                 <a href="https://share.google/Vmv20uo1V4pSFQY8h" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-muted)', fontSize: '0.8125rem', textDecoration: 'none' }}>

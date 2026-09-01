@@ -60,7 +60,7 @@ export async function POST(req: Request) {
     const secret = process.env.KEVDEV_PAYMENTS_SECRET || 'kevdev_payments_sec_2026_key'
 
     const updates: Record<string, any> = {}
-    let paymentsToImport: Array<{ date: string; amount: number; concept?: string; concepto?: string; confirmed: boolean }> = []
+    const paymentsToImport: Array<{ date: string; amount: number; concept?: string; concepto?: string; confirmed: boolean }> = []
 
     // 2. Fetch config de billing desde la web en producción del cliente
     try {
