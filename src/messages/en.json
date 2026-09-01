@@ -287,5 +287,42 @@
         "msg": "Hi! I took the kevdev professionalism diagnostic and I'm interested in the Complete Plan. Can you give me more info and put together a quote?"
       }
     }
+  },
+  "contactoPage": {
+    "badge": "01 // CONTACT & QUOTE",
+    "title": "Let's talk about your project. Direct focus, clear timelines, and technical execution.",
+    "subtext": "Fill out the form or write to me directly on WhatsApp to coordinate a call or an initial quote.",
+    "fastTrackTitle": "Fast Track — Direct Contact",
+    "whatsappBtn": "Message me on WhatsApp",
+    "whatsappMessage": "Hola Kevin, quiero cotizar un proyecto web/software con Kevdev",
+    "statusIndicator": "● Available today | Average response < 1h",
+    "formTitle": "Project Qualification Form",
+    "fields": {
+      "nameLabel": "Name / Company",
+      "namePlaceholder": "E.g. Kevin Loggia / KevDev",
+      "contactLabel": "WhatsApp or Email contact",
+      "contactPlaceholder": "+54 9 223 ... or contact@company.com",
+      "serviceLabel": "Service Type",
+      "services": [
+        "Websites & Landing pages",
+        "Online Stores (E-commerce)",
+        "Custom Software & API Integrations",
+        "SEO Optimization & Performance"
+      ],
+      "descLabel": "Brief description or reference link",
+      "descPlaceholder": "Tell me about your project goals, features or references...",
+      "submitBtn": "Send quote request",
+      "submitting": "Sending request...",
+      "successMsg": "Request received successfully! I will reply shortly."
+    },
+    "nap": {
+      "title": "Information & Local Coverage",
+      "hoursLabel": "Business Hours",
+      "hoursValue": "Monday to Saturday, 09:00 to 20:00",
+      "locationLabel": "Location & Scope",
+      "locationValue": "Mar del Plata, Buenos Aires and remote service nationwide",
+      "socialsLabel": "Official Profiles",
+      "googleMapsBtn": "View Profile on Google Maps 📍"
+    }
   }
 }

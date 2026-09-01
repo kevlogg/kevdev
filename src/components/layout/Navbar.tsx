@@ -77,7 +77,7 @@ export default function Navbar() {
     { href: '/tiendas-online', label: 'Tiendas Online', index: '03' },
     { href: '/desarrollo-a-medida', label: 'A Medida', index: '04' },
     { href: '/proyectos', label: t('items.proyectos'), index: '05' },
-    { href: '#contacto',  label: t('items.contacto'),  index: '06' },
+    { href: '/contacto',  label: t('items.contacto'),  index: '06' },
     { href: '/vault',     label: t('items.vault'),     index: '07' },
   ]
 

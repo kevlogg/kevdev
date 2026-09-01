@@ -287,5 +287,42 @@
         "msg": "Hola! Hice el diagnóstico de profesionalismo de kevdev y me interesa el Plan Integral. ¿Me podés dar más info y armar un presupuesto?"
       }
     }
+  },
+  "contactoPage": {
+    "badge": "01 // CONTACTO & COTIZACIÓN",
+    "title": "Hablemos de tu proyecto. Enfoque directo, tiempos claros y ejecución técnica.",
+    "subtext": "Completá el formulario o escribime directamente por WhatsApp para coordinar una llamada o cotización inicial.",
+    "fastTrackTitle": "Vía Rápida — Contacto Directo",
+    "whatsappBtn": "Escribirme por WhatsApp",
+    "whatsappMessage": "Hola Kevin, quiero cotizar un proyecto web/software con Kevdev",
+    "statusIndicator": "● Disponible hoy | Respuesta promedio < 1h",
+    "formTitle": "Formulario de Calificación de Proyectos",
+    "fields": {
+      "nameLabel": "Nombre / Empresa",
+      "namePlaceholder": "Ej. Kevin Loggia / KevDev",
+      "contactLabel": "WhatsApp o Email de contacto",
+      "contactPlaceholder": "+54 9 223 ... o contacto@empresa.com",
+      "serviceLabel": "Tipo de servicio",
+      "services": [
+        "Sitios web & Landing pages",
+        "Tiendas online (E-commerce)",
+        "Software a medida & Integraciones API",
+        "Optimización SEO & Rendimiento"
+      ],
+      "descLabel": "Breve descripción o link de referencia",
+      "descPlaceholder": "Contame sobre los objetivos de tu proyecto, funcionalidades o referencias...",
+      "submitBtn": "Enviar solicitud de cotización",
+      "submitting": "Enviando solicitud...",
+      "successMsg": "¡Solicitud recibida con éxito! Te responderé en breve."
+    },
+    "nap": {
+      "title": "Información & Cobertura Local",
+      "hoursLabel": "Horarios de Atención",
+      "hoursValue": "Lunes a Sábado, 09:00 a 20:00 hs",
+      "locationLabel": "Ubicación & Alcance",
+      "locationValue": "Mar del Plata, Buenos Aires y atención remota a todo el país",
+      "socialsLabel": "Perfiles Oficiales",
+      "googleMapsBtn": "Ver Ficha en Google Maps 📍"
+    }
   }
 }

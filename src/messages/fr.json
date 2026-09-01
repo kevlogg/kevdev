@@ -288,5 +288,42 @@
         "msg": "Bonjour ! J'ai fait le diagnostic de professionnalisme de kevdev et je suis intéressé par le Plan Intégral. Pouvez-vous me donner plus d'infos et préparer un devis ?"
       }
     }
+  },
+  "contactoPage": {
+    "badge": "01 // CONTACT & DEVIS",
+    "title": "Parlons de votre projet. Focus direct, délais clairs et exécution technique.",
+    "subtext": "Remplissez le formulaire ou écrivez-moi directement sur WhatsApp pour organiser un appel ou un devis initial.",
+    "fastTrackTitle": "Voie Rapide — Contact Direct",
+    "whatsappBtn": "M'écrire sur WhatsApp",
+    "whatsappMessage": "Hola Kevin, quiero cotizar un proyecto web/software con Kevdev",
+    "statusIndicator": "● Disponible aujourd'hui | Réponse moyenne < 1h",
+    "formTitle": "Formulaire de Qualification de Projet",
+    "fields": {
+      "nameLabel": "Nom / Entreprise",
+      "namePlaceholder": "Ex. Kevin Loggia / KevDev",
+      "contactLabel": "Contact WhatsApp ou Email",
+      "contactPlaceholder": "+54 9 223 ... ou contact@entreprise.com",
+      "serviceLabel": "Type de service",
+      "services": [
+        "Sites web & Landing pages",
+        "Boutiques en ligne (E-commerce)",
+        "Logiciel sur mesure & Intégrations API",
+        "Optimisation SEO & Performance"
+      ],
+      "descLabel": "Brève description ou lien de référence",
+      "descPlaceholder": "Parlez-moi des objectifs de votre projet, fonctionnalités ou références...",
+      "submitBtn": "Envoyer la demande de devis",
+      "submitting": "Envoi de la demande...",
+      "successMsg": "Demande reçue avec succès ! Je vous répondrai sous peu."
+    },
+    "nap": {
+      "title": "Informations & Couverture Locale",
+      "hoursLabel": "Heures d'Ouverture",
+      "hoursValue": "Lundi au Samedi, 09h00 à 20h00",
+      "locationLabel": "Emplacement & Portée",
+      "locationValue": "Mar del Plata, Buenos Aires et service à distance dans tout le pays",
+      "socialsLabel": "Profils Officiels",
+      "googleMapsBtn": "Voir la fiche sur Google Maps 📍"
+    }
   }
 }

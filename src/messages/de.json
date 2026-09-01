@@ -288,5 +288,42 @@
         "msg": "Hallo! Ich habe die kevdev-Professionalitätsdiagnose gemacht und interessiere mich für den Komplettplan. Kannst du mir mehr Infos geben und ein Angebot erstellen?"
       }
     }
+  },
+  "contactoPage": {
+    "badge": "01 // KONTAKT & ANGEBOT",
+    "title": "Lass uns über dein Projekt sprechen. Direkter Fokus, klare Fristen und technische Ausführung.",
+    "subtext": "Fülle das Formular aus oder schreibe mir direkt auf WhatsApp, um ein Erstgespräch oder Angebot zu vereinbaren.",
+    "fastTrackTitle": "Direktkontakt — Schnellspur",
+    "whatsappBtn": "Auf WhatsApp schreiben",
+    "whatsappMessage": "Hola Kevin, quiero cotizar un proyecto web/software con Kevdev",
+    "statusIndicator": "● Heute verfügbar | Antwortzeit < 1 Std.",
+    "formTitle": "Projekt-Qualifizierungsformular",
+    "fields": {
+      "nameLabel": "Name / Unternehmen",
+      "namePlaceholder": "Z.B. Kevin Loggia / KevDev",
+      "contactLabel": "WhatsApp oder E-Mail-Kontakt",
+      "contactPlaceholder": "+54 9 223 ... oder kontakt@firma.de",
+      "serviceLabel": "Leistungsart",
+      "services": [
+        "Websites & Landingpages",
+        "Online-Shops (E-Commerce)",
+        "Individualsoftware & API-Integrationen",
+        "SEO-Optimierung & Performance"
+      ],
+      "descLabel": "Kurze Beschreibung oder Referenz-Link",
+      "descPlaceholder": "Erzähle mir von den Zielen deines Projekts, Funktionen oder Referenzen...",
+      "submitBtn": "Angebotsanfrage senden",
+      "submitting": "Anfrage wird gesendet...",
+      "successMsg": "Anfrage erfolgreich erhalten! Ich antworte in Kürze."
+    },
+    "nap": {
+      "title": "Informationen & Lokale Abdeckung",
+      "hoursLabel": "Öffnungszeiten",
+      "hoursValue": "Montag bis Samstag, 09:00 bis 20:00 Uhr",
+      "locationLabel": "Standort & Reichweite",
+      "locationValue": "Mar del Plata, Buenos Aires und Remote-Service landesweit",
+      "socialsLabel": "Offizielle Profile",
+      "googleMapsBtn": "Profil auf Google Maps ansehen 📍"
+    }
   }
 }

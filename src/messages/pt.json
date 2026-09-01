@@ -288,5 +288,42 @@
         "msg": "Olá! Fiz o diagnóstico de profissionalismo da kevdev e tenho interesse no Plano Integral. Pode me dar mais informações e montar um orçamento?"
       }
     }
+  },
+  "contactoPage": {
+    "badge": "01 // CONTATO & ORÇAMENTO",
+    "title": "Fale sobre o seu projeto. Foco direto, prazos claros e execução técnica.",
+    "subtext": "Preencha o formulário ou fale comigo diretamente pelo WhatsApp para agendar uma conversa ou orçamento inicial.",
+    "fastTrackTitle": "Via Rápida — Contato Direto",
+    "whatsappBtn": "Falar pelo WhatsApp",
+    "whatsappMessage": "Hola Kevin, quiero cotizar un proyecto web/software con Kevdev",
+    "statusIndicator": "● Disponível hoje | Resposta média < 1h",
+    "formTitle": "Formulário de Qualificação de Projetos",
+    "fields": {
+      "nameLabel": "Nome / Empresa",
+      "namePlaceholder": "Ex. Kevin Loggia / KevDev",
+      "contactLabel": "WhatsApp ou Email de contato",
+      "contactPlaceholder": "+54 9 223 ... ou contato@empresa.com",
+      "serviceLabel": "Tipo de serviço",
+      "services": [
+        "Sites & Landing pages",
+        "Lojas online (E-commerce)",
+        "Software sob medida & Integrações API",
+        "Otimização SEO & Performance"
+      ],
+      "descLabel": "Breve descrição ou link de referência",
+      "descPlaceholder": "Conte sobre os objetivos do seu projeto, funcionalidades ou referências...",
+      "submitBtn": "Enviar solicitação de orçamento",
+      "submitting": "Enviando solicitação...",
+      "successMsg": "Solicitação recebida com sucesso! Responderei em breve."
+    },
+    "nap": {
+      "title": "Informações & Cobertura Local",
+      "hoursLabel": "Horário de Atendimento",
+      "hoursValue": "Segunda a Sábado, 09:00 a 20:00",
+      "locationLabel": "Localização & Alcance",
+      "locationValue": "Mar del Plata, Buenos Aires e atendimento remoto para todo o país",
+      "socialsLabel": "Perfis Oficiais",
+      "googleMapsBtn": "Ver Ficha no Google Maps 📍"
+    }
   }
 }
