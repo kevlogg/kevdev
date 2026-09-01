@@ -203,54 +203,29 @@ export default function Navbar() {
             }}
           >
             {!open && (
-              <>
-                <button
-                  type="button"
-                  onClick={() => handleNav('/contacto')}
-                  style={{
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '0.75rem',
-                    fontWeight: 700,
-                    letterSpacing: '0.06em',
-                    color: '#ffffff',
-                    background: 'linear-gradient(135deg, #06b6d4, #6366f1)',
-                    border: 'none',
-                    padding: '0.4rem 0.85rem',
-                    borderRadius: 99,
-                    cursor: 'pointer',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.35rem',
-                    boxShadow: '0 4px 14px rgba(6, 182, 212, 0.3)',
-                    transition: 'transform 0.2s',
-                  }}
-                >
-                  <span>Contacto 💬</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleNav('/vault')}
-                  style={{
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '0.75rem',
-                    fontWeight: 700,
-                    letterSpacing: '0.06em',
-                    color: '#22d3ee',
-                    background: 'rgba(6, 182, 212, 0.1)',
-                    border: '1px solid rgba(6, 182, 212, 0.3)',
-                    padding: '0.35rem 0.75rem',
-                    borderRadius: 99,
-                    cursor: 'pointer',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.4rem',
-                    transition: 'all 0.25s',
-                  }}
-                >
-                  <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#22d3ee', display: 'inline-block' }} />
-                  VAULT
-                </button>
-              </>
+              <button
+                type="button"
+                onClick={() => handleNav('/vault')}
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.75rem',
+                  fontWeight: 700,
+                  letterSpacing: '0.06em',
+                  color: '#22d3ee',
+                  background: 'rgba(6, 182, 212, 0.1)',
+                  border: '1px solid rgba(6, 182, 212, 0.3)',
+                  padding: '0.35rem 0.75rem',
+                  borderRadius: 99,
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                  transition: 'all 0.25s',
+                }}
+              >
+                <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#22d3ee', display: 'inline-block' }} />
+                CURSOS
+              </button>
             )}
             {!open && <LanguageSwitcher compact />}
 
