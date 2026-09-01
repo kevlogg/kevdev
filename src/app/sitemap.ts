@@ -18,8 +18,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return routes.map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: currentDate,
-    changeFrequency: route === '' ? 'weekly' : 'monthly',
-<<<<<<< HEAD
     priority: route === '' ? 1.0 : (route === '/contacto' || route.startsWith('/diseno-web') || route.startsWith('/tiendas-online') || route.startsWith('/desarrollo-a-medida') ? 0.9 : 0.7),
   }))
 }

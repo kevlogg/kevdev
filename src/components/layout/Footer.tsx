@@ -118,6 +118,11 @@ export default function Footer() {
             </span>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <li>
+                <Link href="/contacto" style={{ color: '#22d3ee', fontSize: '0.8125rem', textDecoration: 'none', fontWeight: 700 }}>
+                  ➜ Contacto & Cotizaciones 💬
+                </Link>
+              </li>
+              <li>
                 <Link href="/diseno-web" style={{ color: '#38bdf8', fontSize: '0.8125rem', textDecoration: 'none', fontWeight: 600 }}>
                   ➜ Diseño Web Profesional
                 </Link>
@@ -150,6 +155,11 @@ export default function Footer() {
               Secciones
             </span>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <li>
+                <Link href="/contacto" style={{ color: '#22d3ee', fontSize: '0.8125rem', textDecoration: 'none', fontWeight: 600 }}>
+                  Contacto Directo
+                </Link>
+              </li>
               <li>
                 <a href="/#servicios" style={{ color: 'var(--color-muted)', fontSize: '0.8125rem', textDecoration: 'none' }}>
                   Servicios
