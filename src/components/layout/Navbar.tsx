@@ -20,6 +20,7 @@ const STACK_ACCENT = [true, false, false, false, false, false]
 /* ─── Variants ──────────────────────────────────────────────────────── */
 const EASE_EXPO: [number,number,number,number] = [0.76, 0, 0.24, 1]
 const EASE_OUT:  [number,number,number,number] = [0.22, 1, 0.36, 1]
+const EASE_SPRING: [number,number,number,number] = [0.16, 1, 0.3, 1]
 
 const overlayV = {
   closed: {
@@ -33,21 +34,40 @@ const overlayV = {
 }
 
 const itemV = {
-  closed: { y: 45, opacity: 0, filter: 'blur(8px)', rotateX: -12 },
+  closed: (i: number) => ({
+    x: 160 + i * 45,
+    opacity: 0,
+    filter: 'blur(10px)',
+    skewX: -12,
+  }),
   open: (i: number) => ({
-    y: 0,
+    x: 0,
     opacity: 1,
     filter: 'blur(0px)',
-    rotateX: 0,
-    transition: { duration: 0.55, ease: EASE_OUT, delay: 0.1 + i * 0.06 },
+    skewX: 0,
+    transition: {
+      duration: 0.7,
+      ease: EASE_SPRING,
+      delay: 0.12 + i * 0.07,
+    },
   }),
 }
 
 const lineV = {
-  closed: { scaleX: 0 },
+  closed: (i: number) => ({
+    x: 120 + i * 35,
+    scaleX: 0,
+    opacity: 0,
+  }),
   open: (i: number) => ({
+    x: 0,
     scaleX: 1,
-    transition: { duration: 0.65, ease: EASE_OUT, delay: 0.14 + i * 0.09 },
+    opacity: 1,
+    transition: {
+      duration: 0.65,
+      ease: EASE_SPRING,
+      delay: 0.1 + i * 0.07,
+    },
   }),
 }
 
@@ -317,6 +337,8 @@ export default function Navbar() {
 
                       {/* Nav row */}
                       <motion.div
+                        custom={i}
+                        variants={itemV}
                         style={{
                           position: 'relative',
                           overflow: 'hidden',
@@ -332,9 +354,7 @@ export default function Navbar() {
                         onMouseEnter={() => setHovered(i)}
                         onMouseLeave={() => setHovered(null)}
                       >
-                        <motion.button
-                          custom={i}
-                          variants={itemV}
+                        <button
                           onClick={() => handleNav(item.href, close)}
                           style={{
                             background: 'none', border: 'none', cursor: 'pointer',
