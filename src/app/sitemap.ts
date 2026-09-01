@@ -12,15 +12,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/diagnostico',
     '/proyectos',
     '/vault',
-    '/diseno-web.html',
-    '/tiendas-online.html',
-    '/desarrollo-a-medida.html',
   ]
 
   return routes.map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: currentDate,
     changeFrequency: route === '' ? 'weekly' : 'monthly',
-    priority: route === '' ? 1.0 : 0.8,
+    priority: route === '' ? 1.0 : (route.startsWith('/diseno-web') || route.startsWith('/tiendas-online') || route.startsWith('/desarrollo-a-medida') ? 0.9 : 0.7),
   }))
 }

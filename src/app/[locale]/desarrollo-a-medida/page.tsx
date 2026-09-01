@@ -23,7 +23,18 @@ export default function DesarrolloAMedidaPage() {
       '@type': 'ProfessionalService',
       name: 'KevDev',
       url: 'https://kevdev.net.ar',
-      sameAs: 'https://share.google/Vmv20uo1V4pSFQY8h',
+      telephone: '+54-9-223-585-1419',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Mar del Plata',
+        addressRegion: 'Buenos Aires',
+        addressCountry: 'AR',
+      },
+      hasMap: 'https://maps.google.com/?cid=8114234444718749965',
+      sameAs: [
+        'https://maps.google.com/?cid=8114234444718749965',
+        'https://share.google/Vmv20uo1V4pSFQY8h',
+      ],
     },
     areaServed: {
       '@type': 'Country',
