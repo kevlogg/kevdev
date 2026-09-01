@@ -107,11 +107,6 @@ export default function Navbar() {
     { href: '/vault',     label: t('items.vault'),     index: '07' },
   ]
 
-  const CONTACT_LINKS = CONTACT_HREFS.map(({ key, href }) => ({
-    label: t(`contactLinks.${key}`),
-    href,
-  }))
-
   const stackLabels = t.raw('stackTags') as string[]
   const STACK_TAGS = stackLabels.map((label, i) => ({ label, accent: STACK_ACCENT[i] ?? false }))
 
@@ -461,31 +456,37 @@ export default function Navbar() {
                     >
                       {t('contactLabel')}
                     </motion.p>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                      {CONTACT_LINKS.map((link, i) => (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+                      {CONTACT_HREFS.map(({ key, href }, i) => (
                         <motion.a
-                          key={link.label}
+                          key={key}
                           custom={i + 1}
                           variants={rightV}
-                          href={link.href}
-                          target={link.href.startsWith('http') ? '_blank' : undefined}
+                          href={href}
+                          target={href.startsWith('http') ? '_blank' : undefined}
                           rel="noopener noreferrer"
                           style={{
-                            fontFamily: 'var(--font-ui)', fontSize: '1.0625rem',
+                            fontFamily: 'var(--font-ui)', fontSize: '0.9375rem',
                             fontWeight: 500, color: 'var(--color-muted)',
                             textDecoration: 'none', letterSpacing: '0.02em',
-                            display: 'flex', alignItems: 'center', gap: '0.5rem',
-                            transition: 'color 0.2s',
+                            display: 'flex', alignItems: 'center', gap: '0.65rem',
+                            padding: '0.4rem 0.65rem',
+                            borderRadius: 10,
+                            transition: 'all 0.25s ease',
                           }}
                           onMouseEnter={e => {
-                            e.currentTarget.style.color = 'var(--color-star)'
+                            e.currentTarget.style.color = '#ffffff'
+                            e.currentTarget.style.background = 'rgba(255,255,255,0.06)'
+                            e.currentTarget.style.transform = 'translateX(6px)'
                           }}
                           onMouseLeave={e => {
                             e.currentTarget.style.color = 'var(--color-muted)'
+                            e.currentTarget.style.background = 'transparent'
+                            e.currentTarget.style.transform = 'translateX(0)'
                           }}
                         >
-                          {link.label}
-                          <span style={{ fontSize: '0.75rem', opacity: 0.5 }}>↗</span>
+                          <ContactIcon type={key} />
+                          <span>{t(`contactLinks.${key}`)}</span>
                         </motion.a>
                       ))}
                     </div>
@@ -610,4 +611,38 @@ function BurgerIcon({ open }: { open: boolean }) {
       />
     </span>
   )
+}
+
+/* ─── Contact SVG Icon Component ────────────────────────────────────── */
+function ContactIcon({ type }: { type: string }) {
+  const iconStyle = { width: 18, height: 18, flexShrink: 0, transition: 'transform 0.25s ease' }
+
+  switch (type) {
+    case 'whatsapp':
+      return (
+        <svg viewBox="0 0 24 24" fill="currentColor" style={{ ...iconStyle, color: '#25D366' }}>
+          <path d="M12.012 2c-5.506 0-9.989 4.478-9.99 9.984 0 1.764.459 3.488 1.333 5.006L2 22l5.129-1.342c1.464.798 3.116 1.218 4.881 1.219h.004c5.507 0 9.991-4.479 9.991-9.986 0-2.667-1.038-5.174-2.925-7.062A9.923 9.923 0 0 0 12.012 2zm.003 16.516h-.003a8.31 8.31 0 0 1-4.237-1.164l-.304-.18-3.04.796.81-2.964-.198-.315a8.28 8.28 0 0 1-1.272-4.476c.002-4.582 3.73-8.308 8.313-8.308 2.22 0 4.306.865 5.875 2.435a8.257 8.257 0 0 1 2.43 5.877c-.002 4.584-3.73 8.309-8.309 8.309zm4.555-6.222c-.25-.125-1.477-.728-1.706-.811-.229-.083-.396-.125-.562.125-.167.25-.646.811-.792.977-.146.166-.292.187-.542.062a6.837 6.837 0 0 1-2.012-1.24 7.534 7.534 0 0 1-1.391-1.733c-.146-.25-.016-.385.109-.509.112-.112.25-.292.375-.438.125-.146.167-.25.25-.416.083-.166.042-.312-.021-.437-.063-.125-.562-1.354-.77-1.854-.203-.487-.41-.421-.562-.429-.146-.007-.312-.007-.479-.007s-.438.062-.667.312c-.229.25-.875.854-.875 2.083s.896 2.417 1.021 2.583c.125.167 1.763 2.693 4.27 3.777.596.257 1.062.411 1.425.526.598.19 1.142.163 1.572.099.48-.071 1.477-.604 1.686-1.187.208-.583.208-1.083.146-1.187-.063-.105-.229-.167-.479-.292z"/>
+        </svg>
+      )
+    case 'instagram':
+      return (
+        <svg viewBox="0 0 24 24" fill="currentColor" style={{ ...iconStyle, color: '#E4405F' }}>
+          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+        </svg>
+      )
+    case 'linkedin':
+      return (
+        <svg viewBox="0 0 24 24" fill="currentColor" style={{ ...iconStyle, color: '#0A66C2' }}>
+          <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+        </svg>
+      )
+    case 'email':
+      return (
+        <svg viewBox="0 0 24 24" fill="currentColor" style={{ ...iconStyle, color: '#38BDF8' }}>
+          <path d="M0 3v18h24v-18h-24zm21.518 2l-9.518 7.713-9.518-7.713h19.036zm-19.518 14v-11.817l10 8.104 10-8.104v11.817h-20z"/>
+        </svg>
+      )
+    default:
+      return null
+  }
 }
