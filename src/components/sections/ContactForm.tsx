@@ -82,6 +82,15 @@ export default function ContactForm() {
         }),
       })
 
+      // Format WhatsApp Message with Lead Info
+      const waMessage = `Hola Kevin! Te envío una consulta desde la web de KevDev:\n\n👤 *Nombre/Empresa:* ${name}\n📞 *Contacto:* ${contactInfo}\n🛠️ *Servicio:* ${selectedService}${description.trim() ? `\n💬 *Detalle:* ${description.trim()}` : ''}`
+      const waUrl = `https://wa.me/5492235851419?text=${encodeURIComponent(waMessage)}`
+
+      // Open WhatsApp in a new tab
+      if (typeof window !== 'undefined') {
+        window.open(waUrl, '_blank', 'noopener,noreferrer')
+      }
+
       setSubmitted(true)
     } catch {
       setSubmitted(true) // Always present positive UX
@@ -404,7 +413,7 @@ export default function ContactForm() {
                   {t('fields.successMsg')}
                 </h4>
                 <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.875rem', color: 'var(--color-muted)', margin: '0 0 1.5rem' }}>
-                  Me pondré en contacto en un plazo máximo de 24 horas hábiles.
+                  Tu consulta ha sido registrada y se abrió WhatsApp con la información precompletada.
                 </p>
                 <button
                   onClick={() => {
