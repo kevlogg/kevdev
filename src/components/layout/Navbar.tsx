@@ -20,7 +20,7 @@ const STACK_ACCENT = [true, false, false, false, false, false]
 /* ─── Variants ──────────────────────────────────────────────────────── */
 const EASE_EXPO: [number,number,number,number] = [0.76, 0, 0.24, 1]
 const EASE_OUT:  [number,number,number,number] = [0.22, 1, 0.36, 1]
-const EASE_SPRING: [number,number,number,number] = [0.16, 1, 0.3, 1]
+const EASE_CINEMATIC: [number,number,number,number] = [0.16, 1, 0.3, 1]
 
 const overlayV = {
   closed: {
@@ -35,27 +35,29 @@ const overlayV = {
 
 const itemV = {
   closed: (i: number) => ({
-    x: 160 + i * 45,
+    x: 180 + i * 75,
     opacity: 0,
-    filter: 'blur(10px)',
-    skewX: -12,
+    scale: 0.92,
+    filter: 'blur(12px)',
+    skewX: -14,
   }),
   open: (i: number) => ({
     x: 0,
     opacity: 1,
+    scale: 1,
     filter: 'blur(0px)',
     skewX: 0,
     transition: {
-      duration: 0.7,
-      ease: EASE_SPRING,
-      delay: 0.12 + i * 0.07,
+      duration: 0.9,
+      ease: EASE_CINEMATIC,
+      delay: 0.15 + i * 0.13,
     },
   }),
 }
 
 const lineV = {
   closed: (i: number) => ({
-    x: 120 + i * 35,
+    x: 140 + i * 60,
     scaleX: 0,
     opacity: 0,
   }),
@@ -64,9 +66,9 @@ const lineV = {
     scaleX: 1,
     opacity: 1,
     transition: {
-      duration: 0.65,
-      ease: EASE_SPRING,
-      delay: 0.1 + i * 0.07,
+      duration: 0.85,
+      ease: EASE_CINEMATIC,
+      delay: 0.12 + i * 0.13,
     },
   }),
 }
@@ -75,7 +77,7 @@ const rightV = {
   closed: { y: 18, opacity: 0 },
   open: (i: number) => ({
     y: 0, opacity: 1,
-    transition: { duration: 0.55, ease: EASE_OUT, delay: 0.35 + i * 0.07 },
+    transition: { duration: 0.6, ease: EASE_OUT, delay: 0.45 + i * 0.08 },
   }),
 }
 
