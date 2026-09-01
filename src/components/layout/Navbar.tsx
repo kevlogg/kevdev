@@ -419,7 +419,7 @@ export default function Navbar() {
                           }}>
                             ➜
                           </span>
-                        </motion.button>
+                        </button>
                       </motion.div>
                     </div>
                   ))}
