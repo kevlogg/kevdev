@@ -20,64 +20,58 @@ const STACK_ACCENT = [true, false, false, false, false, false]
 /* ─── Variants ──────────────────────────────────────────────────────── */
 const EASE_EXPO: [number,number,number,number] = [0.76, 0, 0.24, 1]
 const EASE_OUT:  [number,number,number,number] = [0.22, 1, 0.36, 1]
-const EASE_CINEMATIC: [number,number,number,number] = [0.16, 1, 0.3, 1]
+const EASE_FAST_SPRING: [number,number,number,number] = [0.16, 1, 0.3, 1]
 
 const overlayV = {
   closed: {
     clipPath: 'inset(0% 0% 100% 0%)',
-    transition: { duration: 0.75, ease: EASE_EXPO },
+    transition: { duration: 0.4, ease: EASE_EXPO },
   },
   open: {
     clipPath: 'inset(0% 0% 0% 0%)',
-    transition: { duration: 0.75, ease: EASE_EXPO },
+    transition: { duration: 0.4, ease: EASE_EXPO },
   },
 }
 
 const itemV = {
   closed: (i: number) => ({
-    x: 180 + i * 75,
+    x: 80 + i * 28,
     opacity: 0,
-    scale: 0.92,
-    filter: 'blur(12px)',
-    skewX: -14,
+    scale: 0.96,
   }),
   open: (i: number) => ({
     x: 0,
     opacity: 1,
     scale: 1,
-    filter: 'blur(0px)',
-    skewX: 0,
     transition: {
-      duration: 0.9,
-      ease: EASE_CINEMATIC,
-      delay: 0.15 + i * 0.13,
+      duration: 0.42,
+      ease: EASE_FAST_SPRING,
+      delay: 0.04 + i * 0.045, // 45ms stagger for snappy, fluid 60FPS waterfall entry!
     },
   }),
 }
 
 const lineV = {
-  closed: (i: number) => ({
-    x: 140 + i * 60,
+  closed: {
     scaleX: 0,
     opacity: 0,
-  }),
+  },
   open: (i: number) => ({
-    x: 0,
     scaleX: 1,
     opacity: 1,
     transition: {
-      duration: 0.85,
-      ease: EASE_CINEMATIC,
-      delay: 0.12 + i * 0.13,
+      duration: 0.38,
+      ease: EASE_FAST_SPRING,
+      delay: 0.03 + i * 0.045,
     },
   }),
 }
 
 const rightV = {
-  closed: { y: 18, opacity: 0 },
+  closed: { y: 12, opacity: 0 },
   open: (i: number) => ({
     y: 0, opacity: 1,
-    transition: { duration: 0.6, ease: EASE_OUT, delay: 0.45 + i * 0.08 },
+    transition: { duration: 0.35, ease: EASE_OUT, delay: 0.22 + i * 0.04 },
   }),
 }
 
@@ -336,12 +330,14 @@ export default function Navbar() {
                       <motion.div
                         custom={i}
                         variants={itemV}
+                        whileTap={{ scale: 0.98, x: 6 }}
+                        className="nav-menu-item"
                         style={{
                           position: 'relative',
                           overflow: 'hidden',
                           padding: 'clamp(0.25rem, min(1vw, 1.2vh), 0.65rem) 0.75rem',
                           borderRadius: 12,
-                          transition: 'background 0.3s ease, border-color 0.3s ease, filter 0.3s ease',
+                          transition: 'background 0.25s ease, border-color 0.25s ease, filter 0.25s ease',
                           background: hovered === i
                             ? 'linear-gradient(90deg, rgba(6,182,212,0.14) 0%, rgba(99,102,241,0.06) 60%, transparent 100%)'
                             : 'transparent',
@@ -363,57 +359,66 @@ export default function Navbar() {
                           }}
                         >
                           {/* Index */}
-                          <span style={{
-                            fontFamily: 'var(--font-mono)', fontSize: 'clamp(0.6875rem, 1.3vw, 0.8125rem)',
-                            color: hovered === i ? '#22d3ee' : 'var(--color-accent)',
-                            letterSpacing: '0.08em',
-                            fontWeight: 700,
-                            transition: 'all 0.3s ease',
-                            opacity: hovered === i ? 1 : 0.6,
-                            flexShrink: 0,
-                            transform: hovered === i ? 'scale(1.15) translateX(2px)' : 'scale(1)',
-                            textShadow: hovered === i ? '0 0 12px rgba(34,211,238,0.6)' : 'none',
-                          }}>
+                          <span
+                            className="nav-menu-index"
+                            style={{
+                              fontFamily: 'var(--font-mono)', fontSize: 'clamp(0.6875rem, 1.3vw, 0.8125rem)',
+                              color: hovered === i ? '#22d3ee' : 'var(--color-accent)',
+                              letterSpacing: '0.08em',
+                              fontWeight: 700,
+                              transition: 'all 0.25s ease',
+                              opacity: hovered === i ? 1 : 0.6,
+                              flexShrink: 0,
+                              transform: hovered === i ? 'scale(1.15) translateX(2px)' : 'scale(1)',
+                              textShadow: hovered === i ? '0 0 12px rgba(34,211,238,0.6)' : 'none',
+                            }}
+                          >
                             {item.index}
                           </span>
 
                           {/* Label */}
-                          <span style={{
-                            fontFamily: 'var(--font-display)',
-                            fontStyle: 'normal',
-                            fontSize: 'clamp(1.5rem, min(7vw, 8vh), 5.5rem)',
-                            fontWeight: 800,
-                            lineHeight: 1.0,
-                            letterSpacing: '-0.03em',
-                            color: hovered === i ? '#ffffff' : 'rgba(221,232,255,0.65)',
-                            transition: 'all 0.3s var(--ease-expo)',
-                            transform: hovered === i ? 'translateX(0.75rem)' : 'translateX(0)',
-                            display: 'inline-block',
-                            textShadow: hovered === i ? '0 0 28px rgba(34,211,238,0.45)' : 'none',
-                          }}>
+                          <span
+                            className="nav-menu-label"
+                            style={{
+                              fontFamily: 'var(--font-display)',
+                              fontStyle: 'normal',
+                              fontSize: 'clamp(1.5rem, min(7vw, 8vh), 5.5rem)',
+                              fontWeight: 800,
+                              lineHeight: 1.0,
+                              letterSpacing: '-0.03em',
+                              color: hovered === i ? '#ffffff' : 'rgba(221,232,255,0.65)',
+                              transition: 'all 0.25s var(--ease-expo)',
+                              transform: hovered === i ? 'translateX(0.75rem)' : 'translateX(0)',
+                              display: 'inline-block',
+                              textShadow: hovered === i ? '0 0 28px rgba(34,211,238,0.45)' : 'none',
+                            }}
+                          >
                             {item.label}
                           </span>
 
                           {/* Arrow Badge */}
-                          <span style={{
-                            fontFamily: 'var(--font-ui)',
-                            fontSize: 'clamp(0.875rem, 1.5vw, 1.125rem)',
-                            color: '#22d3ee',
-                            marginLeft: 'auto',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            width: 34,
-                            height: 34,
-                            borderRadius: '50%',
-                            background: hovered === i ? 'rgba(34,211,238,0.15)' : 'transparent',
-                            border: hovered === i ? '1px solid rgba(34,211,238,0.4)' : '1px solid transparent',
-                            boxShadow: hovered === i ? '0 0 16px rgba(34,211,238,0.3)' : 'none',
-                            transition: 'all 0.3s var(--ease-expo)',
-                            opacity: hovered === i ? 1 : 0,
-                            transform: hovered === i ? 'translate(0, 0) scale(1.05)' : 'translate(-12px, 0) scale(0.8)',
-                            flexShrink: 0,
-                          }}>
+                          <span
+                            className="nav-menu-arrow"
+                            style={{
+                              fontFamily: 'var(--font-ui)',
+                              fontSize: 'clamp(0.875rem, 1.5vw, 1.125rem)',
+                              color: '#22d3ee',
+                              marginLeft: 'auto',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              width: 34,
+                              height: 34,
+                              borderRadius: '50%',
+                              background: hovered === i ? 'rgba(34,211,238,0.15)' : 'transparent',
+                              border: hovered === i ? '1px solid rgba(34,211,238,0.4)' : '1px solid transparent',
+                              boxShadow: hovered === i ? '0 0 16px rgba(34,211,238,0.3)' : 'none',
+                              transition: 'all 0.25s var(--ease-expo)',
+                              opacity: hovered === i ? 1 : 0,
+                              transform: hovered === i ? 'translate(0, 0) scale(1.05)' : 'translate(-12px, 0) scale(0.8)',
+                              flexShrink: 0,
+                            }}
+                          >
                             ➜
                           </span>
                         </button>
@@ -563,6 +568,27 @@ export default function Navbar() {
 
       {/* ── Responsive styles ──────────────────────────────────────── */}
       <style>{`
+        .nav-menu-item {
+          -webkit-tap-highlight-color: transparent;
+          touch-action: manipulation;
+        }
+        .nav-menu-item:active {
+          background: linear-gradient(90deg, rgba(6,182,212,0.22) 0%, rgba(99,102,241,0.12) 60%, transparent 100%) !important;
+          border-left: 3px solid #22d3ee !important;
+        }
+        .nav-menu-item:active .nav-menu-label {
+          color: #ffffff !important;
+          text-shadow: 0 0 20px rgba(34,211,238,0.6) !important;
+        }
+        .nav-menu-item:active .nav-menu-index {
+          color: #22d3ee !important;
+        }
+        .nav-menu-item:active .nav-menu-arrow {
+          opacity: 1 !important;
+          transform: translate(0, 0) scale(1.05) !important;
+          background: rgba(34,211,238,0.2) !important;
+          border-color: rgba(34,211,238,0.5) !important;
+        }
         @media (min-width: 900px) {
           .menu-grid {
             grid-template-columns: 1fr 0.38fr !important;
