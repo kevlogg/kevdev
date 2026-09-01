@@ -238,7 +238,7 @@ export default function ContactForm() {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                justify: 'center',
+                justifyContent: 'center',
                 gap: '0.75rem',
                 width: '100%',
                 padding: '1rem 1.75rem',
