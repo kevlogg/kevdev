@@ -191,33 +191,72 @@ function ServiceItem({
   scrollYProgress: ReturnType<typeof useScroll>['scrollYProgress']
   index: number
 }) {
-  /* Progress line fill — fills as this item's slot scrolls */
+  /* Progress intervals */
   const lo = index / N
   const hi = (index + 1) / N
+
+  // Top horizontal divider sweep: fills as scroll enters this item
+  const prevLo = index === 0 ? 0 : Math.max(0, lo - 0.04)
+  const topLineWidth = useTransform(scrollYProgress, [prevLo, lo], index === 0 ? ['100%', '100%'] : ['0%', '100%'])
+
+  // Vertical line fill: fills as scroll moves through this item
   const lineH = useTransform(scrollYProgress, [lo, hi], ['0%', '100%'])
+
+  // Bottom horizontal divider sweep for the last item (fills near end of section)
+  const bottomLineWidth = useTransform(scrollYProgress, [0.94, 0.99], ['0%', '100%'])
 
   return (
     <div style={{
       position: 'relative',
-      borderTop: '1px solid rgba(255,255,255,0.07)',
-      borderBottom: isLast ? '1px solid rgba(255,255,255,0.07)' : 'none',
       display: 'flex',
       gap: '1.25rem',
     }}>
-      {/* Animated left line */}
+      {/* ── Top Horizontal Divider Line Track & Animated Fill ── */}
+      <div style={{
+        position: 'absolute', top: 0, left: 0, right: 0, height: 1,
+        background: 'rgba(255,255,255,0.07)',
+        zIndex: 2,
+      }}>
+        <motion.div style={{
+          position: 'absolute', top: 0, left: 0, height: '100%',
+          width: topLineWidth,
+          background: active || done ? 'var(--color-accent)' : 'rgba(34,211,238,0.4)',
+          boxShadow: active ? '0 0 10px rgba(0, 229, 255, 0.6)' : 'none',
+        }} />
+      </div>
+
+      {/* ── Bottom Horizontal Divider Line (Only for Last Item) ── */}
+      {isLast && (
+        <div style={{
+          position: 'absolute', bottom: 0, left: 0, right: 0, height: 1,
+          background: 'rgba(255,255,255,0.07)',
+          zIndex: 2,
+        }}>
+          <motion.div style={{
+            position: 'absolute', top: 0, left: 0, height: '100%',
+            width: bottomLineWidth,
+            background: done ? 'var(--color-accent)' : 'rgba(34,211,238,0.4)',
+            boxShadow: done ? '0 0 10px rgba(0, 229, 255, 0.6)' : 'none',
+          }} />
+        </div>
+      )}
+
+      {/* ── Animated left vertical line ── */}
       <div style={{
         position: 'relative',
         width: 2,
         flexShrink: 0,
         background: 'rgba(255,255,255,0.07)',
         alignSelf: 'stretch',
+        zIndex: 1,
       }}>
         <motion.div style={{
           position: 'absolute', top: 0, left: 0,
           width: '100%', height: lineH,
           background: active
             ? 'var(--color-accent)'
-            : done ? 'rgba(34,211,238,0.4)' : 'transparent',
+            : done ? 'rgba(34,211,238,0.5)' : 'transparent',
+          boxShadow: active ? '0 0 12px rgba(0, 229, 255, 0.8)' : 'none',
         }} />
       </div>
 
@@ -225,7 +264,7 @@ function ServiceItem({
       <div style={{
         padding: 'clamp(1.25rem, 2.5vw, 1.875rem) 0',
         flex: 1,
-        opacity: active ? 1 : done ? 0.55 : 0.38,
+        opacity: active ? 1 : done ? 0.65 : 0.38,
         transition: 'opacity 0.4s',
       }}>
         <span style={{
