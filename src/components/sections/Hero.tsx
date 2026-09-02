@@ -88,7 +88,7 @@ function BlockRevealText({
 
 function OkawaTextAnimation({
   text,
-  delayOffset = 0.45,
+  delayOffset = 0.35,
 }: {
   text: string
   delayOffset?: number
@@ -96,14 +96,14 @@ function OkawaTextAnimation({
   const words = text.split(' ')
 
   return (
-    <p
+    <div
       style={{
         fontFamily: 'var(--font-ui)',
         fontWeight: 400,
         fontSize:   'clamp(0.95rem, 1.2vw, 1.125rem)',
-        lineHeight: 1.65,
+        lineHeight: 1.6,
         color:      'var(--color-star)',
-        maxWidth:   '48ch',
+        maxWidth:   '44ch',
         margin:     0,
         padding:    '0.85rem 1.25rem',
         borderRadius: '14px',
@@ -115,6 +115,9 @@ function OkawaTextAnimation({
         borderBottom:'1px solid rgba(255, 255, 255, 0.05)',
         boxShadow:  '0 8px 32px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08)',
         textShadow: '0 2px 16px rgba(0,0,0,0.95)',
+        display:    'flex',
+        flexWrap:   'wrap',
+        gap:        '0.32em',
       }}
     >
       {words.map((word, wordIndex) => (
@@ -123,29 +126,37 @@ function OkawaTextAnimation({
           style={{
             display: 'inline-block',
             overflow: 'hidden',
-            verticalAlign: 'top',
-            marginRight: '0.28em',
+            verticalAlign: 'bottom',
+            lineHeight: 1.25,
+            paddingBottom: '2px',
           }}
         >
           <motion.span
-            initial={{ y: '115%', opacity: 0, rotateX: -15 }}
-            animate={{ y: '0%', opacity: 1, rotateX: 0 }}
+            initial={{
+              y: '100%',
+              opacity: 0,
+              clipPath: 'polygon(0 0, 100% 0, 100% 0, 0 0)',
+            }}
+            animate={{
+              y: '0%',
+              opacity: 1,
+              clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
+            }}
             transition={{
-              duration: 0.58,
-              delay: delayOffset + wordIndex * 0.025,
-              ease: [0.22, 1, 0.36, 1],
+              duration: 0.72,
+              delay: delayOffset + wordIndex * 0.035,
+              ease: [0.77, 0, 0.175, 1],
             }}
             style={{
               display: 'inline-block',
-              willChange: 'transform, opacity',
-              transformOrigin: 'bottom left',
+              willChange: 'transform, opacity, clip-path',
             }}
           >
             {word}
           </motion.span>
         </span>
       ))}
-    </p>
+    </div>
   )
 }
 

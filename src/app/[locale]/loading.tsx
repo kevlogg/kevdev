@@ -1,18 +1,48 @@
 export default function Loading() {
   return (
-    <div className="w-full min-h-[70vh] flex flex-col justify-center items-center px-4">
-      <div className="w-full max-w-4xl space-y-8 animate-pulse">
-        {/* Hero Skeleton */}
-        <div className="h-12 bg-neutral-800/60 rounded-xl w-3/4 mx-auto" />
-        <div className="h-6 bg-neutral-800/40 rounded-lg w-1/2 mx-auto" />
-        
-        {/* Cards Skeleton */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-12">
-          <div className="h-64 bg-neutral-900/80 border border-neutral-800 rounded-2xl" />
-          <div className="h-64 bg-neutral-900/80 border border-neutral-800 rounded-2xl" />
-          <div className="h-64 bg-neutral-900/80 border border-neutral-800 rounded-2xl" />
-        </div>
-      </div>
+    <div
+      aria-label="Cargando KevDev"
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 9999,
+        backgroundColor: '#0c0f17',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '1.25rem',
+      }}
+    >
+      {/* Electric Cyan Pulsating Loader */}
+      <div
+        style={{
+          position: 'relative',
+          width: '44px',
+          height: '44px',
+          borderRadius: '50%',
+          border: '2px solid rgba(0, 229, 255, 0.15)',
+          borderTopColor: '#00e5ff',
+          animation: 'spin 0.8s linear infinite',
+        }}
+      />
+      <span
+        style={{
+          fontFamily: 'monospace',
+          fontSize: '0.75rem',
+          letterSpacing: '0.22em',
+          textTransform: 'uppercase',
+          color: '#e8e8e8',
+          opacity: 0.85,
+        }}
+      >
+        KevDev
+      </span>
+      <style>{`
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   )
 }
