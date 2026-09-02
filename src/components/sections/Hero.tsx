@@ -23,23 +23,29 @@ function BlurEmergeText({
   delayOffset?: number
   style?: React.CSSProperties
 }) {
+  const words = text.split(' ')
   return (
-    <motion.span
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{
-        duration: 0.45,
-        delay: delayOffset,
-        ease: [0.22, 1, 0.36, 1],
-      }}
-      style={{
-        display: 'inline-block',
-        willChange: 'transform, opacity',
-        ...style,
-      }}
-    >
-      {text}
-    </motion.span>
+    <span style={{ display: 'inline-block', ...style }}>
+      {words.map((word, i) => (
+        <motion.span
+          key={i}
+          initial={{ opacity: 0, y: 14, filter: 'blur(10px)' }}
+          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          transition={{
+            duration: 0.55,
+            delay: delayOffset + i * 0.08,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+          style={{
+            display: 'inline-block',
+            marginRight: '0.28em',
+            willChange: 'transform, opacity, filter',
+          }}
+        >
+          {word}
+        </motion.span>
+      ))}
+    </span>
   )
 }
 
@@ -53,7 +59,6 @@ export default function Hero() {
   const springY = useSpring(mouseY, { stiffness: 50, damping: 20 })
 
   useEffect(() => {
-    if (window.innerWidth < 768) return
     const fn = (e: MouseEvent) => { mouseX.set(e.clientX); mouseY.set(e.clientY) }
     window.addEventListener('mousemove', fn, { passive: true })
     
