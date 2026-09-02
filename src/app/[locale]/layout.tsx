@@ -4,7 +4,26 @@ import { getMessages, setRequestLocale } from 'next-intl/server'
 import { hasLocale } from 'next-intl'
 import { notFound } from 'next/navigation'
 import { routing, type Locale } from '@/i18n/routing'
+import { Inter, JetBrains_Mono, Plus_Jakarta_Sans } from 'next/font/google'
 import '../globals.css'
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+})
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-mono',
+  display: 'swap',
+})
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  variable: '--font-display',
+  display: 'swap',
+})
 
 const OG_LOCALE: Record<Locale, string> = {
   es: 'es_AR',
@@ -120,12 +139,6 @@ export default async function RootLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Instrument+Serif:ital@1&display=swap"
-        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -234,7 +247,7 @@ export default async function RootLayout({
           }}
         />
       </head>
-      <body suppressHydrationWarning>
+      <body className={`${inter.variable} ${jetbrainsMono.variable} ${plusJakartaSans.variable}`} suppressHydrationWarning>
         <NextIntlClientProvider messages={messages}>
           <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
           <AnalyticsTracker />

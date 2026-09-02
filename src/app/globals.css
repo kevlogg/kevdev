@@ -24,10 +24,10 @@
   --color-on-accent:    #0c0c0c;
 
   /* Typography */
-  --font-display: 'Inter', 'Plus Jakarta Sans', system-ui, sans-serif;
-  --font-ui:      'Inter', 'Plus Jakarta Sans', system-ui, sans-serif;
-  --font-serif:   'Instrument Serif', Georgia, serif;
-  --font-mono:    'JetBrains Mono', 'DM Mono', monospace;
+  --font-display: var(--font-display), 'Inter', 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-ui:      var(--font-inter), 'Inter', system-ui, sans-serif;
+  --font-serif:   Georgia, serif;
+  --font-mono:    var(--font-mono), 'JetBrains Mono', monospace;
 }
 
 /* ─── Global vars ───────────────────────────────────────────────────── */
