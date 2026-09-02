@@ -14,37 +14,74 @@ const T = {
   glow:     0.5,
 }
 
-function BlurEmergeText({
+function BlockRevealText({
   text,
   delayOffset = 0,
+  isHighlight = false,
   style,
 }: {
   text: string
   delayOffset?: number
+  isHighlight?: boolean
   style?: React.CSSProperties
 }) {
-  const words = text.split(' ')
   return (
-    <span style={{ display: 'inline-block', ...style }}>
-      {words.map((word, i) => (
-        <motion.span
-          key={i}
-          initial={{ opacity: 0, y: 14, filter: 'blur(10px)' }}
-          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          transition={{
-            duration: 0.55,
-            delay: delayOffset + i * 0.08,
-            ease: [0.22, 1, 0.36, 1],
-          }}
-          style={{
-            display: 'inline-block',
-            marginRight: '0.28em',
-            willChange: 'transform, opacity, filter',
-          }}
-        >
-          {word}
-        </motion.span>
-      ))}
+    <span
+      style={{
+        position: 'relative',
+        display: 'inline-flex',
+        alignItems: 'center',
+        verticalAlign: 'baseline',
+        paddingRight: '0.05em',
+        paddingLeft: '0.05em',
+        ...style,
+      }}
+    >
+      {/* ── GPU Accent Curtain Block Swipe (Andy Sanchez CodePen Reveal) ── */}
+      <motion.span
+        initial={{ scaleX: 0, originX: 0 }}
+        animate={{
+          scaleX: [0, 1, 1, 0],
+          originX: [0, 0, 1, 1],
+        }}
+        transition={{
+          duration: 0.72,
+          times: [0, 0.42, 0.48, 1],
+          delay: delayOffset,
+          ease: [0.22, 1, 0.36, 1],
+        }}
+        style={{
+          position: 'absolute',
+          top: '2px',
+          bottom: '2px',
+          left: 0,
+          right: 0,
+          backgroundColor: isHighlight ? 'var(--color-accent)' : '#ffffff',
+          zIndex: 2,
+          borderRadius: '3px',
+          willChange: 'transform',
+          boxShadow: isHighlight
+            ? '0 0 24px rgba(0, 229, 255, 0.75)'
+            : '0 0 16px rgba(255, 255, 255, 0.35)',
+        }}
+      />
+
+      {/* ── Text Content ── */}
+      <motion.span
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{
+          duration: 0.05,
+          delay: delayOffset + 0.30,
+        }}
+        style={{
+          display: 'inline-block',
+          willChange: 'opacity',
+          color: isHighlight ? 'var(--color-accent)' : 'var(--color-star)',
+        }}
+      >
+        {text}
+      </motion.span>
     </span>
   )
 }
@@ -179,10 +216,11 @@ export default function Hero() {
             maxWidth:      '16ch',
             textShadow:    '0 4px 28px rgba(0,0,0,0.95), 0 1px 4px rgba(0,0,0,1)',
           }}>
-            <BlurEmergeText text={t('headlinePre')} delayOffset={T.headline} />{' '}
-            <BlurEmergeText
+            <BlockRevealText text={t('headlinePre')} delayOffset={T.headline} />{' '}
+            <BlockRevealText
               text={t('headlineItalic')}
-              delayOffset={T.headline + 0.10}
+              delayOffset={T.headline + 0.12}
+              isHighlight
               style={{
                 fontFamily: 'var(--font-serif)',
                 fontStyle:  'italic',
@@ -192,7 +230,7 @@ export default function Hero() {
               }}
             />
             <br />
-            <BlurEmergeText text={t('headlinePost')} delayOffset={T.headline + 0.20} />
+            <BlockRevealText text={t('headlinePost')} delayOffset={T.headline + 0.24} />
           </h1>
 
           {/* Decorative CSS-only 3D MacBook — sits right beside the headline */}
