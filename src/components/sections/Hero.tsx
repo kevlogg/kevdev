@@ -105,6 +105,15 @@ export default function Hero() {
     lenis ? lenis.scrollTo(el, { offset: -80 }) : el.scrollIntoView({ behavior: 'smooth' })
   }
 
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 900)
+    checkMobile()
+    window.addEventListener('resize', checkMobile, { passive: true })
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
   return (
     <section
       ref={sectionRef}
@@ -181,7 +190,7 @@ export default function Hero() {
           </h1>
 
           {/* Decorative CSS-only 3D MacBook — sits right beside the headline */}
-          <MacbookHero />
+          {!isMobile && <MacbookHero />}
         </div>
 
         {/* Bottom bar — pure opacity fade-in to prevent flex height shift */}

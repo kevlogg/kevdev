@@ -18,6 +18,7 @@ export default function VideoBackground() {
     let currentFrame = 0
     let targetFrame = 0
     let velocity = 0
+    let isLooping = false
 
     const images: HTMLImageElement[] = []
     imagesRef.current = images
@@ -87,7 +88,7 @@ export default function VideoBackground() {
       return { offsetX, offsetY, renderW, renderH }
     }
 
-    // Sub-frame liquid blending engine (cross-fades consecutive frames)
+    // Sub-frame liquid blending engine
     const renderFrame = (framePos: number) => {
       const clamped = Math.max(0, Math.min(FRAME_COUNT - 1, framePos))
       const floorIdx = Math.floor(clamped)
@@ -116,34 +117,38 @@ export default function VideoBackground() {
       }
     }
 
-    const onScroll = () => {
-      const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight)
-      const progress = Math.min(1, Math.max(0, window.scrollY / maxScroll))
-      targetFrame = progress * (FRAME_COUNT - 1)
+    const startLoop = () => {
+      if (!isLooping) {
+        isLooping = true
+        animationFrameId = requestAnimationFrame(loop)
+      }
     }
 
-    window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('resize', resizeCanvas, { passive: true })
-    resizeCanvas()
-    onScroll()
-
-    // Smooth Kinetic Spring Loop
     const loop = () => {
       const distance = targetFrame - currentFrame
-
-      // Liquid inertia spring formula
       velocity += distance * 0.12
       velocity *= 0.78
       currentFrame += velocity
 
       if (Math.abs(velocity) > 0.0001 || Math.abs(distance) > 0.0005) {
         renderFrame(currentFrame)
+        animationFrameId = requestAnimationFrame(loop)
+      } else {
+        isLooping = false
       }
-
-      animationFrameId = requestAnimationFrame(loop)
     }
 
-    animationFrameId = requestAnimationFrame(loop)
+    const onScroll = () => {
+      const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight)
+      const progress = Math.min(1, Math.max(0, window.scrollY / maxScroll))
+      targetFrame = progress * (FRAME_COUNT - 1)
+      startLoop()
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', resizeCanvas, { passive: true })
+    resizeCanvas()
+    onScroll()
 
     return () => {
       cancelAnimationFrame(animationFrameId)
@@ -176,7 +181,7 @@ export default function VideoBackground() {
         }} />
         <div style={{
           position: 'absolute', top: 0, left: 0, right: 0, height: 160,
-          background: 'linear-gradient(to bottom, rgba(12,15,23,0.7) 0%, transparent 100%)'
+          background: 'gradient(to bottom, rgba(12,15,23,0.7) 0%, transparent 100%)'
         }} />
       </div>
     </>
