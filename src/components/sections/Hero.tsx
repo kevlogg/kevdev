@@ -249,33 +249,24 @@ export default function Hero() {
             paddingTop:     'clamp(2rem, 4vw, 3rem)',
           }}
         >
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-              {t.raw('chips').map((chip: string) => (
-                <span key={chip} style={{
-                  fontFamily:    'var(--font-mono)',
-                  fontSize:      'clamp(0.625rem, 0.9vw, 0.75rem)',
-                  letterSpacing: '0.08em',
-                  color:         'var(--color-star)',
-                  border:        '1px solid rgba(255,255,255,0.18)',
-                  borderRadius:  99,
-                  padding:       '0.35rem 0.85rem',
-                  background:    'rgba(18,18,18,0.72)',
-                  backdropFilter:'blur(16px)',
-                  boxShadow:     '0 4px 16px rgba(0,0,0,0.5)',
-                }}>
-                  {chip}
-                </span>
-              ))}
-            </div>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
             <p style={{
               fontFamily: 'var(--font-ui)',
               fontWeight: 400,
-              fontSize:   'clamp(0.875rem, 1.1vw, 0.95rem)',
-              lineHeight: 1.6,
+              fontSize:   'clamp(0.95rem, 1.2vw, 1.125rem)',
+              lineHeight: 1.65,
               color:      'var(--color-star)',
-              maxWidth:   '38ch',
+              maxWidth:   '48ch',
               margin:     0,
+              padding:    '0.85rem 1.25rem',
+              borderRadius: '14px',
+              background: 'rgba(18, 18, 18, 0.65)',
+              backdropFilter: 'blur(16px)',
+              borderLeft: '3px solid var(--color-accent)',
+              borderTop:  '1px solid rgba(255, 255, 255, 0.08)',
+              borderRight:'1px solid rgba(255, 255, 255, 0.05)',
+              borderBottom:'1px solid rgba(255, 255, 255, 0.05)',
+              boxShadow:  '0 8px 32px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08)',
               textShadow: '0 2px 16px rgba(0,0,0,0.95)',
             }}>
               {t('subcopy')}
