@@ -9,9 +9,9 @@ import MacbookHero from './MacbookHero'
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
 const T = {
-  headline: 0.05,
-  bottom:   0.5,
-  glow:     0.7,
+  headline: 0.02,
+  bottom:   0.35,
+  glow:     0.5,
 }
 
 function BlurEmergeText({
@@ -23,30 +23,23 @@ function BlurEmergeText({
   delayOffset?: number
   style?: React.CSSProperties
 }) {
-  const characters = text.split('')
-
   return (
-    <span style={{ display: 'inline-block', ...style }}>
-      {characters.map((char, i) => (
-        <motion.span
-          key={i}
-          initial={{ opacity: 0, filter: 'blur(10px)', y: 8 }}
-          animate={{ opacity: 1, filter: 'blur(0px)', y: 0 }}
-          transition={{
-            duration: 0.45,
-            delay: delayOffset + i * 0.02,
-            ease: [0.25, 0.46, 0.45, 0.94],
-          }}
-          style={{
-            display: 'inline-block',
-            whiteSpace: char === ' ' ? 'pre' : 'normal',
-            willChange: 'transform, opacity, filter',
-          }}
-        >
-          {char}
-        </motion.span>
-      ))}
-    </span>
+    <motion.span
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: 0.45,
+        delay: delayOffset,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+      style={{
+        display: 'inline-block',
+        willChange: 'transform, opacity',
+        ...style,
+      }}
+    >
+      {text}
+    </motion.span>
   )
 }
 
@@ -174,7 +167,7 @@ export default function Hero() {
             <BlurEmergeText text={t('headlinePre')} delayOffset={T.headline} />{' '}
             <BlurEmergeText
               text={t('headlineItalic')}
-              delayOffset={T.headline + 0.32}
+              delayOffset={T.headline + 0.10}
               style={{
                 fontFamily: 'var(--font-serif)',
                 fontStyle:  'italic',
@@ -184,7 +177,7 @@ export default function Hero() {
               }}
             />
             <br />
-            <BlurEmergeText text={t('headlinePost')} delayOffset={T.headline + 0.68} />
+            <BlurEmergeText text={t('headlinePost')} delayOffset={T.headline + 0.20} />
           </h1>
 
           {/* Decorative CSS-only 3D MacBook — sits right beside the headline */}
