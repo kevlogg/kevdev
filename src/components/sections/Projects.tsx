@@ -66,7 +66,6 @@ export default function Projects() {
   const handlePointerMove = (e: React.PointerEvent) => {
     if (!isDragging) return
     const deltaX = e.clientX - startXRef.current
-    // Controlled low sensitivity on mobile for smooth drag
     const sensitivity = isMobile ? 0.08 : 0.28
     setRotationY(startRotRef.current + deltaX * sensitivity)
   }
@@ -76,7 +75,8 @@ export default function Projects() {
     try { (e.target as HTMLElement).releasePointerCapture(e.pointerId) } catch {}
   }
 
-  const radius = isMobile ? 220 : 440
+  // Increased cylinder radius on mobile so cards are clearly separated without overlapping
+  const radius = isMobile ? 320 : 480
 
   return (
     <section
@@ -84,7 +84,7 @@ export default function Projects() {
       style={{
         position: 'relative',
         zIndex: 10,
-        padding: isMobile ? '2.5rem 0' : 'clamp(4rem, 6vw, 6rem) 0',
+        padding: isMobile ? '3rem 0 4rem' : 'clamp(4rem, 6vw, 6rem) 0',
         overflow: 'hidden',
       }}
     >
@@ -105,16 +105,16 @@ export default function Projects() {
         }
         @media (max-width: 767px) {
           .projects-3d-card {
-            width: 145px !important;
-            height: 195px !important;
-            padding: 0.5rem !important;
+            width: 155px !important;
+            height: 205px !important;
+            padding: 0.55rem !important;
             border-radius: 10px !important;
           }
           .projects-card-img-wrap {
-            height: 52px !important;
+            height: 56px !important;
           }
           .projects-card-title {
-            font-size: 0.8rem !important;
+            font-size: 0.825rem !important;
             line-height: 1.05 !important;
             margin-bottom: 0.1rem !important;
           }
@@ -126,7 +126,7 @@ export default function Projects() {
       `}</style>
 
       {/* Section Header */}
-      <div style={{ textAlign: 'center', marginBottom: isMobile ? '1.25rem' : '2.5rem', paddingInline: 'var(--gutter)' }}>
+      <div style={{ textAlign: 'center', marginBottom: isMobile ? '1.5rem' : '2.5rem', paddingInline: 'var(--gutter)' }}>
         <span className="type-label" style={{ letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-accent)' }}>
           {t('label')}
         </span>
@@ -140,21 +140,22 @@ export default function Projects() {
         onPointerCancel={handlePointerUp}
         style={{
           width: '100%',
-          height: isMobile ? 215 : 330,
-          perspective: isMobile ? 650 : 1000,
+          height: isMobile ? 225 : 330,
+          perspective: isMobile ? 750 : 1000,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           cursor: isDragging ? 'grabbing' : 'grab',
           userSelect: 'none',
           touchAction: 'pan-y',
+          marginBottom: isMobile ? '3.5rem' : '4rem', // Clear margin so primary CTA button never overlaps cards
         }}
       >
         <div
           style={{
             position: 'relative',
-            width: isMobile ? 145 : 230,
-            height: isMobile ? 195 : 290,
+            width: isMobile ? 155 : 230,
+            height: isMobile ? 205 : 290,
             transformStyle: 'preserve-3d',
             transform: `rotateY(${rotationY}deg)`,
             transition: isDragging ? 'none' : 'transform 0.1s linear',
@@ -199,8 +200,8 @@ export default function Projects() {
                     position: 'absolute',
                     top: '-20%',
                     right: '-20%',
-                    width: isMobile ? 100 : 140,
-                    height: isMobile ? 100 : 140,
+                    width: isMobile ? 110 : 140,
+                    height: isMobile ? 110 : 140,
                     borderRadius: '50%',
                     background: `radial-gradient(circle, ${p.color}${isHovered ? '45' : '25'} 0%, transparent 70%)`,
                     pointerEvents: 'none',
@@ -356,22 +357,22 @@ export default function Projects() {
         </div>
       </div>
 
-      {/* Primary CTA Button: Ver Proyectos */}
-      <div style={{ textAlign: 'center', marginTop: isMobile ? '1.5rem' : '2.5rem' }}>
+      {/* Primary CTA Button: Ver Proyectos (with clear separation) */}
+      <div style={{ textAlign: 'center', position: 'relative', zIndex: 20 }}>
         <Link
           href="/proyectos"
           style={{
             display: 'inline-flex',
             alignItems: 'center',
             gap: '0.5rem',
-            padding: isMobile ? '0.6rem 1.5rem' : '0.75rem 2.25rem',
+            padding: isMobile ? '0.65rem 1.75rem' : '0.75rem 2.25rem',
             borderRadius: 99,
             border: '1px solid var(--color-accent)',
             background: 'rgba(0, 229, 255, 0.08)',
             backdropFilter: 'blur(12px)',
             color: 'var(--color-accent)',
             fontFamily: 'var(--font-ui)',
-            fontSize: isMobile ? '0.775rem' : '0.875rem',
+            fontSize: isMobile ? '0.8rem' : '0.875rem',
             fontWeight: 700,
             letterSpacing: '0.04em',
             textDecoration: 'none',
