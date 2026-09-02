@@ -86,6 +86,69 @@ function BlockRevealText({
   )
 }
 
+function OkawaTextAnimation({
+  text,
+  delayOffset = 0.45,
+}: {
+  text: string
+  delayOffset?: number
+}) {
+  const words = text.split(' ')
+
+  return (
+    <p
+      style={{
+        fontFamily: 'var(--font-ui)',
+        fontWeight: 400,
+        fontSize:   'clamp(0.95rem, 1.2vw, 1.125rem)',
+        lineHeight: 1.65,
+        color:      'var(--color-star)',
+        maxWidth:   '48ch',
+        margin:     0,
+        padding:    '0.85rem 1.25rem',
+        borderRadius: '14px',
+        background: 'rgba(18, 18, 18, 0.65)',
+        backdropFilter: 'blur(16px)',
+        borderLeft: '3px solid var(--color-accent)',
+        borderTop:  '1px solid rgba(255, 255, 255, 0.08)',
+        borderRight:'1px solid rgba(255, 255, 255, 0.05)',
+        borderBottom:'1px solid rgba(255, 255, 255, 0.05)',
+        boxShadow:  '0 8px 32px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08)',
+        textShadow: '0 2px 16px rgba(0,0,0,0.95)',
+      }}
+    >
+      {words.map((word, wordIndex) => (
+        <span
+          key={wordIndex}
+          style={{
+            display: 'inline-block',
+            overflow: 'hidden',
+            verticalAlign: 'top',
+            marginRight: '0.28em',
+          }}
+        >
+          <motion.span
+            initial={{ y: '115%', opacity: 0, rotateX: -15 }}
+            animate={{ y: '0%', opacity: 1, rotateX: 0 }}
+            transition={{
+              duration: 0.58,
+              delay: delayOffset + wordIndex * 0.025,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            style={{
+              display: 'inline-block',
+              willChange: 'transform, opacity',
+              transformOrigin: 'bottom left',
+            }}
+          >
+            {word}
+          </motion.span>
+        </span>
+      ))}
+    </p>
+  )
+}
+
 export default function Hero() {
   const t = useTranslations('hero')
   const sectionRef = useRef<HTMLElement>(null)
@@ -250,27 +313,7 @@ export default function Hero() {
           }}
         >
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <p style={{
-              fontFamily: 'var(--font-ui)',
-              fontWeight: 400,
-              fontSize:   'clamp(0.95rem, 1.2vw, 1.125rem)',
-              lineHeight: 1.65,
-              color:      'var(--color-star)',
-              maxWidth:   '48ch',
-              margin:     0,
-              padding:    '0.85rem 1.25rem',
-              borderRadius: '14px',
-              background: 'rgba(18, 18, 18, 0.65)',
-              backdropFilter: 'blur(16px)',
-              borderLeft: '3px solid var(--color-accent)',
-              borderTop:  '1px solid rgba(255, 255, 255, 0.08)',
-              borderRight:'1px solid rgba(255, 255, 255, 0.05)',
-              borderBottom:'1px solid rgba(255, 255, 255, 0.05)',
-              boxShadow:  '0 8px 32px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08)',
-              textShadow: '0 2px 16px rgba(0,0,0,0.95)',
-            }}>
-              {t('subcopy')}
-            </p>
+            <OkawaTextAnimation text={t('subcopy')} delayOffset={0.45} />
           </div>
 
           <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
