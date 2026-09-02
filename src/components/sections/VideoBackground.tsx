@@ -1,14 +1,12 @@
 'use client'
 
-import { useRef, useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
+import { useRef, useEffect } from 'react'
 
 const FRAME_COUNT = 240
 
 export default function VideoBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const imagesRef = useRef<HTMLImageElement[]>([])
-  const [firstFrameReady, setFirstFrameReady] = useState(false)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -29,7 +27,6 @@ export default function VideoBackground() {
     img0.src = `/frames/frame-0001.jpg`
     img0.onload = () => {
       images[0] = img0
-      setFirstFrameReady(true)
       renderFrame(0)
 
       // 2. Progressive idle-batch loading for remaining frames
@@ -182,18 +179,6 @@ export default function VideoBackground() {
           background: 'linear-gradient(to bottom, rgba(12,15,23,0.7) 0%, transparent 100%)'
         }} />
       </div>
-
-      {/* ── Initial curtain ───── */}
-      <motion.div
-        aria-hidden
-        initial={{ opacity: 1 }}
-        animate={{ opacity: firstFrameReady ? 0 : 1 }}
-        transition={{ duration: 0.6, ease: 'linear' }}
-        style={{
-          position: 'fixed', inset: 0, zIndex: 2,
-          background: '#0c0f17', pointerEvents: 'none',
-        }}
-      />
     </>
   )
 }

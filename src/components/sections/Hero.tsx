@@ -186,9 +186,9 @@ export default function Hero() {
 
         {/* Bottom bar — pure opacity fade-in to prevent flex height shift */}
         <motion.div
-          initial={{ opacity: 0 }}
+          initial={{ opacity: 0.6 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.9, delay: T.bottom, ease: EASE }}
+          transition={{ duration: 0.35, delay: 0.1, ease: EASE }}
           style={{
             display:        'flex',
             flexDirection:  'column',
