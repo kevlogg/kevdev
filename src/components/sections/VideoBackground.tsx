@@ -25,7 +25,7 @@ export default function VideoBackground() {
     imagesRef.current = images
     let loadedCount = 0
 
-    // Preload all frames for 0-latency instant scroll seeking
+    // Preload all 240 extracted frames of heronew.mp4 for 0-latency scroll scrubbing
     for (let i = 0; i < FRAME_COUNT; i++) {
       const img = new Image()
       const frameNum = String(i + 1).padStart(4, '0')

@@ -9,9 +9,45 @@ import MacbookHero from './MacbookHero'
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
 const T = {
-  headline: 0.9,
-  bottom:   1.4,
-  glow:     1.7,
+  headline: 0.4,
+  bottom:   2.2,
+  glow:     2.4,
+}
+
+function BlurEmergeText({
+  text,
+  delayOffset = 0,
+  style,
+}: {
+  text: string
+  delayOffset?: number
+  style?: React.CSSProperties
+}) {
+  const characters = text.split('')
+
+  return (
+    <span style={{ display: 'inline-block', ...style }}>
+      {characters.map((char, i) => (
+        <motion.span
+          key={i}
+          initial={{ opacity: 0, filter: 'blur(16px)', y: 14 }}
+          animate={{ opacity: 1, filter: 'blur(0px)', y: 0 }}
+          transition={{
+            duration: 0.75,
+            delay: delayOffset + i * 0.035,
+            ease: [0.25, 0.46, 0.45, 0.94],
+          }}
+          style={{
+            display: 'inline-block',
+            whiteSpace: char === ' ' ? 'pre' : 'normal',
+            willChange: 'transform, opacity, filter',
+          }}
+        >
+          {char}
+        </motion.span>
+      ))}
+    </span>
+  )
 }
 
 export default function Hero() {
@@ -115,8 +151,8 @@ export default function Hero() {
           y: contentY,
         }}
       >
-        {/* Headline — enter animation + scroll fade handled by parent */}
-        <motion.div
+        {/* Headline — CodePen Blur Emerge staggered animation */}
+        <div
           style={{
             flex: 1,
             display: 'flex',
@@ -124,9 +160,6 @@ export default function Hero() {
             justifyContent: 'flex-start',
             gap: '0.25rem',
           }}
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.4, delay: T.headline, ease: EASE }}
         >
           <h1 style={{
             fontFamily:    'var(--font-display)',
@@ -138,26 +171,30 @@ export default function Hero() {
             maxWidth:      '16ch',
             textShadow:    '0 4px 28px rgba(0,0,0,0.95), 0 1px 4px rgba(0,0,0,1)',
           }}>
-            {t('headlinePre')}{' '}
-            <span style={{
-              fontFamily: 'var(--font-serif)',
-              fontStyle:  'italic',
-              fontWeight: 400,
-              color:      'var(--color-accent)',
-              textShadow: '0 0 32px rgba(0,229,255,0.4), 0 2px 16px rgba(0,0,0,0.95)',
-            }}>{t('headlineItalic')}</span>
+            <BlurEmergeText text={t('headlinePre')} delayOffset={T.headline} />{' '}
+            <BlurEmergeText
+              text={t('headlineItalic')}
+              delayOffset={T.headline + 0.32}
+              style={{
+                fontFamily: 'var(--font-serif)',
+                fontStyle:  'italic',
+                fontWeight: 400,
+                color:      'var(--color-accent)',
+                textShadow: '0 0 32px rgba(0,229,255,0.4), 0 2px 16px rgba(0,0,0,0.95)',
+              }}
+            />
             <br />
-            {t('headlinePost')}
+            <BlurEmergeText text={t('headlinePost')} delayOffset={T.headline + 0.68} />
           </h1>
 
           {/* Decorative CSS-only 3D MacBook — sits right beside the headline */}
           <MacbookHero />
-        </motion.div>
+        </div>
 
-        {/* Bottom bar */}
+        {/* Bottom bar — pure opacity fade-in to prevent flex height shift */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ duration: 0.9, delay: T.bottom, ease: EASE }}
           style={{
             display:        'flex',
