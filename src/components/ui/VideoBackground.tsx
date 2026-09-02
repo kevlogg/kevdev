@@ -23,21 +23,40 @@ export default function VideoBackground() {
 
     const images: HTMLImageElement[] = []
     imagesRef.current = images
-    let loadedCount = 0
 
-    // Preload all 240 extracted frames of heronew.mp4 for 0-latency scroll scrubbing
-    for (let i = 0; i < FRAME_COUNT; i++) {
-      const img = new Image()
-      const frameNum = String(i + 1).padStart(4, '0')
-      img.src = `/frames/frame-${frameNum}.jpg`
-      img.onload = () => {
-        loadedCount++
-        if (loadedCount === 1) {
-          setFirstFrameReady(true)
-          renderFrame(0)
+    // 1. Load initial frame 0 immediately for instant 0-latency FCP / LCP
+    const img0 = new Image()
+    img0.src = `/frames/frame-0001.jpg`
+    img0.onload = () => {
+      images[0] = img0
+      setFirstFrameReady(true)
+      renderFrame(0)
+
+      // 2. Progressive idle-batch loading for remaining frames (prevents blocking main thread & network bandwidth on page load)
+      let nextFrame = 1
+      const loadBatch = () => {
+        const batchEnd = Math.min(FRAME_COUNT, nextFrame + 15)
+        for (let i = nextFrame; i < batchEnd; i++) {
+          const img = new Image()
+          const frameNum = String(i + 1).padStart(4, '0')
+          img.src = `/frames/frame-${frameNum}.jpg`
+          img.onload = () => { images[i] = img }
+        }
+        nextFrame = batchEnd
+        if (nextFrame < FRAME_COUNT) {
+          if ('requestIdleCallback' in window) {
+            requestIdleCallback(loadBatch, { timeout: 2000 })
+          } else {
+            setTimeout(loadBatch, 60)
+          }
         }
       }
-      images[i] = img
+
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(loadBatch, { timeout: 1000 })
+      } else {
+        setTimeout(loadBatch, 100)
+      }
     }
 
     const resizeCanvas = () => {
@@ -71,15 +90,15 @@ export default function VideoBackground() {
       return { offsetX, offsetY, renderW, renderH }
     }
 
-    // Sub-frame liquid blending engine (cross-fades consecutive frames for 60/120fps silk)
+    // Sub-frame liquid blending engine (cross-fades consecutive frames)
     const renderFrame = (framePos: number) => {
       const clamped = Math.max(0, Math.min(FRAME_COUNT - 1, framePos))
       const floorIdx = Math.floor(clamped)
       const ceilIdx = Math.min(FRAME_COUNT - 1, floorIdx + 1)
       const fraction = clamped - floorIdx
 
-      const imgA = images[floorIdx]
-      const imgB = images[ceilIdx]
+      const imgA = images[floorIdx] || images[0]
+      const imgB = images[ceilIdx]  || imgA
 
       const readyA = imgA && imgA.complete && imgA.naturalWidth > 0
       const readyB = imgB && imgB.complete && imgB.naturalWidth > 0
@@ -91,8 +110,8 @@ export default function VideoBackground() {
         ctx.globalAlpha = 1
         ctx.drawImage(imgA, offsetX, offsetY, renderW, renderH)
 
-        // Sub-frame crossfade blend with next frame for liquid smooth transitions
-        if (readyB && fraction > 0.01 && ceilIdx !== floorIdx) {
+        // Sub-frame crossfade blend
+        if (readyB && fraction > 0.01 && ceilIdx !== floorIdx && imgB !== imgA) {
           ctx.globalAlpha = fraction
           ctx.drawImage(imgB, offsetX, offsetY, renderW, renderH)
           ctx.globalAlpha = 1
@@ -111,11 +130,11 @@ export default function VideoBackground() {
     resizeCanvas()
     onScroll()
 
-    // Smooth Kinetic Spring Loop (forward & backward scroll responsive)
+    // Smooth Kinetic Spring Loop
     const loop = () => {
       const distance = targetFrame - currentFrame
 
-      // Liquid inertia spring formula (ultra-responsive & silky)
+      // Liquid inertia spring formula
       velocity += distance * 0.12
       velocity *= 0.78
       currentFrame += velocity
@@ -152,7 +171,7 @@ export default function VideoBackground() {
         />
       </div>
 
-      {/* ── Soft vignette & top gradient for maximum readability ── */}
+      {/* ── Soft vignette & top gradient ── */}
       <div aria-hidden style={{ position: 'fixed', inset: 0, zIndex: 1, pointerEvents: 'none' }}>
         <div style={{
           position: 'absolute', inset: 0,

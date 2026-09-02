@@ -120,6 +120,12 @@ export default async function RootLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <head>
+        <link
+          rel="preload"
+          href="/frames/frame-0001.jpg"
+          as="image"
+          type="image/jpeg"
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

@@ -7,17 +7,17 @@ import { PROJECTS, getProjectText, type Locale } from '@/lib/projects'
 
 // Real website preview screenshots captured from live deployments
 const PROJECT_SCREENSHOTS: Record<string, string> = {
-  'kronitt': '/projects/kronitt.png',
-  'experience-fly': '/projects/experience-fly.png',
-  'growai': '/projects/growai.png',
-  'bad-bee': '/projects/bad-bee.png',
-  'nexo': '/projects/nexo.png',
-  'dulce-hogar': '/projects/dulce-hogar.png',
-  'mundialito': '/projects/mundialito.png',
-  'andreac-tejidos': '/projects/dulce-hogar.png',
-  'la-rodante-del-desierto': '/projects/la-rodante-del-desierto.png',
-  'calvos-compresores': '/projects/calvos-compresores.png',
-  'orimar': '/projects/calvos-compresores.png',
+  'kronitt': '/projects/kronitt.webp',
+  'experience-fly': '/projects/experience-fly.webp',
+  'growai': '/projects/growai.webp',
+  'bad-bee': '/projects/bad-bee.webp',
+  'nexo': '/projects/nexo.webp',
+  'dulce-hogar': '/projects/dulce-hogar.webp',
+  'mundialito': '/projects/mundialito.webp',
+  'andreac-tejidos': '/projects/dulce-hogar.webp',
+  'la-rodante-del-desierto': '/projects/la-rodante-del-desierto.webp',
+  'calvos-compresores': '/projects/calvos-compresores.webp',
+  'orimar': '/projects/calvos-compresores.webp',
 }
 
 export default function Projects() {

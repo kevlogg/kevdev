@@ -9,9 +9,9 @@ import MacbookHero from './MacbookHero'
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
 const T = {
-  headline: 0.4,
-  bottom:   2.2,
-  glow:     2.4,
+  headline: 0.05,
+  bottom:   0.5,
+  glow:     0.7,
 }
 
 function BlurEmergeText({
@@ -30,11 +30,11 @@ function BlurEmergeText({
       {characters.map((char, i) => (
         <motion.span
           key={i}
-          initial={{ opacity: 0, filter: 'blur(16px)', y: 14 }}
+          initial={{ opacity: 0, filter: 'blur(10px)', y: 8 }}
           animate={{ opacity: 1, filter: 'blur(0px)', y: 0 }}
           transition={{
-            duration: 0.75,
-            delay: delayOffset + i * 0.035,
+            duration: 0.45,
+            delay: delayOffset + i * 0.02,
             ease: [0.25, 0.46, 0.45, 0.94],
           }}
           style={{
