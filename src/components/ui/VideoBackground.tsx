@@ -9,6 +9,9 @@ export default function VideoBackground() {
   const imagesRef = useRef<HTMLImageElement[]>([])
 
   useEffect(() => {
+    // Skip heavy 240-frame canvas animation on mobile devices for 95+ mobile performance
+    if (window.innerWidth < 768) return
+
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d', { alpha: false })

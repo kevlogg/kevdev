@@ -53,6 +53,7 @@ export default function Hero() {
   const springY = useSpring(mouseY, { stiffness: 50, damping: 20 })
 
   useEffect(() => {
+    if (window.innerWidth < 768) return
     const fn = (e: MouseEvent) => { mouseX.set(e.clientX); mouseY.set(e.clientY) }
     window.addEventListener('mousemove', fn, { passive: true })
     
