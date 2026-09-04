@@ -35,12 +35,18 @@ export async function GET(req: Request) {
       const normId = clienteId.toLowerCase().trim()
       const DULCE_HOGAR_IDS = ['dulcehogar', 'dulce-hogar', 'dulce_hogar', 'gz3g7r0ld4z3g3k5m7n9', 'q6h68vtjro2cd2qwtslj']
       const CALVOS_IDS = ['calvoscompresores', 'calvos-compresores', 'fx25djbynqynowq361jv', 'o5su65lqkz2k6ujl7o08']
+      const PAJAROS_IDS = ['pajarosenlacabeza', 'pajaros-en-la-cabeza', 'pajaros_en_la_cabeza', 'pajaros', 'pajaro']
 
       const match = snap.docs.find(d => {
         const dId = d.id.toLowerCase().trim()
+        const dData = d.data()
+        const dNombre = (dData.nombre || '').toLowerCase().trim()
+        const dUrl = (dData.url || '').toLowerCase().trim()
+
         if (dId === normId) return true
-        if (DULCE_HOGAR_IDS.includes(normId) && DULCE_HOGAR_IDS.includes(dId)) return true
-        if (CALVOS_IDS.includes(normId) && CALVOS_IDS.includes(dId)) return true
+        if (DULCE_HOGAR_IDS.includes(normId) && (DULCE_HOGAR_IDS.includes(dId) || dNombre.includes('dulce'))) return true
+        if (CALVOS_IDS.includes(normId) && (CALVOS_IDS.includes(dId) || dNombre.includes('calvo'))) return true
+        if ((PAJAROS_IDS.includes(normId) || normId.includes('pajaro')) && (PAJAROS_IDS.includes(dId) || dNombre.includes('pajaro') || dUrl.includes('pajaro'))) return true
         return false
       })
 

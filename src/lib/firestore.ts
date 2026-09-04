@@ -173,6 +173,7 @@ export async function deletePresupuestoItem(id: string): Promise<void> {
 
 const CALVOS_IDS = ['calvoscompresores', 'calvos-compresores', 'fx25djbynqynowq361jv', 'o5su65lqkz2k6ujl7o08']
 const DULCE_HOGAR_IDS = ['dulcehogar', 'dulce-hogar', 'dulce_hogar', 'gz3g7r0ld4z3g3k5m7n9', 'q6h68vtjro2cd2qwtslj']
+const PAJAROS_IDS = ['pajarosenlacabeza', 'pajaros-en-la-cabeza', 'pajaros_en_la_cabeza', 'pajaros', 'pajaro']
 
 export async function getHistorialPagos(clienteId: string): Promise<HistorialPago[]> {
   try {
@@ -183,6 +184,7 @@ export async function getHistorialPagos(clienteId: string): Promise<HistorialPag
     const normId = String(clienteId || '').toLowerCase().trim()
     const isCalvosQuery = CALVOS_IDS.includes(normId) || normId.includes('calvo')
     const isDulceHogarQuery = DULCE_HOGAR_IDS.includes(normId) || normId.includes('dulce')
+    const isPajarosQuery = PAJAROS_IDS.includes(normId) || normId.includes('pajaro') || normId.includes('cabeza')
 
     return allPagos
       .filter(p => {
@@ -193,6 +195,8 @@ export async function getHistorialPagos(clienteId: string): Promise<HistorialPag
         if (isCalvosQuery && isCalvosPago) return true
         const isDulceHogarPago = DULCE_HOGAR_IDS.includes(pNorm) || pNorm.includes('dulce')
         if (isDulceHogarQuery && isDulceHogarPago) return true
+        const isPajarosPago = PAJAROS_IDS.includes(pNorm) || pNorm.includes('pajaro') || pNorm.includes('cabeza')
+        if (isPajarosQuery && isPajarosPago) return true
         return false
       })
       .sort((a, b) => (b.fecha || '').localeCompare(a.fecha || ''))
