@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { getHistorialPagos, getClientes } from '@/lib/firestore'
+import { getPaymentsFromStore } from '@/lib/payments-store'
 
 export const dynamic = 'force-dynamic'
 
@@ -29,7 +30,7 @@ export async function GET(req: Request) {
     try {
       const clientes = await getClientes()
       const normId = clienteId.toLowerCase().trim()
-      const isPajarosQuery = normId.includes('pajaro') || normId.includes('cabeza')
+      const isPajarosQuery = normId.includes('pajaro') || normId.includes('cabeza') || normId.includes('qrkvon')
       const isCalvosQuery = normId.includes('calvo')
       const isDulceHogarQuery = normId.includes('dulce')
 
@@ -38,7 +39,7 @@ export async function GET(req: Request) {
         const cNom = String(c.nombre || '').toLowerCase()
         const cUrl = String(c.url || '').toLowerCase()
         if (cId === normId || cNom.includes(normId) || cUrl.includes(normId)) return true
-        if (isPajarosQuery && (cNom.includes('pajaro') || cNom.includes('cabeza') || cUrl.includes('pajaro'))) return true
+        if (isPajarosQuery && (cNom.includes('pajaro') || cNom.includes('cabeza') || cUrl.includes('pajaro') || cId.includes('qrkvon'))) return true
         if (isCalvosQuery && (cNom.includes('calvo') || cUrl.includes('calvo'))) return true
         if (isDulceHogarQuery && (cNom.includes('dulce') || cUrl.includes('dulce'))) return true
         return false
@@ -51,18 +52,44 @@ export async function GET(req: Request) {
       console.warn('[client-history] Warning consultando estadoPago:', cliErr)
     }
 
-    const rawPagos = await getHistorialPagos(clienteId)
+    const rawPagos = await getHistorialPagos(clienteId).catch(() => [])
+    const storePagos = getPaymentsFromStore(clienteId)
 
-    const formattedPayments = rawPagos.map((p: any) => ({
-      id: p.id || '',
-      date: p.fecha || p.date || '',
-      amount: Number(p.monto || p.amount || 0),
-      concept: p.concepto || p.concept || 'Cuota Mensual',
-      medioPago: p.medioPago || 'Transferencia',
-      metodo: p.metodo || 'pasarela',
-      referencia: p.referencia || '',
-      confirmed: p.confirmado ?? true,
-    }))
+    const allMap = new Map<string, any>()
+    
+    // Add payments from Firestore
+    rawPagos.forEach((p: any) => {
+      const key = `${p.fecha || p.date || ''}_${p.monto || p.amount || 0}`
+      allMap.set(key, {
+        id: p.id || '',
+        date: p.fecha || p.date || '',
+        amount: Number(p.monto || p.amount || 0),
+        concept: p.concepto || p.concept || 'Cuota Mensual',
+        medioPago: p.medioPago || 'Transferencia',
+        metodo: p.metodo || 'pasarela',
+        referencia: p.referencia || '',
+        confirmed: p.confirmado ?? true,
+      })
+    })
+
+    // Add/merge payments from PaymentsStore
+    storePagos.forEach((sp: any) => {
+      const key = `${sp.date}_${sp.amount}`
+      if (!allMap.has(key)) {
+        allMap.set(key, {
+          id: sp.id,
+          date: sp.date,
+          amount: Number(sp.amount),
+          concept: sp.concept,
+          medioPago: sp.medioPago,
+          metodo: 'pasarela',
+          referencia: '',
+          confirmed: sp.confirmed ?? true,
+        })
+      }
+    })
+
+    const formattedPayments = Array.from(allMap.values()).sort((a, b) => (b.date || '').localeCompare(a.date || ''))
 
     return NextResponse.json(
       {

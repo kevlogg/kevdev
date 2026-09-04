@@ -20,18 +20,32 @@ const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig)
 export const auth = getAuth(app)
 export const db   = getFirestore(app)
 
+let authPromise: Promise<any> | null = null
+
 export async function ensureServerAuth() {
-  if (!auth.currentUser) {
-    const email = process.env.FIREBASE_ADMIN_EMAIL || 'kevdev.info@gmail.com'
-    const password = process.env.FIREBASE_ADMIN_PASSWORD || 'kevdev2026'
+  if (auth.currentUser) return
+  if (authPromise) return authPromise
+
+  const email = process.env.FIREBASE_ADMIN_EMAIL || 'kevdev.info@gmail.com'
+  const password = process.env.FIREBASE_ADMIN_PASSWORD || 'kevdev2026'
+
+  authPromise = (async () => {
     try {
       await signInWithEmailAndPassword(auth, email, password)
-    } catch (e) {
-      try {
-        await signInAnonymously(auth)
-      } catch (anonErr) {
-        console.warn('Firebase Auth fallback failed:', anonErr)
+    } catch (e: any) {
+      if (e?.code === 'auth/too-many-requests') {
+        console.warn('Firebase Auth rate limited, waiting for session or fallback')
+      } else {
+        try {
+          await signInAnonymously(auth)
+        } catch (anonErr) {
+          console.warn('Firebase Auth fallback failed:', anonErr)
+        }
       }
+    } finally {
+      authPromise = null
     }
-  }
+  })()
+
+  return authPromise
 }

@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { recordPaymentInStore, deletePaymentFromStore } from '@/lib/payments-store'
 
 export const dynamic = 'force-dynamic'
 
@@ -33,8 +34,30 @@ export async function POST(req: Request) {
     const body = await req.json().catch(() => ({}))
     const { action, clientUrl, paymentData } = body
 
-    if (!clientUrl || !action || !paymentData) {
+    if (!paymentData) {
       return NextResponse.json({ error: 'Faltan parámetros requeridos' }, { status: 400 })
+    }
+
+    if (action === 'delete') {
+      deletePaymentFromStore(
+        paymentData.date || paymentData.fecha || '',
+        Number(paymentData.amount || paymentData.monto || 0),
+        paymentData.clienteId || paymentData.clientId || ''
+      )
+    } else {
+      recordPaymentInStore({
+        id: paymentData.id || `PAGO-${Date.now()}`,
+        clienteId: paymentData.clienteId || paymentData.clientId || 'qrKvonUCFeUOJZW32bee',
+        date: paymentData.date || paymentData.fecha || new Date().toISOString().split('T')[0],
+        amount: Number(paymentData.amount || paymentData.monto || 0),
+        concept: paymentData.concept || paymentData.concepto || 'Cuota Mensual',
+        medioPago: paymentData.medioPago || 'Transferencia',
+        confirmed: paymentData.confirmed ?? true,
+      })
+    }
+
+    if (!clientUrl) {
+      return NextResponse.json({ success: true, synced: true, message: 'Pago registrado en KevDev Payments Store' })
     }
 
     const targetUrl = getCanonicalApiUrl(clientUrl)

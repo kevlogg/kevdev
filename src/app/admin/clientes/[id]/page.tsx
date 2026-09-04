@@ -144,22 +144,23 @@ export default function ClienteDetailPage() {
         confirmado: pagoForm.confirmado,
       })
       // Push directo a la web del cliente a través del servidor (evita CORS)
-      if (cliente?.url) {
-        fetch('/api/admin/push-payment', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            action: 'add',
-            clientUrl: cliente.url,
-            paymentData: {
-              amount: montoNum,
-              date: pagoForm.fecha,
-              concept: pagoForm.concepto || 'Cuota Mensual',
-              medioPago: pagoForm.medioPago || 'Transferencia',
-              confirmed: pagoForm.confirmado,
-            }
-          })
+      fetch('/api/admin/push-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'add',
+          clientUrl: cliente?.url || 'https://pajaros-en-la-cabeza.vercel.app',
+          paymentData: {
+            id: newId,
+            clienteId: id,
+            amount: montoNum,
+            date: pagoForm.fecha,
+            concept: pagoForm.concepto || 'Cuota Mensual',
+            medioPago: pagoForm.medioPago || 'Transferencia',
+            confirmed: pagoForm.confirmado,
+          }
         })
+      })
         .then(async (r) => {
           if (!r.ok) {
             const data = await r.json().catch(() => ({}))
@@ -327,6 +328,29 @@ export default function ClienteDetailPage() {
         ])
         if (c) { setCliente(c); setForm(c) }
         setPagos(h)
+
+        // Registrar todos los pagos en el PaymentsStore de KevDev
+        if (h && h.length > 0) {
+          h.forEach(p => {
+            fetch('/api/admin/push-payment', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                action: 'add',
+                clientUrl: cliente?.url || 'https://pajaros-en-la-cabeza.vercel.app',
+                paymentData: {
+                  id: p.id,
+                  clienteId: cliente.id,
+                  date: p.fecha,
+                  amount: p.monto,
+                  concept: p.concepto || 'Cuota Mensual',
+                  medioPago: p.medioPago || 'Transferencia',
+                  confirmed: p.confirmado ?? true,
+                }
+              })
+            }).catch(() => {})
+          })
+        }
       } else {
         setSyncMsg(data.error || 'No se pudo conectar con la web.')
       }
