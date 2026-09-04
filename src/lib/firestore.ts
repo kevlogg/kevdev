@@ -232,7 +232,6 @@ export async function getHistorialPagos(clienteId: string): Promise<HistorialPag
         if (isCalvosQuery && (CALVOS_IDS.includes(pNormLower) || pNormLower.includes('calvo'))) return true
         if (isDulceHogarQuery && (DULCE_HOGAR_IDS.includes(pNormLower) || pNormLower.includes('dulce'))) return true
         if (isPajarosQuery && (PAJAROS_IDS.includes(pNormLower) || pNormLower.includes('pajaro') || pNormLower.includes('cabeza') || pNormLower.includes('qrkvon'))) return true
-        if (isPajarosQuery && !CALVOS_IDS.includes(pNormLower) && !DULCE_HOGAR_IDS.includes(pNormLower) && !pNormLower.includes('calvo') && !pNormLower.includes('dulce')) return true
         return false
       })
       .sort((a, b) => (b.fecha || '').localeCompare(a.fecha || ''))

@@ -96,7 +96,7 @@ export function getPaymentsFromStore(clienteId: string): StoredPayment[] {
   return store.filter(p => {
     const pNorm = String(p.clienteId || '').toLowerCase().trim()
     if (pNorm === normId) return true
-    if (isPajarosQuery && (PAJAROS_IDS.includes(pNorm) || pNorm.includes('pajaro') || pNorm.includes('cabeza') || pNorm.includes('qrkvon') || (!CALVOS_IDS.includes(pNorm) && !DULCE_HOGAR_IDS.includes(pNorm) && !pNorm.includes('calvo') && !pNorm.includes('dulce')))) return true
+    if (isPajarosQuery && (PAJAROS_IDS.includes(pNorm) || pNorm.includes('pajaro') || pNorm.includes('cabeza') || pNorm.includes('qrkvon'))) return true
     if (isCalvosQuery && (CALVOS_IDS.includes(pNorm) || pNorm.includes('calvo'))) return true
     if (isDulceHogarQuery && (DULCE_HOGAR_IDS.includes(pNorm) || pNorm.includes('dulce'))) return true
     return false
