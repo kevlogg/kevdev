@@ -27,8 +27,11 @@ export async function ensureServerAuth() {
     try {
       await signInWithEmailAndPassword(auth, email, password)
     } catch (e) {
-      console.warn('Firebase Auth Admin sign-in failed, trying anonymous fallback:', e)
-      await signInAnonymously(auth)
+      try {
+        await signInAnonymously(auth)
+      } catch (anonErr) {
+        console.warn('Firebase Auth fallback failed:', anonErr)
+      }
     }
   }
 }

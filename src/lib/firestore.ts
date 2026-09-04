@@ -173,18 +173,18 @@ export async function deletePresupuestoItem(id: string): Promise<void> {
 
 const CALVOS_IDS = ['calvoscompresores', 'calvos-compresores', 'fx25djbynqynowq361jv', 'o5su65lqkz2k6ujl7o08']
 const DULCE_HOGAR_IDS = ['dulcehogar', 'dulce-hogar', 'dulce_hogar', 'gz3g7r0ld4z3g3k5m7n9', 'q6h68vtjro2cd2qwtslj']
-const PAJAROS_IDS = ['pajarosenlacabeza', 'pajaros-en-la-cabeza', 'pajaros_en_la_cabeza', 'pajaros', 'pajaro']
+const PAJAROS_IDS = ['pajarosenlacabeza', 'pajaros-en-la-cabeza', 'pajaros_en_la_cabeza', 'pajaros', 'pajaro', 'qrkvonucfeuojzw32bee', 'qrkvonucfeuojzw32bee']
 
 export async function getHistorialPagos(clienteId: string): Promise<HistorialPago[]> {
   try {
-    await ensureServerAuth()
+    await ensureServerAuth().catch(() => {})
     const normId = String(clienteId || '').toLowerCase().trim()
     const isCalvosQuery = CALVOS_IDS.includes(normId) || normId.includes('calvo')
     const isDulceHogarQuery = DULCE_HOGAR_IDS.includes(normId) || normId.includes('dulce')
-    const isPajarosQuery = PAJAROS_IDS.includes(normId) || normId.includes('pajaro') || normId.includes('cabeza')
+    const isPajarosQuery = PAJAROS_IDS.includes(normId) || normId.includes('pajaro') || normId.includes('cabeza') || normId.includes('qrkvon')
 
     // Resolver IDs de documentos de clientes coincidentes en Firestore
-    const matchingClientDocIds = new Set<string>([clienteId, normId])
+    const matchingClientDocIds = new Set<string>([clienteId, normId, 'qrKvonUCFeUOJZW32bee', 'qrkvonucfeuojzw32bee'])
     try {
       const cliSnap = await getDocs(collection(db, 'clientes'))
       cliSnap.docs.forEach(docSnap => {
@@ -203,7 +203,7 @@ export async function getHistorialPagos(clienteId: string): Promise<HistorialPag
         if (isDulceHogarQuery && (cNombre.includes('dulce') || cUrl.includes('dulce') || DULCE_HOGAR_IDS.includes(cIdLower))) {
           matchingClientDocIds.add(cId)
         }
-        if (isPajarosQuery && (cNombre.includes('pajaro') || cNombre.includes('cabeza') || cUrl.includes('pajaro') || PAJAROS_IDS.includes(cIdLower))) {
+        if (isPajarosQuery && (cNombre.includes('pajaro') || cNombre.includes('cabeza') || cUrl.includes('pajaro') || PAJAROS_IDS.includes(cIdLower) || cIdLower.includes('qrkvon'))) {
           matchingClientDocIds.add(cId)
         }
       })
@@ -227,7 +227,7 @@ export async function getHistorialPagos(clienteId: string): Promise<HistorialPag
         if (matchingClientDocIds.has(pNorm) || matchingClientDocIds.has(pNormLower)) return true
         if (isCalvosQuery && (CALVOS_IDS.includes(pNormLower) || pNormLower.includes('calvo'))) return true
         if (isDulceHogarQuery && (DULCE_HOGAR_IDS.includes(pNormLower) || pNormLower.includes('dulce'))) return true
-        if (isPajarosQuery && (PAJAROS_IDS.includes(pNormLower) || pNormLower.includes('pajaro') || pNormLower.includes('cabeza'))) return true
+        if (isPajarosQuery && (PAJAROS_IDS.includes(pNormLower) || pNormLower.includes('pajaro') || pNormLower.includes('cabeza') || pNormLower.includes('qrkvon'))) return true
         if (isPajarosQuery && !CALVOS_IDS.includes(pNormLower) && !DULCE_HOGAR_IDS.includes(pNormLower) && !pNormLower.includes('calvo') && !pNormLower.includes('dulce')) return true
         return false
       })
