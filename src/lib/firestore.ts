@@ -178,25 +178,56 @@ const PAJAROS_IDS = ['pajarosenlacabeza', 'pajaros-en-la-cabeza', 'pajaros_en_la
 export async function getHistorialPagos(clienteId: string): Promise<HistorialPago[]> {
   try {
     await ensureServerAuth()
-    const snap = await getDocs(collection(db, 'historialPagos'))
-    const allPagos = snap.docs.map(d => ({ id: d.id, ...d.data() } as HistorialPago))
-
     const normId = String(clienteId || '').toLowerCase().trim()
     const isCalvosQuery = CALVOS_IDS.includes(normId) || normId.includes('calvo')
     const isDulceHogarQuery = DULCE_HOGAR_IDS.includes(normId) || normId.includes('dulce')
     const isPajarosQuery = PAJAROS_IDS.includes(normId) || normId.includes('pajaro') || normId.includes('cabeza')
 
+    // Resolver IDs de documentos de clientes coincidentes en Firestore
+    const matchingClientDocIds = new Set<string>([clienteId, normId])
+    try {
+      const cliSnap = await getDocs(collection(db, 'clientes'))
+      cliSnap.docs.forEach(docSnap => {
+        const cId = docSnap.id
+        const cIdLower = cId.toLowerCase().trim()
+        const cData = docSnap.data()
+        const cNombre = String(cData.nombre || '').toLowerCase().trim()
+        const cUrl = String(cData.url || '').toLowerCase().trim()
+
+        if (cIdLower === normId || (normId !== 'all' && (cNombre.includes(normId) || cUrl.includes(normId)))) {
+          matchingClientDocIds.add(cId)
+        }
+        if (isCalvosQuery && (cNombre.includes('calvo') || cUrl.includes('calvo') || CALVOS_IDS.includes(cIdLower))) {
+          matchingClientDocIds.add(cId)
+        }
+        if (isDulceHogarQuery && (cNombre.includes('dulce') || cUrl.includes('dulce') || DULCE_HOGAR_IDS.includes(cIdLower))) {
+          matchingClientDocIds.add(cId)
+        }
+        if (isPajarosQuery && (cNombre.includes('pajaro') || cNombre.includes('cabeza') || cUrl.includes('pajaro') || PAJAROS_IDS.includes(cIdLower))) {
+          matchingClientDocIds.add(cId)
+        }
+      })
+    } catch (cliErr) {
+      console.warn('[getHistorialPagos] Warning buscando doc IDs de clientes:', cliErr)
+    }
+
+    const snap = await getDocs(collection(db, 'historialPagos'))
+    const allPagos = snap.docs.map(d => ({ id: d.id, ...d.data() } as HistorialPago))
+
+    if (normId === 'all') {
+      return allPagos.sort((a, b) => (b.fecha || '').localeCompare(a.fecha || ''))
+    }
+
     return allPagos
       .filter(p => {
         if (!p.clienteId) return false
-        const pNorm = String(p.clienteId || '').toLowerCase().trim()
-        if (pNorm === normId) return true
-        const isCalvosPago = CALVOS_IDS.includes(pNorm) || pNorm.includes('calvo')
-        if (isCalvosQuery && isCalvosPago) return true
-        const isDulceHogarPago = DULCE_HOGAR_IDS.includes(pNorm) || pNorm.includes('dulce')
-        if (isDulceHogarQuery && isDulceHogarPago) return true
-        const isPajarosPago = PAJAROS_IDS.includes(pNorm) || pNorm.includes('pajaro') || pNorm.includes('cabeza')
-        if (isPajarosQuery && isPajarosPago) return true
+        const pNorm = String(p.clienteId || '').trim()
+        const pNormLower = pNorm.toLowerCase()
+
+        if (matchingClientDocIds.has(pNorm) || matchingClientDocIds.has(pNormLower)) return true
+        if (isCalvosQuery && (CALVOS_IDS.includes(pNormLower) || pNormLower.includes('calvo'))) return true
+        if (isDulceHogarQuery && (DULCE_HOGAR_IDS.includes(pNormLower) || pNormLower.includes('dulce'))) return true
+        if (isPajarosQuery && (PAJAROS_IDS.includes(pNormLower) || pNormLower.includes('pajaro') || pNormLower.includes('cabeza'))) return true
         return false
       })
       .sort((a, b) => (b.fecha || '').localeCompare(a.fecha || ''))
