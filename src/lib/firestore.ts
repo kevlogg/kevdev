@@ -184,7 +184,11 @@ export async function getHistorialPagos(clienteId: string): Promise<HistorialPag
     const isPajarosQuery = PAJAROS_IDS.includes(normId) || normId.includes('pajaro') || normId.includes('cabeza') || normId.includes('qrkvon')
 
     // Resolver IDs de documentos de clientes coincidentes en Firestore
-    const matchingClientDocIds = new Set<string>([clienteId, normId, 'qrKvonUCFeUOJZW32bee', 'qrkvonucfeuojzw32bee'])
+    const matchingClientDocIds = new Set<string>([clienteId, normId])
+    if (isPajarosQuery) {
+      matchingClientDocIds.add('qrKvonUCFeUOJZW32bee')
+      matchingClientDocIds.add('qrkvonucfeuojzw32bee')
+    }
     try {
       const cliSnap = await getDocs(collection(db, 'clientes'))
       cliSnap.docs.forEach(docSnap => {

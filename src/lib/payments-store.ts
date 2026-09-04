@@ -82,19 +82,23 @@ export function deletePaymentFromStore(date: string, amount: number, clienteId?:
   saveStore(store)
 }
 
+const CALVOS_IDS = ['calvoscompresores', 'calvos-compresores', 'fx25djbynqynowq361jv', 'o5su65lqkz2k6ujl7o08']
+const DULCE_HOGAR_IDS = ['dulcehogar', 'dulce-hogar', 'dulce_hogar', 'gz3g7r0ld4z3g3k5m7n9', 'q6h68vtjro2cd2qwtslj']
+const PAJAROS_IDS = ['pajarosenlacabeza', 'pajaros-en-la-cabeza', 'pajaros_en_la_cabeza', 'pajaros', 'pajaro', 'qrkvonucfeuojzw32bee']
+
 export function getPaymentsFromStore(clienteId: string): StoredPayment[] {
   const store = loadStore()
   const normId = String(clienteId || '').toLowerCase().trim()
-  const isPajarosQuery = normId.includes('pajaro') || normId.includes('cabeza') || normId.includes('qrkvon')
-  const isCalvosQuery = normId.includes('calvo')
-  const isDulceHogarQuery = normId.includes('dulce')
+  const isPajarosQuery = PAJAROS_IDS.includes(normId) || normId.includes('pajaro') || normId.includes('cabeza') || normId.includes('qrkvon')
+  const isCalvosQuery = CALVOS_IDS.includes(normId) || normId.includes('calvo')
+  const isDulceHogarQuery = DULCE_HOGAR_IDS.includes(normId) || normId.includes('dulce')
 
   return store.filter(p => {
     const pNorm = String(p.clienteId || '').toLowerCase().trim()
     if (pNorm === normId) return true
-    if (isPajarosQuery && (pNorm.includes('pajaro') || pNorm.includes('cabeza') || pNorm.includes('qrkvon') || (!pNorm.includes('calvo') && !pNorm.includes('dulce')))) return true
-    if (isCalvosQuery && pNorm.includes('calvo')) return true
-    if (isDulceHogarQuery && pNorm.includes('dulce')) return true
+    if (isPajarosQuery && (PAJAROS_IDS.includes(pNorm) || pNorm.includes('pajaro') || pNorm.includes('cabeza') || pNorm.includes('qrkvon') || (!CALVOS_IDS.includes(pNorm) && !DULCE_HOGAR_IDS.includes(pNorm) && !pNorm.includes('calvo') && !pNorm.includes('dulce')))) return true
+    if (isCalvosQuery && (CALVOS_IDS.includes(pNorm) || pNorm.includes('calvo'))) return true
+    if (isDulceHogarQuery && (DULCE_HOGAR_IDS.includes(pNorm) || pNorm.includes('dulce'))) return true
     return false
   }).sort((a, b) => (b.date || '').localeCompare(a.date || ''))
 }
