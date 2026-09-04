@@ -168,7 +168,6 @@ export default function ClienteDetailPage() {
           }
         })
         .catch(err => console.warn('Push a web del cliente falló:', err))
-      }
 
       setPagos(prev => [
         {
