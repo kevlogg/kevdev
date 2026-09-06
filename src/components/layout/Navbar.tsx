@@ -228,15 +228,19 @@ export default function Navbar() {
                     fontSize: '0.75rem',
                     fontWeight: 700,
                     letterSpacing: '0.06em',
-                    color: '#00e5ff',
-                    background: 'rgba(0, 229, 255, 0.1)',
-                    border: '1px solid rgba(0, 229, 255, 0.3)',
-                    padding: '0.35rem 0.75rem',
+                    color: '#33ebff',
+                    background: 'rgba(12, 12, 12, 0.88)',
+                    backdropFilter: 'blur(12px)',
+                    WebkitBackdropFilter: 'blur(12px)',
+                    border: '1px solid rgba(0, 229, 255, 0.65)',
+                    padding: '0.4rem 0.85rem',
                     borderRadius: 99,
                     cursor: 'pointer',
                     display: 'inline-flex',
                     alignItems: 'center',
-                    gap: '0.4rem',
+                    gap: '0.45rem',
+                    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.7), 0 0 14px rgba(0, 229, 255, 0.3)',
+                    textShadow: '0 2px 8px rgba(0, 0, 0, 0.95), 0 0 8px rgba(0, 229, 255, 0.6)',
                     transition: 'all 0.25s',
                   }}
                 >
@@ -251,19 +255,23 @@ export default function Navbar() {
                     fontSize: '0.75rem',
                     fontWeight: 700,
                     letterSpacing: '0.06em',
-                    color: '#22d3ee',
-                    background: 'rgba(6, 182, 212, 0.1)',
-                    border: '1px solid rgba(6, 182, 212, 0.3)',
-                    padding: '0.35rem 0.75rem',
+                    color: '#38bdf8',
+                    background: 'rgba(12, 12, 12, 0.88)',
+                    backdropFilter: 'blur(12px)',
+                    WebkitBackdropFilter: 'blur(12px)',
+                    border: '1px solid rgba(56, 189, 248, 0.65)',
+                    padding: '0.4rem 0.85rem',
                     borderRadius: 99,
                     cursor: 'pointer',
                     display: 'inline-flex',
                     alignItems: 'center',
-                    gap: '0.4rem',
+                    gap: '0.45rem',
+                    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.7), 0 0 14px rgba(56, 189, 248, 0.3)',
+                    textShadow: '0 2px 8px rgba(0, 0, 0, 0.95), 0 0 8px rgba(56, 189, 248, 0.6)',
                     transition: 'all 0.25s',
                   }}
                 >
-                  <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#22d3ee', display: 'inline-block' }} />
+                  <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#38bdf8', boxShadow: '0 0 8px #38bdf8', display: 'inline-block' }} />
                   CURSOS
                 </button>
               </>
