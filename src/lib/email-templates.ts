@@ -151,3 +151,103 @@ export function generateVaultAccessEmailHtml(params: VaultAccessEmailParams): st
 </body>
 </html>`
 }
+
+export function generateImpulsoNotificationEmailHtml(p: {
+  nombre: string
+  negocio: string
+  whatsapp: string
+  instagram: string
+  dedicacion: string
+  antiguedad: string
+  canalVentas: string
+  trabaPrincipal: string
+  porQueSeleccionado: string
+  materialesListos: string
+}): string {
+  const waClean = p.whatsapp.replace(/[^\d+]/g, '')
+  const waUrl = `https://wa.me/${waClean}`
+
+  return `<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nueva Postulación Impulso Digital</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #07090e; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #e2e8f0;">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #07090e; padding: 30px 10px;">
+    <tr>
+      <td align="center">
+        <table width="100%" max-width="650" border="0" cellspacing="0" cellpadding="0" style="max-width: 650px; background-color: #121212; border: 1px solid rgba(0, 229, 255, 0.3); border-radius: 16px; overflow: hidden;">
+          
+          <!-- HEADER -->
+          <tr>
+            <td style="padding: 28px; background: linear-gradient(135deg, rgba(0, 229, 255, 0.12), rgba(147, 51, 234, 0.12)); border-bottom: 1px solid rgba(255,255,255,0.08);">
+              <span style="font-family: monospace; font-weight: 800; font-size: 22px; color: #ffffff;">
+                Kev<span style="color: #00e5ff;">Dev</span> <span style="font-size: 11px; padding: 4px 10px; border-radius: 99px; background: rgba(0, 229, 255, 0.15); color: #00e5ff; border: 1px solid rgba(0, 229, 255, 0.3); margin-left: 8px;">IMPULSO DIGITAL</span>
+              </span>
+              <h1 style="margin: 14px 0 0 0; font-size: 20px; font-weight: 800; color: #ffffff;">
+                🚀 Nueva Postulación Recibida
+              </h1>
+            </td>
+          </tr>
+
+          <!-- BODY -->
+          <tr>
+            <td style="padding: 28px;">
+              <!-- CANDIDATE HEADER CARD -->
+              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #181818; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 24px; padding: 20px;">
+                <tr>
+                  <td>
+                    <div style="font-size: 18px; font-weight: 700; color: #00e5ff;">${p.negocio}</div>
+                    <div style="font-size: 14px; color: #e8e8e8; margin-top: 4px;">👤 <strong>${p.nombre}</strong></div>
+                    <div style="font-size: 13px; color: #94a3b8; margin-top: 6px;">
+                      📱 WhatsApp: <a href="${waUrl}" style="color: #22d3ee; text-decoration: none;">${p.whatsapp}</a> | 📸 IG: <strong style="color: #c084fc;">${p.instagram}</strong>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- SECTIONS -->
+              <h2 style="font-size: 15px; text-transform: uppercase; letter-spacing: 1px; color: #00e5ff; margin: 0 0 12px 0;">1. Estado del Negocio</h2>
+              <div style="background-color: #181818; border-radius: 8px; padding: 16px; margin-bottom: 20px; font-size: 14px; line-height: 1.6;">
+                <div style="margin-bottom: 10px;"><strong>¿A qué se dedica y qué ofrece?</strong><br/><span style="color: #cbd5e1;">${p.dedicacion}</span></div>
+                <div style="margin-bottom: 10px;"><strong>Antigüedad:</strong> <span style="color: #38bdf8;">${p.antiguedad}</span></div>
+                <div><strong>Canal principal de ventas:</strong> <span style="color: #38bdf8;">${p.canalVentas}</span></div>
+              </div>
+
+              <h2 style="font-size: 15px; text-transform: uppercase; letter-spacing: 1px; color: #00e5ff; margin: 0 0 12px 0;">2. Necesidad y Compromiso</h2>
+              <div style="background-color: #181818; border-radius: 8px; padding: 16px; margin-bottom: 24px; font-size: 14px; line-height: 1.6;">
+                <div style="margin-bottom: 12px;"><strong>Principal traba por no tener web:</strong><br/><span style="color: #cbd5e1;">${p.trabaPrincipal}</span></div>
+                <div style="margin-bottom: 12px;"><strong>¿Por qué debería ser el seleccionado?</strong><br/><span style="color: #cbd5e1;">${p.porQueSeleccionado}</span></div>
+                <div><strong>Material básico disponible:</strong> <span style="color: #4ade80;">${p.materialesListos}</span></div>
+              </div>
+
+              <!-- BUTTON -->
+              <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td align="center">
+                    <a href="${waUrl}" target="_blank" style="display: inline-block; padding: 14px 28px; background: linear-gradient(135deg, #25D366, #128C7E); color: #ffffff; text-decoration: none; font-weight: 700; font-size: 14px; border-radius: 10px; box-shadow: 0 4px 14px rgba(37,211,102,0.3);">
+                      💬 Abrir WhatsApp con ${p.nombre}
+                    </a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- FOOTER -->
+          <tr>
+            <td style="padding: 20px; background-color: #07090e; border-top: 1px solid rgba(255,255,255,0.08); text-align: center; font-family: monospace; font-size: 12px; color: #64748b;">
+              KevDev Convocatoria Impulso Digital • Notificación Automática
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`
+}
+

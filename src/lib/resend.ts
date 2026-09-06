@@ -1,5 +1,5 @@
 import { Resend } from 'resend'
-import { generateVaultAccessEmailHtml, VaultAccessEmailParams } from './email-templates'
+import { generateVaultAccessEmailHtml, VaultAccessEmailParams, generateImpulsoNotificationEmailHtml } from './email-templates'
 
 const resendApiKey = process.env.RESEND_API_KEY || 're_mock_key_for_dev'
 export const resendClient = new Resend(resendApiKey)
@@ -32,3 +32,42 @@ export async function sendVaultAccessEmail(params: VaultAccessEmailParams) {
     return { success: false, error: error?.message || 'Unknown Resend error' }
   }
 }
+
+export async function sendImpulsoNotificationEmail(params: {
+  nombre: string
+  negocio: string
+  whatsapp: string
+  instagram: string
+  dedicacion: string
+  antiguedad: string
+  canalVentas: string
+  trabaPrincipal: string
+  porQueSeleccionado: string
+  materialesListos: string
+}) {
+  const fromEmail = process.env.RESEND_FROM_EMAIL || 'KevDev <onboarding@resend.dev>'
+  const adminEmail = process.env.FIREBASE_ADMIN_EMAIL || 'kevdev.info@gmail.com'
+  const html = generateImpulsoNotificationEmailHtml(params)
+  const subject = `🚀 Nueva Postulación Impulso Digital: ${params.negocio} (${params.nombre})`
+
+  try {
+    const response = await resendClient.emails.send({
+      from: fromEmail,
+      to: [adminEmail],
+      subject,
+      html,
+    })
+
+    if (response.error) {
+      console.error('[Resend Impulso Email Error]:', response.error)
+      return { success: false, error: response.error }
+    }
+
+    console.log('[Resend Impulso Email Success] Dispatched to admin ID:', response.data?.id)
+    return { success: true, id: response.data?.id }
+  } catch (error: any) {
+    console.error('[Resend Impulso Exception]:', error)
+    return { success: false, error: error?.message || 'Unknown Resend error' }
+  }
+}
+

@@ -288,3 +288,67 @@ export function getPagosAcumuladosGlobal(pagos: HistorialPago[]): number {
     .reduce((sum, p) => sum + (p.monto || 0), 0)
 }
 
+/* ─── Convocatoria Impulso Digital ───────────────────────────────────── */
+
+export type EstadoPostulacion = 'pendiente' | 'en_revision' | 'seleccionado' | 'descartado'
+
+export interface PostulacionImpulso {
+  id?: string
+  creadoEn?: Timestamp | any
+  // Datos de contacto
+  nombre: string
+  negocio: string
+  whatsapp: string
+  instagram: string
+  // Estado del negocio
+  dedicacion: string
+  antiguedad: 'Menos de 6 meses' | 'Entre 6 meses y 2 años' | 'Más de 2 años' | string
+  canalVentas: 'Mensajes de WhatsApp' | 'Mensajes directos de Instagram' | 'Local a la calle / presencial' | 'Otro' | string
+  // Necesidad y compromiso
+  trabaPrincipal: string
+  porQueSeleccionado: string
+  materialesListos: 'Sí, tengo todo listo para arrancar' | 'Tengo bastante, me faltan pulir detalles' | 'Tengo que armarlo desde cero' | string
+  // Control admin
+  estado?: EstadoPostulacion
+  notasAdmin?: string
+}
+
+export async function getPostulacionesImpulso(): Promise<PostulacionImpulso[]> {
+  try {
+    await ensureServerAuth().catch(() => {})
+    const q = query(collection(db, 'convocatoria_postulantes'), orderBy('creadoEn', 'desc'))
+    const snap = await getDocs(q)
+    return snap.docs.map(d => ({ id: d.id, ...d.data() } as PostulacionImpulso))
+  } catch (err) {
+    console.warn('[getPostulacionesImpulso] Error consultando Firestore:', err)
+    return []
+  }
+}
+
+export async function addPostulacionImpulso(
+  data: Omit<PostulacionImpulso, 'id' | 'creadoEn'>
+): Promise<string> {
+  await ensureServerAuth().catch(() => {})
+  const ref = await addDoc(collection(db, 'convocatoria_postulantes'), {
+    ...data,
+    estado: data.estado || 'pendiente',
+    notasAdmin: data.notasAdmin || '',
+    creadoEn: serverTimestamp(),
+  })
+  return ref.id
+}
+
+export async function updatePostulacionImpulso(
+  id: string,
+  data: Partial<Omit<PostulacionImpulso, 'id' | 'creadoEn'>>,
+): Promise<void> {
+  await ensureServerAuth().catch(() => {})
+  await updateDoc(doc(db, 'convocatoria_postulantes', id), data)
+}
+
+export async function deletePostulacionImpulso(id: string): Promise<void> {
+  await ensureServerAuth().catch(() => {})
+  await deleteDoc(doc(db, 'convocatoria_postulantes', id))
+}
+
+
