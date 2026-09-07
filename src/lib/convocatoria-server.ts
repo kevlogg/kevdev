@@ -65,10 +65,19 @@ export async function savePostulacionServer(data: Omit<PostulacionRecord, 'id' |
     docId = docRef.id
     record.id = docId
   } catch (err) {
-    console.warn('[Convocatoria Server] Firestore Admin write warning, using local fallback:', err)
+    console.warn('[Convocatoria Server] Firestore Admin write warning:', err)
   }
 
-  // 2. Always update local fallback store
+  // 2. Try Client SDK fallback to guarantee creation in Firestore Console
+  try {
+    const { addPostulacionImpulso } = await import('@/lib/firestore')
+    const cliDocId = await addPostulacionImpulso(data)
+    if (!docId) docId = cliDocId
+  } catch (cliErr) {
+    console.warn('[Convocatoria Server] Client SDK write warning:', cliErr)
+  }
+
+  // 3. Always update local fallback store
   const store = loadFallbackStore()
   store.unshift(record)
   saveFallbackStore(store)
