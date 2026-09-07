@@ -315,22 +315,12 @@ export interface PostulacionImpulso {
 
 export async function getPostulacionesImpulso(): Promise<PostulacionImpulso[]> {
   try {
-    if (typeof window === 'undefined') {
-      const { adminDb } = await import('@/lib/firebase-admin')
-      const snap = await adminDb.collection('convocatoria_postulantes').orderBy('creadoEn', 'desc').get()
-      return snap.docs.map(d => ({ id: d.id, ...d.data() } as PostulacionImpulso))
-    }
-  } catch (err) {
-    console.warn('[getPostulacionesImpulso] Admin SDK fallback warning:', err)
-  }
-
-  try {
     await ensureServerAuth().catch(() => {})
     const q = query(collection(db, 'convocatoria_postulantes'), orderBy('creadoEn', 'desc'))
     const snap = await getDocs(q)
     return snap.docs.map(d => ({ id: d.id, ...d.data() } as PostulacionImpulso))
   } catch (err) {
-    console.warn('[getPostulacionesImpulso] Client SDK error:', err)
+    console.warn('[getPostulacionesImpulso] Error consultando Firestore:', err)
     return []
   }
 }
@@ -338,57 +328,25 @@ export async function getPostulacionesImpulso(): Promise<PostulacionImpulso[]> {
 export async function addPostulacionImpulso(
   data: Omit<PostulacionImpulso, 'id' | 'creadoEn'>
 ): Promise<string> {
-  try {
-    const { adminDb, FieldValue } = await import('@/lib/firebase-admin')
-    const ref = await adminDb.collection('convocatoria_postulantes').add({
-      ...data,
-      estado: data.estado || 'pendiente',
-      notasAdmin: data.notasAdmin || '',
-      creadoEn: FieldValue.serverTimestamp(),
-    })
-    return ref.id
-  } catch (adminErr) {
-    console.warn('[addPostulacionImpulso] Admin SDK warning, usando Client SDK:', adminErr)
-    await ensureServerAuth().catch(() => {})
-    const ref = await addDoc(collection(db, 'convocatoria_postulantes'), {
-      ...data,
-      estado: data.estado || 'pendiente',
-      notasAdmin: data.notasAdmin || '',
-      creadoEn: serverTimestamp(),
-    })
-    return ref.id
-  }
+  await ensureServerAuth().catch(() => {})
+  const ref = await addDoc(collection(db, 'convocatoria_postulantes'), {
+    ...data,
+    estado: data.estado || 'pendiente',
+    notasAdmin: data.notasAdmin || '',
+    creadoEn: serverTimestamp(),
+  })
+  return ref.id
 }
 
 export async function updatePostulacionImpulso(
   id: string,
   data: Partial<Omit<PostulacionImpulso, 'id' | 'creadoEn'>>,
 ): Promise<void> {
-  try {
-    if (typeof window === 'undefined') {
-      const { adminDb } = await import('@/lib/firebase-admin')
-      await adminDb.collection('convocatoria_postulantes').doc(id).update(data)
-      return
-    }
-  } catch (err) {
-    console.warn('[updatePostulacionImpulso] Admin SDK fallback warning:', err)
-  }
-
   await ensureServerAuth().catch(() => {})
   await updateDoc(doc(db, 'convocatoria_postulantes', id), data)
 }
 
 export async function deletePostulacionImpulso(id: string): Promise<void> {
-  try {
-    if (typeof window === 'undefined') {
-      const { adminDb } = await import('@/lib/firebase-admin')
-      await adminDb.collection('convocatoria_postulantes').doc(id).delete()
-      return
-    }
-  } catch (err) {
-    console.warn('[deletePostulacionImpulso] Admin SDK fallback warning:', err)
-  }
-
   await ensureServerAuth().catch(() => {})
   await deleteDoc(doc(db, 'convocatoria_postulantes', id))
 }

@@ -138,8 +138,19 @@ export async function POST(req: Request) {
       notasAdmin: '',
     }
 
-    // Save to Firestore
-    const docId = await addPostulacionImpulso(payload)
+    // Save to Firestore using Admin SDK in Server API Route
+    let docId = ''
+    try {
+      const { adminDb, FieldValue } = await import('@/lib/firebase-admin')
+      const docRef = await adminDb.collection('convocatoria_postulantes').add({
+        ...payload,
+        creadoEn: FieldValue.serverTimestamp(),
+      })
+      docId = docRef.id
+    } catch (adminErr) {
+      console.warn('[Convocatoria API] Fallback a addPostulacionImpulso:', adminErr)
+      docId = await addPostulacionImpulso(payload)
+    }
 
     // Dispatch email notification
     sendImpulsoNotificationEmail(payload).catch((emailErr) => {
