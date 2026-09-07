@@ -30,7 +30,10 @@ const securityHeaders = [
   },
 ]
 
+import path from 'path'
+
 const nextConfig: NextConfig = {
+  outputFileTracingRoot: path.join(__dirname),
   eslint: {
     ignoreDuringBuilds: false,
   },

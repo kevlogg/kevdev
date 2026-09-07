@@ -47,44 +47,27 @@ export default function ProyectosPage() {
   }, [currentIndex])
 
   return (
-    <div style={{ position: 'relative', width: '100vw', height: '100vh', overflow: 'hidden' }}>
+    <div style={{ position: 'relative', width: '100%', height: '100dvh', minHeight: '100vh', overflow: 'hidden' }}>
       <div className="grain"    aria-hidden />
       <div className="vignette" aria-hidden />
-
-      <style>{`
-        @media (max-width: 768px) {
-          .project-bg-video-wrap {
-            inset: auto !important;
-            top: 0 !important;
-            left: 0 !important;
-            width: 100% !important;
-            aspect-ratio: 16 / 9;
-            height: auto !important;
-            border-radius: 0 0 16px 16px;
-          }
-          .project-bg-video {
-            min-width: unset !important;
-            min-height: unset !important;
-            width: 100% !important;
-            height: 100% !important;
-            object-fit: cover !important;
-          }
-        }
-      `}</style>
 
       <div
         className="project-bg-video-wrap"
         style={{
           position: 'fixed',
           inset: 0,
+          width: '100%',
+          height: '100%',
           zIndex: 0,
           overflow: 'hidden',
+          pointerEvents: 'none',
         }}
       >
         <video
           ref={videoRef}
           autoPlay
           muted
+          loop
           playsInline
           className="project-bg-video"
           style={{
@@ -349,7 +332,7 @@ function ProjectCard({ project: rawProject, direction }: { project: Project; dir
       <h2 style={{
         fontFamily: 'var(--font-display)',
         fontWeight: 800,
-        fontSize: 'clamp(3.5rem, 8vw, 7rem)',
+        fontSize: 'clamp(2.25rem, 7vw, 7rem)',
         lineHeight: 0.95,
         letterSpacing: '-0.03em',
         color: project.color,
@@ -515,18 +498,18 @@ function ArrowButton({ direction, onClick }: {
       aria-label={direction === 'left' ? t('prevAria') : t('nextAria')}
       style={{
         position: 'absolute',
-        [side]: 'clamp(1rem, 4vw, 3rem)',
+        [side]: 'clamp(0.5rem, 3vw, 3rem)',
         top: '50%',
         transform: `translateY(-50%) scale(${hov ? 1.06 : 1})`,
-        width: 52,
-        height: 52,
+        width: 'clamp(40px, 8vw, 52px)',
+        height: 'clamp(40px, 8vw, 52px)',
         borderRadius: '50%',
         border: `1.5px solid ${hov ? 'var(--color-star)' : 'rgba(255,255,255,0.45)'}`,
         background: hov ? 'rgba(255,255,255,0.16)' : 'rgba(10,12,20,0.45)',
         backdropFilter: 'blur(6px)',
         boxShadow: hov ? '0 4px 20px rgba(0,0,0,0.35)' : '0 2px 12px rgba(0,0,0,0.25)',
         color: 'var(--color-star)',
-        fontSize: '1.375rem',
+        fontSize: 'clamp(1rem, 3vw, 1.375rem)',
         cursor: 'pointer',
         display: 'flex',
         alignItems: 'center',
