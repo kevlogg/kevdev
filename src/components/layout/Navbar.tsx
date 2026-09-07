@@ -245,7 +245,8 @@ export default function Navbar() {
                   }}
                 >
                   <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#00e5ff', boxShadow: '0 0 8px #00e5ff', display: 'inline-block' }} />
-                  IMPULSO DIGITAL 🚀
+                  <span>IMPULSO DIGITAL</span>
+                  <span className="badge-rocket">🚀</span>
                 </button>
                 <button
                   type="button"
@@ -622,6 +623,11 @@ export default function Navbar() {
           transform: translate(0, 0) scale(1.05) !important;
           background: rgba(34,211,238,0.2) !important;
           border-color: rgba(34,211,238,0.5) !important;
+        }
+        @media (max-width: 640px) {
+          .badge-rocket {
+            display: none !important;
+          }
         }
         @media (min-width: 900px) {
           .menu-grid {
