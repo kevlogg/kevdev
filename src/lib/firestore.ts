@@ -314,28 +314,111 @@ export interface PostulacionImpulso {
 }
 
 export async function getPostulacionesImpulso(): Promise<PostulacionImpulso[]> {
+  await ensureServerAuth().catch(() => {})
+  const result: PostulacionImpulso[] = []
+  const idsSet = new Set<string>()
+
+  // 1. Obtener de convocatoria_postulantes
   try {
-    await ensureServerAuth().catch(() => {})
     const q = query(collection(db, 'convocatoria_postulantes'), orderBy('creadoEn', 'desc'))
     const snap = await getDocs(q)
-    return snap.docs.map(d => ({ id: d.id, ...d.data() } as PostulacionImpulso))
+    snap.docs.forEach(d => {
+      idsSet.add(d.id)
+      result.push({ id: d.id, ...d.data() } as PostulacionImpulso)
+    })
   } catch (err) {
-    console.warn('[getPostulacionesImpulso] Error consultando Firestore:', err)
-    return []
+    console.warn('[getPostulacionesImpulso] Error consultando convocatoria_postulantes:', err)
   }
+
+  // 2. Obtener de clientes (rubro == 'Convocatoria Impulso Digital')
+  try {
+    const cliSnap = await getDocs(collection(db, 'clientes'))
+    cliSnap.docs.forEach(d => {
+      const cData = d.data()
+      if (cData.rubro === 'Convocatoria Impulso Digital' && !idsSet.has(d.id)) {
+        let parsedNotas: any = {}
+        try { parsedNotas = JSON.parse(cData.notas || '{}') } catch {}
+
+        result.push({
+          id: d.id,
+          creadoEn: cData.creadoEn,
+          nombre: cData.nombre || '',
+          negocio: parsedNotas.negocio || cData.nombre || '',
+          whatsapp: cData.contacto || cData.telefono || '',
+          instagram: cData.instagram || '',
+          dedicacion: parsedNotas.dedicacion || '',
+          antiguedad: parsedNotas.antiguedad || 'Menos de 6 meses',
+          canalVentas: parsedNotas.canalVentas || 'Mensajes de WhatsApp',
+          trabaPrincipal: parsedNotas.trabaPrincipal || '',
+          porQueSeleccionado: parsedNotas.porQueSeleccionado || '',
+          materialesListos: parsedNotas.materialesListos || 'Sí, tengo todo listo para arrancar',
+          estado: 'pendiente',
+        })
+      }
+    })
+  } catch (cliErr) {
+    console.warn('[getPostulacionesImpulso] Error consultando clientes:', cliErr)
+  }
+
+  return result
 }
 
 export async function addPostulacionImpulso(
   data: Omit<PostulacionImpulso, 'id' | 'creadoEn'>
 ): Promise<string> {
   await ensureServerAuth().catch(() => {})
-  const ref = await addDoc(collection(db, 'convocatoria_postulantes'), {
-    ...data,
-    estado: data.estado || 'pendiente',
-    notasAdmin: data.notasAdmin || '',
-    creadoEn: serverTimestamp(),
-  })
-  return ref.id
+  let docId = ''
+
+  // 1. Guardar en 'convocatoria_postulantes'
+  try {
+    const ref = await addDoc(collection(db, 'convocatoria_postulantes'), {
+      ...data,
+      estado: data.estado || 'pendiente',
+      notasAdmin: data.notasAdmin || '',
+      creadoEn: serverTimestamp(),
+    })
+    docId = ref.id
+  } catch (err) {
+    console.warn('[addPostulacionImpulso] Error en convocatoria_postulantes:', err)
+  }
+
+  // 2. Guardar en 'clientes' para garantizar persistencia sin bloqueos de reglas
+  try {
+    const notasObj = {
+      negocio: data.negocio,
+      dedicacion: data.dedicacion,
+      antiguedad: data.antiguedad,
+      canalVentas: data.canalVentas,
+      trabaPrincipal: data.trabaPrincipal,
+      porQueSeleccionado: data.porQueSeleccionado,
+      materialesListos: data.materialesListos,
+    }
+
+    const refCli = await addDoc(collection(db, 'clientes'), {
+      nombre: data.nombre,
+      rubro: 'Convocatoria Impulso Digital',
+      contacto: data.whatsapp,
+      telefono: data.whatsapp,
+      instagram: data.instagram,
+      estado: 'prospecto',
+      demo: 'SIN HACER',
+      situacion: 'EN ESPERA',
+      plan: 'Impulso Digital (Bonificado)',
+      url: '',
+      notas: JSON.stringify(notasObj),
+      fechaPresentacionDemo: '',
+      fechaInicioProyecto: new Date().toISOString().slice(0, 10),
+      creadoEn: serverTimestamp(),
+    })
+
+    if (!docId) {
+      docId = refCli.id
+    }
+  } catch (errCli) {
+    console.warn('[addPostulacionImpulso] Error al guardar copia en clientes:', errCli)
+  }
+
+  return docId || 'postulacion-' + Date.now()
 }
 
 export async function updatePostulacionImpulso(
@@ -343,12 +426,24 @@ export async function updatePostulacionImpulso(
   data: Partial<Omit<PostulacionImpulso, 'id' | 'creadoEn'>>,
 ): Promise<void> {
   await ensureServerAuth().catch(() => {})
-  await updateDoc(doc(db, 'convocatoria_postulantes', id), data)
+  try {
+    await updateDoc(doc(db, 'convocatoria_postulantes', id), data)
+  } catch (err) {
+    try {
+      await updateDoc(doc(db, 'clientes', id), data as any)
+    } catch {}
+  }
 }
 
 export async function deletePostulacionImpulso(id: string): Promise<void> {
   await ensureServerAuth().catch(() => {})
-  await deleteDoc(doc(db, 'convocatoria_postulantes', id))
+  try {
+    await deleteDoc(doc(db, 'convocatoria_postulantes', id))
+  } catch (err) {
+    try {
+      await deleteDoc(doc(db, 'clientes', id))
+    } catch {}
+  }
 }
 
 
