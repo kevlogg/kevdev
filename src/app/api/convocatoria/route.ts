@@ -1,15 +1,31 @@
 import { NextResponse } from 'next/server'
-import { addPostulacionImpulso } from '@/lib/firestore'
+import {
+  savePostulacionServer,
+  getPostulacionesServer,
+  updatePostulacionServer,
+  deletePostulacionServer,
+} from '@/lib/convocatoria-server'
 import { sendImpulsoNotificationEmail } from '@/lib/resend'
 
-// Helper function to sanitize text input and prevent XSS script injection
+export const dynamic = 'force-dynamic'
+
 function sanitizeText(str: string, maxLength = 1000): string {
   if (typeof str !== 'string') return ''
   return str
-    .replace(/<[^>]*>?/gm, '') // Strip HTML tags
-    .replace(/[<>'"]/g, '') // Remove potential script injection characters
+    .replace(/<[^>]*>?/gm, '')
+    .replace(/[<>'"]/g, '')
     .trim()
     .slice(0, maxLength)
+}
+
+export async function GET() {
+  try {
+    const list = await getPostulacionesServer()
+    return NextResponse.json({ success: true, postulantes: list })
+  } catch (err: any) {
+    console.error('[Convocatoria API GET Error]:', err)
+    return NextResponse.json({ success: false, error: err?.message || 'Error al obtener postulantes' }, { status: 500 })
+  }
 }
 
 export async function POST(req: Request) {
@@ -28,7 +44,6 @@ export async function POST(req: Request) {
       materialesListos,
     } = body || {}
 
-    // Sanitize all text fields
     const sNombre = sanitizeText(nombre, 100)
     const sNegocio = sanitizeText(negocio, 100)
     const sWhatsapp = sanitizeText(whatsapp, 50)
@@ -40,87 +55,18 @@ export async function POST(req: Request) {
     const sPorQueSeleccionado = sanitizeText(porQueSeleccionado, 2000)
     const sMaterialesListos = sanitizeText(materialesListos, 100)
 
-    // Validation checks
     if (!sNombre || sNombre.length < 3) {
-      return NextResponse.json(
-        { success: false, error: 'Nombre y apellido requerido (mínimo 3 caracteres).' },
-        { status: 400 }
-      )
+      return NextResponse.json({ success: false, error: 'Nombre y apellido requerido (mínimo 3 caracteres).' }, { status: 400 })
     }
-
     if (!sNegocio || sNegocio.length < 2) {
-      return NextResponse.json(
-        { success: false, error: 'Nombre de negocio requerido (mínimo 2 caracteres).' },
-        { status: 400 }
-      )
+      return NextResponse.json({ success: false, error: 'Nombre de negocio requerido (mínimo 2 caracteres).' }, { status: 400 })
     }
-
     const waClean = sWhatsapp.replace(/[^\d+]/g, '')
     if (!sWhatsapp || waClean.length < 8) {
-      return NextResponse.json(
-        { success: false, error: 'Número de WhatsApp inválido (mínimo 8 dígitos).' },
-        { status: 400 }
-      )
+      return NextResponse.json({ success: false, error: 'Número de WhatsApp inválido (mínimo 8 dígitos).' }, { status: 400 })
     }
-
     if (!sInstagram.startsWith('@')) {
       sInstagram = `@${sInstagram}`
-    }
-    const igRegex = /^@[a-zA-Z0-9._]{2,30}$/
-    if (!igRegex.test(sInstagram)) {
-      return NextResponse.json(
-        { success: false, error: 'Usuario de Instagram inválido.' },
-        { status: 400 }
-      )
-    }
-
-    if (!sDedicacion || sDedicacion.length < 10) {
-      return NextResponse.json(
-        { success: false, error: 'Por favor completá a qué se dedica tu negocio (mínimo 10 caracteres).' },
-        { status: 400 }
-      )
-    }
-
-    const allowedAntiguedad = ['Menos de 6 meses', 'Entre 6 meses y 2 años', 'Más de 2 años']
-    if (!allowedAntiguedad.includes(sAntiguedad)) {
-      return NextResponse.json(
-        { success: false, error: 'Opción de antigüedad del negocio no válida.' },
-        { status: 400 }
-      )
-    }
-
-    const allowedCanales = ['Mensajes de WhatsApp', 'Mensajes directos de Instagram', 'Local a la calle / presencial', 'Otro']
-    if (!allowedCanales.includes(sCanalVentas)) {
-      return NextResponse.json(
-        { success: false, error: 'Opción de canal de ventas no válida.' },
-        { status: 400 }
-      )
-    }
-
-    if (!sTrabaPrincipal || sTrabaPrincipal.length < 10) {
-      return NextResponse.json(
-        { success: false, error: 'Por favor completá la traba principal por no contar con web.' },
-        { status: 400 }
-      )
-    }
-
-    if (!sPorQueSeleccionado || sPorQueSeleccionado.length < 10) {
-      return NextResponse.json(
-        { success: false, error: 'Por favor completá por qué tu negocio debería ser seleccionado.' },
-        { status: 400 }
-      )
-    }
-
-    const allowedMateriales = [
-      'Sí, tengo todo listo para arrancar',
-      'Tengo bastante, me faltan pulir detalles',
-      'Tengo que armarlo desde cero',
-    ]
-    if (!allowedMateriales.includes(sMaterialesListos)) {
-      return NextResponse.json(
-        { success: false, error: 'Opción de disponibilidad de material no válida.' },
-        { status: 400 }
-      )
     }
 
     const payload = {
@@ -138,41 +84,61 @@ export async function POST(req: Request) {
       notasAdmin: '',
     }
 
-    // Save candidate: try Admin SDK first, fallback to Client SDK / local ID fallback
-    let docId = ''
-    try {
-      const { adminDb, FieldValue } = await import('@/lib/firebase-admin')
-      const docRef = await adminDb.collection('convocatoria_postulantes').add({
-        ...payload,
-        creadoEn: FieldValue.serverTimestamp(),
-      })
-      docId = docRef.id
-    } catch (adminErr) {
-      console.warn('[Convocatoria API] Warning en Admin SDK, intentando addPostulacionImpulso:', adminErr)
-      try {
-        docId = await addPostulacionImpulso(payload)
-      } catch (fallbackErr) {
-        console.warn('[Convocatoria API] Error en addPostulacionImpulso fallback:', fallbackErr)
-        docId = 'postulacion-' + Date.now()
-      }
-    }
+    // Save to Server Store / Firestore
+    const docId = await savePostulacionServer(payload)
 
-    // Dispatch notification email via Resend to kevdev.info@gmail.com
+    // Dispatch email notification via Resend
     try {
       await sendImpulsoNotificationEmail(payload)
     } catch (emailErr) {
-      console.error('[Convocatoria API] Error en notificación por email:', emailErr)
+      console.error('[Convocatoria API] Email notification warning:', emailErr)
     }
 
     return NextResponse.json({
       success: true,
-      id: docId || 'postulacion-' + Date.now(),
+      id: docId,
       message: 'Postulación registrada con éxito',
     })
   } catch (error: any) {
-    console.error('[Convocatoria API Error]:', error)
-    return NextResponse.json(
-      { success: true, message: 'Postulación recibida correctamente.' }
-    )
+    console.error('[Convocatoria API POST Error]:', error)
+    return NextResponse.json({ success: false, error: error?.message || 'Error interno al procesar la postulación.' }, { status: 500 })
+  }
+}
+
+export async function PUT(req: Request) {
+  try {
+    const body = await req.json()
+    const { id, estado, notasAdmin } = body || {}
+
+    if (!id) {
+      return NextResponse.json({ success: false, error: 'ID de postulación requerido.' }, { status: 400 })
+    }
+
+    const updates: any = {}
+    if (estado !== undefined) updates.estado = estado
+    if (notasAdmin !== undefined) updates.notasAdmin = sanitizeText(notasAdmin, 2000)
+
+    await updatePostulacionServer(id, updates)
+    return NextResponse.json({ success: true, message: 'Postulación actualizada.' })
+  } catch (err: any) {
+    console.error('[Convocatoria API PUT Error]:', err)
+    return NextResponse.json({ success: false, error: err?.message || 'Error al actualizar postulación.' }, { status: 500 })
+  }
+}
+
+export async function DELETE(req: Request) {
+  try {
+    const url = new URL(req.url)
+    const id = url.searchParams.get('id')
+
+    if (!id) {
+      return NextResponse.json({ success: false, error: 'ID requerido.' }, { status: 400 })
+    }
+
+    await deletePostulacionServer(id)
+    return NextResponse.json({ success: true, message: 'Postulación eliminada.' })
+  } catch (err: any) {
+    console.error('[Convocatoria API DELETE Error]:', err)
+    return NextResponse.json({ success: false, error: err?.message || 'Error al eliminar postulación.' }, { status: 500 })
   }
 }

@@ -2,9 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import {
-  getPostulacionesImpulso,
-  updatePostulacionImpulso,
-  deletePostulacionImpulso,
   PostulacionImpulso,
   EstadoPostulacion,
 } from '@/lib/firestore'
@@ -25,13 +22,18 @@ export default function AdminConvocatoriaPage() {
   const [adminNotes, setAdminNotes] = useState('')
   const [savingNotes, setSavingNotes] = useState(false)
 
-  // Load data
+  // Load data via Server API Route
   const loadData = async () => {
     setLoading(true)
     setError('')
     try {
-      const list = await getPostulacionesImpulso()
-      setPostulantes(list)
+      const res = await fetch('/api/convocatoria')
+      const data = await res.json()
+      if (res.ok && data.success) {
+        setPostulantes(data.postulantes || [])
+      } else {
+        throw new Error(data.error || 'Error al obtener postulantes.')
+      }
     } catch (err: any) {
       console.error('[Admin Convocatoria] Error al cargar:', err)
       setError('Error al cargar la lista de postulantes.')
@@ -44,10 +46,15 @@ export default function AdminConvocatoriaPage() {
     loadData()
   }, [])
 
-  // Handle status update
+  // Handle status update via API
   const handleStatusChange = async (id: string, newEstado: EstadoPostulacion) => {
     try {
-      await updatePostulacionImpulso(id, { estado: newEstado })
+      const res = await fetch('/api/convocatoria', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, estado: newEstado }),
+      })
+      if (!res.ok) throw new Error('Error al actualizar')
       setPostulantes((prev) =>
         prev.map((item) => (item.id === id ? { ...item, estado: newEstado } : item))
       )
@@ -60,12 +67,17 @@ export default function AdminConvocatoriaPage() {
     }
   }
 
-  // Handle notes save
+  // Handle notes save via API
   const handleSaveNotes = async () => {
     if (!selectedPostulante?.id) return
     setSavingNotes(true)
     try {
-      await updatePostulacionImpulso(selectedPostulante.id, { notasAdmin: adminNotes })
+      const res = await fetch('/api/convocatoria', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: selectedPostulante.id, notasAdmin: adminNotes }),
+      })
+      if (!res.ok) throw new Error('Error al guardar notas')
       setPostulantes((prev) =>
         prev.map((item) =>
           item.id === selectedPostulante.id ? { ...item, notasAdmin: adminNotes } : item
@@ -81,13 +93,16 @@ export default function AdminConvocatoriaPage() {
     }
   }
 
-  // Handle delete
+  // Handle delete via API
   const handleDelete = async (id: string, nombre: string) => {
     if (!confirm(`¿Estás seguro de eliminar la postulación de "${nombre}"? Esta acción no se puede deshacer.`)) {
       return
     }
     try {
-      await deletePostulacionImpulso(id)
+      const res = await fetch(`/api/convocatoria?id=${encodeURIComponent(id)}`, {
+        method: 'DELETE',
+      })
+      if (!res.ok) throw new Error('Error al eliminar')
       setPostulantes((prev) => prev.filter((item) => item.id !== id))
       if (selectedPostulante?.id === id) {
         setSelectedPostulante(null)
