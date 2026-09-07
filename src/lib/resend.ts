@@ -47,6 +47,7 @@ export async function sendImpulsoNotificationEmail(params: {
 }) {
   const fromEmail = process.env.RESEND_FROM_EMAIL || 'KevDev <onboarding@resend.dev>'
   const primaryEmail = process.env.RESEND_TO_EMAIL || 'loggia1996@gmail.com'
+  const adminEmail = process.env.FIREBASE_ADMIN_EMAIL || 'kevdev.info@gmail.com'
   const html = generateImpulsoNotificationEmailHtml(params)
   const subject = `🚀 Nueva Postulación Impulso Digital: ${params.negocio} (${params.nombre})`
 
