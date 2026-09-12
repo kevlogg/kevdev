@@ -41,6 +41,23 @@ export default function ContactForm() {
       event_label: 'Fast Track WhatsApp Button',
       page_location: typeof window !== 'undefined' ? window.location.href : '',
     })
+    // Also fire to our own analytics backend
+    try {
+      const visitorId = typeof window !== 'undefined' ? (localStorage.getItem('kevdev_visitor_id') || 'v_anon') : 'v_anon'
+      fetch('/api/analytics/track', {
+        method: 'POST',
+        keepalive: true,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          site: 'kevdev',
+          eventType: 'button_click',
+          buttonId: 'cta_whatsapp',
+          path: typeof window !== 'undefined' ? window.location.pathname : '/contacto',
+          device: typeof window !== 'undefined' && window.innerWidth < 768 ? 'mobile' : 'desktop',
+          metadata: { label: 'Fast Track WhatsApp — Página Contacto', visitorId },
+        }),
+      }).catch(() => {})
+    } catch {}
   }
 
   // Handle Form Submit Event
@@ -65,20 +82,17 @@ export default function ContactForm() {
       })
 
       // Send Lead Data to Server Analytics endpoint
+      const visitorId = typeof window !== 'undefined' ? (localStorage.getItem('kevdev_visitor_id') || 'v_anon') : 'v_anon'
       await fetch('/api/analytics/track', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           site: 'kevdev',
-          eventType: 'lead_form_submit',
+          eventType: 'form_submit',
+          buttonId: 'contacto_form_lead',
           path: typeof window !== 'undefined' ? window.location.pathname : '/contacto',
           device: typeof window !== 'undefined' && window.innerWidth < 768 ? 'mobile' : 'desktop',
-          metadata: {
-            name,
-            contactInfo,
-            service: selectedService,
-            description,
-          },
+          metadata: { visitorId, service: selectedService, hasDescription: description.trim().length > 0 },
         }),
       })
 
