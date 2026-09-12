@@ -14,7 +14,7 @@ export default function MetaPixel({ pixelId }: MetaPixelProps) {
   const searchParams = useSearchParams()
   const isFirstRender = useRef(true)
 
-  const activePixelId = pixelId || process.env.NEXT_PUBLIC_META_PIXEL_ID
+  const activePixelId = pixelId || process.env.NEXT_PUBLIC_META_PIXEL_ID || '1629627702097924'
 
   // Escuchar cambios de ruta en la SPA (Single Page Application)
   useEffect(() => {
