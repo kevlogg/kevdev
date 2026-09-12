@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, Suspense } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 import Script from 'next/script'
 import { generateEventId } from '@/lib/metaPixel'
@@ -9,14 +9,13 @@ interface MetaPixelProps {
   pixelId?: string
 }
 
-export default function MetaPixel({ pixelId }: MetaPixelProps) {
+function MetaPixelTracker({ pixelId }: MetaPixelProps) {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const isFirstRender = useRef(true)
 
   const activePixelId = pixelId || process.env.NEXT_PUBLIC_META_PIXEL_ID || '1629627702097924'
 
-  // Escuchar cambios de ruta en la SPA (Single Page Application)
   useEffect(() => {
     if (!activePixelId) return
 
@@ -36,12 +35,22 @@ export default function MetaPixel({ pixelId }: MetaPixelProps) {
     }
   }, [pathname, searchParams, activePixelId])
 
+  return null
+}
+
+export default function MetaPixel({ pixelId }: MetaPixelProps) {
+  const activePixelId = pixelId || process.env.NEXT_PUBLIC_META_PIXEL_ID || '1629627702097924'
+
   if (!activePixelId) {
     return null
   }
 
   return (
     <>
+      <Suspense fallback={null}>
+        <MetaPixelTracker pixelId={activePixelId} />
+      </Suspense>
+
       {/* Script base oficial de Meta Pixel con deduplicación event_id */}
       <Script
         id="meta-pixel-base"
