@@ -5,10 +5,12 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import type { AnalyticsSummary } from '@/lib/analyticsStore'
 
+type SummaryWithPrev = AnalyticsSummary & { prevPeriodPageviews?: number }
+
 export default function EstadisticasWebPage() {
   const [loading, setLoading] = useState(true)
   const [period, setPeriod] = useState<number>(30)
-  const [analytics, setAnalytics] = useState<AnalyticsSummary | null>(null)
+  const [analytics, setAnalytics] = useState<SummaryWithPrev | null>(null)
   const [lastUpdated, setLastUpdated] = useState<string>('')
 
   const loadData = async (showSpinner = false) => {
@@ -204,9 +206,22 @@ export default function EstadisticasWebPage() {
               <p style={{ fontFamily: 'var(--font-display)', fontSize: '2.25rem', fontWeight: 800, color: '#38bdf8', margin: 0, letterSpacing: '-0.02em' }}>
                 {analytics.totalPageviews.toLocaleString()}
               </p>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.75rem', color: '#34d399', fontFamily: 'var(--font-mono)' }}>
-                <span>↑ +14.2%</span>
-                <span style={{ color: 'rgba(255, 255, 255, 0.35)' }}>vs período ant.</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.75rem', fontFamily: 'var(--font-mono)' }}>
+                {(() => {
+                  const prev = analytics.prevPeriodPageviews ?? 0
+                  const curr = analytics.totalPageviews
+                  if (prev === 0 && curr === 0) return <span style={{ color: 'rgba(255,255,255,0.35)' }}>Sin datos anteriores</span>
+                  if (prev === 0) return <span style={{ color: '#34d399' }}>↑ Primeros datos registrados</span>
+                  const diff = Math.round(((curr - prev) / prev) * 100)
+                  const color = diff >= 0 ? '#34d399' : '#f87171'
+                  const arrow = diff >= 0 ? '↑' : '↓'
+                  return (
+                    <>
+                      <span style={{ color }}>{arrow} {diff >= 0 ? '+' : ''}{diff}%</span>
+                      <span style={{ color: 'rgba(255, 255, 255, 0.35)' }}>vs período ant. ({prev} vistas)</span>
+                    </>
+                  )
+                })()}
               </div>
             </motion.div>
 
@@ -454,6 +469,39 @@ export default function EstadisticasWebPage() {
             </section>
 
           </div>
+
+          {/* ── 5b. FUNNEL DE CONVERSIÓN ─────────────────────────────────────────── */}
+          {analytics.conversionFunnel && analytics.conversionFunnel.length > 0 && (
+            <section style={{ ...cardStyle, gap: '1.5rem' }}>
+              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.125rem', fontWeight: 700, color: '#ffffff', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span>🔻</span> Funnel de Conversión
+              </h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+                {analytics.conversionFunnel.map((step, i) => {
+                  const colors = ['#38bdf8', '#a855f7', '#34d399']
+                  const color  = colors[i % colors.length]
+                  return (
+                    <div key={step.step}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.35rem' }}>
+                        <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.875rem', color: '#ffffff', fontWeight: 600 }}>{step.step}</span>
+                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8125rem', color }}>
+                          {step.count.toLocaleString()} <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.75rem' }}>({step.pct}%)</span>
+                        </span>
+                      </div>
+                      <div style={{ height: 8, background: 'rgba(255,255,255,0.06)', borderRadius: 99, overflow: 'hidden' }}>
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={{ width: `${Math.max(step.pct, step.count > 0 ? 3 : 0)}%` }}
+                          transition={{ duration: 0.8, delay: i * 0.15, ease: [0.22, 1, 0.36, 1] }}
+                          style={{ height: '100%', background: color, borderRadius: 99 }}
+                        />
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </section>
+          )}
 
           {/* ── 6. DIAGNÓSTICO DE GOOGLE SEARCH CONSOLE & SEO HEALTH ─────────────────── */}
           <section style={{ ...cardStyle, background: 'linear-gradient(145deg, rgba(6, 182, 212, 0.05), rgba(15, 23, 42, 0.75))', border: '1px solid rgba(34, 211, 238, 0.25)', padding: '1.75rem' }}>

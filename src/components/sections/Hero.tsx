@@ -172,28 +172,14 @@ export default function Hero() {
   useEffect(() => {
     const fn = (e: MouseEvent) => { mouseX.set(e.clientX); mouseY.set(e.clientY) }
     window.addEventListener('mousemove', fn, { passive: true })
-    
-    // Registrar vista real de la página principal de kevdev
-    try {
-      fetch('/api/analytics/track', {
-        method: 'POST',
-        keepalive: true,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          site: 'kevdev',
-          eventType: 'pageview',
-          path: window.location.pathname,
-          device: window.innerWidth < 768 ? 'mobile' : 'desktop',
-          source: document.referrer.includes('instagram') ? 'instagram' : 'directo',
-        }),
-      }).catch(() => {})
-    } catch {}
-
+    // Pageview is already tracked by AnalyticsTracker.tsx globally — no duplicate needed here
     return () => window.removeEventListener('mousemove', fn)
   }, [mouseX, mouseY])
 
   function trackBtnClick(buttonId: string, label: string) {
     try {
+      // AnalyticsTracker handles global button clicks via data-analytics-id
+      // Keep this function for explicit CTA tracking with known IDs
       fetch('/api/analytics/track', {
         method: 'POST',
         keepalive: true,
@@ -204,7 +190,7 @@ export default function Hero() {
           buttonId,
           path: window.location.pathname,
           device: window.innerWidth < 768 ? 'mobile' : 'desktop',
-          metadata: { label },
+          metadata: { label, visitorId: localStorage.getItem('kevdev_visitor_id') || 'v_anon' },
         }),
       }).catch(() => {})
     } catch {}

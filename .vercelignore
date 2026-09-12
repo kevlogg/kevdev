@@ -1,0 +1,9 @@
+.next
+node_modules
+assets
+css-only-3d-macbook-air
+docs
+**/*.mp4
+**/*.webm
+**/*.zip
+**/*.mov
