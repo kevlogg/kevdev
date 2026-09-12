@@ -151,12 +151,8 @@ export default async function RootLayout({
               t.src=v;s=b.getElementsByTagName(e)[0];
               s.parentNode.insertBefore(t,s)}(window, document,'script',
               'https://connect.facebook.net/en_US/fbevents.js');
-              var initialEventId = 'kevdev_pv_' + Date.now() + '_' + Math.random().toString(36).substring(2, 9);
-              var params = new URLSearchParams(window.location.search);
-              var testCode = params.get('test_event_code');
-              var extraOpts = testCode ? { test_event_code: testCode } : {};
               fbq('init', '1629627702097924');
-              fbq('track', 'PageView', {}, Object.assign({ eventID: initialEventId }, extraOpts));
+              fbq('track', 'PageView');
             `,
           }}
         />
