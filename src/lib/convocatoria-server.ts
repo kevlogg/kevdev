@@ -85,6 +85,40 @@ export async function savePostulacionServer(data: Omit<PostulacionRecord, 'id' |
   return docId || fallbackId
 }
 
+async function fetchRestFromFirestore(): Promise<PostulacionRecord[]> {
+  try {
+    const projectId = process.env.FIREBASE_ADMIN_PROJECT_ID || process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'kevdev-1234'
+    const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/convocatoria_postulantes`
+    const res = await fetch(url, { cache: 'no-store' })
+    if (!res.ok) return []
+    const data = await res.json()
+    if (!data.documents || !Array.isArray(data.documents)) return []
+
+    return data.documents.map((doc: any) => {
+      const f = doc.fields || {}
+      return {
+        id: doc.name.split('/').pop(),
+        nombre: f.nombre?.stringValue || '',
+        negocio: f.negocio?.stringValue || '',
+        whatsapp: f.whatsapp?.stringValue || '',
+        instagram: f.instagram?.stringValue || '',
+        dedicacion: f.dedicacion?.stringValue || '',
+        antiguedad: f.antiguedad?.stringValue || 'Menos de 6 meses',
+        canalVentas: f.canalVentas?.stringValue || 'Mensajes de WhatsApp',
+        trabaPrincipal: f.trabaPrincipal?.stringValue || '',
+        porQueSeleccionado: f.porQueSeleccionado?.stringValue || '',
+        materialesListos: f.materialesListos?.stringValue || 'Sí, tengo todo listo para arrancar',
+        estado: f.estado?.stringValue || 'pendiente',
+        notasAdmin: f.notasAdmin?.stringValue || '',
+        creadoEn: f.creadoEn?.timestampValue || f.creadoEn?.stringValue || new Date().toISOString(),
+      } as PostulacionRecord
+    })
+  } catch (err) {
+    console.warn('[Convocatoria Server] Firestore REST API fetch warning:', err)
+    return []
+  }
+}
+
 export async function getPostulacionesServer(): Promise<PostulacionRecord[]> {
   const result: PostulacionRecord[] = []
   const idsSet = new Set<string>()
@@ -120,10 +154,21 @@ export async function getPostulacionesServer(): Promise<PostulacionRecord[]> {
       })
     })
   } catch (err) {
-    console.warn('[Convocatoria Server] Firestore Admin read warning, falling back to local store:', err)
+    console.warn('[Convocatoria Server] Firestore Admin read warning, falling back to REST/local store:', err)
   }
 
-  // 2. Merge items from fallback store if not already present
+  // 2. Fallback to Firestore REST API if Admin SDK failed or returned empty
+  if (result.length === 0) {
+    const restItems = await fetchRestFromFirestore()
+    restItems.forEach((item) => {
+      if (!idsSet.has(item.id)) {
+        idsSet.add(item.id)
+        result.push(item)
+      }
+    })
+  }
+
+  // 3. Merge items from fallback store if not already present
   const store = loadFallbackStore()
   store.forEach((item) => {
     if (!idsSet.has(item.id)) {
@@ -132,7 +177,7 @@ export async function getPostulacionesServer(): Promise<PostulacionRecord[]> {
     }
   })
 
-  return result
+  return result.sort((a, b) => new Date(b.creadoEn).getTime() - new Date(a.creadoEn).getTime())
 }
 
 export async function updatePostulacionServer(id: string, updates: Partial<PostulacionRecord>): Promise<void> {
