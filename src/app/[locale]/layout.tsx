@@ -122,6 +122,7 @@ export async function generateMetadata({
 import { Analytics as VercelAnalytics } from '@vercel/analytics/react'
 import AnalyticsTracker from '@/components/AnalyticsTracker'
 import GoogleAnalytics from '@/components/GoogleAnalytics'
+import MetaPixel from '@/components/MetaPixel'
 
 export default async function RootLayout({
   children,
@@ -250,6 +251,7 @@ export default async function RootLayout({
       <body className={`${inter.variable} ${jetbrainsMono.variable} ${plusJakartaSans.variable}`} suppressHydrationWarning>
         <NextIntlClientProvider messages={messages}>
           <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
+          <MetaPixel pixelId={process.env.NEXT_PUBLIC_META_PIXEL_ID} />
           <AnalyticsTracker />
           <VercelAnalytics />
           {children}
