@@ -5,14 +5,14 @@ import ClientShell from '@/components/ui/ClientShell'
 import ConvocatoriaImpulsoForm from '@/components/sections/ConvocatoriaImpulsoForm'
 
 export const metadata: Metadata = {
-  title: 'Convocatoria Impulso Digital | Sitios Web Bonificados | KevDev',
+  title: 'Sitio Web Gratis | Convocatoria Impulso Digital | KevDev',
   description:
     'Postulá tu negocio para ganar el desarrollo de tu sitio web bonificado y 3 meses de suscripción sin costo. Convocatoria abierta para marcas y emprendimientos en marcha.',
   alternates: {
     canonical: 'https://kevdev.net.ar/impulso-digital',
   },
   openGraph: {
-    title: 'Convocatoria Impulso Digital — KevDev',
+    title: 'Conseguí tu Sitio Web Gratis — Convocatoria Impulso Digital KevDev',
     description:
       'Buscamos un negocio en marcha que quiera ordenar sus ventas y dar un salto profesional en internet. ¡Postulá tu marca hoy!',
     url: 'https://kevdev.net.ar/impulso-digital',

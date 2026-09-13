@@ -230,7 +230,7 @@ export default function ConvocatoriaImpulsoForm() {
             textShadow: '0 4px 28px rgba(0,0,0,0.95), 0 1px 4px rgba(0,0,0,1)',
           }}
         >
-          Convocatoria Impulso Digital{' '}
+          Conseguí tu{' '}
           <span
             style={{
               fontFamily: 'var(--font-serif)',
@@ -240,7 +240,7 @@ export default function ConvocatoriaImpulsoForm() {
               textShadow: '0 0 32px rgba(0, 229, 255, 0.5), 0 2px 16px rgba(0,0,0,0.95)',
             }}
           >
-            KevDev
+            Sitio Web Gratis
           </span>
         </motion.h1>
 
@@ -259,7 +259,7 @@ export default function ConvocatoriaImpulsoForm() {
             textShadow: '0 2px 14px rgba(0,0,0,0.9)',
           }}
         >
-          Postulá tu negocio para obtener el diseño de tu sitio web bonificado y 3 meses de suscripción sin costo.
+          Postulá tu negocio en la Convocatoria Impulso Digital para obtener el diseño de tu sitio web 100% bonificado y 3 meses de suscripción sin costo.
         </motion.h2>
 
         {/* Texto descriptivo de alto contraste */}
