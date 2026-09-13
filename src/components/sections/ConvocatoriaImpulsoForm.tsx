@@ -44,13 +44,13 @@ export default function ConvocatoriaImpulsoForm() {
     'Tengo que armarlo desde cero',
   ] as const
 
-  // Security & Format Validation
+  // Security & Format Validation (Optimizado para Máxima Conversión)
   const validateForm = (): boolean => {
     const errors: Record<string, string> = {}
 
     // 1. Contacto
-    if (!nombre.trim() || nombre.trim().length < 3) {
-      errors.nombre = 'Ingresá tu nombre y apellido completo (mínimo 3 caracteres).'
+    if (!nombre.trim() || nombre.trim().length < 2) {
+      errors.nombre = 'Ingresá tu nombre completo.'
     }
 
     if (!negocio.trim() || negocio.trim().length < 2) {
@@ -58,46 +58,45 @@ export default function ConvocatoriaImpulsoForm() {
     }
 
     const waClean = whatsapp.replace(/[^\d+]/g, '')
-    if (!whatsapp.trim() || waClean.length < 8) {
-      errors.whatsapp = 'Ingresá un WhatsApp válido con código de área (ej: +54 9 11 1234 5678).'
+    if (!whatsapp.trim() || waClean.length < 7) {
+      errors.whatsapp = 'Ingresá un número de WhatsApp válido.'
     }
 
     const igTrimmed = instagram.trim()
-    const igRegex = /^@?[a-zA-Z0-9._]{2,30}$/
-    if (!igTrimmed || !igRegex.test(igTrimmed)) {
-      errors.instagram = 'Ingresá un usuario de Instagram válido (ej: @tunegocio).'
+    if (!igTrimmed) {
+      errors.instagram = 'Ingresá tu usuario de Instagram o marca.'
     }
 
     // 2. Estado del negocio
-    if (!dedicacion.trim() || dedicacion.trim().length < 10) {
-      errors.dedicacion = 'Contanos brevemente a qué se dedica tu negocio (mínimo 10 caracteres).'
+    if (!dedicacion.trim() || dedicacion.trim().length < 3) {
+      errors.dedicacion = 'Contanos brevemente a qué se dedica tu negocio.'
     }
 
     if (!antiguedad) {
-      errors.antiguedad = 'Seleccioná cuánto tiempo tiene funcionando tu negocio.'
+      errors.antiguedad = 'Seleccioná el tiempo de funcionamiento.'
     }
 
     if (!canalVentas) {
-      errors.canalVentas = 'Seleccioná el canal por donde concretás más ventas.'
+      errors.canalVentas = 'Seleccioná tu canal principal de ventas.'
     }
 
     // 3. Necesidad y compromiso
-    if (!trabaPrincipal.trim() || trabaPrincipal.trim().length < 10) {
-      errors.trabaPrincipal = 'Describí la traba principal por no contar con web (mínimo 10 caracteres).'
+    if (!trabaPrincipal.trim() || trabaPrincipal.trim().length < 2) {
+      errors.trabaPrincipal = 'Contanos brevemente qué te traba por no tener web.'
     }
 
-    if (!porQueSeleccionado.trim() || porQueSeleccionado.trim().length < 10) {
-      errors.porQueSeleccionado = 'Explicá por qué considerás que tu negocio debería ser seleccionado (mínimo 10 caracteres).'
+    if (!porQueSeleccionado.trim() || porQueSeleccionado.trim().length < 2) {
+      errors.porQueSeleccionado = 'Explicá brevemente por qué deberías ser seleccionado.'
     }
 
     if (!materialesListos) {
-      errors.materialesListos = 'Indicanos si contás con el material básico para empezar.'
+      errors.materialesListos = 'Indicanos si contás con material básico.'
     }
 
     setFieldErrors(errors)
 
     if (Object.keys(errors).length > 0) {
-      setErrorMsg('Por favor corregí los campos indicados antes de enviar.')
+      setErrorMsg('Por favor completá los campos indicados antes de enviar.')
       return false
     }
 
@@ -407,25 +406,56 @@ export default function ConvocatoriaImpulsoForm() {
             </button>
           </motion.div>
         ) : (
-          <motion.form
-            key="form-box"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.25 }}
-            onSubmit={handleSubmit}
-            style={{
-              background: 'rgba(14, 14, 14, 0.92)',
-              backdropFilter: 'blur(20px)',
-              WebkitBackdropFilter: 'blur(20px)',
-              border: '1px solid rgba(0, 229, 255, 0.25)',
-              borderRadius: 24,
-              padding: 'clamp(1.75rem, 4.5vw, 3.25rem)',
-              boxShadow: '0 25px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 229, 255, 0.05)',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '2.75rem',
-            }}
-          >
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            {/* Canal Directo WhatsApp para captura rápida de leads */}
+            <motion.a
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              href="https://wa.me/5492235851419?text=Hola%20KevDev!%20Quiero%20postular%20mi%20negocio%20a%20la%20Convocatoria%20Impulso%20Digital%20para%20el%20Sitio%20Web%20Gratis."
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.75rem',
+                background: 'linear-gradient(135deg, rgba(37, 211, 102, 0.18), rgba(15, 23, 42, 0.8))',
+                border: '1px solid rgba(37, 211, 102, 0.45)',
+                borderRadius: 18,
+                padding: '1.1rem 1.5rem',
+                color: '#25d366',
+                fontFamily: 'var(--font-ui)',
+                fontSize: '1rem',
+                fontWeight: 700,
+                textDecoration: 'none',
+                boxShadow: '0 8px 24px rgba(37, 211, 102, 0.15)',
+                textAlign: 'center',
+              }}
+            >
+              <span style={{ fontSize: '1.35rem' }}>💬</span>
+              <span>¿Preferís postularte en 1 clic por WhatsApp? Tocá acá para chatear ↗</span>
+            </motion.a>
+
+            <motion.form
+              key="form-box"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.25 }}
+              onSubmit={handleSubmit}
+              style={{
+                background: 'rgba(14, 14, 14, 0.92)',
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
+                border: '1px solid rgba(0, 229, 255, 0.25)',
+                borderRadius: 24,
+                padding: 'clamp(1.75rem, 4.5vw, 3.25rem)',
+                boxShadow: '0 25px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 229, 255, 0.05)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '2.75rem',
+              }}
+            >
             {/* ── BLOQUE 1: DATOS DE CONTACTO ──────────────────────── */}
             <div>
               <div
@@ -1037,6 +1067,7 @@ export default function ConvocatoriaImpulsoForm() {
               @keyframes spin { to { transform: rotate(360deg); } }
             `}</style>
           </motion.form>
+        </div>
         )}
       </AnimatePresence>
     </div>
