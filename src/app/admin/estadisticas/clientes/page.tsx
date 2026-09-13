@@ -33,7 +33,7 @@ export default function EstadisticasClientesPage() {
 
   // Cálculos Financieros y de Clientes
   const enProduccion = clientes.filter(c => c.situacion === 'EN PRODUCCION')
-  const mrrCalculado = enProduccion.reduce((acc, c) => acc + (c.montoMensual || 0), 0)
+  const mrrCalculado = enProduccion.reduce((acc, c) => acc + (Number(c.montoMensual) || 0), 0)
   const cobradoMesActual = getPagosMesActual(pagos)
   const cobradoHistoricoGlobal = getPagosAcumuladosGlobal(pagos)
   const clientesAlDia = clientes.filter(c => c.estadoPago === 'AL_DIA').length

@@ -98,11 +98,14 @@ export default function ClienteDetailPage() {
     }
   }, [])
 
-  async function saveField(field: EditableField, value: string) {
+  async function saveField(field: EditableField, value: any) {
     setSaving(true)
     try {
-      await updateCliente(id, { [field]: value })
-      setCliente(prev => prev ? { ...prev, [field]: value } : prev)
+      const parsedValue = (field === 'montoMensual' || field === 'montoPagoUnico' || field === 'diaVencimiento')
+        ? (typeof value === 'number' ? value : parseFloat(value) || 0)
+        : value
+      await updateCliente(id, { [field]: parsedValue })
+      setCliente(prev => prev ? { ...prev, [field]: parsedValue } : prev)
       setSaved(true)
       setTimeout(() => setSaved(false), 1800)
     } catch {
@@ -590,7 +593,7 @@ export default function ClienteDetailPage() {
               placeholder="ej: 25000"
               value={form.montoMensual ?? ''}
               onChange={e => setForm(f => ({ ...f, montoMensual: parseFloat(e.target.value) || 0 }))}
-              onBlur={e => saveField('montoMensual', (form.montoMensual ?? 0).toString())}
+              onBlur={e => saveField('montoMensual', form.montoMensual ?? 0)}
               style={inputStyle}
             />
           </label>

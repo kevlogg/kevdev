@@ -279,13 +279,13 @@ export function getPagosMesActual(pagos: HistorialPago[]): number {
 
   return pagos
     .filter(p => p.confirmado && p.fecha && p.fecha.startsWith(prefix))
-    .reduce((sum, p) => sum + (p.monto || 0), 0)
+    .reduce((sum, p) => sum + (Number(p.monto) || 0), 0)
 }
 
 export function getPagosAcumuladosGlobal(pagos: HistorialPago[]): number {
   return pagos
     .filter(p => p.confirmado)
-    .reduce((sum, p) => sum + (p.monto || 0), 0)
+    .reduce((sum, p) => sum + (Number(p.monto) || 0), 0)
 }
 
 /* ─── Convocatoria Impulso Digital ───────────────────────────────────── */
