@@ -5,6 +5,8 @@ import Link from 'next/link'
 import { getClientes, getAllHistorialPagos, getPagosMesActual, getPagosAcumuladosGlobal, type Cliente, type HistorialPago, type Situacion } from '@/lib/firestore'
 import { SITUACION_LABELS, SITUACION_COLORS, DEMO_LABELS, DEMO_COLORS } from '@/lib/cliente-ui'
 
+import ClientRevenueChart from '@/components/admin/ClientRevenueChart'
+
 function formatARS(n: number) {
   return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }).format(n)
 }
@@ -34,7 +36,9 @@ export default function EstadisticasClientesPage() {
   // Cálculos Financieros y de Clientes
   const enProduccion = clientes.filter(c => c.situacion === 'EN PRODUCCION')
   const mrrCalculado = enProduccion.reduce((acc, c) => acc + (Number(c.montoMensual) || 0), 0)
+  const arpuPromedio = enProduccion.length > 0 ? Math.round(mrrCalculado / enProduccion.length) : 0
   const cobradoMesActual = getPagosMesActual(pagos)
+  const tasaCobroMes = mrrCalculado > 0 ? Math.min(Math.round((cobradoMesActual / mrrCalculado) * 100), 100) : 0
   const cobradoHistoricoGlobal = getPagosAcumuladosGlobal(pagos)
   const clientesAlDia = clientes.filter(c => c.estadoPago === 'AL_DIA').length
   const clientesPendientes = clientes.filter(c => c.estadoPago === 'PENDIENTE' || c.estadoPago === 'VENCIDO').length
@@ -42,6 +46,16 @@ export default function EstadisticasClientesPage() {
   const pagosConfirmados = pagos.filter(p => p.confirmado)
   const pagosWebhookCount = pagosConfirmados.filter(p => p.origen === 'WEBHOOK' || p.metodo === 'pasarela').length
   const pagosManualesCount = pagosConfirmados.length - pagosWebhookCount
+
+  // Distribución por Rubros de Clientes
+  const rubroCounts: Record<string, number> = {}
+  clientes.forEach(c => {
+    const r = c.rubro && c.rubro.trim() ? c.rubro.trim() : 'Sin especificar'
+    rubroCounts[r] = (rubroCounts[r] || 0) + 1
+  })
+  const topRubros = Object.entries(rubroCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
 
   const cardStyle: React.CSSProperties = {
     background: 'var(--color-depth)',
@@ -176,17 +190,19 @@ export default function EstadisticasClientesPage() {
             <div style={cardStyle}>
               <span style={kpiLabelStyle}>MRR (Ingreso Recurrente Mensual)</span>
               <p style={{ ...kpiValueStyle, color: 'var(--color-accent)' }}>{formatARS(mrrCalculado)}</p>
-              <span style={{ fontSize: '0.75rem', color: 'var(--color-faint)', fontFamily: 'var(--font-ui)' }}>
-                Basado en {enProduccion.length} clientes activos en producción
-              </span>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--color-faint)', fontFamily: 'var(--font-ui)' }}>
+                <span>{enProduccion.length} clientes activos</span>
+                <span style={{ color: '#38bdf8', fontWeight: 600 }}>Ticket: {formatARS(arpuPromedio)}</span>
+              </div>
             </div>
 
             <div style={cardStyle}>
               <span style={kpiLabelStyle}>Cobrado Mes Actual</span>
               <p style={{ ...kpiValueStyle, color: '#4ade80' }}>{formatARS(cobradoMesActual)}</p>
-              <span style={{ fontSize: '0.75rem', color: 'var(--color-faint)', fontFamily: 'var(--font-ui)' }}>
-                Ingresos abonados este mes
-              </span>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--color-faint)', fontFamily: 'var(--font-ui)' }}>
+                <span>Ingresos abonados este mes</span>
+                <span style={{ color: '#4ade80', fontWeight: 600 }}>{tasaCobroMes}% del MRR</span>
+              </div>
             </div>
 
             <div style={cardStyle}>
@@ -214,7 +230,10 @@ export default function EstadisticasClientesPage() {
             </div>
           </section>
 
-          {/* Grid 2: Canales de Cobro & Estado de Clientes */}
+          {/* 📊 GRÁFICO INTERACTIVO DE RECAUDACIÓN Y EVOLUCIÓN DE INGRESOS */}
+          <ClientRevenueChart pagos={pagos} />
+
+          {/* Grid 2: Canales de Cobro, Rubros & Estado de Clientes */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 16 }}>
             {/* Desglose de Métodos de Pago */}
             <section style={{ ...cardStyle, gap: 16 }}>
@@ -255,7 +274,7 @@ export default function EstadisticasClientesPage() {
             <section style={{ ...cardStyle, gap: 16 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <h2 style={{ fontFamily: 'var(--font-ui)', fontSize: '0.875rem', fontWeight: 600, color: 'var(--color-star)', margin: 0 }}>
-                  📊 Embudo y Estado de Demos
+                  📈 Embudo y Estado de Demos
                 </h2>
               </div>
 
@@ -282,6 +301,37 @@ export default function EstadisticasClientesPage() {
               </div>
             </section>
           </div>
+
+          {/* Grid 3: Distribución por Rubros de Clientes */}
+          <section style={{ ...cardStyle, gap: 16 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div>
+                <h2 style={{ fontFamily: 'var(--font-ui)', fontSize: '0.875rem', fontWeight: 600, color: 'var(--color-star)', margin: 0 }}>
+                  🏢 Distribución por Rubros & Sectores de Clientes
+                </h2>
+                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: 'var(--color-muted)', margin: '2px 0 0' }}>
+                  Sectores de negocios con mayor representación en tu cartera.
+                </p>
+              </div>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
+              {topRubros.map(([rubro, count]) => {
+                const pct = Math.round((count / (clientes.length || 1)) * 100)
+                return (
+                  <div key={rubro} style={{ background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.06)', padding: 12, borderRadius: 10 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', fontFamily: 'var(--font-ui)', marginBottom: 6 }}>
+                      <span style={{ color: 'var(--color-star)', fontWeight: 600 }}>{rubro}</span>
+                      <span style={{ color: '#38bdf8', fontFamily: 'var(--font-mono)' }}>{count} ({pct}%)</span>
+                    </div>
+                    <div style={{ height: 4, background: 'rgba(221,232,255,0.06)', borderRadius: 99, overflow: 'hidden' }}>
+                      <div style={{ height: '100%', width: `${pct}%`, background: '#38bdf8', borderRadius: 99 }} />
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </section>
         </>
       )}
     </div>
