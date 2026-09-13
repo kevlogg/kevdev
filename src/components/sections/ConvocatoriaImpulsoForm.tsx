@@ -15,7 +15,16 @@ export default function ConvocatoriaImpulsoForm() {
   const [canalVentas, setCanalVentas] = useState<'Mensajes de WhatsApp' | 'Mensajes directos de Instagram' | 'Local a la calle / presencial' | 'Otro' | ''>('')
 
   const [trabaPrincipal, setTrabaPrincipal] = useState('')
+  const [trabaOpt, setTrabaOpt] = useState('')
+  const [trabaCustom, setTrabaCustom] = useState('')
+
   const [porQueSeleccionado, setPorQueSeleccionado] = useState('')
+  const [porQueOpt, setPorQueOpt] = useState('')
+  const [porQueCustom, setPorQueCustom] = useState('')
+
+  const [dedicacionOpt, setDedicacionOpt] = useState('')
+  const [dedicacionCustom, setDedicacionCustom] = useState('')
+
   const [materialesListos, setMaterialesListos] = useState<'Sí, tengo todo listo para arrancar' | 'Tengo bastante, me faltan pulir detalles' | 'Tengo que armarlo desde cero' | ''>('')
 
   // UI State
@@ -62,6 +71,30 @@ export default function ConvocatoriaImpulsoForm() {
   }, [])
 
   // Options arrays
+  const dedicacionOptions = [
+    'Venta de productos / Comercio (Indumentaria, Deco, Calzado, etc.)',
+    'Servicios profesionales / Asesoría / Cursos',
+    'Gastronomía / Alimentos / Repostería',
+    'Salud, Belleza y Estética',
+    'Otro',
+  ] as const
+
+  const trabaOptions = [
+    'Pierdo mucho tiempo pasando precios y fotos una por una por WhatsApp',
+    'Me cuesta mostrar el catálogo completo en Instagram o redes',
+    'Mi negocio no transmite la imagen profesional que merece',
+    'Presupuestos inalcanzables en agencias de diseño web',
+    'Otro',
+  ] as const
+
+  const porQueSeleccionadoOptions = [
+    'Tengo un negocio en marcha y quiero dar el salto profesional',
+    'Me comprometo a aprovechar la web al 100% para multiplicar ventas',
+    'Tengo un producto/servicio excelente pero me falta presencia en Google',
+    'Tengo todo el material e información lista para arrancar ya',
+    'Otro',
+  ] as const
+
   const antiguedadOptions = [
     'Menos de 6 meses',
     'Entre 6 meses y 2 años',
@@ -378,7 +411,7 @@ export default function ConvocatoriaImpulsoForm() {
             textShadow: '0 2px 14px rgba(0,0,0,0.9)',
           }}
         >
-          Postulá tu negocio en la Convocatoria Impulso Digital para obtener el diseño de tu sitio web 100% bonificado y 3 meses de suscripción sin costo.
+          Desarrollo de tu sitio web 100% bonificado durante 3 meses sin costo.
         </motion.h2>
 
         {/* Texto descriptivo de alto contraste */}
@@ -485,10 +518,16 @@ export default function ConvocatoriaImpulsoForm() {
                 setWhatsapp('')
                 setInstagram('')
                 setDedicacion('')
+                setDedicacionOpt('')
+                setDedicacionCustom('')
                 setAntiguedad('')
                 setCanalVentas('')
                 setTrabaPrincipal('')
+                setTrabaOpt('')
+                setTrabaCustom('')
                 setPorQueSeleccionado('')
+                setPorQueOpt('')
+                setPorQueCustom('')
                 setMaterialesListos('')
                 setFieldErrors({})
               }}
@@ -783,27 +822,76 @@ export default function ConvocatoriaImpulsoForm() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
                 {/* Dedicación y propuesta */}
                 <div>
-                  <label htmlFor="dedicacion" style={labelStyle}>
+                  <label style={labelStyle}>
                     ¿A qué se dedica tu negocio y qué ofrecés? <span style={{ color: '#00e5ff' }}>*</span>
                   </label>
-                  <textarea
-                    id="dedicacion"
-                    rows={3}
-                    required
-                    value={dedicacion}
-                    onChange={(e) => {
-                      setDedicacion(e.target.value)
-                      if (fieldErrors.dedicacion) setFieldErrors((prev) => ({ ...prev, dedicacion: '' }))
-                    }}
-                    placeholder="Contanos brevemente qué vendés o qué servicio prestás"
-                    style={{
-                      ...inputStyle,
-                      resize: 'vertical',
-                      borderColor: fieldErrors.dedicacion ? '#ef4444' : 'rgba(255, 255, 255, 0.2)',
-                    }}
-                    onFocus={(e) => (e.currentTarget.style.borderColor = '#00e5ff')}
-                    onBlur={(e) => (e.currentTarget.style.borderColor = fieldErrors.dedicacion ? '#ef4444' : 'rgba(255, 255, 255, 0.2)')}
-                  />
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', marginTop: '0.6rem' }}>
+                    {dedicacionOptions.map((opt) => {
+                      const active = dedicacionOpt === opt
+                      return (
+                        <button
+                          key={opt}
+                          type="button"
+                          onClick={() => {
+                            setDedicacionOpt(opt)
+                            if (opt !== 'Otro') {
+                              setDedicacion(opt)
+                              setDedicacionCustom('')
+                            } else {
+                              setDedicacion(dedicacionCustom)
+                            }
+                            if (fieldErrors.dedicacion) setFieldErrors((prev) => ({ ...prev, dedicacion: '' }))
+                          }}
+                          style={{
+                            padding: '0.95rem 1.1rem',
+                            borderRadius: 14,
+                            border: active ? '1px solid #00e5ff' : '1px solid rgba(255, 255, 255, 0.18)',
+                            background: active ? 'rgba(0, 229, 255, 0.15)' : 'rgba(12, 12, 12, 0.8)',
+                            color: active ? '#ffffff' : '#e8e8e8',
+                            fontFamily: 'var(--font-ui)',
+                            fontSize: '0.9375rem',
+                            fontWeight: active ? 700 : 500,
+                            cursor: 'pointer',
+                            textAlign: 'left',
+                            transition: 'all 0.2s',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.75rem',
+                            boxShadow: active ? '0 0 15px rgba(0, 229, 255, 0.25)' : 'none',
+                          }}
+                        >
+                          <span
+                            style={{
+                              width: 18,
+                              height: 18,
+                              borderRadius: '50%',
+                              border: active ? '6px solid #00e5ff' : '2px solid rgba(255, 255, 255, 0.4)',
+                              boxSizing: 'border-box',
+                              flexShrink: 0,
+                            }}
+                          />
+                          {opt}
+                        </button>
+                      )
+                    })}
+                  </div>
+                  {dedicacionOpt === 'Otro' && (
+                    <input
+                      type="text"
+                      placeholder="Especificá a qué se dedica tu negocio..."
+                      value={dedicacionCustom}
+                      onChange={(e) => {
+                        setDedicacionCustom(e.target.value)
+                        setDedicacion(e.target.value)
+                        if (fieldErrors.dedicacion) setFieldErrors((prev) => ({ ...prev, dedicacion: '' }))
+                      }}
+                      style={{
+                        ...inputStyle,
+                        marginTop: '0.75rem',
+                        borderColor: fieldErrors.dedicacion ? '#ef4444' : 'rgba(255, 255, 255, 0.2)',
+                      }}
+                    />
+                  )}
                   {fieldErrors.dedicacion && (
                     <span style={{ fontSize: '0.78125rem', color: '#f87171', marginTop: '0.35rem', display: 'block' }}>
                       ⚠️ {fieldErrors.dedicacion}
@@ -974,27 +1062,76 @@ export default function ConvocatoriaImpulsoForm() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
                 {/* Principal traba por no tener web */}
                 <div>
-                  <label htmlFor="trabaPrincipal" style={labelStyle}>
+                  <label style={labelStyle}>
                     ¿Cuál es la principal traba que tenés hoy por no contar con una página web? <span style={{ color: '#00e5ff' }}>*</span>
                   </label>
-                  <textarea
-                    id="trabaPrincipal"
-                    rows={3}
-                    required
-                    value={trabaPrincipal}
-                    onChange={(e) => {
-                      setTrabaPrincipal(e.target.value)
-                      if (fieldErrors.trabaPrincipal) setFieldErrors((prev) => ({ ...prev, trabaPrincipal: '' }))
-                    }}
-                    placeholder="Ej: pierdo tiempo pasando precios uno a uno, me cuesta mostrar el catálogo completo, etc."
-                    style={{
-                      ...inputStyle,
-                      resize: 'vertical',
-                      borderColor: fieldErrors.trabaPrincipal ? '#ef4444' : 'rgba(255, 255, 255, 0.2)',
-                    }}
-                    onFocus={(e) => (e.currentTarget.style.borderColor = '#00e5ff')}
-                    onBlur={(e) => (e.currentTarget.style.borderColor = fieldErrors.trabaPrincipal ? '#ef4444' : 'rgba(255, 255, 255, 0.2)')}
-                  />
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', marginTop: '0.6rem' }}>
+                    {trabaOptions.map((opt) => {
+                      const active = trabaOpt === opt
+                      return (
+                        <button
+                          key={opt}
+                          type="button"
+                          onClick={() => {
+                            setTrabaOpt(opt)
+                            if (opt !== 'Otro') {
+                              setTrabaPrincipal(opt)
+                              setTrabaCustom('')
+                            } else {
+                              setTrabaPrincipal(trabaCustom)
+                            }
+                            if (fieldErrors.trabaPrincipal) setFieldErrors((prev) => ({ ...prev, trabaPrincipal: '' }))
+                          }}
+                          style={{
+                            padding: '0.95rem 1.1rem',
+                            borderRadius: 14,
+                            border: active ? '1px solid #00e5ff' : '1px solid rgba(255, 255, 255, 0.18)',
+                            background: active ? 'rgba(0, 229, 255, 0.15)' : 'rgba(12, 12, 12, 0.8)',
+                            color: active ? '#ffffff' : '#e8e8e8',
+                            fontFamily: 'var(--font-ui)',
+                            fontSize: '0.9375rem',
+                            fontWeight: active ? 700 : 500,
+                            cursor: 'pointer',
+                            textAlign: 'left',
+                            transition: 'all 0.2s',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.75rem',
+                            boxShadow: active ? '0 0 15px rgba(0, 229, 255, 0.25)' : 'none',
+                          }}
+                        >
+                          <span
+                            style={{
+                              width: 18,
+                              height: 18,
+                              borderRadius: '50%',
+                              border: active ? '6px solid #00e5ff' : '2px solid rgba(255, 255, 255, 0.4)',
+                              boxSizing: 'border-box',
+                              flexShrink: 0,
+                            }}
+                          />
+                          {opt}
+                        </button>
+                      )
+                    })}
+                  </div>
+                  {trabaOpt === 'Otro' && (
+                    <input
+                      type="text"
+                      placeholder="Especificá cuál es tu principal traba..."
+                      value={trabaCustom}
+                      onChange={(e) => {
+                        setTrabaCustom(e.target.value)
+                        setTrabaPrincipal(e.target.value)
+                        if (fieldErrors.trabaPrincipal) setFieldErrors((prev) => ({ ...prev, trabaPrincipal: '' }))
+                      }}
+                      style={{
+                        ...inputStyle,
+                        marginTop: '0.75rem',
+                        borderColor: fieldErrors.trabaPrincipal ? '#ef4444' : 'rgba(255, 255, 255, 0.2)',
+                      }}
+                    />
+                  )}
                   {fieldErrors.trabaPrincipal && (
                     <span style={{ fontSize: '0.78125rem', color: '#f87171', marginTop: '0.35rem', display: 'block' }}>
                       ⚠️ {fieldErrors.trabaPrincipal}
@@ -1004,27 +1141,76 @@ export default function ConvocatoriaImpulsoForm() {
 
                 {/* Por qué debería ser seleccionado */}
                 <div>
-                  <label htmlFor="porQueSeleccionado" style={labelStyle}>
+                  <label style={labelStyle}>
                     ¿Por qué considerás que tu negocio debería ser el seleccionado para este impulso? <span style={{ color: '#00e5ff' }}>*</span>
                   </label>
-                  <textarea
-                    id="porQueSeleccionado"
-                    rows={3}
-                    required
-                    value={porQueSeleccionado}
-                    onChange={(e) => {
-                      setPorQueSeleccionado(e.target.value)
-                      if (fieldErrors.porQueSeleccionado) setFieldErrors((prev) => ({ ...prev, porQueSeleccionado: '' }))
-                    }}
-                    placeholder="Contanos tu motivación, proyección o cómo esto impactaría en la historia de tu marca"
-                    style={{
-                      ...inputStyle,
-                      resize: 'vertical',
-                      borderColor: fieldErrors.porQueSeleccionado ? '#ef4444' : 'rgba(255, 255, 255, 0.2)',
-                    }}
-                    onFocus={(e) => (e.currentTarget.style.borderColor = '#00e5ff')}
-                    onBlur={(e) => (e.currentTarget.style.borderColor = fieldErrors.porQueSeleccionado ? '#ef4444' : 'rgba(255, 255, 255, 0.2)')}
-                  />
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', marginTop: '0.6rem' }}>
+                    {porQueSeleccionadoOptions.map((opt) => {
+                      const active = porQueOpt === opt
+                      return (
+                        <button
+                          key={opt}
+                          type="button"
+                          onClick={() => {
+                            setPorQueOpt(opt)
+                            if (opt !== 'Otro') {
+                              setPorQueSeleccionado(opt)
+                              setPorQueCustom('')
+                            } else {
+                              setPorQueSeleccionado(porQueCustom)
+                            }
+                            if (fieldErrors.porQueSeleccionado) setFieldErrors((prev) => ({ ...prev, porQueSeleccionado: '' }))
+                          }}
+                          style={{
+                            padding: '0.95rem 1.1rem',
+                            borderRadius: 14,
+                            border: active ? '1px solid #00e5ff' : '1px solid rgba(255, 255, 255, 0.18)',
+                            background: active ? 'rgba(0, 229, 255, 0.15)' : 'rgba(12, 12, 12, 0.8)',
+                            color: active ? '#ffffff' : '#e8e8e8',
+                            fontFamily: 'var(--font-ui)',
+                            fontSize: '0.9375rem',
+                            fontWeight: active ? 700 : 500,
+                            cursor: 'pointer',
+                            textAlign: 'left',
+                            transition: 'all 0.2s',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.75rem',
+                            boxShadow: active ? '0 0 15px rgba(0, 229, 255, 0.25)' : 'none',
+                          }}
+                        >
+                          <span
+                            style={{
+                              width: 18,
+                              height: 18,
+                              borderRadius: '50%',
+                              border: active ? '6px solid #00e5ff' : '2px solid rgba(255, 255, 255, 0.4)',
+                              boxSizing: 'border-box',
+                              flexShrink: 0,
+                            }}
+                          />
+                          {opt}
+                        </button>
+                      )
+                    })}
+                  </div>
+                  {porQueOpt === 'Otro' && (
+                    <input
+                      type="text"
+                      placeholder="Contanos tu motivo o motivación..."
+                      value={porQueCustom}
+                      onChange={(e) => {
+                        setPorQueCustom(e.target.value)
+                        setPorQueSeleccionado(e.target.value)
+                        if (fieldErrors.porQueSeleccionado) setFieldErrors((prev) => ({ ...prev, porQueSeleccionado: '' }))
+                      }}
+                      style={{
+                        ...inputStyle,
+                        marginTop: '0.75rem',
+                        borderColor: fieldErrors.porQueSeleccionado ? '#ef4444' : 'rgba(255, 255, 255, 0.2)',
+                      }}
+                    />
+                  )}
                   {fieldErrors.porQueSeleccionado && (
                     <span style={{ fontSize: '0.78125rem', color: '#f87171', marginTop: '0.35rem', display: 'block' }}>
                       ⚠️ {fieldErrors.porQueSeleccionado}
