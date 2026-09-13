@@ -9,6 +9,7 @@ export default function ConvocatoriaImpulsoForm() {
   const [negocio, setNegocio] = useState('')
   const [whatsapp, setWhatsapp] = useState('')
   const [instagram, setInstagram] = useState('')
+  const [redSocial, setRedSocial] = useState<'Instagram' | 'Facebook' | 'TikTok' | 'Web'>('Instagram')
 
   const [dedicacion, setDedicacion] = useState('')
   const [antiguedad, setAntiguedad] = useState<'Menos de 6 meses' | 'Entre 6 meses y 2 años' | 'Más de 2 años' | ''>('')
@@ -118,13 +119,9 @@ export default function ConvocatoriaImpulsoForm() {
   const validateForm = (): boolean => {
     const errors: Record<string, string> = {}
 
-    // 1. Contacto
+    // 1. Contacto (Solo nombre y WhatsApp obligatorios)
     if (!nombre.trim() || nombre.trim().length < 2) {
-      errors.nombre = 'Ingresá tu nombre completo.'
-    }
-
-    if (!negocio.trim() || negocio.trim().length < 2) {
-      errors.negocio = 'Ingresá el nombre de tu negocio o marca.'
+      errors.nombre = 'Ingresá tu nombre.'
     }
 
     const waClean = whatsapp.replace(/[^\d+]/g, '')
@@ -132,14 +129,9 @@ export default function ConvocatoriaImpulsoForm() {
       errors.whatsapp = 'Ingresá un número de WhatsApp válido.'
     }
 
-    const igTrimmed = instagram.trim()
-    if (!igTrimmed) {
-      errors.instagram = 'Ingresá tu usuario de Instagram o marca.'
-    }
-
     // 2. Estado del negocio
-    if (!dedicacion.trim() || dedicacion.trim().length < 3) {
-      errors.dedicacion = 'Contanos brevemente a qué se dedica tu negocio.'
+    if (!dedicacion.trim() || dedicacion.trim().length < 2) {
+      errors.dedicacion = 'Contanos a qué se dedica tu negocio.'
     }
 
     if (!antiguedad) {
@@ -152,11 +144,11 @@ export default function ConvocatoriaImpulsoForm() {
 
     // 3. Necesidad y compromiso
     if (!trabaPrincipal.trim() || trabaPrincipal.trim().length < 2) {
-      errors.trabaPrincipal = 'Contanos brevemente qué te traba por no tener web.'
+      errors.trabaPrincipal = 'Contanos qué te traba por no tener web.'
     }
 
     if (!porQueSeleccionado.trim() || porQueSeleccionado.trim().length < 2) {
-      errors.porQueSeleccionado = 'Explicá brevemente por qué deberías ser seleccionado.'
+      errors.porQueSeleccionado = 'Indicanos por qué deberías ser seleccionado.'
     }
 
     if (!materialesListos) {
@@ -166,7 +158,7 @@ export default function ConvocatoriaImpulsoForm() {
     setFieldErrors(errors)
 
     if (Object.keys(errors).length > 0) {
-      setErrorMsg('Por favor completá los campos indicados antes de enviar.')
+      setErrorMsg('Por favor completá los campos obligatorios indicados antes de enviar.')
       return false
     }
 
@@ -184,10 +176,9 @@ export default function ConvocatoriaImpulsoForm() {
     setSubmitting(true)
     setErrorMsg('')
 
-    // Formatear Instagram con @ si no lo tiene
-    const formattedInstagram = instagram.trim().startsWith('@')
-      ? instagram.trim()
-      : `@${instagram.trim()}`
+    const formattedSocial = instagram.trim()
+      ? `${redSocial}: ${instagram.trim()}`
+      : 'No especificado'
 
     try {
       const response = await fetch('/api/convocatoria', {
@@ -195,9 +186,9 @@ export default function ConvocatoriaImpulsoForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           nombre: nombre.trim(),
-          negocio: negocio.trim(),
+          negocio: negocio.trim() || 'No especificado',
           whatsapp: whatsapp.trim(),
-          instagram: formattedInstagram,
+          instagram: formattedSocial,
           dedicacion: dedicacion.trim(),
           antiguedad,
           canalVentas,
@@ -656,10 +647,10 @@ export default function ConvocatoriaImpulsoForm() {
                   gap: '1.5rem',
                 }}
               >
-                {/* Nombre y apellido */}
+                {/* Nombre */}
                 <div>
                   <label htmlFor="nombre" style={labelStyle}>
-                    Nombre y apellido <span style={{ color: '#00e5ff' }}>*</span>
+                    Tu nombre <span style={{ color: '#00e5ff' }}>*</span>
                   </label>
                   <input
                     id="nombre"
@@ -670,7 +661,7 @@ export default function ConvocatoriaImpulsoForm() {
                       setNombre(e.target.value)
                       if (fieldErrors.nombre) setFieldErrors((prev) => ({ ...prev, nombre: '' }))
                     }}
-                    placeholder="Tu nombre completo"
+                    placeholder="Ej: Juan"
                     style={{
                       ...inputStyle,
                       borderColor: fieldErrors.nombre ? '#ef4444' : 'rgba(255, 255, 255, 0.2)',
@@ -685,39 +676,10 @@ export default function ConvocatoriaImpulsoForm() {
                   )}
                 </div>
 
-                {/* Nombre de negocio o marca */}
-                <div>
-                  <label htmlFor="negocio" style={labelStyle}>
-                    Nombre de tu negocio o marca <span style={{ color: '#00e5ff' }}>*</span>
-                  </label>
-                  <input
-                    id="negocio"
-                    type="text"
-                    required
-                    value={negocio}
-                    onChange={(e) => {
-                      setNegocio(e.target.value)
-                      if (fieldErrors.negocio) setFieldErrors((prev) => ({ ...prev, negocio: '' }))
-                    }}
-                    placeholder="Ej: Dulce Hogar Deco"
-                    style={{
-                      ...inputStyle,
-                      borderColor: fieldErrors.negocio ? '#ef4444' : 'rgba(255, 255, 255, 0.2)',
-                    }}
-                    onFocus={(e) => (e.currentTarget.style.borderColor = '#00e5ff')}
-                    onBlur={(e) => (e.currentTarget.style.borderColor = fieldErrors.negocio ? '#ef4444' : 'rgba(255, 255, 255, 0.2)')}
-                  />
-                  {fieldErrors.negocio && (
-                    <span style={{ fontSize: '0.78125rem', color: '#f87171', marginTop: '0.35rem', display: 'block' }}>
-                      ⚠️ {fieldErrors.negocio}
-                    </span>
-                  )}
-                </div>
-
                 {/* WhatsApp */}
                 <div>
                   <label htmlFor="whatsapp" style={labelStyle}>
-                    Número de WhatsApp con código de área <span style={{ color: '#00e5ff' }}>*</span>
+                    Número de WhatsApp <span style={{ color: '#00e5ff' }}>*</span>
                   </label>
                   <input
                     id="whatsapp"
@@ -743,33 +705,87 @@ export default function ConvocatoriaImpulsoForm() {
                   )}
                 </div>
 
-                {/* Instagram */}
+                {/* Nombre de negocio o marca (Opcional) */}
+                <div>
+                  <label htmlFor="negocio" style={labelStyle}>
+                    Nombre de tu negocio <span style={{ color: 'rgba(255, 255, 255, 0.45)', fontWeight: 500, fontSize: '0.7rem' }}>(Opcional)</span>
+                  </label>
+                  <input
+                    id="negocio"
+                    type="text"
+                    value={negocio}
+                    onChange={(e) => setNegocio(e.target.value)}
+                    placeholder="Ej: Dulce Hogar Deco"
+                    style={inputStyle}
+                    onFocus={(e) => (e.currentTarget.style.borderColor = '#00e5ff')}
+                    onBlur={(e) => (e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)')}
+                  />
+                </div>
+
+                {/* Red social o Web (Opcional con selector interactivo por ícono) */}
                 <div>
                   <label htmlFor="instagram" style={labelStyle}>
-                    Usuario de Instagram del negocio <span style={{ color: '#00e5ff' }}>*</span>
+                    Red Social o Web <span style={{ color: 'rgba(255, 255, 255, 0.45)', fontWeight: 500, fontSize: '0.7rem' }}>(Opcional)</span>
                   </label>
+                  
+                  {/* Selector interactivo de plataforma */}
+                  <div style={{ display: 'flex', gap: '0.4rem', marginBottom: '0.6rem' }}>
+                    {[
+                      { key: 'Instagram', label: 'Instagram', icon: '📸' },
+                      { key: 'Facebook', label: 'Facebook', icon: '📘' },
+                      { key: 'TikTok', label: 'TikTok', icon: '🎵' },
+                      { key: 'Web', label: 'Web / Otro', icon: '🌐' },
+                    ].map((item) => {
+                      const active = redSocial === item.key
+                      return (
+                        <button
+                          key={item.key}
+                          type="button"
+                          onClick={() => setRedSocial(item.key as any)}
+                          style={{
+                            flex: 1,
+                            padding: '0.45rem 0.5rem',
+                            borderRadius: 10,
+                            border: active ? '1px solid #00e5ff' : '1px solid rgba(255, 255, 255, 0.15)',
+                            background: active ? 'rgba(0, 229, 255, 0.2)' : 'rgba(12, 12, 12, 0.7)',
+                            color: active ? '#ffffff' : '#a3a3a3',
+                            fontSize: '0.75rem',
+                            fontFamily: 'var(--font-ui)',
+                            fontWeight: active ? 700 : 500,
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '0.3rem',
+                            transition: 'all 0.2s',
+                            boxShadow: active ? '0 0 10px rgba(0, 229, 255, 0.3)' : 'none',
+                          }}
+                        >
+                          <span>{item.icon}</span>
+                          <span style={{ fontSize: '0.7rem' }}>{item.label}</span>
+                        </button>
+                      )
+                    })}
+                  </div>
+
                   <input
                     id="instagram"
                     type="text"
-                    required
                     value={instagram}
-                    onChange={(e) => {
-                      setInstagram(e.target.value)
-                      if (fieldErrors.instagram) setFieldErrors((prev) => ({ ...prev, instagram: '' }))
-                    }}
-                    placeholder="@tunegocio"
-                    style={{
-                      ...inputStyle,
-                      borderColor: fieldErrors.instagram ? '#ef4444' : 'rgba(255, 255, 255, 0.2)',
-                    }}
+                    onChange={(e) => setInstagram(e.target.value)}
+                    placeholder={
+                      redSocial === 'Instagram'
+                        ? '@tunegocio'
+                        : redSocial === 'Facebook'
+                        ? 'facebook.com/tunegocio'
+                        : redSocial === 'TikTok'
+                        ? '@tunegocio'
+                        : 'www.tunegocio.com'
+                    }
+                    style={inputStyle}
                     onFocus={(e) => (e.currentTarget.style.borderColor = '#00e5ff')}
-                    onBlur={(e) => (e.currentTarget.style.borderColor = fieldErrors.instagram ? '#ef4444' : 'rgba(255, 255, 255, 0.2)')}
+                    onBlur={(e) => (e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)')}
                   />
-                  {fieldErrors.instagram && (
-                    <span style={{ fontSize: '0.78125rem', color: '#f87171', marginTop: '0.35rem', display: 'block' }}>
-                      ⚠️ {fieldErrors.instagram}
-                    </span>
-                  )}
                 </div>
               </div>
             </div>
