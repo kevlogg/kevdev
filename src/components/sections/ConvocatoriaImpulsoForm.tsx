@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 export default function ConvocatoriaImpulsoForm() {
@@ -23,6 +23,43 @@ export default function ConvocatoriaImpulsoForm() {
   const [submitted, setSubmitted] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
+
+  // Countdown Timer State (Hasta el 30 de Septiembre 23:59:59)
+  const [timeLeft, setTimeLeft] = useState<{ days: number; hours: number; minutes: number; seconds: number }>({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  })
+
+  useEffect(() => {
+    const calculateTimeLeft = () => {
+      const now = new Date()
+      const currentYear = now.getFullYear()
+      let targetYear = currentYear
+      if (now.getMonth() > 8 || (now.getMonth() === 8 && now.getDate() > 30)) {
+        targetYear = currentYear + 1
+      }
+      const targetDate = new Date(targetYear, 8, 30, 23, 59, 59) // Mes 8 = Septiembre
+      const diff = targetDate.getTime() - now.getTime()
+
+      if (diff <= 0) {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 })
+        return
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24)
+      const minutes = Math.floor((diff / 1000 / 60) % 60)
+      const seconds = Math.floor((diff / 1000) % 60)
+
+      setTimeLeft({ days, hours, minutes, seconds })
+    }
+
+    calculateTimeLeft()
+    const timer = setInterval(calculateTimeLeft, 1000)
+    return () => clearInterval(timer)
+  }, [])
 
   // Options arrays
   const antiguedadOptions = [
@@ -184,10 +221,82 @@ export default function ConvocatoriaImpulsoForm() {
     <div style={{ maxWidth: 940, margin: '0 auto', padding: '0 var(--gutter)' }}>
       {/* ── ENCABEZADO CON ESTILO DEL HOME ────────────────────────── */}
       <div style={{ textAlign: 'center', maxWidth: 840, margin: '0 auto 3.5rem' }}>
+        
+        {/* ⏳ CONTADOR EN RETROCESO HASTA LA FECHA LÍMITE (30 DE SEPTIEMBRE) */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '0.85rem',
+            marginBottom: '1.25rem',
+            background: 'rgba(10, 10, 10, 0.88)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            border: '1px solid rgba(0, 229, 255, 0.45)',
+            borderRadius: 20,
+            padding: '0.65rem 1.35rem',
+            boxShadow: '0 8px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 229, 255, 0.2)',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginRight: '0.35rem' }}>
+            <span style={{ fontSize: '1.1rem' }}>⚡</span>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', fontWeight: 800, color: 'rgba(255, 255, 255, 0.85)', textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+              CIERRA EN:
+            </span>
+          </div>
+
+          {[
+            { label: 'DÍAS', val: timeLeft.days },
+            { label: 'HORAS', val: timeLeft.hours },
+            { label: 'MIN', val: timeLeft.minutes },
+            { label: 'SEG', val: timeLeft.seconds },
+          ].map((item, i, arr) => (
+            <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <span
+                  style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '1.35rem',
+                    fontWeight: 900,
+                    color: '#00e5ff',
+                    lineHeight: 1,
+                    textShadow: '0 0 16px rgba(0, 229, 255, 0.8)',
+                  }}
+                >
+                  {String(item.val).padStart(2, '0')}
+                </span>
+                <span
+                  style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.5625rem',
+                    fontWeight: 700,
+                    color: 'rgba(255, 255, 255, 0.5)',
+                    letterSpacing: '0.08em',
+                    marginTop: '0.2rem',
+                  }}
+                >
+                  {item.label}
+                </span>
+              </div>
+              {i < arr.length - 1 && (
+                <span style={{ color: 'rgba(0, 229, 255, 0.5)', fontWeight: 800, fontSize: '1rem', marginTop: '-0.5rem' }}>
+                  :
+                </span>
+              )}
+            </div>
+          ))}
+        </motion.div>
+
+        <br />
+
         <motion.span
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
           style={{
             fontFamily: 'var(--font-mono)',
             fontSize: '0.8125rem',
