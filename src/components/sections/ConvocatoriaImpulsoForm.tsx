@@ -411,7 +411,7 @@ export default function ConvocatoriaImpulsoForm() {
             textShadow: '0 2px 14px rgba(0,0,0,0.9)',
           }}
         >
-          Desarrollo de tu sitio web 100% bonificado durante 3 meses sin costo.
+          100% bonificado por 3 meses.
         </motion.h2>
 
         {/* Texto descriptivo de alto contraste */}
