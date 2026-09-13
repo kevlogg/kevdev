@@ -214,30 +214,41 @@ export default function ConvocatoriaImpulsoForm() {
           CONVOCATORIA ABIERTA • HASTA EL 30 DE SEPTIEMBRE
         </motion.span>
 
-        {/* Título Principal (Exacto al Display del Home) */}
+        {/* Título Principal (2 Líneas: Celeste arriba, Blanco en contraste abajo) */}
         <motion.h1
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
           style={{
-            fontFamily: 'var(--font-display)',
-            fontWeight: 800,
-            fontSize: 'clamp(2.4rem, 5.5vw, 4.2rem)',
-            lineHeight: 1.08,
-            letterSpacing: '-0.03em',
-            color: '#ffffff',
             margin: '0 0 1.25rem',
-            textShadow: '0 4px 28px rgba(0,0,0,0.95), 0 1px 4px rgba(0,0,0,1)',
+            textAlign: 'center',
           }}
         >
-          Conseguí tu{' '}
           <span
             style={{
+              display: 'block',
               fontFamily: 'var(--font-serif)',
               fontStyle: 'italic',
               fontWeight: 400,
+              fontSize: 'clamp(1.75rem, 4vw, 3rem)',
+              lineHeight: 1.15,
               color: '#00e5ff',
-              textShadow: '0 0 32px rgba(0, 229, 255, 0.5), 0 2px 16px rgba(0,0,0,0.95)',
+              textShadow: '0 0 28px rgba(0, 229, 255, 0.6), 0 2px 14px rgba(0,0,0,0.95)',
+              marginBottom: '0.2rem',
+            }}
+          >
+            Conseguí tu
+          </span>
+          <span
+            style={{
+              display: 'block',
+              fontFamily: 'var(--font-display)',
+              fontWeight: 900,
+              fontSize: 'clamp(2.6rem, 6.2vw, 4.6rem)',
+              lineHeight: 1.05,
+              letterSpacing: '-0.03em',
+              color: '#ffffff',
+              textShadow: '0 4px 32px rgba(0,0,0,0.95), 0 2px 8px rgba(0,0,0,1)',
             }}
           >
             Sitio Web Gratis
