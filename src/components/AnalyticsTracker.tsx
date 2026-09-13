@@ -179,8 +179,10 @@ export default function AnalyticsTracker() {
   // ── Pageview on every route change ──────────────────────────────
   useEffect(() => {
     try {
+      const path = pathname || window.location.pathname
+      if (path.startsWith('/admin')) return // Ignorar navegación del panel de control admin
+
       const visitorId = getVisitorId()
-      const path      = pathname || window.location.pathname
       const source    = detectTrafficSource()
       const device    = window.innerWidth < 768 ? 'mobile' : 'desktop'
 

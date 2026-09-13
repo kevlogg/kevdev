@@ -208,34 +208,36 @@ export async function addAnalyticsEvent(eventData: Omit<AnalyticsEvent, 'id' | '
 let memoryEventsCache: AnalyticsEvent[] = []
 
 export async function getStoreAnalyticsSummary(periodDays: number = 30): Promise<AnalyticsSummary> {
-  // 1. Primary: Firestore REST API — always has the full durable dataset
-  let events = await fetchEventsFromFirestoreRest()
+  let events: AnalyticsEvent[] = []
 
-  // 2. Merge with local /tmp and in-memory cache (catches very recent events)
-  const localEvents = readLocalEvents()
-  if (localEvents.length > 0 || memoryEventsCache.length > 0) {
-    const eventMap = new Map<string, AnalyticsEvent>()
-    events.forEach(e => e.id && eventMap.set(e.id, e))
-    localEvents.forEach(e => e.id && !eventMap.has(e.id) && eventMap.set(e.id, e))
-    memoryEventsCache.forEach(e => e.id && !eventMap.has(e.id) && eventMap.set(e.id, e))
-    events = Array.from(eventMap.values())
-  }
-
-  // 3. Legacy Client SDK merge — optional, usually fails
+  // 1. Obtener eventos de Firestore usando la conexión autenticada del servidor
   try {
     await ensureServerAuth()
     const snap = await getDocs(collection(db, 'analyticsEvents'))
     if (!snap.empty) {
-      const eventMap = new Map<string, AnalyticsEvent>()
-      events.forEach(e => e.id && eventMap.set(e.id, e))
-      snap.docs.forEach(d => {
-        const ev = { id: d.id, ...d.data() } as AnalyticsEvent
-        if (ev.id && !eventMap.has(ev.id)) eventMap.set(ev.id, ev)
-      })
-      events = Array.from(eventMap.values())
+      events = snap.docs.map(d => ({ id: d.id, ...d.data() } as AnalyticsEvent))
     }
-  } catch { /* expected */ }
+  } catch (err) {
+    console.warn('[Analytics] Error leyendo Firestore con Client SDK:', err)
+  }
 
+  // 2. Si no devolvió nada, intentar vía REST API
+  if (events.length === 0) {
+    events = await fetchEventsFromFirestoreRest()
+  }
+
+  // 3. Merge and deduplicate across Firestore, local disk and memory cache
+  const allRaw = [...events, ...readLocalEvents(), ...memoryEventsCache]
+  const deduplicatedMap = new Map<string, AnalyticsEvent>()
+  allRaw.forEach(e => {
+    if (!e) return
+    const vId = (e.metadata as any)?.visitorId || ''
+    const sig = e.id || `${e.eventType}_${e.path}_${vId}_${e.createdAt}`
+    if (!deduplicatedMap.has(sig)) {
+      deduplicatedMap.set(sig, e)
+    }
+  })
+  events = Array.from(deduplicatedMap.values())
   memoryEventsCache = events
 
   /* ── Filter by period ── */
