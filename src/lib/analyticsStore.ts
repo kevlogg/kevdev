@@ -16,6 +16,14 @@ export interface AnalyticsEvent {
   createdAt: string
 }
 
+export interface DailyStat {
+  date: string
+  displayDate: string
+  pageviews: number
+  visitors: number
+  leads: number
+}
+
 export interface AnalyticsSummary {
   totalPageviews: number
   uniqueVisitors: number
@@ -30,6 +38,7 @@ export interface AnalyticsSummary {
   conversionFunnel: { step: string; count: number; pct: number }[]
   recentEvents: { id: string; type: string; path: string; time: string; device: string; label?: string }[]
   prevPeriodPageviews?: number
+  dailyStats: DailyStat[]
 }
 
 const FILE_PATH = path.join(os.tmpdir(), 'kevdev_analytics_events.json')
@@ -336,6 +345,52 @@ export async function getStoreAnalyticsSummary(periodDays: number = 30): Promise
     return new Date(oldest).toLocaleDateString('es-AR', { day: 'numeric', month: 'long', year: 'numeric' })
   })()
 
+  /* ── Compute daily breakdown stats ── */
+  const dailyMap: Record<string, { pageviews: number; visitorSet: Set<string>; leads: number }> = {}
+
+  const endDate = new Date(now)
+  endDate.setHours(23, 59, 59, 999)
+
+  const startDate = new Date(now.getTime() - (periodDays - 1) * 24 * 60 * 60 * 1000)
+  startDate.setHours(0, 0, 0, 0)
+
+  const curr = new Date(startDate)
+  while (curr <= endDate) {
+    const key = curr.toISOString().slice(0, 10)
+    dailyMap[key] = { pageviews: 0, visitorSet: new Set(), leads: 0 }
+    curr.setDate(curr.getDate() + 1)
+  }
+
+  filtered.forEach(ev => {
+    if (!ev.createdAt) return
+    const key = new Date(ev.createdAt).toISOString().slice(0, 10)
+    if (!dailyMap[key]) {
+      dailyMap[key] = { pageviews: 0, visitorSet: new Set(), leads: 0 }
+    }
+    if (ev.eventType === 'pageview') {
+      dailyMap[key].pageviews += 1
+    } else {
+      dailyMap[key].leads += 1
+    }
+    const vId = (ev.metadata as any)?.visitorId || ev.id || 'v_anon'
+    dailyMap[key].visitorSet.add(String(vId))
+  })
+
+  const dailyStats: DailyStat[] = Object.keys(dailyMap)
+    .sort()
+    .map(dateKey => {
+      const [year, month, day] = dateKey.split('-').map(Number)
+      const d = new Date(year, month - 1, day)
+      const displayDate = d.toLocaleDateString('es-AR', { day: 'numeric', month: 'short' })
+      return {
+        date: dateKey,
+        displayDate,
+        pageviews: dailyMap[dateKey].pageviews,
+        visitors: dailyMap[dateKey].visitorSet.size,
+        leads: dailyMap[dateKey].leads,
+      }
+    })
+
   return {
     totalPageviews,
     uniqueVisitors,
@@ -354,5 +409,6 @@ export async function getStoreAnalyticsSummary(periodDays: number = 30): Promise
     ],
     recentEvents,
     prevPeriodPageviews,
+    dailyStats,
   }
 }

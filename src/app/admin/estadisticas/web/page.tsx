@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import type { AnalyticsSummary } from '@/lib/analyticsStore'
+import DailyVisitsChart from '@/components/admin/DailyVisitsChart'
 
 type SummaryWithPrev = AnalyticsSummary & { prevPeriodPageviews?: number }
 
@@ -161,7 +162,7 @@ export default function EstadisticasWebPage() {
             🔄 Actualizar
           </button>
 
-          {[7, 30, 90].map(p => (
+          {[7, 14, 30, 60, 90].map(p => (
             <button
               key={p}
               onClick={() => setPeriod(p)}
@@ -295,6 +296,9 @@ export default function EstadisticasWebPage() {
             </motion.div>
 
           </div>
+
+          {/* ── 3b. GRÁFICO DE EVOLUCIÓN DIARIA DE VISITAS ──────────────────────────── */}
+          <DailyVisitsChart dailyStats={analytics.dailyStats || []} periodDays={period} />
 
           {/* ── 4. GRID SECUNDARIO: CANALES DE TRÁFICO Y RUTAS POPULARES ─────────────── */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '1.5rem' }}>
