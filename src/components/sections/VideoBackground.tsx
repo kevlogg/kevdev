@@ -12,7 +12,9 @@ export default function VideoBackground() {
   const [hero1Opacity, setHero1Opacity] = useState(1)
 
   useEffect(() => {
-    // 1. Lock scroll initially while hero1 is playing
+    const video = videoRef.current
+
+    // Lock scroll initially while hero1 is playing
     const lenis = (window as any).__lenis
     if (lenis) lenis.stop()
     document.body.style.overflow = 'hidden'
@@ -22,9 +24,11 @@ export default function VideoBackground() {
       if (endedHandled) return
       endedHandled = true
 
-      // Pause hero1 video on last frame
-      if (videoRef.current) {
-        videoRef.current.pause()
+      // Pause hero1 video on its last frame
+      if (video) {
+        try {
+          video.pause()
+        } catch {}
       }
 
       setIsHero1Ended(true)
@@ -32,7 +36,7 @@ export default function VideoBackground() {
       // Fade out hero1 video element to smoothly reveal hero2 canvas underneath
       setTimeout(() => {
         setHero1Opacity(0)
-      }, 100)
+      }, 400)
 
       // Unlock scroll and notify application
       if ((window as any).__lenis) {
@@ -42,23 +46,38 @@ export default function VideoBackground() {
       window.dispatchEvent(new CustomEvent('kevdev:hero1Ended'))
     }
 
-    const video = videoRef.current
     if (video) {
+      video.muted = true
+      video.defaultMuted = true
+      video.playsInline = true
+
       video.onended = handleHero1Ended
+
       const checkEnd = () => {
-        if (video.duration && video.currentTime >= video.duration - 0.08) {
+        // ONLY trigger end if duration is valid and video has actually played past 1 second
+        if (
+          video.duration > 1 &&
+          video.currentTime > 1 &&
+          video.currentTime >= video.duration - 0.15
+        ) {
           handleHero1Ended()
         }
       }
       video.addEventListener('timeupdate', checkEnd)
-      
+
+      // Safeguard timeout only if video takes longer than 6s (video is ~3s)
       const fallbackTimer = setTimeout(() => {
         handleHero1Ended()
-      }, 4000)
+      }, 6000)
 
-      video.play().catch(() => {
-        handleHero1Ended()
-      })
+      // Attempt explicit play
+      const playPromise = video.play()
+      if (playPromise !== undefined) {
+        playPromise.catch((err) => {
+          console.warn('Hero1 autoplay blocked by browser policy:', err)
+          handleHero1Ended()
+        })
+      }
 
       return () => {
         video.removeEventListener('timeupdate', checkEnd)
@@ -252,6 +271,7 @@ export default function VideoBackground() {
             width: '100%',
             height: '100%',
             objectFit: 'cover',
+            zIndex: 2,
             opacity: hero1Opacity,
             transition: 'opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1)',
             pointerEvents: 'none',

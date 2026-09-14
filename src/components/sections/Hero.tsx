@@ -219,8 +219,8 @@ export default function Hero() {
     const handleHero1Ended = () => setShowContent(true)
     window.addEventListener('kevdev:hero1Ended', handleHero1Ended)
     
-    // Safety fallback timer if video is instant or blocked
-    const timer = setTimeout(() => setShowContent(true), 3200)
+    // Safety fallback timer if video is blocked or fails
+    const timer = setTimeout(() => setShowContent(true), 6000)
 
     return () => {
       window.removeEventListener('resize', checkMobile)
