@@ -164,8 +164,8 @@ function OkawaTextAnimation({
 export default function Hero() {
   const t = useTranslations('hero')
   const sectionRef = useRef<HTMLElement>(null)
-  const { phase } = useIntro()
-  const showContent = phase === 'SCROLLING'
+  const { isContentVisible } = useIntro()
+  const showContent = isContentVisible
 
   const mouseX  = useMotionValue(0)
   const mouseY  = useMotionValue(0)

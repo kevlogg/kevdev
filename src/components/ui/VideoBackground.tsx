@@ -40,6 +40,9 @@ export default function VideoBackground() {
       video.muted = true
       video.defaultMuted = true
       video.playsInline = true
+      video.volume = 0
+      video.setAttribute('muted', '')
+      video.setAttribute('playsinline', '')
 
       video.onended = handleHero1Ended
 
@@ -54,16 +57,26 @@ export default function VideoBackground() {
       }
       video.addEventListener('timeupdate', checkEnd)
 
+      // Fallback timer if video takes longer than 4.5s
       const fallbackTimer = setTimeout(() => {
         handleHero1Ended()
-      }, 5000)
+      }, 4500)
 
-      const playPromise = video.play()
-      if (playPromise !== undefined) {
-        playPromise.catch((err) => {
-          console.warn('Autoplay fallback:', err)
-          handleHero1Ended()
-        })
+      const attemptPlay = () => {
+        const playPromise = video.play()
+        if (playPromise !== undefined) {
+          playPromise.catch((err) => {
+            console.warn('Video play fallback:', err)
+            handleHero1Ended()
+          })
+        }
+      }
+
+      if (video.readyState >= 2) {
+        attemptPlay()
+      } else {
+        video.oncanplay = attemptPlay
+        attemptPlay()
       }
 
       return () => {
@@ -223,8 +236,6 @@ export default function VideoBackground() {
     }
   }, [])
 
-  const isIntroOverlayVisible = phase === 'INTRO_PLAYING' || phase === 'INTRO_ENDED'
-
   return (
     <>
       <div
@@ -250,17 +261,18 @@ export default function VideoBackground() {
         style={{
           position: 'fixed',
           inset: 0,
-          zIndex: 99999, // Highest z-index covering all navbar & content during intro
+          zIndex: phase === 'INTRO_PLAYING' ? 99999 : 2,
           opacity: phase === 'SCROLLING' ? 0 : 1,
           pointerEvents: phase === 'SCROLLING' ? 'none' : 'auto',
           transition: 'opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1)',
           display: phase === 'SCROLLING' ? 'none' : 'block',
-          backgroundColor: '#000',
+          backgroundColor: '#0c0f17',
         }}
       >
         <video
           ref={videoRef}
           src="/hero1.mp4"
+          poster="/frames/frame-0001.jpg"
           autoPlay
           muted
           playsInline

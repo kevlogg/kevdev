@@ -85,7 +85,7 @@ const footerV = {
 export default function Navbar() {
   const t = useTranslations('nav')
   const locale = useLocale()
-  const { phase } = useIntro()
+  const { isContentVisible } = useIntro()
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen]         = useState(false)
   const [hovered, setHovered]   = useState<number | null>(null)
@@ -170,8 +170,8 @@ export default function Navbar() {
       {/* ── Fixed bar ─────────────────────────────────────────────── */}
       <header style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
-        opacity: phase === 'SCROLLING' ? 1 : 0,
-        pointerEvents: phase === 'SCROLLING' ? 'auto' : 'none',
+        opacity: isContentVisible ? 1 : 0,
+        pointerEvents: isContentVisible ? 'auto' : 'none',
         transition: 'opacity 0.6s var(--ease-expo), background 0.45s var(--ease-expo), border-color 0.45s',
         background: open
           ? 'transparent'
