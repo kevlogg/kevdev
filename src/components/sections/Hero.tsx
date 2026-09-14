@@ -209,12 +209,24 @@ export default function Hero() {
   }
 
   const [isMobile, setIsMobile] = useState(false)
+  const [showContent, setShowContent] = useState(false)
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 900)
     checkMobile()
     window.addEventListener('resize', checkMobile, { passive: true })
-    return () => window.removeEventListener('resize', checkMobile)
+
+    const handleHero1Ended = () => setShowContent(true)
+    window.addEventListener('kevdev:hero1Ended', handleHero1Ended)
+    
+    // Safety fallback timer if video is instant or blocked
+    const timer = setTimeout(() => setShowContent(true), 3200)
+
+    return () => {
+      window.removeEventListener('resize', checkMobile)
+      window.removeEventListener('kevdev:hero1Ended', handleHero1Ended)
+      clearTimeout(timer)
+    }
   }, [])
 
   return (
@@ -232,8 +244,8 @@ export default function Hero() {
       <motion.div
         aria-hidden
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: T.glow, duration: 1.4 }}
+        animate={{ opacity: showContent ? 1 : 0 }}
+        transition={{ delay: 0.2, duration: 1.4 }}
         style={{
           position: 'fixed', top: 0, left: 0,
           width: 640, height: 640, borderRadius: '50%',
@@ -246,6 +258,12 @@ export default function Hero() {
 
       {/* ── Content — fades + rises on scroll ─────────────────────── */}
       <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{
+          opacity: showContent ? 1 : 0,
+          y: showContent ? 0 : 20,
+        }}
+        transition={{ duration: 0.8, ease: EASE }}
         style={{
           position: 'relative', zIndex: 10,
           flex: 1,
@@ -254,6 +272,7 @@ export default function Hero() {
           padding: `clamp(10rem, 16vh, 15rem) var(--gutter) clamp(2.5rem, 4vw, 3.5rem)`,
           opacity: contentOpacity,
           y: contentY,
+          pointerEvents: showContent ? 'auto' : 'none',
         }}
       >
         {/* Headline — CodePen Blur Emerge staggered animation */}

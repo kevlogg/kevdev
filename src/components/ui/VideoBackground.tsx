@@ -1,13 +1,80 @@
 'use client'
 
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 
 const FRAME_COUNT = 240
 
 export default function VideoBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const videoRef = useRef<HTMLVideoElement>(null)
   const imagesRef = useRef<HTMLImageElement[]>([])
+  const [isHero1Ended, setIsHero1Ended] = useState(false)
+  const [hero1Opacity, setHero1Opacity] = useState(1)
 
+  useEffect(() => {
+    // 1. Lock scroll initially while hero1 is playing
+    const lenis = (window as any).__lenis
+    if (lenis) lenis.stop()
+    document.body.style.overflow = 'hidden'
+
+    let endedHandled = false
+    const handleHero1Ended = () => {
+      if (endedHandled) return
+      endedHandled = true
+
+      // Pause hero1 video on last frame
+      if (videoRef.current) {
+        videoRef.current.pause()
+      }
+
+      setIsHero1Ended(true)
+
+      // Fade out hero1 video element to smoothly reveal hero2 canvas underneath
+      setTimeout(() => {
+        setHero1Opacity(0)
+      }, 100)
+
+      // Unlock scroll and notify application
+      if ((window as any).__lenis) {
+        ;(window as any).__lenis.start()
+      }
+      document.body.style.overflow = ''
+      window.dispatchEvent(new CustomEvent('kevdev:hero1Ended'))
+    }
+
+    const video = videoRef.current
+    if (video) {
+      video.onended = handleHero1Ended
+      // Safeguard for video stall or end detection
+      video.onended = handleHero1Ended
+      const checkEnd = () => {
+        if (video.duration && video.currentTime >= video.duration - 0.08) {
+          handleHero1Ended()
+        }
+      }
+      video.addEventListener('timeupdate', checkEnd)
+      
+      // Fallback timer in case autoplay is restricted or video takes longer
+      const fallbackTimer = setTimeout(() => {
+        handleHero1Ended()
+      }, 4000)
+
+      // Try playing video explicitly
+      video.play().catch(() => {
+        // If autoplay fails, release lock gracefully
+        handleHero1Ended()
+      })
+
+      return () => {
+        video.removeEventListener('timeupdate', checkEnd)
+        clearTimeout(fallbackTimer)
+      }
+    } else {
+      handleHero1Ended()
+    }
+  }, [])
+
+  // Canvas frame scrubbing engine for hero2
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
@@ -23,7 +90,7 @@ export default function VideoBackground() {
     const images: HTMLImageElement[] = []
     imagesRef.current = images
 
-    // 1. Load initial frame 0 immediately for instant 0-latency FCP / LCP
+    // 1. Load initial frame 1 immediately for instant 0-latency handoff
     const img0 = new Image()
     img0.src = `/frames/frame-0001.jpg`
     img0.onload = () => {
@@ -33,7 +100,7 @@ export default function VideoBackground() {
       // 2. Progressive idle-batch loading for remaining frames
       let nextFrame = 1
       const loadBatch = () => {
-        const batchEnd = Math.min(FRAME_COUNT, nextFrame + 15)
+        const batchEnd = Math.min(FRAME_COUNT, nextFrame + 20)
         for (let i = nextFrame; i < batchEnd; i++) {
           const img = new Image()
           const frameNum = String(i + 1).padStart(4, '0')
@@ -43,17 +110,17 @@ export default function VideoBackground() {
         nextFrame = batchEnd
         if (nextFrame < FRAME_COUNT) {
           if ('requestIdleCallback' in window) {
-            requestIdleCallback(loadBatch, { timeout: 2000 })
+            requestIdleCallback(loadBatch, { timeout: 1500 })
           } else {
-            setTimeout(loadBatch, 60)
+            setTimeout(loadBatch, 50)
           }
         }
       }
 
       if ('requestIdleCallback' in window) {
-        requestIdleCallback(loadBatch, { timeout: 1000 })
+        requestIdleCallback(loadBatch, { timeout: 500 })
       } else {
-        setTimeout(loadBatch, 100)
+        setTimeout(loadBatch, 60)
       }
     }
 
@@ -96,7 +163,7 @@ export default function VideoBackground() {
       const fraction = clamped - floorIdx
 
       const imgA = images[floorIdx] || images[0]
-      const imgB = images[ceilIdx]  || imgA
+      const imgB = images[ceilIdx] || imgA
 
       const readyA = imgA && imgA.complete && imgA.naturalWidth > 0
       const readyB = imgB && imgB.complete && imgB.naturalWidth > 0
@@ -162,27 +229,62 @@ export default function VideoBackground() {
       <div
         aria-hidden
         style={{
-          position: 'fixed', inset: 0, zIndex: 0,
-          overflow: 'hidden', backgroundColor: '#0c0f17',
+          position: 'fixed',
+          inset: 0,
+          zIndex: 0,
+          overflow: 'hidden',
+          backgroundColor: '#0c0f17',
           pointerEvents: 'none',
         }}
       >
+        {/* hero2 Frame Canvas Background */}
         <canvas
           ref={canvasRef}
           style={{ position: 'absolute', inset: 0, display: 'block' }}
+        />
+
+        {/* hero1 Intro Video Overlay */}
+        <video
+          ref={videoRef}
+          src="/hero1.mp4"
+          autoPlay
+          muted
+          playsInline
+          preload="auto"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            opacity: hero1Opacity,
+            transition: 'opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1)',
+            pointerEvents: 'none',
+            display: hero1Opacity === 0 ? 'none' : 'block',
+          }}
         />
       </div>
 
       {/* ── Soft vignette & top gradient ── */}
       <div aria-hidden style={{ position: 'fixed', inset: 0, zIndex: 1, pointerEvents: 'none' }}>
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: 'radial-gradient(ellipse 95% 95% at 50% 50%, rgba(12,15,23,0.2) 0%, rgba(12,15,23,0.65) 100%)'
-        }} />
-        <div style={{
-          position: 'absolute', top: 0, left: 0, right: 0, height: 160,
-          background: 'gradient(to bottom, rgba(12,15,23,0.7) 0%, transparent 100%)'
-        }} />
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background:
+              'radial-gradient(ellipse 95% 95% at 50% 50%, rgba(12,15,23,0.2) 0%, rgba(12,15,23,0.65) 100%)',
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: 160,
+            background: 'linear-gradient(to bottom, rgba(12,15,23,0.7) 0%, transparent 100%)',
+          }}
+        />
       </div>
     </>
   )
