@@ -21,34 +21,49 @@ const IntroContext = createContext<IntroContextType>({
 
 export function IntroProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-  
-  // Check if home page
-  const isHomePage = !pathname || pathname === '/' || pathname === '/es' || pathname === '/en' || pathname === '/pt'
-  
+  const isHomePage =
+    !pathname || pathname === '/' || /^\/(es|en|pt)\/?$/.test(pathname)
+
   const [phase, setPhase] = useState<IntroPhase>(isHomePage ? 'INTRO_PLAYING' : 'SCROLLING')
 
-  // Listen for user scroll when in INTRO_ENDED phase
+  // Lock scroll during hero1 playback
   useEffect(() => {
-    if (phase === 'INTRO_ENDED') {
-      const handleScroll = () => {
-        if (window.scrollY > 5) {
-          setPhase('SCROLLING')
-        }
-      }
+    if (phase === 'INTRO_PLAYING') {
+      document.body.style.overflow = 'hidden'
+      document.documentElement.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+      document.documentElement.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+      document.documentElement.style.overflow = ''
+    }
+  }, [phase])
 
-      const handleTouch = () => {
-        if (window.scrollY > 2) {
-          setPhase('SCROLLING')
-        }
-      }
+  // When INTRO_ENDED, listen for first scroll → SCROLLING
+  useEffect(() => {
+    if (phase !== 'INTRO_ENDED') return
 
-      window.addEventListener('scroll', handleScroll, { passive: true })
-      window.addEventListener('touchmove', handleTouch, { passive: true })
+    const onScroll = () => {
+      if (window.scrollY > 5) setPhase('SCROLLING')
+    }
+    const onWheel = () => {
+      // Even a tiny wheel event means user tried to scroll
+      setPhase('SCROLLING')
+    }
+    const onTouch = () => {
+      if (window.scrollY > 2) setPhase('SCROLLING')
+    }
 
-      return () => {
-        window.removeEventListener('scroll', handleScroll)
-        window.removeEventListener('touchmove', handleTouch)
-      }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('wheel', onWheel, { passive: true })
+    window.addEventListener('touchmove', onTouch, { passive: true })
+
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('wheel', onWheel)
+      window.removeEventListener('touchmove', onTouch)
     }
   }, [phase])
 

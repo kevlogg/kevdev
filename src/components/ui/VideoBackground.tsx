@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useCallback } from 'react'
 import { useIntro } from '@/context/IntroContext'
 
 const FRAME_COUNT = 240
@@ -8,236 +8,199 @@ const FRAME_COUNT = 240
 export default function VideoBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
-  const imagesRef = useRef<HTMLImageElement[]>([])
+  const imagesRef = useRef<(HTMLImageElement | null)[]>([])
+  const frameStateRef = useRef({ current: 0, target: 0, velocity: 0, raf: 0, looping: false })
   const { phase, setPhase } = useIntro()
 
+  // ─── hero1 intro playback ───────────────────────────────────────────────────
   useEffect(() => {
     const video = videoRef.current
-    if (!video) return
+    if (!video || phase !== 'INTRO_PLAYING') return
 
-    if (phase === 'INTRO_PLAYING') {
-      const lenis = (window as any).__lenis
-      if (lenis) lenis.stop()
-      document.body.style.overflow = 'hidden'
+    let settled = false
+    const done = () => {
+      if (settled) return
+      settled = true
+      setPhase('INTRO_ENDED')
+    }
 
-      let endedHandled = false
-      const handleHero1Ended = () => {
-        if (endedHandled) return
-        endedHandled = true
+    // Make sure all mute attributes are set (browser policy)
+    video.muted = true
+    video.volume = 0
+    video.setAttribute('muted', '')
+    video.setAttribute('playsinline', '')
 
-        try {
-          video.pause()
-        } catch {}
+    video.addEventListener('ended', done, { once: true })
+    // Safety net: if the video somehow stalls >30s, proceed anyway
+    const safety = setTimeout(done, 30_000)
 
-        setPhase('INTRO_ENDED')
+    const tryPlay = () => {
+      video
+        .play()
+        .then(() => {
+          // Playing fine — wait for 'ended' event
+        })
+        .catch(() => {
+          // Autoplay blocked: show static poster and move on after 1 frame so
+          // the user at least sees the poster before content appears.
+          requestAnimationFrame(done)
+        })
+    }
 
-        if ((window as any).__lenis) {
-          ;(window as any).__lenis.start()
-        }
-        document.body.style.overflow = ''
-      }
+    if (video.readyState >= 2) {
+      tryPlay()
+    } else {
+      video.load()
+      video.addEventListener('canplay', tryPlay, { once: true })
+    }
 
-      video.muted = true
-      video.defaultMuted = true
-      video.playsInline = true
-      video.volume = 0
-      video.setAttribute('muted', '')
-      video.setAttribute('playsinline', '')
+    return () => {
+      clearTimeout(safety)
+      video.removeEventListener('ended', done)
+      video.removeEventListener('canplay', tryPlay)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase])
 
-      video.onended = handleHero1Ended
+  // ─── hero2 canvas frame scrubber ────────────────────────────────────────────
+  const renderFrame = useCallback((framePos: number, ctx: CanvasRenderingContext2D) => {
+    const images = imagesRef.current
+    const clamped = Math.max(0, Math.min(FRAME_COUNT - 1, framePos))
+    const floorIdx = Math.floor(clamped)
+    const ceilIdx = Math.min(FRAME_COUNT - 1, floorIdx + 1)
+    const fraction = clamped - floorIdx
 
-      const checkEnd = () => {
-        if (
-          video.duration > 1 &&
-          video.currentTime > 1 &&
-          video.currentTime >= video.duration - 0.15
-        ) {
-          handleHero1Ended()
-        }
-      }
-      video.addEventListener('timeupdate', checkEnd)
+    const imgA = images[floorIdx]
+    const imgB = images[ceilIdx]
 
-      // Fallback timer if video takes longer than 4.5s
-      const fallbackTimer = setTimeout(() => {
-        handleHero1Ended()
-      }, 4500)
+    if (imgA && imgA.complete && imgA.naturalWidth > 0) {
+      const w = ctx.canvas.width / (window.devicePixelRatio || 1)
+      const h = ctx.canvas.height / (window.devicePixelRatio || 1)
+      const ratio = imgA.naturalWidth / imgA.naturalHeight
+      const cr = w / h
+      const rW = cr > ratio ? w : h * ratio
+      const rH = cr > ratio ? w / ratio : h
+      const ox = (w - rW) / 2
+      const oy = (h - rH) / 2
 
-      const attemptPlay = () => {
-        const playPromise = video.play()
-        if (playPromise !== undefined) {
-          playPromise.catch((err) => {
-            console.warn('Video play fallback:', err)
-            handleHero1Ended()
-          })
-        }
-      }
+      ctx.globalAlpha = 1
+      ctx.drawImage(imgA, ox, oy, rW, rH)
 
-      if (video.readyState >= 2) {
-        attemptPlay()
-      } else {
-        video.oncanplay = attemptPlay
-        attemptPlay()
-      }
-
-      return () => {
-        video.removeEventListener('timeupdate', checkEnd)
-        clearTimeout(fallbackTimer)
+      if (imgB && imgB.complete && imgB.naturalWidth > 0 && fraction > 0.01 && ceilIdx !== floorIdx) {
+        ctx.globalAlpha = fraction
+        ctx.drawImage(imgB, ox, oy, rW, rH)
+        ctx.globalAlpha = 1
       }
     }
-  }, [phase, setPhase])
+  }, [])
 
-  // Canvas frame scrubbing engine for hero2
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d', { alpha: false })
     if (!ctx) return
 
-    let animationFrameId: number
-    let currentFrame = 0
-    let targetFrame = 0
-    let velocity = 0
-    let isLooping = false
+    const state = frameStateRef.current
+    const images = imagesRef.current
 
-    const images: HTMLImageElement[] = []
-    imagesRef.current = images
-
-    // Load initial frame 1 immediately
-    const img0 = new Image()
-    img0.src = `/frames/frame-0001.jpg`
-    img0.onload = () => {
-      images[0] = img0
-      renderFrame(0)
-
-      // Progressive idle-batch loading for remaining frames
-      let nextFrame = 1
-      const loadBatch = () => {
-        const batchEnd = Math.min(FRAME_COUNT, nextFrame + 20)
-        for (let i = nextFrame; i < batchEnd; i++) {
-          const img = new Image()
-          const frameNum = String(i + 1).padStart(4, '0')
-          img.src = `/frames/frame-${frameNum}.jpg`
-          img.onload = () => { images[i] = img }
-        }
-        nextFrame = batchEnd
-        if (nextFrame < FRAME_COUNT) {
-          if ('requestIdleCallback' in window) {
-            requestIdleCallback(loadBatch, { timeout: 1500 })
-          } else {
-            setTimeout(loadBatch, 50)
-          }
-        }
-      }
-
-      if ('requestIdleCallback' in window) {
-        requestIdleCallback(loadBatch, { timeout: 500 })
-      } else {
-        setTimeout(loadBatch, 60)
-      }
-    }
-
-    const resizeCanvas = () => {
+    // Resize canvas to fill viewport at device pixel ratio
+    const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2)
       canvas.width = window.innerWidth * dpr
       canvas.height = window.innerHeight * dpr
       canvas.style.width = `${window.innerWidth}px`
       canvas.style.height = `${window.innerHeight}px`
       ctx.scale(dpr, dpr)
-      renderFrame(currentFrame)
+      renderFrame(state.current, ctx)
     }
 
-    const getDrawDimensions = (img: HTMLImageElement) => {
-      const w = window.innerWidth
-      const h = window.innerHeight
-      const imgRatio = (img.naturalWidth || 1920) / (img.naturalHeight || 1080)
-      const canvasRatio = w / h
-      let renderW = w
-      let renderH = h
-      let offsetX = 0
-      let offsetY = 0
+    // Animation loop with spring easing
+    const loop = () => {
+      const dist = state.target - state.current
+      state.velocity += dist * 0.12
+      state.velocity *= 0.78
+      state.current += state.velocity
 
-      if (canvasRatio > imgRatio) {
-        renderH = w / imgRatio
-        offsetY = (h - renderH) / 2
+      if (Math.abs(state.velocity) > 0.001 || Math.abs(dist) > 0.001) {
+        renderFrame(state.current, ctx)
+        state.raf = requestAnimationFrame(loop)
       } else {
-        renderW = h * imgRatio
-        offsetX = (w - renderW) / 2
-      }
-
-      return { offsetX, offsetY, renderW, renderH }
-    }
-
-    // Sub-frame liquid blending engine
-    const renderFrame = (framePos: number) => {
-      const clamped = Math.max(0, Math.min(FRAME_COUNT - 1, framePos))
-      const floorIdx = Math.floor(clamped)
-      const ceilIdx = Math.min(FRAME_COUNT - 1, floorIdx + 1)
-      const fraction = clamped - floorIdx
-
-      const imgA = images[floorIdx] || images[0]
-      const imgB = images[ceilIdx] || imgA
-
-      const readyA = imgA && imgA.complete && imgA.naturalWidth > 0
-      const readyB = imgB && imgB.complete && imgB.naturalWidth > 0
-
-      if (readyA) {
-        const { offsetX, offsetY, renderW, renderH } = getDrawDimensions(imgA)
-
-        // Draw primary frame
-        ctx.globalAlpha = 1
-        ctx.drawImage(imgA, offsetX, offsetY, renderW, renderH)
-
-        // Sub-frame crossfade blend
-        if (readyB && fraction > 0.01 && ceilIdx !== floorIdx && imgB !== imgA) {
-          ctx.globalAlpha = fraction
-          ctx.drawImage(imgB, offsetX, offsetY, renderW, renderH)
-          ctx.globalAlpha = 1
-        }
+        state.looping = false
       }
     }
 
     const startLoop = () => {
-      if (!isLooping) {
-        isLooping = true
-        animationFrameId = requestAnimationFrame(loop)
-      }
-    }
-
-    const loop = () => {
-      const distance = targetFrame - currentFrame
-      velocity += distance * 0.12
-      velocity *= 0.78
-      currentFrame += velocity
-
-      if (Math.abs(velocity) > 0.0001 || Math.abs(distance) > 0.0005) {
-        renderFrame(currentFrame)
-        animationFrameId = requestAnimationFrame(loop)
-      } else {
-        isLooping = false
+      if (!state.looping) {
+        state.looping = true
+        state.raf = requestAnimationFrame(loop)
       }
     }
 
     const onScroll = () => {
       const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight)
       const progress = Math.min(1, Math.max(0, window.scrollY / maxScroll))
-      targetFrame = progress * (FRAME_COUNT - 1)
+      state.target = progress * (FRAME_COUNT - 1)
       startLoop()
     }
 
+    // Progressive image loading — load first frame immediately, rest in idle batches
+    const loadFrames = () => {
+      const loadOne = (i: number) => {
+        if (images[i]) return
+        const img = new Image()
+        const num = String(i + 1).padStart(4, '0')
+        img.src = `/frames/frame-${num}.jpg`
+        img.onload = () => { images[i] = img }
+        img.onerror = () => { images[i] = images[0] ?? null }
+      }
+
+      // Frame 0 first
+      const img0 = new Image()
+      img0.src = '/frames/frame-0001.jpg'
+      img0.onload = () => {
+        images[0] = img0
+        renderFrame(0, ctx)
+
+        let next = 1
+        const batch = () => {
+          const end = Math.min(FRAME_COUNT, next + 20)
+          for (let i = next; i < end; i++) loadOne(i)
+          next = end
+          if (next < FRAME_COUNT) {
+            if ('requestIdleCallback' in window) {
+              requestIdleCallback(batch, { timeout: 2000 })
+            } else {
+              setTimeout(batch, 60)
+            }
+          }
+        }
+
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(batch, { timeout: 800 })
+        } else {
+          setTimeout(batch, 80)
+        }
+      }
+    }
+
+    resize()
+    loadFrames()
     window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('resize', resizeCanvas, { passive: true })
-    resizeCanvas()
-    onScroll()
+    window.addEventListener('resize', resize, { passive: true })
 
     return () => {
-      cancelAnimationFrame(animationFrameId)
+      cancelAnimationFrame(state.raf)
       window.removeEventListener('scroll', onScroll)
-      window.removeEventListener('resize', resizeCanvas)
+      window.removeEventListener('resize', resize)
     }
-  }, [])
+  }, [renderFrame])
+
+  // ─── Derived visibility ─────────────────────────────────────────────────────
+  const introVisible = phase === 'INTRO_PLAYING' || phase === 'INTRO_ENDED'
 
   return (
     <>
+      {/* ── hero2 canvas background (always rendered, z:0) ── */}
       <div
         aria-hidden
         style={{
@@ -249,23 +212,19 @@ export default function VideoBackground() {
           pointerEvents: 'none',
         }}
       >
-        {/* hero2 Frame Canvas Background */}
-        <canvas
-          ref={canvasRef}
-          style={{ position: 'absolute', inset: 0, display: 'block' }}
-        />
+        <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, display: 'block' }} />
       </div>
 
-      {/* hero1 Intro Fullscreen Overlay */}
+      {/* ── hero1 fullscreen intro overlay ── */}
       <div
+        aria-hidden
         style={{
           position: 'fixed',
           inset: 0,
           zIndex: phase === 'INTRO_PLAYING' ? 99999 : 2,
-          opacity: phase === 'SCROLLING' ? 0 : 1,
-          pointerEvents: phase === 'SCROLLING' ? 'none' : 'auto',
-          transition: 'opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1)',
-          display: phase === 'SCROLLING' ? 'none' : 'block',
+          opacity: introVisible ? 1 : 0,
+          pointerEvents: introVisible ? 'auto' : 'none',
+          transition: 'opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1)',
           backgroundColor: '#0c0f17',
         }}
       >
@@ -281,18 +240,19 @@ export default function VideoBackground() {
             width: '100%',
             height: '100%',
             objectFit: 'cover',
+            display: 'block',
           }}
         />
       </div>
 
-      {/* ── Soft vignette & top gradient ── */}
+      {/* ── Vignette + top gradient overlay ── */}
       <div aria-hidden style={{ position: 'fixed', inset: 0, zIndex: 1, pointerEvents: 'none' }}>
         <div
           style={{
             position: 'absolute',
             inset: 0,
             background:
-              'radial-gradient(ellipse 95% 95% at 50% 50%, rgba(12,15,23,0.2) 0%, rgba(12,15,23,0.65) 100%)',
+              'radial-gradient(ellipse 95% 95% at 50% 50%, rgba(12,15,23,0.18) 0%, rgba(12,15,23,0.62) 100%)',
           }}
         />
         <div
@@ -302,7 +262,7 @@ export default function VideoBackground() {
             left: 0,
             right: 0,
             height: 160,
-            background: 'linear-gradient(to bottom, rgba(12,15,23,0.7) 0%, transparent 100%)',
+            background: 'linear-gradient(to bottom, rgba(12,15,23,0.65) 0%, transparent 100%)',
           }}
         />
       </div>
