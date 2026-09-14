@@ -205,8 +205,8 @@ export default function Navbar() {
                 maxHeight: 48,
                 display: 'block',
                 objectFit: 'contain',
-                borderRadius: '6px',
-                filter: 'drop-shadow(0 4px 16px rgba(0,229,255,0.35)) brightness(1.1)',
+                mixBlendMode: 'screen',
+                filter: 'brightness(1.15)',
               }} 
             />
           </motion.a>
