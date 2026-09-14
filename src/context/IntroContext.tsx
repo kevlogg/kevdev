@@ -26,14 +26,20 @@ export function IntroProvider({ children }: { children: React.ReactNode }) {
 
   const [phase, setPhase] = useState<IntroPhase>(isHomePage ? 'INTRO_PLAYING' : 'SCROLLING')
 
-  // Lock scroll during hero1 playback
+  // Lock/unlock scroll during hero1
   useEffect(() => {
     if (phase === 'INTRO_PLAYING') {
       document.body.style.overflow = 'hidden'
       document.documentElement.style.overflow = 'hidden'
+      // Also stop Lenis if it's running
+      const lenis = (window as any).__lenis
+      if (lenis) lenis.stop()
     } else {
       document.body.style.overflow = ''
       document.documentElement.style.overflow = ''
+      // Resume Lenis
+      const lenis = (window as any).__lenis
+      if (lenis) lenis.start()
     }
     return () => {
       document.body.style.overflow = ''
@@ -41,29 +47,46 @@ export function IntroProvider({ children }: { children: React.ReactNode }) {
     }
   }, [phase])
 
-  // When INTRO_ENDED, listen for first scroll → SCROLLING
+  // INTRO_ENDED → wait for any scroll attempt → SCROLLING
   useEffect(() => {
     if (phase !== 'INTRO_ENDED') return
 
-    const onScroll = () => {
-      if (window.scrollY > 5) setPhase('SCROLLING')
-    }
-    const onWheel = () => {
-      // Even a tiny wheel event means user tried to scroll
-      setPhase('SCROLLING')
-    }
-    const onTouch = () => {
-      if (window.scrollY > 2) setPhase('SCROLLING')
+    const goScrolling = () => setPhase('SCROLLING')
+
+    // Listen to Lenis scroll events (fires even before scrollY updates)
+    let lenisUnsub: (() => void) | null = null
+    const tryHookLenis = () => {
+      const lenis = (window as any).__lenis
+      if (lenis && typeof lenis.on === 'function') {
+        lenis.on('scroll', goScrolling)
+        lenisUnsub = () => lenis.off('scroll', goScrolling)
+        return true
+      }
+      return false
     }
 
+    // Also listen to native wheel/touch as fallback
+    const onWheel = () => goScrolling()
+    const onTouch = () => { if (window.scrollY > 2) goScrolling() }
+    const onScroll = () => { if (window.scrollY > 5) goScrolling() }
+
+    window.addEventListener('wheel', onWheel, { passive: true, once: true })
+    window.addEventListener('touchmove', onTouch, { passive: true, once: true })
     window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('wheel', onWheel, { passive: true })
-    window.addEventListener('touchmove', onTouch, { passive: true })
+
+    if (!tryHookLenis()) {
+      // Lenis might not be ready yet
+      let attempts = 0
+      const retry = setInterval(() => {
+        if (tryHookLenis() || ++attempts > 15) clearInterval(retry)
+      }, 200)
+    }
 
     return () => {
-      window.removeEventListener('scroll', onScroll)
+      lenisUnsub?.()
       window.removeEventListener('wheel', onWheel)
       window.removeEventListener('touchmove', onTouch)
+      window.removeEventListener('scroll', onScroll)
     }
   }, [phase])
 
