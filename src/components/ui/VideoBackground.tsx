@@ -1,6 +1,7 @@
 'use client'
 
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect } from 'react'
+import { useIntro } from '@/context/IntroContext'
 
 const FRAME_COUNT = 240
 
@@ -8,45 +9,34 @@ export default function VideoBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
   const imagesRef = useRef<HTMLImageElement[]>([])
-  const [isHero1Ended, setIsHero1Ended] = useState(false)
-  const [hero1Opacity, setHero1Opacity] = useState(1)
+  const { phase, setPhase } = useIntro()
 
   useEffect(() => {
     const video = videoRef.current
+    if (!video) return
 
-    // Lock scroll initially while hero1 is playing
-    const lenis = (window as any).__lenis
-    if (lenis) lenis.stop()
-    document.body.style.overflow = 'hidden'
+    if (phase === 'INTRO_PLAYING') {
+      const lenis = (window as any).__lenis
+      if (lenis) lenis.stop()
+      document.body.style.overflow = 'hidden'
 
-    let endedHandled = false
-    const handleHero1Ended = () => {
-      if (endedHandled) return
-      endedHandled = true
+      let endedHandled = false
+      const handleHero1Ended = () => {
+        if (endedHandled) return
+        endedHandled = true
 
-      // Pause hero1 video on its last frame
-      if (video) {
         try {
           video.pause()
         } catch {}
+
+        setPhase('INTRO_ENDED')
+
+        if ((window as any).__lenis) {
+          ;(window as any).__lenis.start()
+        }
+        document.body.style.overflow = ''
       }
 
-      setIsHero1Ended(true)
-
-      // Fade out hero1 video element to smoothly reveal hero2 canvas underneath
-      setTimeout(() => {
-        setHero1Opacity(0)
-      }, 400)
-
-      // Unlock scroll and notify application
-      if ((window as any).__lenis) {
-        ;(window as any).__lenis.start()
-      }
-      document.body.style.overflow = ''
-      window.dispatchEvent(new CustomEvent('kevdev:hero1Ended'))
-    }
-
-    if (video) {
       video.muted = true
       video.defaultMuted = true
       video.playsInline = true
@@ -54,7 +44,6 @@ export default function VideoBackground() {
       video.onended = handleHero1Ended
 
       const checkEnd = () => {
-        // ONLY trigger end if duration is valid and video has actually played past 1 second
         if (
           video.duration > 1 &&
           video.currentTime > 1 &&
@@ -65,16 +54,14 @@ export default function VideoBackground() {
       }
       video.addEventListener('timeupdate', checkEnd)
 
-      // Safeguard timeout only if video takes longer than 6s (video is ~3s)
       const fallbackTimer = setTimeout(() => {
         handleHero1Ended()
-      }, 6000)
+      }, 5000)
 
-      // Attempt explicit play
       const playPromise = video.play()
       if (playPromise !== undefined) {
         playPromise.catch((err) => {
-          console.warn('Hero1 autoplay blocked by browser policy:', err)
+          console.warn('Autoplay fallback:', err)
           handleHero1Ended()
         })
       }
@@ -83,10 +70,8 @@ export default function VideoBackground() {
         video.removeEventListener('timeupdate', checkEnd)
         clearTimeout(fallbackTimer)
       }
-    } else {
-      handleHero1Ended()
     }
-  }, [])
+  }, [phase, setPhase])
 
   // Canvas frame scrubbing engine for hero2
   useEffect(() => {
@@ -104,14 +89,14 @@ export default function VideoBackground() {
     const images: HTMLImageElement[] = []
     imagesRef.current = images
 
-    // 1. Load initial frame 1 immediately for instant 0-latency handoff
+    // Load initial frame 1 immediately
     const img0 = new Image()
     img0.src = `/frames/frame-0001.jpg`
     img0.onload = () => {
       images[0] = img0
       renderFrame(0)
 
-      // 2. Progressive idle-batch loading for remaining frames
+      // Progressive idle-batch loading for remaining frames
       let nextFrame = 1
       const loadBatch = () => {
         const batchEnd = Math.min(FRAME_COUNT, nextFrame + 20)
@@ -238,6 +223,8 @@ export default function VideoBackground() {
     }
   }, [])
 
+  const isIntroOverlayVisible = phase === 'INTRO_PLAYING' || phase === 'INTRO_ENDED'
+
   return (
     <>
       <div
@@ -256,8 +243,21 @@ export default function VideoBackground() {
           ref={canvasRef}
           style={{ position: 'absolute', inset: 0, display: 'block' }}
         />
+      </div>
 
-        {/* hero1 Intro Video Overlay */}
+      {/* hero1 Intro Fullscreen Overlay */}
+      <div
+        style={{
+          position: 'fixed',
+          inset: 0,
+          zIndex: 99999, // Highest z-index covering all navbar & content during intro
+          opacity: phase === 'SCROLLING' ? 0 : 1,
+          pointerEvents: phase === 'SCROLLING' ? 'none' : 'auto',
+          transition: 'opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1)',
+          display: phase === 'SCROLLING' ? 'none' : 'block',
+          backgroundColor: '#000',
+        }}
+      >
         <video
           ref={videoRef}
           src="/hero1.mp4"
@@ -266,16 +266,9 @@ export default function VideoBackground() {
           playsInline
           preload="auto"
           style={{
-            position: 'absolute',
-            inset: 0,
             width: '100%',
             height: '100%',
             objectFit: 'cover',
-            zIndex: 2,
-            opacity: hero1Opacity,
-            transition: 'opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1)',
-            pointerEvents: 'none',
-            display: hero1Opacity === 0 ? 'none' : 'block',
           }}
         />
       </div>

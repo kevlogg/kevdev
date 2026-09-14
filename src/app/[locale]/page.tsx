@@ -7,16 +7,18 @@ import Projects        from '@/components/sections/Projects'
 import Approach        from '@/components/sections/Approach'
 import Contact         from '@/components/sections/Contact'
 import ClientShell     from '@/components/ui/ClientShell'
+import PageContent     from '@/components/layout/PageContent'
+import { IntroProvider } from '@/context/IntroContext'
 
 export default function Home() {
   return (
-    <>
+    <IntroProvider>
       <ClientShell />
 
       <div className="grain"    aria-hidden />
       <div className="vignette" aria-hidden />
 
-      <div style={{ position: 'relative', zIndex: 10 }}>
+      <PageContent>
         <Navbar />
         <main>
           <Hero />
@@ -27,7 +29,7 @@ export default function Home() {
           <Contact />
         </main>
         <Footer />
-      </div>
-    </>
+      </PageContent>
+    </IntroProvider>
   )
 }

@@ -6,6 +6,7 @@ import { useRouter, usePathname } from '@/i18n/navigation'
 import { routing } from '@/i18n/routing'
 import { motion, AnimatePresence } from 'framer-motion'
 import LanguageSwitcher from '@/components/ui/LanguageSwitcher'
+import { useIntro } from '@/context/IntroContext'
 
 /* ─── Data ──────────────────────────────────────────────────────────── */
 const CONTACT_HREFS = [
@@ -84,6 +85,7 @@ const footerV = {
 export default function Navbar() {
   const t = useTranslations('nav')
   const locale = useLocale()
+  const { phase } = useIntro()
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen]         = useState(false)
   const [hovered, setHovered]   = useState<number | null>(null)
@@ -168,7 +170,9 @@ export default function Navbar() {
       {/* ── Fixed bar ─────────────────────────────────────────────── */}
       <header style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
-        transition: 'background 0.45s var(--ease-expo), border-color 0.45s',
+        opacity: phase === 'SCROLLING' ? 1 : 0,
+        pointerEvents: phase === 'SCROLLING' ? 'auto' : 'none',
+        transition: 'opacity 0.6s var(--ease-expo), background 0.45s var(--ease-expo), border-color 0.45s',
         background: open
           ? 'transparent'
           : scrolled ? 'rgba(18,18,18,0.72)' : 'transparent',
@@ -177,7 +181,6 @@ export default function Navbar() {
         borderBottom: !open && scrolled
           ? '1px solid rgba(255,255,255,0.08)'
           : '1px solid transparent',
-        pointerEvents: 'none',
       }}>
         <nav className="site-container" style={{
           height: 76, display: 'flex', alignItems: 'center', justifyContent: 'space-between',

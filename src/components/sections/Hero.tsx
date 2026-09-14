@@ -5,6 +5,7 @@ import { motion, useMotionValue, useSpring, useTransform, useScroll } from 'fram
 import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import MacbookHero from './MacbookHero'
+import { useIntro } from '@/context/IntroContext'
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
@@ -163,6 +164,8 @@ function OkawaTextAnimation({
 export default function Hero() {
   const t = useTranslations('hero')
   const sectionRef = useRef<HTMLElement>(null)
+  const { phase } = useIntro()
+  const showContent = phase === 'SCROLLING'
 
   const mouseX  = useMotionValue(0)
   const mouseY  = useMotionValue(0)
@@ -172,14 +175,11 @@ export default function Hero() {
   useEffect(() => {
     const fn = (e: MouseEvent) => { mouseX.set(e.clientX); mouseY.set(e.clientY) }
     window.addEventListener('mousemove', fn, { passive: true })
-    // Pageview is already tracked by AnalyticsTracker.tsx globally — no duplicate needed here
     return () => window.removeEventListener('mousemove', fn)
   }, [mouseX, mouseY])
 
   function trackBtnClick(buttonId: string, label: string) {
     try {
-      // AnalyticsTracker handles global button clicks via data-analytics-id
-      // Keep this function for explicit CTA tracking with known IDs
       fetch('/api/analytics/track', {
         method: 'POST',
         keepalive: true,
@@ -209,23 +209,14 @@ export default function Hero() {
   }
 
   const [isMobile, setIsMobile] = useState(false)
-  const [showContent, setShowContent] = useState(false)
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 900)
     checkMobile()
     window.addEventListener('resize', checkMobile, { passive: true })
 
-    const handleHero1Ended = () => setShowContent(true)
-    window.addEventListener('kevdev:hero1Ended', handleHero1Ended)
-    
-    // Safety fallback timer if video is blocked or fails
-    const timer = setTimeout(() => setShowContent(true), 6000)
-
     return () => {
       window.removeEventListener('resize', checkMobile)
-      window.removeEventListener('kevdev:hero1Ended', handleHero1Ended)
-      clearTimeout(timer)
     }
   }, [])
 
