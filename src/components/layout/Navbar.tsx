@@ -197,7 +197,7 @@ export default function Navbar() {
             style={{ textDecoration: 'none', position: 'relative', zIndex: 101, display: 'flex', alignItems: 'center', pointerEvents: 'auto' }}
           >
             <img 
-              src="/logo1.jpeg" 
+              src="/logo1-transparent.png" 
               alt="kevdev logo" 
               style={{ 
                 height: 'clamp(36px, 4.5vw, 48px)', 
@@ -205,8 +205,7 @@ export default function Navbar() {
                 maxHeight: 48,
                 display: 'block',
                 objectFit: 'contain',
-                mixBlendMode: 'screen',
-                filter: 'brightness(1.15)',
+                filter: 'brightness(1.4)',
               }} 
             />
           </motion.a>
