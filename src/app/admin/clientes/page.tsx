@@ -3,7 +3,7 @@
 import { useEffect, useState, FormEvent } from 'react'
 import Link from 'next/link'
 import {
-  getClientes, addCliente, updateCliente, addHistorialPago,
+  getClientes, addCliente, updateCliente, deleteCliente, addHistorialPago,
   type Cliente, type DemoEstado, type Situacion,
 } from '@/lib/firestore'
 import { SITUACIONES, SITUACION_COLORS, DEMO_COLORS } from '@/lib/cliente-ui'
@@ -43,15 +43,17 @@ const EMPTY_FORM = {
 }
 
 export default function ClientesPage() {
-  const [clientes,  setClientes]  = useState<Cliente[]>([])
-  const [loading,   setLoading]   = useState(true)
-  const [filter,    setFilter]    = useState<Situacion | 'todos'>('todos')
-  const [showForm,  setShowForm]  = useState(false)
-  const [form,      setForm]      = useState(EMPTY_FORM)
-  const [saving,    setSaving]    = useState(false)
-  const [editing,   setEditing]   = useState<{ id: string; field: string } | null>(null)
-  const [editVal,   setEditVal]   = useState('')
-  const [showPass,  setShowPass]  = useState<Record<string, boolean>>({})
+  const [clientes,       setClientes]       = useState<Cliente[]>([])
+  const [loading,        setLoading]        = useState(true)
+  const [filter,         setFilter]         = useState<Situacion | 'todos'>('todos')
+  const [showForm,       setShowForm]       = useState(false)
+  const [form,           setForm]           = useState(EMPTY_FORM)
+  const [saving,         setSaving]         = useState(false)
+  const [editing,        setEditing]        = useState<{ id: string; field: string } | null>(null)
+  const [editVal,        setEditVal]        = useState('')
+  const [showPass,       setShowPass]       = useState<Record<string, boolean>>({})
+  const [clientToDelete, setClientToDelete] = useState<Cliente | null>(null)
+  const [deleting,       setDeleting]       = useState(false)
 
   useEffect(() => { load() }, [])
 
@@ -60,6 +62,21 @@ export default function ClientesPage() {
     try { setClientes(await getClientes()) }
     catch { /* keep existing */ }
     finally { setLoading(false) }
+  }
+
+  async function handleDelete() {
+    if (!clientToDelete?.id) return
+    setDeleting(true)
+    try {
+      await deleteCliente(clientToDelete.id)
+      setClientes(prev => prev.filter(c => c.id !== clientToDelete.id))
+      setClientToDelete(null)
+    } catch (err) {
+      console.error('Error al eliminar cliente:', err)
+      alert('No se pudo eliminar el cliente. Verificá tu conexión o reintentá nuevamente.')
+    } finally {
+      setDeleting(false)
+    }
   }
 
   async function handleAdd(e: FormEvent) {
@@ -292,8 +309,8 @@ export default function ClientesPage() {
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--color-border)' }}>
-                {['Cliente', 'Demo', 'Situación', 'Plan', 'Pass Admin', 'WSP', 'URL', 'Observaciones'].map(h => (
-                  <th key={h} style={{ padding: '12px 10px', textAlign: 'left', fontFamily: 'var(--font-ui)', fontSize: '0.6875rem', fontWeight: 600, color: 'var(--color-muted)', letterSpacing: '0.08em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
+                {['Cliente', 'Demo', 'Situación', 'Plan', 'Pass Admin', 'WSP', 'URL', 'Observaciones', 'Acciones'].map(h => (
+                  <th key={h} style={{ padding: '12px 10px', textAlign: h === 'Acciones' ? 'center' : 'left', fontFamily: 'var(--font-ui)', fontSize: '0.6875rem', fontWeight: 600, color: 'var(--color-muted)', letterSpacing: '0.08em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
                     {h}
                   </th>
                 ))}
@@ -605,11 +622,124 @@ export default function ClientesPage() {
                       </div>
                     )}
                   </td>
+
+                  {/* Acciones */}
+                  <td style={{ padding: '8px 10px', textAlign: 'center' }}>
+                    <button
+                      type="button"
+                      onClick={e => {
+                        e.stopPropagation()
+                        setClientToDelete(c)
+                      }}
+                      title="Eliminar cliente"
+                      style={{
+                        background: 'rgba(239, 68, 68, 0.1)',
+                        color: '#f87171',
+                        border: '1px solid rgba(239, 68, 68, 0.25)',
+                        borderRadius: 6,
+                        padding: '4px 8px',
+                        fontSize: '0.75rem',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s',
+                      }}
+                      onMouseEnter={e => {
+                        e.currentTarget.style.background = 'rgba(239, 68, 68, 0.25)'
+                        e.currentTarget.style.borderColor = 'rgba(239, 68, 68, 0.5)'
+                      }}
+                      onMouseLeave={e => {
+                        e.currentTarget.style.background = 'rgba(239, 68, 68, 0.1)'
+                        e.currentTarget.style.borderColor = 'rgba(239, 68, 68, 0.25)'
+                      }}
+                    >
+                      🗑️
+                    </button>
+                  </td>
                 </tr>
                 )
               })}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {/* Modal de Confirmación de Eliminación */}
+      {clientToDelete && (
+        <div style={{
+          position: 'fixed', inset: 0, zIndex: 999,
+          background: 'rgba(5, 8, 22, 0.75)', backdropFilter: 'blur(6px)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16,
+        }}>
+          <div style={{
+            background: 'var(--color-depth)', border: '1px solid var(--color-border)',
+            borderRadius: 16, padding: 24, maxWidth: 440, width: '100%',
+            boxShadow: '0 20px 40px rgba(0,0,0,0.5)', display: 'flex', flexDirection: 'column', gap: 16,
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <div style={{
+                width: 42, height: 42, borderRadius: '50%',
+                background: 'rgba(239, 68, 68, 0.15)', border: '1px solid rgba(239, 68, 68, 0.3)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                color: '#f87171', fontSize: '1.25rem', flexShrink: 0,
+              }}>
+                ⚠️
+              </div>
+              <div>
+                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.125rem', fontWeight: 700, color: 'var(--color-star)', margin: 0 }}>
+                  ¿Eliminar cliente?
+                </h3>
+                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.8125rem', color: 'var(--color-muted)', margin: '2px 0 0' }}>
+                  Confirmá si querés eliminar este registro.
+                </p>
+              </div>
+            </div>
+
+            <div style={{
+              background: 'rgba(221,232,255,0.03)', border: '1px solid var(--color-border)',
+              borderRadius: 10, padding: 12, fontFamily: 'var(--font-ui)', fontSize: '0.875rem',
+            }}>
+              <div style={{ color: 'var(--color-muted)', fontSize: '0.75rem', marginBottom: 2 }}>Cliente seleccionado:</div>
+              <strong style={{ color: 'var(--color-star)', fontSize: '1rem' }}>{clientToDelete.nombre}</strong>
+              {clientToDelete.rubro && (
+                <div style={{ color: 'var(--color-faint)', fontSize: '0.75rem', marginTop: 2 }}>
+                  Rubro: {clientToDelete.rubro}
+                </div>
+              )}
+            </div>
+
+            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.8125rem', color: '#f87171', margin: 0, lineHeight: 1.4 }}>
+              Esta acción eliminará de forma permanente al cliente de la base de datos y no se puede deshacer.
+            </p>
+
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 4 }}>
+              <button
+                type="button"
+                disabled={deleting}
+                onClick={() => setClientToDelete(null)}
+                style={{
+                  background: 'transparent', border: '1px solid var(--color-border)',
+                  borderRadius: 8, padding: '8px 16px', color: 'var(--color-muted)',
+                  fontFamily: 'var(--font-ui)', fontSize: '0.875rem', cursor: 'pointer',
+                }}
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                disabled={deleting}
+                onClick={handleDelete}
+                style={{
+                  background: '#ef4444', color: '#ffffff',
+                  border: 'none', borderRadius: 8, padding: '8px 18px',
+                  fontFamily: 'var(--font-ui)', fontSize: '0.875rem', fontWeight: 600,
+                  cursor: deleting ? 'not-allowed' : 'pointer',
+                  opacity: deleting ? 0.7 : 1,
+                  display: 'flex', alignItems: 'center', gap: 6,
+                }}
+              >
+                {deleting ? 'Eliminando...' : 'Sí, eliminar'}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

@@ -100,6 +100,11 @@ export async function updateCliente(
   await updateDoc(doc(db, 'clientes', id), data)
 }
 
+export async function deleteCliente(id: string): Promise<void> {
+  await ensureServerAuth()
+  await deleteDoc(doc(db, 'clientes', id))
+}
+
 /* ─── Checklist ──────────────────────────────────────────────────────── */
 
 export async function getChecklistProgreso(

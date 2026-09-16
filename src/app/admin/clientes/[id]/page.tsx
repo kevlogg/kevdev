@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import {
-  getCliente, updateCliente, getChecklistProgreso, toggleChecklistStep,
+  getCliente, updateCliente, deleteCliente, getChecklistProgreso, toggleChecklistStep,
   getHistorialPagos, addHistorialPago, togglePagoConfirmado, deleteHistorialPago,
   type Cliente, type EstadoCliente, type DemoEstado, type Situacion, type EstadoPago, type HistorialPago,
 } from '@/lib/firestore'
@@ -48,14 +48,30 @@ export default function ClienteDetailPage() {
   const router = useRouter()
   const id = params.id as string
 
-  const [cliente,        setCliente]        = useState<Cliente | null>(null)
-  const [progreso,       setProgreso]       = useState<Record<number, boolean>>({})
-  const [pagos,          setPagos]          = useState<HistorialPago[]>([])
-  const [loading,        setLoading]        = useState(true)
-  const [saving,         setSaving]         = useState(false)
-  const [saved,          setSaved]          = useState(false)
-  const [form,           setForm]           = useState<Partial<Cliente>>({})
-  const [showPass,       setShowPass]       = useState(false)
+  const [cliente,         setCliente]         = useState<Cliente | null>(null)
+  const [progreso,        setProgreso]        = useState<Record<number, boolean>>({})
+  const [pagos,           setPagos]           = useState<HistorialPago[]>([])
+  const [loading,         setLoading]         = useState(true)
+  const [saving,          setSaving]          = useState(false)
+  const [saved,           setSaved]           = useState(false)
+  const [form,            setForm]            = useState<Partial<Cliente>>({})
+  const [showPass,        setShowPass]        = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [deleting,        setDeleting]        = useState(false)
+
+  async function handleDeleteCliente() {
+    if (!cliente?.id) return
+    setDeleting(true)
+    try {
+      await deleteCliente(cliente.id)
+      router.replace('/admin/clientes')
+    } catch (err) {
+      console.error('Error al eliminar cliente:', err)
+      alert('No se pudo eliminar el cliente. Intentalo de nuevo.')
+    } finally {
+      setDeleting(false)
+    }
+  }
   
   // Formulario nuevo pago
   const todayIso = new Date().toISOString().split('T')[0]
@@ -447,6 +463,28 @@ export default function ClienteDetailPage() {
           >
             {ESTADOS.map(e => <option key={e} value={e}>{ESTADO_LABELS[e]}</option>)}
           </select>
+          <button
+            type="button"
+            onClick={() => setShowDeleteModal(true)}
+            title="Eliminar cliente"
+            style={{
+              background: 'rgba(239, 68, 68, 0.1)',
+              color: '#f87171',
+              border: '1px solid rgba(239, 68, 68, 0.3)',
+              borderRadius: 8,
+              padding: '8px 14px',
+              fontFamily: 'var(--font-ui)',
+              fontSize: '0.8125rem',
+              fontWeight: 600,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+              whiteSpace: 'nowrap',
+            }}
+          >
+            🗑️ Eliminar
+          </button>
         </div>
       </div>
 
@@ -865,6 +903,87 @@ export default function ClienteDetailPage() {
           })}
         </div>
       </section>
+
+      {/* Modal de Confirmación de Eliminación */}
+      {showDeleteModal && (
+        <div style={{
+          position: 'fixed', inset: 0, zIndex: 999,
+          background: 'rgba(5, 8, 22, 0.75)', backdropFilter: 'blur(6px)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16,
+        }}>
+          <div style={{
+            background: 'var(--color-depth)', border: '1px solid var(--color-border)',
+            borderRadius: 16, padding: 24, maxWidth: 440, width: '100%',
+            boxShadow: '0 20px 40px rgba(0,0,0,0.5)', display: 'flex', flexDirection: 'column', gap: 16,
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <div style={{
+                width: 42, height: 42, borderRadius: '50%',
+                background: 'rgba(239, 68, 68, 0.15)', border: '1px solid rgba(239, 68, 68, 0.3)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                color: '#f87171', fontSize: '1.25rem', flexShrink: 0,
+              }}>
+                ⚠️
+              </div>
+              <div>
+                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.125rem', fontWeight: 700, color: 'var(--color-star)', margin: 0 }}>
+                  ¿Eliminar cliente?
+                </h3>
+                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.8125rem', color: 'var(--color-muted)', margin: '2px 0 0' }}>
+                  Confirmá si querés eliminar permanentemente este cliente.
+                </p>
+              </div>
+            </div>
+
+            <div style={{
+              background: 'rgba(221,232,255,0.03)', border: '1px solid var(--color-border)',
+              borderRadius: 10, padding: 12, fontFamily: 'var(--font-ui)', fontSize: '0.875rem',
+            }}>
+              <div style={{ color: 'var(--color-muted)', fontSize: '0.75rem', marginBottom: 2 }}>Cliente:</div>
+              <strong style={{ color: 'var(--color-star)', fontSize: '1rem' }}>{cliente.nombre}</strong>
+              {cliente.rubro && (
+                <div style={{ color: 'var(--color-faint)', fontSize: '0.75rem', marginTop: 2 }}>
+                  Rubro: {cliente.rubro}
+                </div>
+              )}
+            </div>
+
+            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.8125rem', color: '#f87171', margin: 0, lineHeight: 1.4 }}>
+              Esta acción eliminará la ficha completa del cliente y te redirigirá a la lista de clientes. No se puede deshacer.
+            </p>
+
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 4 }}>
+              <button
+                type="button"
+                disabled={deleting}
+                onClick={() => setShowDeleteModal(false)}
+                style={{
+                  background: 'transparent', border: '1px solid var(--color-border)',
+                  borderRadius: 8, padding: '8px 16px', color: 'var(--color-muted)',
+                  fontFamily: 'var(--font-ui)', fontSize: '0.875rem', cursor: 'pointer',
+                }}
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                disabled={deleting}
+                onClick={handleDeleteCliente}
+                style={{
+                  background: '#ef4444', color: '#ffffff',
+                  border: 'none', borderRadius: 8, padding: '8px 18px',
+                  fontFamily: 'var(--font-ui)', fontSize: '0.875rem', fontWeight: 600,
+                  cursor: deleting ? 'not-allowed' : 'pointer',
+                  opacity: deleting ? 0.7 : 1,
+                  display: 'flex', alignItems: 'center', gap: 6,
+                }}
+              >
+                {deleting ? 'Eliminando...' : 'Sí, eliminar'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
