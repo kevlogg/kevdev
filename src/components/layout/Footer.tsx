@@ -5,34 +5,34 @@ import Link from 'next/link'
 
 const GOOGLE_REVIEWS = [
   {
-    name: 'Martín Soler',
-    role: 'Dulce Hogar — E-commerce',
-    initials: 'MS',
-    avatarBg: 'linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%)',
+    name: 'Martina Cantale',
+    role: '4 opiniones · 2 fotos',
+    initials: 'MC',
+    avatarBg: 'linear-gradient(135deg, #a855f7 0%, #ec4899 100%)',
     rating: 5,
-    date: 'Hace 2 semanas',
+    date: 'Hace 5 días',
     comment:
-      'Excelente trabajo con nuestra tienda online. Kevin no solo diseñó un e-commerce impecable y rápido con Mercado Pago, sino que nos asesoró en todo el proceso. Super profesional y directo.',
+      'Estamos muy contentos de haber contratado a Kevin. Excelente servicio, sabe lo que los clientes necesitan y ofrece más de lo que tiene que ver con su trabajo! Muy innovador',
   },
   {
-    name: 'Sofía Giménez',
-    role: 'Centro de Estética',
-    initials: 'SG',
-    avatarBg: 'linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%)',
+    name: 'Noelia Bandini',
+    role: 'Local Guide · 45 opiniones',
+    initials: 'NB',
+    avatarBg: 'linear-gradient(135deg, #f59e0b 0%, #ef4444 100%)',
     rating: 5,
-    date: 'Hace 1 mes',
+    date: 'Hace 3 semanas',
     comment:
-      'El sistema de turnos web y la landing superaron todas las expectativas. La velocidad de carga y la atención personalizada de KevDev fueron fundamentales para nuestro negocio. 100% recomendable.',
+      'Excelente atencion amabilidad, profesionalismo y flexibilidad en todo, muy recomendable',
   },
   {
-    name: 'Alejandro Rossi',
-    role: 'Desarrollo a Medida',
-    initials: 'AR',
-    avatarBg: 'linear-gradient(135deg, #10b981 0%, #06b6d4 100%)',
+    name: 'Grow AI',
+    role: 'App, Web & Juego',
+    initials: 'G',
+    avatarBg: 'linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%)',
     rating: 5,
-    date: 'Hace 1 mes',
+    date: 'Hace 3 semanas',
     comment:
-      'Buscábamos un desarrollo a medida rápido sin depender de agencias lentas. La demo previa antes de pagar nos dio total confianza y el resultado final a 60 FPS quedó increíble.',
+      'Fenómeno kevin y su equipo de Kevdev. Nos armó una aplicación, una página web y hasta nos creó un juego que está mejorando, son unos cracks!',
   },
 ]
 
