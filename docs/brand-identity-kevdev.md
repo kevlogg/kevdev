@@ -5,7 +5,7 @@
 
 ## Quién soy
 
-Soy kevdev (@kevd3v). Desarrollo sitios web modernos, rápidos y accesibles para negocios que quieren crecer en internet. No soy una agencia, soy una persona real que se encarga de todo el proceso: diseño, desarrollo y soporte.
+Soy kevdev (@kevdev_software). Desarrollo sitios web modernos, rápidos y accesibles para negocios que quieren crecer en internet. No soy una agencia, soy una persona real que se encarga de todo el proceso: diseño, desarrollo y soporte.
 
 ---
 

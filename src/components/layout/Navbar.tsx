@@ -11,7 +11,7 @@ import { useIntro } from '@/context/IntroContext'
 /* ─── Data ──────────────────────────────────────────────────────────── */
 const CONTACT_HREFS = [
   { key: 'whatsapp',  href: 'https://wa.me/5492235851419' },
-  { key: 'instagram', href: 'https://www.instagram.com/kevd3v/' },
+  { key: 'instagram', href: 'https://www.instagram.com/kevdev_software/' },
   { key: 'linkedin',  href: 'https://www.linkedin.com/in/kevin-loggia/' },
   { key: 'email',     href: 'mailto:kevdev.info@gmail.com' },
 ] as const

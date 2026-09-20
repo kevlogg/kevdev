@@ -196,7 +196,7 @@ export default async function RootLayout({
                   sameAs: [
                     'https://maps.google.com/?cid=8114234444718749965',
                     'https://share.google/Vmv20uo1V4pSFQY8h',
-                    'https://www.instagram.com/kevd3v/',
+                    'https://www.instagram.com/kevdev_software/',
                     'https://www.linkedin.com/in/kevin-loggia/',
                   ],
                   aggregateRating: {
