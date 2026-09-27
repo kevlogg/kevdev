@@ -179,6 +179,7 @@ export async function deletePresupuestoItem(id: string): Promise<void> {
 const CALVOS_IDS = ['calvoscompresores', 'calvos-compresores', 'fx25djbynqynowq361jv', 'o5su65lqkz2k6ujl7o08']
 const DULCE_HOGAR_IDS = ['dulcehogar', 'dulce-hogar', 'dulce_hogar', 'gz3g7r0ld4z3g3k5m7n9', 'q6h68vtjro2cd2qwtslj']
 const PAJAROS_IDS = ['pajarosenlacabeza', 'pajaros-en-la-cabeza', 'pajaros_en_la_cabeza', 'pajaros', 'pajaro', 'qrkvonucfeuojzw32bee', 'qrkvonucfeuojzw32bee']
+const ONMAS_IDS = ['onmas', 'entre-rios-on', 'entre_rios_on', 'entrerios-on', 'entrerioson', 'on_mas', 'on-mas']
 
 export async function getHistorialPagos(clienteId: string): Promise<HistorialPago[]> {
   try {
@@ -187,6 +188,7 @@ export async function getHistorialPagos(clienteId: string): Promise<HistorialPag
     const isCalvosQuery = CALVOS_IDS.includes(normId) || normId.includes('calvo')
     const isDulceHogarQuery = DULCE_HOGAR_IDS.includes(normId) || normId.includes('dulce')
     const isPajarosQuery = PAJAROS_IDS.includes(normId) || normId.includes('pajaro') || normId.includes('cabeza') || normId.includes('qrkvon')
+    const isOnmasQuery = ONMAS_IDS.includes(normId) || normId.includes('onmas') || normId.includes('entre-rios') || normId.includes('entrerios')
 
     // Resolver IDs de documentos de clientes coincidentes en Firestore
     const matchingClientDocIds = new Set<string>([clienteId, normId])
@@ -215,6 +217,9 @@ export async function getHistorialPagos(clienteId: string): Promise<HistorialPag
         if (isPajarosQuery && (cNombre.includes('pajaro') || cNombre.includes('cabeza') || cUrl.includes('pajaro') || PAJAROS_IDS.includes(cIdLower) || cIdLower.includes('qrkvon'))) {
           matchingClientDocIds.add(cId)
         }
+        if (isOnmasQuery && (cNombre.includes('onmas') || cNombre.includes('entre') || cUrl.includes('onmas') || ONMAS_IDS.includes(cIdLower))) {
+          matchingClientDocIds.add(cId)
+        }
       })
     } catch (cliErr) {
       console.warn('[getHistorialPagos] Warning buscando doc IDs de clientes:', cliErr)
@@ -237,6 +242,7 @@ export async function getHistorialPagos(clienteId: string): Promise<HistorialPag
         if (isCalvosQuery && (CALVOS_IDS.includes(pNormLower) || pNormLower.includes('calvo'))) return true
         if (isDulceHogarQuery && (DULCE_HOGAR_IDS.includes(pNormLower) || pNormLower.includes('dulce'))) return true
         if (isPajarosQuery && (PAJAROS_IDS.includes(pNormLower) || pNormLower.includes('pajaro') || pNormLower.includes('cabeza') || pNormLower.includes('qrkvon'))) return true
+        if (isOnmasQuery && (ONMAS_IDS.includes(pNormLower) || pNormLower.includes('onmas') || pNormLower.includes('entre-rios') || pNormLower.includes('entrerios'))) return true
         return false
       })
       .sort((a, b) => (b.fecha || '').localeCompare(a.fecha || ''))
