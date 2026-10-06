@@ -60,7 +60,7 @@ const LINK_ITEMS: LinkItem[] = [
   {
     id: 'instagram',
     title: 'Instagram Oficial',
-    subtitle: '@kevdev_software — Novedades, desarrollos 60FPS y detrás de escena.',
+    subtitle: '@kevdev_software — Novedades, desarrollos y detrás de escena.',
     url: 'https://www.instagram.com/kevdev_software/',
     category: 'instagram',
     badge: '@kevdev_software',
@@ -92,8 +92,6 @@ const LINK_ITEMS: LinkItem[] = [
 ]
 
 export default function LinkTreeClient() {
-  const [activeCategory, setActiveCategory] = useState<LinkCategory>('all')
-  const [searchQuery, setSearchQuery] = useState('')
   const [toastMsg, setToastMsg] = useState<string | null>(null)
   const [showQrModal, setShowQrModal] = useState(false)
 
@@ -101,15 +99,6 @@ export default function LinkTreeClient() {
     setToastMsg(msg)
     setTimeout(() => setToastMsg(null), 3000)
   }
-
-  const filteredItems = LINK_ITEMS.filter((item) => {
-    const matchesCategory = activeCategory === 'all' || item.category === activeCategory
-    const matchesSearch =
-      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.subtitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.badge.toLowerCase().includes(searchQuery.toLowerCase())
-    return matchesCategory && matchesSearch
-  })
 
   const handleCopyShareLink = () => {
     const pageUrl = typeof window !== 'undefined' ? window.location.href : 'https://kevdev.net.ar/link'
@@ -445,7 +434,7 @@ export default function LinkTreeClient() {
             maxWidth: 480,
             lineHeight: 1.5,
           }}>
-            Creamos experiencias digitales a 60 FPS, sitios web de alta conversión y software a medida en Argentina.
+            Creamos experiencias digitales, sitios web de alta conversión y software a medida en Argentina.
           </p>
 
           {/* Status Indicator */}
@@ -472,131 +461,40 @@ export default function LinkTreeClient() {
           </div>
         </div>
 
-        {/* Filter Pills */}
-        <div style={{
-          display: 'flex',
-          gap: 8,
-          overflowX: 'auto',
-          paddingBottom: 4,
-          scrollbarWidth: 'none',
-        }}>
-          {[
-            { id: 'all', label: 'Todos' },
-            { id: 'web', label: '🌐 Sitio Web' },
-            { id: 'proyectos', label: '💼 Proyectos' },
-            { id: 'instagram', label: '📸 Instagram' },
-            { id: 'wsp', label: '💬 WhatsApp' },
-          ].map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => setActiveCategory(cat.id as LinkCategory)}
-              style={{
-                padding: '8px 16px',
-                borderRadius: 99,
-                border: activeCategory === cat.id ? '1px solid var(--color-accent)' : '1px solid var(--color-border)',
-                background: activeCategory === cat.id ? 'var(--color-accent-dim)' : 'rgba(255,255,255,0.03)',
-                color: activeCategory === cat.id ? 'var(--color-star)' : 'var(--color-muted)',
-                fontFamily: 'var(--font-ui)',
-                fontSize: '0.8125rem',
-                fontWeight: activeCategory === cat.id ? 600 : 400,
-                cursor: 'pointer',
-                whiteSpace: 'nowrap',
-                transition: 'all 0.2s ease',
-              }}
-            >
-              {cat.label}
-            </button>
-          ))}
-        </div>
-
-        {/* Search input filter */}
-        <div style={{ position: 'relative' }}>
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="🔍 Filtrar o buscar enlace..."
-            style={{
-              width: '100%',
-              background: 'rgba(255,255,255,0.03)',
-              border: '1px solid var(--color-border)',
-              borderRadius: 12,
-              padding: '12px 16px',
-              color: 'var(--color-star)',
-              fontFamily: 'var(--font-ui)',
-              fontSize: '0.875rem',
-              outline: 'none',
-              boxSizing: 'border-box',
-              transition: 'border 0.2s',
-            }}
-          />
-          {searchQuery && (
-            <button
-              onClick={() => setSearchQuery('')}
-              style={{
-                position: 'absolute',
-                right: 14,
-                top: '50%',
-                transform: 'translateY(-50%)',
-                background: 'none',
-                border: 'none',
-                color: 'var(--color-muted)',
-                cursor: 'pointer',
-              }}
-            >
-              ✕
-            </button>
-          )}
-        </div>
-
         {/* Links Stack List */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-          {filteredItems.length === 0 ? (
-            <div style={{
-              textAlign: 'center',
-              padding: '40px 20px',
-              background: 'rgba(255,255,255,0.02)',
-              borderRadius: 16,
-              border: '1px dashed var(--color-border)',
-              color: 'var(--color-muted)',
-              fontFamily: 'var(--font-ui)',
-              fontSize: '0.875rem',
-            }}>
-              No se encontraron enlaces con esa búsqueda.
-            </div>
-          ) : (
-            filteredItems.map((item) => (
-              <a
-                key={item.id}
-                href={item.url}
-                target={item.isExternal ? '_blank' : '_self'}
-                rel={item.isExternal ? 'noopener noreferrer' : undefined}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 16,
-                  padding: '16px 20px',
-                  background: 'rgba(24, 24, 24, 0.75)',
-                  backdropFilter: 'blur(12px)',
-                  border: `1px solid rgba(255, 255, 255, 0.08)`,
-                  borderRadius: 16,
-                  textDecoration: 'none',
-                  color: 'inherit',
-                  transition: 'all 0.25s cubic-bezier(0.22, 1, 0.36, 1)',
-                  position: 'relative',
-                  overflow: 'hidden',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = item.accentColor
-                  e.currentTarget.style.transform = 'translateY(-2px)'
-                  e.currentTarget.style.boxShadow = `0 10px 30px rgba(0,0,0,0.5), 0 0 20px ${item.accentColor}25`
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)'
-                  e.currentTarget.style.transform = 'translateY(0)'
-                  e.currentTarget.style.boxShadow = 'none'
-                }}
-              >
+          {LINK_ITEMS.map((item) => (
+            <a
+              key={item.id}
+              href={item.url}
+              target={item.isExternal ? '_blank' : '_self'}
+              rel={item.isExternal ? 'noopener noreferrer' : undefined}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 16,
+                padding: '16px 20px',
+                background: 'rgba(24, 24, 24, 0.75)',
+                backdropFilter: 'blur(12px)',
+                border: `1px solid rgba(255, 255, 255, 0.08)`,
+                borderRadius: 16,
+                textDecoration: 'none',
+                color: 'inherit',
+                transition: 'all 0.25s cubic-bezier(0.22, 1, 0.36, 1)',
+                position: 'relative',
+                overflow: 'hidden',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = item.accentColor
+                e.currentTarget.style.transform = 'translateY(-2px)'
+                e.currentTarget.style.boxShadow = `0 10px 30px rgba(0,0,0,0.5), 0 0 20px ${item.accentColor}25`
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)'
+                e.currentTarget.style.transform = 'translateY(0)'
+                e.currentTarget.style.boxShadow = 'none'
+              }}
+            >
                 {/* Left Glowing Icon Box */}
                 <div style={{
                   width: 48,
@@ -661,8 +559,7 @@ export default function LinkTreeClient() {
                   ↗
                 </div>
               </a>
-            ))
-          )}
+            ))}
         </div>
 
         {/* Footer info */}
