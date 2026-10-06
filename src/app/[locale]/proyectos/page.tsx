@@ -6,7 +6,7 @@ import { useTranslations, useLocale } from 'next-intl'
 import Navbar from '@/components/layout/Navbar'
 import TechSpecModal from '@/components/ui/TechSpecModal'
 import CaseStudyModal from '@/components/ui/CaseStudyModal'
-import { PROJECTS, getProjectText, type Project, type Locale } from '@/lib/projects'
+import { PROJECTS, PROJECT_SCREENSHOTS, getProjectText, type Project, type Locale } from '@/lib/projects'
 
 type PageState = 'intro' | 'carousel'
 
@@ -30,7 +30,6 @@ export default function ProyectosPage() {
   const [pageState, setPageState]       = useState<PageState>('intro')
   const [currentIndex, setCurrentIndex] = useState(0)
   const [direction, setDirection]       = useState<1 | -1>(1)
-  const videoRef = useRef<HTMLVideoElement>(null)
 
   const enterCarousel = useCallback(() => setPageState('carousel'), [])
 
@@ -39,20 +38,16 @@ export default function ProyectosPage() {
     setCurrentIndex(prev => (prev + dir + PROJECTS.length) % PROJECTS.length)
   }, [])
 
-  useEffect(() => {
-    const v = videoRef.current
-    if (!v) return
-    v.currentTime = 0
-    v.play()
-  }, [currentIndex])
+  const currentProject = PROJECTS[currentIndex]
+  const previewImg = PROJECT_SCREENSHOTS[currentProject.id] || PROJECT_SCREENSHOTS['kronitt']
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100dvh', minHeight: '100vh', overflow: 'hidden' }}>
       <div className="grain"    aria-hidden />
       <div className="vignette" aria-hidden />
 
+      {/* Dynamic Fullscreen Website Preview Background */}
       <div
-        className="project-bg-video-wrap"
         style={{
           position: 'fixed',
           inset: 0,
@@ -63,39 +58,43 @@ export default function ProyectosPage() {
           pointerEvents: 'none',
         }}
       >
-        <video
-          ref={videoRef}
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="project-bg-video"
-          style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            minWidth: '100%',
-            minHeight: '100%',
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            objectPosition: 'center center',
-          }}
-        >
-          <source src="/video-proyectos.mp4" type="video/mp4" />
-        </video>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentProject.id}
+            initial={{ opacity: 0, scale: 1.05 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6, ease: EASE_OUT }}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+            }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={previewImg}
+              alt={`${currentProject.name} website preview background`}
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                objectPosition: 'top center',
+                filter: 'blur(4px) brightness(0.3) contrast(1.15)',
+              }}
+            />
+            {/* Dark Ambient Vignette + Radial Tint matching active project color */}
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background: `radial-gradient(circle at 50% 45%, ${currentProject.color}30 0%, rgba(6, 8, 16, 0.85) 60%, rgba(4, 6, 12, 0.96) 100%)`,
+              }}
+            />
+          </motion.div>
+        </AnimatePresence>
       </div>
-
-      <div
-        aria-hidden
-        style={{
-          position: 'fixed',
-          inset: 0,
-          background: 'rgba(6,8,16,0.55)',
-          zIndex: 1,
-        }}
-      />
 
       <div style={{ position: 'relative', zIndex: 10, height: '100%' }}>
         <Navbar />

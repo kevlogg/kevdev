@@ -63,6 +63,33 @@ export interface ProjectText {
   techSpecs?: NamedTechSpec[]
 }
 
+export const PROJECT_SCREENSHOTS: Record<string, string> = {
+  'kronitt': '/projects/kronitt.webp',
+  'experience-fly': '/projects/experience-fly.webp',
+  'growai': '/projects/growai.webp',
+  'bad-bee': '/projects/bad-bee.webp',
+  'nexo': '/projects/nexo.webp',
+  'dulce-hogar': '/projects/dulce-hogar.webp',
+  'mundialito': '/projects/mundialito.webp',
+  'andreac-tejidos': '/projects/dulce-hogar.webp',
+  'la-rodante-del-desierto': '/projects/la-rodante-del-desierto.webp',
+  'calvos-compresores': '/projects/calvos-compresores.webp',
+  'entre-rios-on': '/projects/entre-rios-on.png',
+  'sitio-automotor': '/projects/calvos-compresores.webp',
+  'pajaros-en-la-cabeza': '/projects/bad-bee.webp',
+  'aquapro-studio': '/projects/experience-fly.webp',
+  'aire-y-luz-arquitectura': '/projects/dulce-hogar.webp',
+  'don-lorenzo-panaderia': '/projects/bad-bee.webp',
+  'gabriel-70': '/projects/mundialito.webp',
+  'aura-estetica': '/projects/kronitt.webp',
+  'aura-farm': '/projects/growai.webp',
+  'modo-living': '/projects/dulce-hogar.webp',
+  'duplack': '/projects/calvos-compresores.webp',
+  'orimar-concepto': '/projects/dulce-hogar.webp',
+  'dvamoblamientos': '/projects/calvos-compresores.webp',
+  'crdecoradores': '/projects/la-rodante-del-desierto.webp',
+}
+
 const STATUS: Record<StatusKey, Record<Locale, string>> = {
   ready: {
     es: 'Listo para validar',
