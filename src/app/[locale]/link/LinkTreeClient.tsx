@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -94,6 +94,14 @@ const LINK_ITEMS: LinkItem[] = [
 export default function LinkTreeClient() {
   const [toastMsg, setToastMsg] = useState<string | null>(null)
   const [showQrModal, setShowQrModal] = useState(false)
+  const [activeCardIndex, setActiveCardIndex] = useState(0)
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveCardIndex((prev) => (prev + 1) % LINK_ITEMS.length)
+    }, 2600)
+    return () => clearInterval(timer)
+  }, [])
 
   const showToast = (msg: string) => {
     setToastMsg(msg)
@@ -369,65 +377,92 @@ export default function LinkTreeClient() {
           }}>
             Experiencias digitales para potenciar tu marca
           </p>
-
-          {/* Status Indicator */}
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 8,
-            background: 'rgba(0,229,255,0.06)',
-            border: '1px solid rgba(0,229,255,0.2)',
-            borderRadius: 99,
-            padding: '6px 16px',
-            fontSize: '0.75rem',
-            color: 'var(--color-star)',
-            fontFamily: 'var(--font-ui)',
-          }}>
-            <span style={{
-              width: 8,
-              height: 8,
-              borderRadius: '50%',
-              background: '#10b981',
-              boxShadow: '0 0 10px #10b981',
-            }} />
-            <span>Disponible para nuevos proyectos</span>
-          </div>
         </div>
 
         {/* Links Stack List */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-          {LINK_ITEMS.map((item) => (
-            <a
-              key={item.id}
-              href={item.url}
-              target={item.isExternal ? '_blank' : '_self'}
-              rel={item.isExternal ? 'noopener noreferrer' : undefined}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 16,
-                padding: '16px 20px',
-                background: 'rgba(24, 24, 24, 0.75)',
-                backdropFilter: 'blur(12px)',
-                border: `1px solid rgba(255, 255, 255, 0.08)`,
-                borderRadius: 16,
-                textDecoration: 'none',
-                color: 'inherit',
-                transition: 'all 0.25s cubic-bezier(0.22, 1, 0.36, 1)',
-                position: 'relative',
-                overflow: 'hidden',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = item.accentColor
-                e.currentTarget.style.transform = 'translateY(-2px)'
-                e.currentTarget.style.boxShadow = `0 10px 30px rgba(0,0,0,0.5), 0 0 20px ${item.accentColor}25`
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)'
-                e.currentTarget.style.transform = 'translateY(0)'
-                e.currentTarget.style.boxShadow = 'none'
-              }}
-            >
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {LINK_ITEMS.map((item, index) => {
+            const isActive = index === activeCardIndex
+            return (
+              <a
+                key={item.id}
+                href={item.url}
+                target={item.isExternal ? '_blank' : '_self'}
+                rel={item.isExternal ? 'noopener noreferrer' : undefined}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 16,
+                  padding: '16px 20px',
+                  background: 'rgba(24, 24, 24, 0.85)',
+                  backdropFilter: 'blur(12px)',
+                  border: `1.5px solid ${isActive ? '#00e5ff' : 'rgba(255, 255, 255, 0.08)'}`,
+                  borderRadius: 16,
+                  textDecoration: 'none',
+                  color: 'inherit',
+                  transition: 'border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1)',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  boxShadow: isActive
+                    ? '0 0 25px rgba(0, 229, 255, 0.35), 0 8px 30px rgba(0,0,0,0.6)'
+                    : 'none',
+                  transform: isActive ? 'scale(1.015)' : 'scale(1)',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = item.accentColor
+                  e.currentTarget.style.transform = 'translateY(-2px) scale(1.015)'
+                  e.currentTarget.style.boxShadow = `0 10px 30px rgba(0,0,0,0.5), 0 0 20px ${item.accentColor}35`
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = isActive ? '#00e5ff' : 'rgba(255, 255, 255, 0.08)'
+                  e.currentTarget.style.transform = isActive ? 'scale(1.015)' : 'scale(1)'
+                  e.currentTarget.style.boxShadow = isActive
+                    ? '0 0 25px rgba(0, 229, 255, 0.35), 0 8px 30px rgba(0,0,0,0.6)'
+                    : 'none'
+                }}
+              >
+                {/* Traveling Cyan Light Beam Effect */}
+                {isActive && (
+                  <>
+                    <div
+                      style={{
+                        position: 'absolute',
+                        inset: -2,
+                        borderRadius: 18,
+                        overflow: 'hidden',
+                        pointerEvents: 'none',
+                        zIndex: 1,
+                      }}
+                    >
+                      <div
+                        style={{
+                          position: 'absolute',
+                          inset: '-100%',
+                          background:
+                            'conic-gradient(from 0deg at 50% 50%, transparent 65%, #00e5ff 85%, #33ebff 94%, transparent 100%)',
+                          animation: 'cyan-card-beam 2.2s linear infinite',
+                        }}
+                      />
+                    </div>
+
+                    <style>{`
+                      @keyframes cyan-card-beam {
+                        0% { transform: rotate(0deg); }
+                        100% { transform: rotate(360deg); }
+                      }
+                    `}</style>
+                  </>
+                )}
+
+                {/* Card Inner Content Container */}
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 16,
+                  width: '100%',
+                  position: 'relative',
+                  zIndex: 2,
+                }}>
                 {/* Left Glowing Icon Box */}
                 <div style={{
                   width: 48,
@@ -484,15 +519,18 @@ export default function LinkTreeClient() {
 
                 {/* Right Arrow */}
                 <div style={{
-                  color: 'var(--color-muted)',
+                  color: isActive ? '#00e5ff' : 'var(--color-muted)',
                   fontSize: '1.25rem',
                   flexShrink: 0,
-                  transition: 'transform 0.2s',
+                  transition: 'transform 0.2s, color 0.2s',
+                  transform: isActive ? 'translateX(2px)' : 'none',
                 }}>
                   ↗
                 </div>
-              </a>
-            ))}
+              </div>
+            </a>
+          )
+        })}
         </div>
 
         {/* Footer info */}
