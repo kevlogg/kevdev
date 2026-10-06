@@ -354,7 +354,7 @@ export default function LinkTreeClient() {
               textTransform: 'uppercase',
               margin: 0,
             }}>
-              Desarrollador Web & Software Studio
+              Desarrollador web & software a medida
             </p>
           </div>
 
@@ -367,7 +367,7 @@ export default function LinkTreeClient() {
             maxWidth: 480,
             lineHeight: 1.5,
           }}>
-            Creamos experiencias digitales, sitios web de alta conversión y software a medida en Argentina.
+            Experiencias digitales para potenciar tu marca
           </p>
 
           {/* Status Indicator */}
