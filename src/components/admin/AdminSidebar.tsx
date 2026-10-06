@@ -12,6 +12,7 @@ const NAV_ITEMS = [
   { href: '/admin/estadisticas/clientes', label: 'Métricas Clientes', icon: '💼' },
   { href: '/admin/presupuesto',          label: 'Presupuesto',       icon: '◎' },
   { href: '/admin/mensajes',             label: 'Mensajes',          icon: '◇' },
+  { href: '/admin/qr',                   label: 'Generador QR',      icon: '📱' },
 ]
 
 export default function AdminSidebar() {

@@ -5,14 +5,14 @@ import Link from 'next/link'
 
 const GOOGLE_REVIEWS = [
   {
-    name: 'Martina Cantale',
-    role: '4 opiniones · 2 fotos',
-    initials: 'MC',
-    avatarBg: 'linear-gradient(135deg, #a855f7 0%, #ec4899 100%)',
+    name: 'Ulises Sangla',
+    role: '3 opiniones',
+    initials: 'US',
+    avatarBg: 'linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%)',
     rating: 5,
-    date: 'Hace 5 días',
+    date: 'Hace 3 semanas',
     comment:
-      'Estamos muy contentos de haber contratado a Kevin. Excelente servicio, sabe lo que los clientes necesitan y ofrece más de lo que tiene que ver con su trabajo! Muy innovador',
+      'Excelente la atencion brindada, siempre muy atento a lo que necesitaba para mi proyecto!',
   },
   {
     name: 'Noelia Bandini',
