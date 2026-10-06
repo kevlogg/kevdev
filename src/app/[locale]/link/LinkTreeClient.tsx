@@ -421,38 +421,66 @@ export default function LinkTreeClient() {
                     : 'none'
                 }}
               >
-                {/* Traveling Cyan Light Beam Effect */}
-                {isActive && (
-                  <>
-                    <div
-                      style={{
-                        position: 'absolute',
-                        inset: -2,
-                        borderRadius: 18,
-                        overflow: 'hidden',
-                        pointerEvents: 'none',
-                        zIndex: 1,
-                      }}
-                    >
-                      <div
-                        style={{
-                          position: 'absolute',
-                          inset: '-100%',
-                          background:
-                            'conic-gradient(from 0deg at 50% 50%, transparent 65%, #00e5ff 85%, #33ebff 94%, transparent 100%)',
-                          animation: 'cyan-card-beam 2.2s linear infinite',
-                        }}
-                      />
-                    </div>
+                {/* SVG Border Light Beam Traveling along the card edges */}
+                <svg
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    width: '100%',
+                    height: '100%',
+                    pointerEvents: 'none',
+                    overflow: 'visible',
+                    borderRadius: 16,
+                    zIndex: 3,
+                  }}
+                >
+                  <defs>
+                    <linearGradient id={`beam-grad-${item.id}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#00e5ff" stopOpacity="1" />
+                      <stop offset="50%" stopColor="#33ebff" stopOpacity="0.9" />
+                      <stop offset="100%" stopColor="#00e5ff" stopOpacity="0.1" />
+                    </linearGradient>
+                    <filter id={`beam-glow-${item.id}`} x="-30%" y="-30%" width="160%" height="160%">
+                      <feGaussianBlur stdDeviation="3.5" result="blur" />
+                      <feMerge>
+                        <feMergeNode in="blur" />
+                        <feMergeNode in="SourceGraphic" />
+                      </feMerge>
+                    </filter>
+                  </defs>
 
-                    <style>{`
-                      @keyframes cyan-card-beam {
-                        0% { transform: rotate(0deg); }
-                        100% { transform: rotate(360deg); }
-                      }
-                    `}</style>
-                  </>
-                )}
+                  {/* Active Cyan Light Segment sliding around the 4 border edges */}
+                  {isActive && (
+                    <rect
+                      x="1"
+                      y="1"
+                      width="calc(100% - 2px)"
+                      height="calc(100% - 2px)"
+                      rx="15"
+                      fill="none"
+                      stroke={`url(#beam-grad-${item.id})`}
+                      strokeWidth="3.5"
+                      strokeLinecap="round"
+                      filter={`url(#beam-glow-${item.id})`}
+                      pathLength="100"
+                      strokeDasharray="22 78"
+                      style={{
+                        animation: 'edge-beam-trace 1.8s linear infinite',
+                      }}
+                    />
+                  )}
+                </svg>
+
+                <style>{`
+                  @keyframes edge-beam-trace {
+                    0% {
+                      stroke-dashoffset: 0;
+                    }
+                    100% {
+                      stroke-dashoffset: -100;
+                    }
+                  }
+                `}</style>
 
                 {/* Card Inner Content Container */}
                 <div style={{
