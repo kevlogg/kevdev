@@ -825,18 +825,467 @@ export const PROJECTS: Project[] = [
           learning: 'Separating the Vercel hosts and the www version with 301 redirects in next.config.ts avoids duplicate content without losing the ability to use those URLs for preview and deployment.',
         },
       },
-      pt: {
-        tagline: 'Site institucional para uma oficina especializada em compressores de ar-condicionado automotivo.',
-        description: 'Catálogo de serviços, galeria de trabalhos, comparador antes/depois, formulário de contato e painel administrativo próprio. Mais de 40 anos de trajetória da oficina em um site rápido e otimizado para SEO local.',
-      },
-      fr: {
-        tagline: 'Site institutionnel pour un atelier spécialisé dans les compresseurs de climatisation automobile.',
-        description: 'Catalogue de services, galerie de réalisations, comparateur avant/après, formulaire de contact et panneau d’administration propre. Plus de 40 ans d’expérience de l’atelier traduits en un site rapide et optimisé pour le référencement local.',
-      },
       de: {
         tagline: 'Institutionelle Website für eine auf Kfz-Klimakompressoren spezialisierte Werkstatt.',
         description: 'Serviceübersicht, Arbeitsgalerie, Vorher-Nachher-Vergleich, Kontaktformular und eigenes Admin-Panel. Über 40 Jahre Werkstatt-Erfahrung in einer schnellen, lokal SEO-optimierten Website umgesetzt.',
       },
+      pt: {
+        tagline: 'Site institucional para uma oficina especializada em compressores de ar condicionado automotivo.',
+        description: 'Catálogo de serviços, galeria de trabalhos, comparador antes/depois, formulário de contato e painel administrativo próprio.',
+      },
+      fr: {
+        tagline: 'Site institutionnel pour un atelier spécialisé dans les compresseurs de climatisation automobile.',
+        description: 'Catalogue de services, galerie de réalisations, comparateur avant/après, formulaire de contact et panneau d’administration propre.',
+      },
+    },
+  },
+  {
+    id: 'entre-rios-on',
+    name: 'Entre Ríos ON',
+    statusKey: 'production',
+    statusDot: 'var(--color-accent)',
+    tags: ['Next.js', 'Portal', 'Noticias', 'SEO'],
+    year: '2026',
+    href: 'https://www.onmasportal.com.ar',
+    color: '#00e5ff',
+    i18n: {
+      es: {
+        tagline: 'Portal digital de noticias y contenidos para Entre Ríos.',
+        description: 'Plataforma de comunicación y portal informativo con distribución de noticias por categorías, integración multimedia y diseño responsivo enfocado en velocidad y lecturabilidad.',
+      },
+      en: {
+        tagline: 'Digital news and content portal for Entre Ríos.',
+        description: 'Communication platform and news portal featuring categorized news distribution, multimedia integration, and responsive design focused on speed and readability.',
+      },
+      pt: {
+        tagline: 'Portal digital de notícias e conteúdos para Entre Ríos.',
+        description: 'Plataforma de comunicação e portal informativo com distribuição de notícias por categorias e design responsivo.',
+      },
+      fr: {
+        tagline: 'Portail numérique d’actualités et de contenus pour Entre Ríos.',
+        description: 'Plateforme de communication et portail d’information axé sur la rapidité et la lisibilité.',
+      },
+      de: {
+        tagline: 'Digitales Nachrichten- und Content-Portal für Entre Ríos.',
+        description: 'Kommunikationsplattform und Nachrichtenportal mit kategorisierter Nachrichtenverteilung und hoher Ladegeschwindigkeit.',
+      },
+    },
+  },
+  {
+    id: 'sitio-automotor',
+    name: 'Sitio Automotor',
+    statusKey: 'production',
+    statusDot: 'var(--color-accent)',
+    tags: ['Next.js', 'Catálogo', 'Automotor', 'Framer Motion'],
+    year: '2026',
+    href: 'https://www.sitioautomotor.com.ar',
+    color: '#ef4444',
+    i18n: {
+      es: {
+        tagline: 'Plataforma de catálogo digital y exhibición de vehículos.',
+        description: 'Showcase automotor interactivo con búsqueda de vehículos por ficha técnica, filtros por modelo, año y características, optimizado para alto rendimiento y conversión.',
+      },
+      en: {
+        tagline: 'Digital vehicle catalog and showcase platform.',
+        description: 'Interactive automotive showcase featuring vehicle search by technical specs, model filters, and responsive design optimized for high performance.',
+      },
+      pt: {
+        tagline: 'Plataforma de catálogo digital e exibição de veículos.',
+        description: 'Showcase automotivo interativo com busca de veículos e filtros por características.',
+      },
+      fr: {
+        tagline: 'Plateforme de catalogue numérique et d’exposition de véhicules.',
+        description: 'Vitrines automobiles interactives avec recherche par fiches techniques et filtres.',
+      },
+      de: {
+        tagline: 'Plattform für digitale Fahrzeugkataloge und -präsentationen.',
+        description: 'Interaktiver Fahrzeug-Showcase mit Suche nach technischen Daten und Filtern.',
+      },
+    },
+  },
+  {
+    id: 'pajaros-en-la-cabeza',
+    name: 'Pájaros en la Cabeza',
+    statusKey: 'production',
+    statusDot: 'var(--color-accent)',
+    tags: ['Next.js', 'E-commerce', 'Branding', 'Moda'],
+    year: '2026',
+    href: 'https://www.pajarosenlacabeza.com.ar',
+    color: '#ec4899',
+    i18n: {
+      es: {
+        tagline: 'Tienda online de moda, indumentaria y diseño de autor.',
+        description: 'E-commerce para marca de moda con catálogo visual de prendas, carrito interactivo y estética editorial que refleja la identidad única de la marca.',
+      },
+      en: {
+        tagline: 'Online store for fashion, apparel, and designer wear.',
+        description: 'E-commerce platform for fashion brand featuring visual product catalogs, interactive cart, and editorial design highlighting brand identity.',
+      },
+      pt: {
+        tagline: 'Loja online de moda, vestuário e design autoral.',
+        description: 'E-commerce para marca de moda com catálogo visual e estética editorial.',
+      },
+      fr: {
+        tagline: 'Boutique en ligne de mode, vêtements et créations d’auteur.',
+        description: 'E-commerce pour marque de mode avec catalogue visuel et design éditorial.',
+      },
+      de: {
+        tagline: 'Online-Shop für Mode, Bekleidung und Autorendesign.',
+        description: 'E-Commerce-Plattform für Modemarken mit visuellem Produktkatalog und redaktionellem Design.',
+      },
+    },
+  },
+  {
+    id: 'aquapro-studio',
+    name: 'AquaPro Studio',
+    statusKey: 'production',
+    statusDot: 'var(--color-accent)',
+    tags: ['Landing', 'Detailing', 'Showcase 3D', 'Estética Vehicular'],
+    year: '2026',
+    href: 'https://aquapro-studio.vercel.app',
+    color: '#06b6d4',
+    i18n: {
+      es: {
+        tagline: 'Landing page inmersiva para estudio de detailing vehicular.',
+        description: 'Experiencia web visual para estudio de estética automotriz, tratamiento cerámico y protección PPF con comparativas interactiva de resultados antes/después.',
+      },
+      en: {
+        tagline: 'Immersive landing page for auto detailing studio.',
+        description: 'Visual web experience for automotive detailing studio, ceramic coating, and PPF protection with interactive before/after result comparisons.',
+      },
+      pt: {
+        tagline: 'Landing page imersiva para estúdio de estética automotiva.',
+        description: 'Experiência web visual para estúdio de detailing com comparativos antes/depois.',
+      },
+      fr: {
+        tagline: 'Landing page immersive pour studio de detailing automobile.',
+        description: 'Expérience web visuelle pour studio de préparation esthétique automobile.',
+      },
+      de: {
+        tagline: 'Immersive Landingpage für ein Fahrzeugaufbereitungs-Studio.',
+        description: 'Visuelles Web-Erlebnis für Auto-Detailing und Keramikversiegelung.',
+      },
+    },
+  },
+  {
+    id: 'aire-y-luz-arquitectura',
+    name: 'Aire y Luz Arquitectura',
+    statusKey: 'production',
+    statusDot: 'var(--color-accent)',
+    tags: ['Landing', 'Arquitectura', 'Minimalista', 'Portfolio'],
+    year: '2026',
+    href: 'https://aire-y-luz-arquitectura.vercel.app',
+    color: '#f59e0b',
+    i18n: {
+      es: {
+        tagline: 'Sitio institucional y portafolio para estudio de arquitectura.',
+        description: 'Diseño elegante y minimalista centrado en obras residenciales y comerciales, tipografía limpia y galerías de proyectos en alta definición.',
+      },
+      en: {
+        tagline: 'Institutional website and portfolio for architecture studio.',
+        description: 'Elegant and minimalist design focused on residential and commercial works, clean typography, and high-definition project galleries.',
+      },
+      pt: {
+        tagline: 'Site institucional e portfólio para estúdio de arquitetura.',
+        description: 'Design elegante e minimalista focado em obras residenciais e comerciais.',
+      },
+      fr: {
+        tagline: 'Site institutionnel et portfolio pour studio d’architecture.',
+        description: 'Design élégant et minimaliste axé sur les projets résidentiels et commerciaux.',
+      },
+      de: {
+        tagline: 'Institutionelle Website und Portfolio für ein Architekturbüro.',
+        description: 'Elegantes und minimalistisches Design mit Fokus auf Wohn- und Gewerbeprojekte.',
+      },
+    },
+  },
+  {
+    id: 'don-lorenzo-panaderia',
+    name: 'Don Lorenzo Panadería',
+    statusKey: 'production',
+    statusDot: 'var(--color-accent)',
+    tags: ['Landing', 'Gastronomía', 'Branding', 'Artesanal'],
+    year: '2026',
+    href: 'https://don-lorenzo-panaderia.vercel.app',
+    color: '#d97706',
+    i18n: {
+      es: {
+        tagline: 'Sitio de presentación para panadería y confitería artesanal.',
+        description: 'Landing cálida que destaca la tradición de masa madre, productos horneados diarios, menú de cafetería y ubicación con mapa interactivo.',
+      },
+      en: {
+        tagline: 'Presentation site for artisanal bakery and pastry shop.',
+        description: 'Warm landing page highlighting sourdough tradition, fresh daily baked goods, coffee menu, and interactive location map.',
+      },
+      pt: {
+        tagline: 'Site de apresentação para padaria e confeitaria artesanal.',
+        description: 'Landing calorosa que destaca produtos frescos do dia e tradição artesanal.',
+      },
+      fr: {
+        tagline: 'Site de présentation pour boulangerie et pâtisserie artisanale.',
+        description: 'Landing chaleureuse mettant en valeur la tradition du pain au levain et des produits frais.',
+      },
+      de: {
+        tagline: 'Präsentationsseite für eine handwerkliche Bäckerei und Konditorei.',
+        description: 'Warme Landingpage, die Sauerteigtradition und frische Backwaren hervorhebt.',
+      },
+    },
+  },
+  {
+    id: 'gabriel-70',
+    name: 'Gabriel 70',
+    statusKey: 'production',
+    statusDot: 'var(--color-accent)',
+    tags: ['Landing', 'Eventos', 'Celebración', 'Interactive'],
+    year: '2026',
+    href: 'https://gabriel-70.vercel.app',
+    color: '#8b5cf6',
+    i18n: {
+      es: {
+        tagline: 'Landing interactiva y confirmación para evento de celebración.',
+        description: 'Sitio personalizado con historia de vida, cronograma del evento, confirmación de asistencia (RSVP) y galería de recuerdos.',
+      },
+      en: {
+        tagline: 'Interactive landing page and RSVP for celebration event.',
+        description: 'Custom site featuring life milestones, event schedule, attendance confirmation (RSVP), and memory gallery.',
+      },
+      pt: {
+        tagline: 'Landing interativa e confirmação para evento especial.',
+        description: 'Site personalizado com cronograma do evento, RSVP e galeria de memórias.',
+      },
+      fr: {
+        tagline: 'Landing interactive et confirmation pour événement spécial.',
+        description: 'Site personnalisé avec déroulement de l’événement, RSVP et galerie de souvenirs.',
+      },
+      de: {
+        tagline: 'Interaktive Landingpage und Zusage-Portal für ein besonderes Event.',
+        description: 'Maßgeschneiderte Website mit Zeitplan, RSVP-Formular und Erinnerungsgalerie.',
+      },
+    },
+  },
+  {
+    id: 'aura-estetica',
+    name: 'Aura Estética',
+    statusKey: 'production',
+    statusDot: 'var(--color-accent)',
+    tags: ['Next.js', 'Estética', 'Turnos', 'Salud'],
+    year: '2026',
+    href: 'https://aura-estetica-landing.vercel.app',
+    color: '#f472b6',
+    i18n: {
+      es: {
+        tagline: 'Landing de conversión para centro de medicina estética.',
+        description: 'Catálogo de tratamientos faciales y corporales, tecnología láser, testimonios reales y reserva directa de consultas.',
+      },
+      en: {
+        tagline: 'Conversion landing page for medical aesthetics center.',
+        description: 'Catalog of facial and body treatments, laser technology showcase, customer testimonials, and direct consultation booking.',
+      },
+      pt: {
+        tagline: 'Landing de conversão para centro de medicina estética.',
+        description: 'Catálogo de tratamentos faciais e corporais e agendamento de consultas.',
+      },
+      fr: {
+        tagline: 'Landing page de conversion pour centre de médecine esthétique.',
+        description: 'Catalogue de soins visages et corps et prise de rendez-vous directe.',
+      },
+      de: {
+        tagline: 'Konversionsstarke Landingpage für ein Ästhetikzentrum.',
+        description: 'Übersicht über Gesichts- und Körperbehandlungen mit direkter Buchung.',
+      },
+    },
+  },
+  {
+    id: 'aura-farm',
+    name: 'Aura Farm',
+    statusKey: 'production',
+    statusDot: 'var(--color-accent)',
+    tags: ['Web App', 'Salud', 'Farmacia', 'Next.js'],
+    year: '2026',
+    href: 'https://aura-farm-kappa.vercel.app',
+    color: '#10b981',
+    i18n: {
+      es: {
+        tagline: 'Plataforma web de bienestar y productos dermo-farmacéuticos.',
+        description: 'E-commerce especializado en productos de cuidado personal, dermo-cosmética y suplementos con asesoramiento en línea.',
+      },
+      en: {
+        tagline: 'Web platform for wellness and dermo-pharmaceutical products.',
+        description: 'Specialized e-commerce for skincare, dermo-cosmetics, and health supplements with online consultation support.',
+      },
+      pt: {
+        tagline: 'Plataforma web de bem-estar e produtos dermo-farmacêuticos.',
+        description: 'E-commerce especializado em produtos de cuidados pessoais e dermo-cosmética.',
+      },
+      fr: {
+        tagline: 'Plateforme web de bien-être et de produits dermo-pharmaceutiques.',
+        description: 'E-commerce spécialisé dans les soins de la peau et les compléments de santé.',
+      },
+      de: {
+        tagline: 'Web-Plattform für Wellness- und Dermo-Pharmazie-Produkte.',
+        description: 'Spezialisierter Online-Shop für Hautpflege und Gesundheitsprodukte.',
+      },
+    },
+  },
+  {
+    id: 'modo-living',
+    name: 'Modo Living',
+    statusKey: 'production',
+    statusDot: 'var(--color-accent)',
+    tags: ['Landing', 'Muebles', 'Deco', 'Diseño'],
+    year: '2026',
+    href: 'https://modo-living.vercel.app',
+    color: '#a855f7',
+    i18n: {
+      es: {
+        tagline: 'Landing de exhibición de muebles y diseño de interiores.',
+        description: 'Muestrario digital de sillones, mesas y equipamiento de diseño para livings con asesoramiento personalizado por WhatsApp.',
+      },
+      en: {
+        tagline: 'Furniture showcase and interior design landing page.',
+        description: 'Digital catalog for sofas, tables, and living room design furniture with personalized WhatsApp assistance.',
+      },
+      pt: {
+        tagline: 'Landing de exibição de móveis e design de interiores.',
+        description: 'Catálogo digital de sofás, mesas e móveis para sala de estar.',
+      },
+      fr: {
+        tagline: 'Landing d’exposition de meubles et aménagement d’intérieur.',
+        description: 'Catalogue numérique de canapés, tables et mobilier pour le salon.',
+      },
+      de: {
+        tagline: 'Möbel-Showcase und Landingpage für Innenarchitektur.',
+        description: 'Digitaler Katalog für Sofas, Tische und Wohnzimmermöbel.',
+      },
+    },
+  },
+  {
+    id: 'duplack',
+    name: 'Duplack',
+    statusKey: 'production',
+    statusDot: 'var(--color-accent)',
+    tags: ['Landing', 'Placards', 'Muebles a Medida'],
+    year: '2026',
+    href: 'https://duplack.vercel.app',
+    color: '#64748b',
+    i18n: {
+      es: {
+        tagline: 'Presentación de placards y vestidores a medida.',
+        description: 'Sitio enfocado en la exhibición de muebles funcionales, optimización de espacios, organizadores interiores y cotizador rápido.',
+      },
+      en: {
+        tagline: 'Custom closets and wardrobe presentation site.',
+        description: 'Website focused on displaying functional furniture, space optimization, interior organizers, and quick quotes.',
+      },
+      pt: {
+        tagline: 'Apresentação de armários e closets sob medida.',
+        description: 'Site focado na exibição de móveis funcionais e otimização de espaços.',
+      },
+      fr: {
+        tagline: 'Présentation de placards et dressings sur mesure.',
+        description: 'Site axé sur la présentation de meubles fonctionnels et l’optimisation de l’espace.',
+      },
+      de: {
+        tagline: 'Präsentation von maßgefertigten Kleiderschränken und Ankleiden.',
+        description: 'Website zur Präsentation funktionaler Möbel und Raumoptimierung.',
+      },
+    },
+  },
+  {
+    id: 'orimar-concepto',
+    name: 'Orimar Concepto',
+    statusKey: 'production',
+    statusDot: 'var(--color-accent)',
+    tags: ['Landing', 'Diseño', 'Muebles', 'Concepto'],
+    year: '2026',
+    href: 'https://orimar-concepto.vercel.app',
+    color: '#eab308',
+    i18n: {
+      es: {
+        tagline: 'Showcase de mobiliario y concepto de diseño de autor.',
+        description: 'Sitio editorial para marca de diseño con piezas exclusivas, materiales nobles y atención a los detalles arquitectónicos.',
+      },
+      en: {
+        tagline: 'Showcase of bespoke furniture and design concept.',
+        description: 'Editorial website for design brand featuring exclusive pieces, noble materials, and attention to architectural details.',
+      },
+      pt: {
+        tagline: 'Showcase de mobiliário e conceito de design autoral.',
+        description: 'Site editorial para marca de design com peças exclusivas e materiais nobres.',
+      },
+      fr: {
+        tagline: 'Vitrines de mobilier et concept de design sur mesure.',
+        description: 'Site éditorial pour marque de design présentant des pièces exclusives.',
+      },
+      de: {
+        tagline: 'Showcase für Designermöbel und Wohnkonzepte.',
+        description: 'Redaktionelle Website für eine Designmarke mit exklusiven Einzelstücken.',
+      },
+    },
+  },
+  {
+    id: 'dvamoblamientos',
+    name: 'DVA Moblamientos',
+    statusKey: 'production',
+    statusDot: 'var(--color-accent)',
+    tags: ['Landing', 'Cocinas', 'Muebles', 'Diseño'],
+    year: '2026',
+    href: 'https://dvamoblamientos.vercel.app',
+    color: '#3b82f6',
+    i18n: {
+      es: {
+        tagline: 'Amoblamientos de cocina y mobiliario para el hogar.',
+        description: 'Galería de proyectos de cocina terminados, herrajes de última generación, acabados en melamina y cotización a medida.',
+      },
+      en: {
+        tagline: 'Kitchen furniture and custom home furnishings.',
+        description: 'Gallery of completed kitchen projects, next-gen hardware, melamine finishes, and custom quoting.',
+      },
+      pt: {
+        tagline: 'Móveis de cozinha e móveis para toda a casa.',
+        description: 'Galeria de projetos de cozinha concluídos e orçamento sob medida.',
+      },
+      fr: {
+        tagline: 'Mobilier de cuisine et aménagement pour la maison.',
+        description: 'Galerie de projets de cuisine réalisés et devis sur mesure.',
+      },
+      de: {
+        tagline: 'Küchenmöbel und maßgefertigte Inneneinrichtung.',
+        description: 'Galerie fertiggestellter Küchenprojekte und individuelle Angebote.',
+      },
+    },
+  },
+  {
+    id: 'crdecoradores',
+    name: 'CR Decoradores',
+    statusKey: 'production',
+    statusDot: 'var(--color-accent)',
+    tags: ['Landing', 'Decoración', 'Cortinados', 'Hogar'],
+    year: '2026',
+    href: 'https://crdecoradores.vercel.app',
+    color: '#14b8a6',
+    i18n: {
+      es: {
+        tagline: 'Sitio institucional para empresa de decoración y cortinajes.',
+        description: 'Presentación de servicios de confección de cortinas, roller blackout, sistemas motorizados y ambientación de espacios.',
+      },
+      en: {
+        tagline: 'Institutional website for interior decoration and curtains company.',
+        description: 'Presentation of custom curtain manufacturing, blackout rollers, motorized systems, and space styling.',
+      },
+      pt: {
+        tagline: 'Site institucional para empresa de decoração e cortinas.',
+        description: 'Apresentação de serviços de confecção de cortinas, blackout e sistemas motorizados.',
+      },
+      fr: {
+        tagline: 'Site institutionnel pour entreprise de décoration et voilages.',
+        description: 'Présentation des services de confection de rideaux, stores occultants et systèmes motorisés.',
+      },
+      de: {
+        tagline: 'Institutionelle Website für ein Dekoration- und Vorhangunternehmen.',
+        description: 'Präsentation von maßgefertigten Vorhängen, Blackout-Rollos und motorisierten Systemen.',
+      },
     },
   },
 ]
+
