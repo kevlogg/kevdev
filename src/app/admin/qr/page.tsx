@@ -13,7 +13,8 @@ const PRESETS = [
 
 // Logotipos disponibles
 const LOGO_OPTIONS = [
-  { label: 'Logo Isotipo HQ', src: '/favicon-512x512.png' },
+  { label: 'Logo KevDev (logo2-png)', src: '/logo2-png.png' },
+  { label: 'Isotipo HQ (512x512)', src: '/favicon-512x512.png' },
   { label: 'Logo Transparente', src: '/logo1-transparent.png' },
   { label: 'Apple Touch Icon', src: '/apple-touch-icon.png' },
 ]
@@ -59,7 +60,7 @@ export default function AdminQRPage() {
   const [fgColor, setFgColor] = useState('#090d16')
   const [bgColor, setBgColor] = useState('#ffffff')
   const [showLogo, setShowLogo] = useState(true)
-  const [selectedLogo, setSelectedLogo] = useState('/favicon-512x512.png')
+  const [selectedLogo, setSelectedLogo] = useState('/logo2-png.png')
   const [customLogoUrl, setCustomLogoUrl] = useState<string | null>(null)
   const [logoScale, setLogoScale] = useState(22) // porcentaje del ancho
   const [errorLevel, setErrorLevel] = useState<'L' | 'M' | 'Q' | 'H'>('H')

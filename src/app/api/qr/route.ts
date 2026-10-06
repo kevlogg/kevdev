@@ -40,7 +40,10 @@ export async function GET(req: NextRequest) {
     // Read logo file from public/
     let base64Logo = ''
     try {
-      const logoPath = path.join(process.cwd(), 'public', 'favicon-512x512.png')
+      let logoPath = path.join(process.cwd(), 'public', 'logo2-png.png')
+      if (!fs.existsSync(logoPath)) {
+        logoPath = path.join(process.cwd(), 'public', 'favicon-512x512.png')
+      }
       if (fs.existsSync(logoPath)) {
         const logoBuffer = fs.readFileSync(logoPath)
         base64Logo = `data:image/png;base64,${logoBuffer.toString('base64')}`
