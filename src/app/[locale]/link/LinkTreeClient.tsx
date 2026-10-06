@@ -398,9 +398,8 @@ export default function LinkTreeClient() {
                   backdropFilter: 'blur(12px)',
                   border: `1.5px solid ${isActive ? '#00e5ff' : 'rgba(255, 255, 255, 0.08)'}`,
                   borderRadius: 16,
-                  textDecoration: 'none',
                   color: 'inherit',
-                  transition: 'border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1)',
+                  transition: 'border-color 0.8s ease-in-out, box-shadow 0.8s ease-in-out, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)',
                   position: 'relative',
                   overflow: 'hidden',
                   boxShadow: isActive
@@ -421,7 +420,7 @@ export default function LinkTreeClient() {
                     : 'none'
                 }}
               >
-                {/* SVG Border Light Beam Traveling along the card edges */}
+                {/* SVG Border Light Beam Traveling along the card edges with 0.8s crossfade */}
                 <svg
                   style={{
                     position: 'absolute',
@@ -437,7 +436,7 @@ export default function LinkTreeClient() {
                   <defs>
                     <linearGradient id={`beam-grad-${item.id}`} x1="0%" y1="0%" x2="100%" y2="100%">
                       <stop offset="0%" stopColor="#00e5ff" stopOpacity="1" />
-                      <stop offset="50%" stopColor="#33ebff" stopOpacity="0.9" />
+                      <stop offset="50%" stopColor="#33ebff" stopOpacity="0.95" />
                       <stop offset="100%" stopColor="#00e5ff" stopOpacity="0.1" />
                     </linearGradient>
                     <filter id={`beam-glow-${item.id}`} x="-30%" y="-30%" width="160%" height="160%">
@@ -449,26 +448,26 @@ export default function LinkTreeClient() {
                     </filter>
                   </defs>
 
-                  {/* Active Cyan Light Segment sliding around the 4 border edges */}
-                  {isActive && (
-                    <rect
-                      x="1"
-                      y="1"
-                      width="calc(100% - 2px)"
-                      height="calc(100% - 2px)"
-                      rx="15"
-                      fill="none"
-                      stroke={`url(#beam-grad-${item.id})`}
-                      strokeWidth="3.5"
-                      strokeLinecap="round"
-                      filter={`url(#beam-glow-${item.id})`}
-                      pathLength="100"
-                      strokeDasharray="22 78"
-                      style={{
-                        animation: 'edge-beam-trace 1.8s linear infinite',
-                      }}
-                    />
-                  )}
+                  {/* Active Light Segment with smooth crossfade transition */}
+                  <rect
+                    x="1"
+                    y="1"
+                    width="calc(100% - 2px)"
+                    height="calc(100% - 2px)"
+                    rx="15"
+                    fill="none"
+                    stroke={`url(#beam-grad-${item.id})`}
+                    strokeWidth="3.5"
+                    strokeLinecap="round"
+                    filter={`url(#beam-glow-${item.id})`}
+                    pathLength="100"
+                    strokeDasharray="24 76"
+                    style={{
+                      opacity: isActive ? 1 : 0,
+                      transition: 'opacity 0.8s ease-in-out',
+                      animation: 'edge-beam-trace 2s linear infinite',
+                    }}
+                  />
                 </svg>
 
                 <style>{`
