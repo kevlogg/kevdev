@@ -180,6 +180,7 @@ const CALVOS_IDS = ['calvoscompresores', 'calvos-compresores', 'fx25djbynqynowq3
 const DULCE_HOGAR_IDS = ['dulcehogar', 'dulce-hogar', 'dulce_hogar', 'gz3g7r0ld4z3g3k5m7n9', 'q6h68vtjro2cd2qwtslj']
 const PAJAROS_IDS = ['pajarosenlacabeza', 'pajaros-en-la-cabeza', 'pajaros_en_la_cabeza', 'pajaros', 'pajaro', 'qrkvonucfeuojzw32bee', 'qrkvonucfeuojzw32bee']
 const ONMAS_IDS = ['onmas', 'entre-rios-on', 'entre_rios_on', 'entrerios-on', 'entrerioson', 'on_mas', 'on-mas']
+const AUTOMOTOR_IDS = ['sitioautomotor', 'sitio-automotor', 'sitio_automotor', 'j7rqjxzppbba1bgp1pb7', 'J7RqjxzpPBaG1bGp1pB7']
 
 export async function getHistorialPagos(clienteId: string): Promise<HistorialPago[]> {
   try {
@@ -189,12 +190,17 @@ export async function getHistorialPagos(clienteId: string): Promise<HistorialPag
     const isDulceHogarQuery = DULCE_HOGAR_IDS.includes(normId) || normId.includes('dulce')
     const isPajarosQuery = PAJAROS_IDS.includes(normId) || normId.includes('pajaro') || normId.includes('cabeza') || normId.includes('qrkvon')
     const isOnmasQuery = ONMAS_IDS.includes(normId) || normId.includes('onmas') || normId.includes('entre-rios') || normId.includes('entrerios')
+    const isAutomotorQuery = AUTOMOTOR_IDS.includes(normId) || normId.includes('automotor') || normId.includes('sitio') || normId.includes('j7rq')
 
     // Resolver IDs de documentos de clientes coincidentes en Firestore
     const matchingClientDocIds = new Set<string>([clienteId, normId])
     if (isPajarosQuery) {
       matchingClientDocIds.add('qrKvonUCFeUOJZW32bee')
       matchingClientDocIds.add('qrkvonucfeuojzw32bee')
+    }
+    if (isAutomotorQuery) {
+      matchingClientDocIds.add('J7RqjxzpPBaG1bGp1pB7')
+      matchingClientDocIds.add('j7rqjxzppbba1bgp1pb7')
     }
     try {
       const cliSnap = await getDocs(collection(db, 'clientes'))
@@ -220,6 +226,9 @@ export async function getHistorialPagos(clienteId: string): Promise<HistorialPag
         if (isOnmasQuery && (cNombre.includes('onmas') || cNombre.includes('entre') || cUrl.includes('onmas') || ONMAS_IDS.includes(cIdLower))) {
           matchingClientDocIds.add(cId)
         }
+        if (isAutomotorQuery && (cNombre.includes('automotor') || cUrl.includes('automotor') || AUTOMOTOR_IDS.includes(cIdLower))) {
+          matchingClientDocIds.add(cId)
+        }
       })
     } catch (cliErr) {
       console.warn('[getHistorialPagos] Warning buscando doc IDs de clientes:', cliErr)
@@ -243,6 +252,7 @@ export async function getHistorialPagos(clienteId: string): Promise<HistorialPag
         if (isDulceHogarQuery && (DULCE_HOGAR_IDS.includes(pNormLower) || pNormLower.includes('dulce'))) return true
         if (isPajarosQuery && (PAJAROS_IDS.includes(pNormLower) || pNormLower.includes('pajaro') || pNormLower.includes('cabeza') || pNormLower.includes('qrkvon'))) return true
         if (isOnmasQuery && (ONMAS_IDS.includes(pNormLower) || pNormLower.includes('onmas') || pNormLower.includes('entre-rios') || pNormLower.includes('entrerios'))) return true
+        if (isAutomotorQuery && (AUTOMOTOR_IDS.includes(pNormLower) || pNormLower.includes('automotor') || pNormLower.includes('sitio'))) return true
         return false
       })
       .sort((a, b) => (b.fecha || '').localeCompare(a.fecha || ''))

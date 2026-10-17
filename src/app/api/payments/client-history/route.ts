@@ -34,6 +34,7 @@ export async function GET(req: Request) {
       const isCalvosQuery = normId.includes('calvo')
       const isDulceHogarQuery = normId.includes('dulce')
       const isOnmasQuery = normId.includes('onmas') || normId.includes('entre-rios') || normId.includes('entrerios') || normId.includes('on_mas')
+      const isAutomotorQuery = normId.includes('automotor') || normId.includes('sitio') || normId.includes('j7rq')
 
       const matchedCli = clientes.find(c => {
         const cId = String(c.id || '').toLowerCase()
@@ -44,6 +45,7 @@ export async function GET(req: Request) {
         if (isCalvosQuery && (cNom.includes('calvo') || cUrl.includes('calvo'))) return true
         if (isDulceHogarQuery && (cNom.includes('dulce') || cUrl.includes('dulce'))) return true
         if (isOnmasQuery && (cNom.includes('onmas') || cNom.includes('entre') || cUrl.includes('onmas') || cUrl.includes('entre-rios'))) return true
+        if (isAutomotorQuery && (cNom.includes('automotor') || cUrl.includes('automotor') || cId.includes('j7rq'))) return true
         return false
       })
 
