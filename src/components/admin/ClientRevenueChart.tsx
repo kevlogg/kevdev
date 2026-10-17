@@ -68,6 +68,13 @@ export default function ClientRevenueChart({ pagos }: ClientRevenueChartProps) {
   const peakIdx = values.indexOf(Math.max(...values))
   const peakMonth = chartData[peakIdx]
 
+  // Cálculo de tendencia vs mes anterior
+  const currentMonthVal = chartData[chartData.length - 1]?.total || 0
+  const prevMonthVal = chartData[chartData.length - 2]?.total || 0
+  const diffPct = prevMonthVal > 0 
+    ? Math.round(((currentMonthVal - prevMonthVal) / prevMonthVal) * 100)
+    : currentMonthVal > 0 ? 100 : 0
+
   return (
     <div
       style={{
@@ -95,7 +102,7 @@ export default function ClientRevenueChart({ pagos }: ClientRevenueChartProps) {
           </p>
         </div>
 
-        {/* Resumen Promedio */}
+        {/* Resumen Promedio y Tendencia */}
         <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
           <div style={{ background: 'rgba(56, 189, 248, 0.08)', border: '1px solid rgba(56, 189, 248, 0.2)', padding: '6px 12px', borderRadius: 10 }}>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: '#38bdf8', textTransform: 'uppercase' }}>
@@ -112,6 +119,31 @@ export default function ClientRevenueChart({ pagos }: ClientRevenueChartProps) {
             </span>
             <p style={{ fontFamily: 'var(--font-display)', fontSize: '1rem', fontWeight: 700, color: '#4ade80', margin: 0 }}>
               {formatARS(peakMonth?.total || 0)}
+            </p>
+          </div>
+
+          <div style={{
+            background: diffPct >= 0 ? 'rgba(74, 222, 128, 0.08)' : 'rgba(248, 113, 113, 0.08)',
+            border: `1px solid ${diffPct >= 0 ? 'rgba(74, 222, 128, 0.2)' : 'rgba(248, 113, 113, 0.2)'}`,
+            padding: '6px 12px',
+            borderRadius: 10
+          }}>
+            <span style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.6875rem',
+              color: diffPct >= 0 ? '#4ade80' : '#f87171',
+              textTransform: 'uppercase'
+            }}>
+              Tendencia Intermensual
+            </span>
+            <p style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: '1rem',
+              fontWeight: 700,
+              color: diffPct >= 0 ? '#4ade80' : '#f87171',
+              margin: 0
+            }}>
+              {diffPct >= 0 ? `+${diffPct}%` : `${diffPct}%`}
             </p>
           </div>
         </div>
