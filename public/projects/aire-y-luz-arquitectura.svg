@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1c1507" />
+      <stop offset="50%" stop-color="#0a0d16" />
+      <stop offset="100%" stop-color="#04060c" />
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#f59e0b88" />
+    </linearGradient>
+    <radialGradient id="glow" cx="80%" cy="20%" r="50%">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="glowLeft" cx="20%" cy="80%" r="50%">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.2" />
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0" />
+    </radialGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="1200" height="800" fill="url(#bgGrad)" />
+  <rect width="1200" height="800" fill="url(#glow)" />
+  <rect width="1200" height="800" fill="url(#glowLeft)" />
+
+  <!-- Subtle UI Grid lines -->
+  <path d="M0 100 H1200 M0 200 H1200 M0 300 H1200 M0 400 H1200 M0 500 H1200 M0 600 H1200 M0 700 H1200" stroke="#ffffff" stroke-opacity="0.03" stroke-width="1"/>
+  <path d="M200 0 V800 M400 0 V800 M600 0 V800 M800 0 V800 M1000 0 V800" stroke="#ffffff" stroke-opacity="0.03" stroke-width="1"/>
+
+  <!-- Browser Window Frame -->
+  <g transform="translate(60, 50)" filter="url(#shadow)">
+    <!-- Browser Bar -->
+    <rect width="1080" height="42" rx="10" ry="10" fill="#141824" stroke="#ffffff" stroke-opacity="0.12" stroke-width="1"/>
+    <circle cx="24" cy="21" r="6" fill="#ff5f56"/>
+    <circle cx="42" cy="21" r="6" fill="#ffbd2e"/>
+    <circle cx="60" cy="21" r="6" fill="#27c93f"/>
+    <!-- URL Bar -->
+    <rect x="90" y="10" width="450" height="22" rx="6" fill="#0b0e17"/>
+    <text x="105" y="25" fill="#8b95b0" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="500">https://www.aire-y-luz-arquitectura.com.ar</text>
+
+    <!-- Navigation Menu mockup -->
+    <text x="820" y="26" fill="#ffffff" font-family="system-ui, sans-serif" font-size="13" font-weight="600" opacity="0.9">Inicio</text>
+    <text x="880" y="26" fill="#8b95b0" font-family="system-ui, sans-serif" font-size="13">Servicios</text>
+    <text x="960" y="26" fill="#8b95b0" font-family="system-ui, sans-serif" font-size="13">Contacto</text>
+
+    <!-- Main Web Canvas Content -->
+    <rect y="42" width="1080" height="658" rx="0" ry="0" fill="#090c15" fill-opacity="0.95" stroke="#ffffff" stroke-opacity="0.1" stroke-width="1"/>
+
+    <!-- Hero Section Content -->
+    <!-- Top Accent Badge -->
+    <rect x="80" y="90" width="220" height="32" rx="16" fill="#f59e0b" fill-opacity="0.15" stroke="#f59e0b" stroke-opacity="0.4" stroke-width="1"/>
+    <text x="100" y="111" fill="#f59e0b" font-family="system-ui, sans-serif" font-size="13" font-weight="700" letter-spacing="1">📐 OBRAS RESIDENCIALES</text>
+
+    <!-- Hero Headline -->
+    <text x="80" y="175" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="44" font-weight="800" letter-spacing="-1">Aire y Luz Arquitectura</text>
+
+    <!-- Hero Subtitle -->
+    <text x="80" y="215" fill="#f59e0b" font-family="system-ui, sans-serif" font-size="22" font-weight="600">Espacios que Inspiran Luz Natural</text>
+    <text x="80" y="248" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="16" font-weight="400">Portafolio de Obras 2026</text>
+
+    <!-- CTA Button -->
+    <rect x="80" y="280" width="190" height="48" rx="24" fill="url(#accentGrad)"/>
+    <text x="118" y="310" fill="#000000" font-family="system-ui, sans-serif" font-size="15" font-weight="800">Ver Propuesta →</text>
+
+    <rect x="290" y="280" width="160" height="48" rx="24" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.15"/>
+    <text x="325" y="310" fill="#ffffff" font-family="system-ui, sans-serif" font-size="15" font-weight="600">Consultar</text>
+
+    <!-- Right Side Hero Image Card / Showcase -->
+    <g transform="translate(560, 90)">
+      <rect width="440" height="300" rx="16" fill="#131927" stroke="#f59e0b" stroke-opacity="0.3" stroke-width="1.5" filter="url(#shadow)"/>
+      <rect width="440" height="300" rx="16" fill="url(#glow)"/>
+
+      <!-- Inner Visual Graphic -->
+      <circle cx="220" cy="130" r="70" fill="#f59e0b" fill-opacity="0.12" stroke="#f59e0b" stroke-opacity="0.5" stroke-width="2"/>
+      <text x="220" y="145" fill="#f59e0b" font-family="system-ui, sans-serif" font-size="56" text-anchor="middle">📐</text>
+
+      <text x="220" y="230" fill="#ffffff" font-family="system-ui, sans-serif" font-size="20" font-weight="700" text-anchor="middle">Estudio de Arquitectura & Diseño Residencial</text>
+
+      <!-- Badge row inside card -->
+      <rect x="70" y="252" width="90" height="24" rx="12" fill="#ffffff" fill-opacity="0.08"/>
+      <text x="115" y="268" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="11" font-weight="600" text-anchor="middle">Obras Residenciales</text>
+
+      <rect x="175" y="252" width="90" height="24" rx="12" fill="#ffffff" fill-opacity="0.08"/>
+      <text x="220" y="268" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="11" font-weight="600" text-anchor="middle">Diseño Minimalista</text>
+
+      <rect x="280" y="252" width="90" height="24" rx="12" fill="#ffffff" fill-opacity="0.08"/>
+      <text x="325" y="268" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="11" font-weight="600" text-anchor="middle">Dirección de Obra</text>
+    </g>
+
+    <!-- Bottom Cards Grid (Features/Products) -->
+    <g transform="translate(80, 420)">
+      <text x="0" y="0" fill="#ffffff" font-family="system-ui, sans-serif" font-size="18" font-weight="700">Destacados del Proyecto</text>
+
+      
+        <g transform="translate(0, 25)">
+          <rect width="290" height="180" rx="12" fill="#111625" stroke="#ffffff" stroke-opacity="0.08" stroke-width="1"/>
+          <rect x="15" y="15" width="40" height="40" rx="8" fill="#f59e0b" fill-opacity="0.2"/>
+          <text x="35" y="41" fill="#f59e0b" font-family="system-ui, sans-serif" font-size="18" text-anchor="middle">01</text>
+
+          <text x="15" y="85" fill="#ffffff" font-family="system-ui, sans-serif" font-size="17" font-weight="700">Casa Gurruchaga</text>
+          <text x="15" y="112" fill="#64748b" font-family="system-ui, sans-serif" font-size="13">Servicio integral y personalizado con acabados de excelencia.</text>
+
+          <text x="15" y="155" fill="#f59e0b" font-family="system-ui, sans-serif" font-size="13" font-weight="700">Saber más →</text>
+        </g>
+      
+        <g transform="translate(310, 25)">
+          <rect width="290" height="180" rx="12" fill="#111625" stroke="#ffffff" stroke-opacity="0.08" stroke-width="1"/>
+          <rect x="15" y="15" width="40" height="40" rx="8" fill="#f59e0b" fill-opacity="0.2"/>
+          <text x="35" y="41" fill="#f59e0b" font-family="system-ui, sans-serif" font-size="18" text-anchor="middle">02</text>
+
+          <text x="15" y="85" fill="#ffffff" font-family="system-ui, sans-serif" font-size="17" font-weight="700">Refugio Thames</text>
+          <text x="15" y="112" fill="#64748b" font-family="system-ui, sans-serif" font-size="13">Servicio integral y personalizado con acabados de excelencia.</text>
+
+          <text x="15" y="155" fill="#f59e0b" font-family="system-ui, sans-serif" font-size="13" font-weight="700">Saber más →</text>
+        </g>
+      
+        <g transform="translate(620, 25)">
+          <rect width="290" height="180" rx="12" fill="#111625" stroke="#ffffff" stroke-opacity="0.08" stroke-width="1"/>
+          <rect x="15" y="15" width="40" height="40" rx="8" fill="#f59e0b" fill-opacity="0.2"/>
+          <text x="35" y="41" fill="#f59e0b" font-family="system-ui, sans-serif" font-size="18" text-anchor="middle">03</text>
+
+          <text x="15" y="85" fill="#ffffff" font-family="system-ui, sans-serif" font-size="17" font-weight="700">PH Colegiales</text>
+          <text x="15" y="112" fill="#64748b" font-family="system-ui, sans-serif" font-size="13">Servicio integral y personalizado con acabados de excelencia.</text>
+
+          <text x="15" y="155" fill="#f59e0b" font-family="system-ui, sans-serif" font-size="13" font-weight="700">Saber más →</text>
+        </g>
+      
+    </g>
+
+  </g>
+</svg>

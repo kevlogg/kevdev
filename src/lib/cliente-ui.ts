@@ -38,3 +38,18 @@ export const DEMO_COLORS: Record<DemoEstado, string> = {
   HECHA:       '#fbbf24',
   '':          'var(--color-faint)',
 }
+
+export const ESTADO_PAGO_LABELS: Record<string, string> = {
+  'AL_DIA':    'Al día',
+  'PENDIENTE': 'Pendiente',
+  'VENCIDO':   'Vencido',
+  '':          'Sin registrar',
+}
+
+export const ESTADO_PAGO_COLORS: Record<string, string> = {
+  'AL_DIA':    '#4ade80',
+  'PENDIENTE': '#f59e0b',
+  'VENCIDO':   '#f87171',
+  '':          'var(--color-faint)',
+}
+
