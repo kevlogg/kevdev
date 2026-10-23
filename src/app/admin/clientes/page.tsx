@@ -190,6 +190,31 @@ export default function ClientesPage() {
 
   return (
     <div style={{ width: '100%' }}>
+      {/* Header */}
+      <div style={{ marginBottom: 20 }}>
+        <h1 style={{
+          fontFamily: 'var(--font-display)',
+          fontSize: '1.625rem',
+          fontWeight: 800,
+          color: 'var(--color-star)',
+          letterSpacing: '-0.02em',
+          margin: '0 0 4px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 10,
+        }}>
+          <span>👥</span> Clientes & Cuentas
+        </h1>
+        <p style={{
+          fontFamily: 'var(--font-ui)',
+          fontSize: '0.8125rem',
+          color: 'var(--color-muted)',
+          margin: 0,
+        }}>
+          Gestión de clientes, estado de demos, planes activos y sincronización de pagos.
+        </p>
+      </div>
+
       {/* Toolbar */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, gap: 12, flexWrap: 'wrap' }}>
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>

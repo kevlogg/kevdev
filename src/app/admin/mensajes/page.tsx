@@ -241,6 +241,31 @@ export default function MensajesPage() {
 
   return (
     <div style={{ maxWidth: 720, display: 'flex', flexDirection: 'column', gap: 24 }}>
+      {/* Header */}
+      <div>
+        <h1 style={{
+          fontFamily: 'var(--font-display)',
+          fontSize: '1.625rem',
+          fontWeight: 800,
+          color: 'var(--color-star)',
+          letterSpacing: '-0.02em',
+          margin: '0 0 4px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 10,
+        }}>
+          <span>💬</span> Plantillas de Mensajes
+        </h1>
+        <p style={{
+          fontFamily: 'var(--font-ui)',
+          fontSize: '0.8125rem',
+          color: 'var(--color-muted)',
+          margin: 0,
+        }}>
+          Mensajes prediseñados para prospección, seguimiento y entrega de credenciales.
+        </p>
+      </div>
+
       {/* Inputs */}
       <div style={{
         display: 'flex',

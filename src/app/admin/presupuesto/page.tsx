@@ -103,6 +103,30 @@ export default function PresupuestoPage() {
 
   return (
     <div style={{ maxWidth: 680, display: 'flex', flexDirection: 'column', gap: 20 }}>
+      {/* Header */}
+      <div>
+        <h1 style={{
+          fontFamily: 'var(--font-display)',
+          fontSize: '1.625rem',
+          fontWeight: 800,
+          color: 'var(--color-star)',
+          letterSpacing: '-0.02em',
+          margin: '0 0 4px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 10,
+        }}>
+          <span>💰</span> Presupuesto & Cotizaciones
+        </h1>
+        <p style={{
+          fontFamily: 'var(--font-ui)',
+          fontSize: '0.8125rem',
+          color: 'var(--color-muted)',
+          margin: 0,
+        }}>
+          Calculador rápido de planes de pago único y suscripción mensual para enviar a clientes.
+        </p>
+      </div>
 
       {/* Plan */}
       <div style={card}>

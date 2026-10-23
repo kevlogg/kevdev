@@ -5,15 +5,15 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 const NAV_ITEMS = [
-  { href: '/admin/dashboard',            label: 'Dashboard',         icon: '▦' },
-  { href: '/admin/organizador',          label: 'Organizador',       icon: '📋' },
-  { href: '/admin/clientes',             label: 'Clientes',          icon: '◈' },
+  { href: '/admin/dashboard',            label: 'Dashboard',            icon: '📊' },
+  { href: '/admin/organizador',          label: 'Organizador',          icon: '📋' },
+  { href: '/admin/clientes',             label: 'Clientes',             icon: '👥' },
   { href: '/admin/convocatoria',         label: 'Convocatoria Impulso', icon: '🚀' },
-  { href: '/admin/estadisticas/web',      label: 'Estadísticas Web',  icon: '🌐' },
-  { href: '/admin/estadisticas/clientes', label: 'Métricas Clientes', icon: '💼' },
-  { href: '/admin/presupuesto',          label: 'Presupuesto',       icon: '◎' },
-  { href: '/admin/mensajes',             label: 'Mensajes',          icon: '◇' },
-  { href: '/admin/qr',                   label: 'Generador QR',      icon: '📱' },
+  { href: '/admin/estadisticas/web',      label: 'Estadísticas Web',     icon: '🌐' },
+  { href: '/admin/estadisticas/clientes', label: 'Métricas Clientes',    icon: '💼' },
+  { href: '/admin/presupuesto',          label: 'Presupuesto',          icon: '💰' },
+  { href: '/admin/mensajes',             label: 'Mensajes',             icon: '💬' },
+  { href: '/admin/qr',                   label: 'Generador QR',         icon: '📱' },
 ]
 
 export default function AdminSidebar() {

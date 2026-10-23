@@ -182,8 +182,11 @@ export default function DashboardPage() {
             color: 'var(--color-star)',
             letterSpacing: '-0.02em',
             margin: '0 0 4px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 10,
           }}>
-            Dashboard
+            <span>📊</span> Dashboard
           </h1>
           <p style={{
             fontFamily: 'var(--font-ui)',
@@ -214,7 +217,25 @@ export default function DashboardPage() {
               transition: 'transform 0.15s, opacity 0.15s',
             }}
           >
-            <span>+</span> Nuevo Cliente
+            <span>👥</span> + Nuevo Cliente
+          </Link>
+          <Link
+            href="/admin/organizador"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 6,
+              background: 'var(--color-depth)',
+              border: '1px solid var(--color-border)',
+              color: 'var(--color-star)',
+              fontSize: '0.8125rem',
+              fontFamily: 'var(--font-ui)',
+              padding: '8px 12px',
+              borderRadius: 8,
+              textDecoration: 'none',
+            }}
+          >
+            <span>📋</span> Organizador
           </Link>
           <Link
             href="/admin/presupuesto"
@@ -232,7 +253,7 @@ export default function DashboardPage() {
               textDecoration: 'none',
             }}
           >
-            <span>◎</span> Presupuesto
+            <span>💰</span> Presupuesto
           </Link>
           <Link
             href="/admin/mensajes"
@@ -250,7 +271,7 @@ export default function DashboardPage() {
               textDecoration: 'none',
             }}
           >
-            <span>◇</span> Plantillas
+            <span>💬</span> Plantillas
           </Link>
           <Link
             href="/admin/qr"
