@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 
@@ -34,6 +35,46 @@ const GOOGLE_REVIEWS = [
     comment:
       'Fenómeno kevin y su equipo de Kevdev. Nos armó una aplicación, una página web y hasta nos creó un juego que está mejorando, son unos cracks!',
   },
+  {
+    name: 'Prana Pro',
+    role: '1 opinión · 0 fotos',
+    initials: 'PP',
+    avatarBg: 'linear-gradient(135deg, #059669 0%, #10b981 100%)',
+    rating: 5,
+    date: 'Hace 3 semanas',
+    comment:
+      'Si buscas tecnología de vanguardia y procesos eficientes son los indicados, nos hicieron una automatización, landing page y sistema de stock en menos de 2 semanas una locura, muy recomendados!!!',
+  },
+  {
+    name: 'marpla code',
+    role: '2 opiniones · 1 foto',
+    initials: 'MC',
+    avatarBg: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
+    rating: 5,
+    date: 'Hace 3 semanas',
+    comment:
+      'Necesitábamos una landing page para un cliente grande y los genios de KevDev supieron resolver a la altura, capos.',
+  },
+  {
+    name: 'Camila Nardi',
+    role: '3 opiniones · 0 fotos',
+    initials: 'CN',
+    avatarBg: 'linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%)',
+    rating: 5,
+    date: 'Hace 3 semanas',
+    comment:
+      'Entiende muy bien lo que uno busca!! Son divinos y muy profesionales siempre muy atentos kevin y su team, re talentosos 🙌',
+  },
+  {
+    name: 'Emiliano Firpo',
+    role: '7 opiniones · 1 foto',
+    initials: 'EF',
+    avatarBg: 'linear-gradient(135deg, #2563eb 0%, #0284c7 100%)',
+    rating: 5,
+    date: 'Hace 3 semanas',
+    comment:
+      'Nos contactamos con Kevin para realizar un sitio web para el mundial 2026 y superó nuestras expectativas, altamente recomendable, interpreta muy rápido lo que uno quiere y lo hace realidad con la misma velocidad, muy bueno en lo que hace el y su equipo!',
+  },
 ]
 
 function GoogleGIcon() {
@@ -63,6 +104,61 @@ export default function Footer() {
   const t = useTranslations('footer')
   const year = new Date().getFullYear()
 
+  // Carousel state and refs
+  const carouselRef = useRef<HTMLDivElement>(null)
+  const [isPaused, setIsPaused] = useState(false)
+  const [isDragging, setIsDragging] = useState(false)
+  const dragStartX = useRef(0)
+  const dragStartScrollLeft = useRef(0)
+
+  // Scroll carousel by direction
+  const scrollByCard = useCallback((direction: 'next' | 'prev') => {
+    const el = carouselRef.current
+    if (!el) return
+    const cardWidth = el.firstElementChild ? (el.firstElementChild as HTMLElement).offsetWidth + 16 : 320
+    const scrollAmount = direction === 'next' ? cardWidth : -cardWidth
+    
+    // Check if at the end and looping forward
+    if (direction === 'next' && el.scrollLeft + el.clientWidth >= el.scrollWidth - 15) {
+      el.scrollTo({ left: 0, behavior: 'smooth' })
+    } else if (direction === 'prev' && el.scrollLeft <= 5) {
+      el.scrollTo({ left: el.scrollWidth, behavior: 'smooth' })
+    } else {
+      el.scrollBy({ left: scrollAmount, behavior: 'smooth' })
+    }
+  }, [])
+
+  // Auto-scroll loop
+  useEffect(() => {
+    if (isPaused || isDragging) return
+    const interval = setInterval(() => {
+      scrollByCard('next')
+    }, 3800)
+    return () => clearInterval(interval)
+  }, [isPaused, isDragging, scrollByCard])
+
+  // Mouse Drag to Scroll handlers
+  const handleMouseDown = (e: React.MouseEvent) => {
+    const el = carouselRef.current
+    if (!el) return
+    setIsDragging(true)
+    setIsPaused(true)
+    dragStartX.current = e.pageX - el.offsetLeft
+    dragStartScrollLeft.current = el.scrollLeft
+  }
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || !carouselRef.current) return
+    e.preventDefault()
+    const x = e.pageX - carouselRef.current.offsetLeft
+    const walk = (x - dragStartX.current) * 1.4
+    carouselRef.current.scrollLeft = dragStartScrollLeft.current - walk
+  }
+
+  const handleMouseUpOrLeave = () => {
+    setIsDragging(false)
+  }
+
   return (
     <footer
       style={{
@@ -78,7 +174,9 @@ export default function Footer() {
       <div className="site-container" style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
         
         {/* Ficha de Google Business Profile & Reseñas */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+          
+          {/* Header Card con botones de acción */}
           <div
             style={{
               background: 'rgba(15, 23, 42, 0.35)',
@@ -119,7 +217,7 @@ export default function Footer() {
                   Google Business Profile Oficial
                 </span>
                 <span style={{ color: '#fbbc04', fontWeight: 700, fontSize: '0.8125rem' }}>
-                  5.0 ★★★★★
+                  5.0 ★★★★★ (7 reseñas verificadas)
                 </span>
               </div>
               <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.8125rem', color: 'var(--color-muted)', margin: 0 }}>
@@ -127,42 +225,171 @@ export default function Footer() {
               </p>
             </div>
 
-            <a
-              href="https://share.google/Vmv20uo1V4pSFQY8h"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                background: 'rgba(234, 67, 53, 0.85)',
-                backdropFilter: 'blur(8px)',
-                color: '#ffffff',
-                fontWeight: 700,
-                fontSize: '0.8125rem',
-                padding: '0.625rem 1.125rem',
-                borderRadius: 10,
-                textDecoration: 'none',
-                boxShadow: '0 4px 14px rgba(234, 67, 53, 0.25)',
-                transition: 'transform 0.2s, background 0.2s',
-              }}
-            >
-              📍 <span>Ver Ficha en Google</span>
-            </a>
+            {/* Acciones: Dejar mi reseña (Nuevo) + Ver Ficha */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+              <a
+                href="https://g.page/r/CQ05s4U8jZtwEBM/review"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  background: 'linear-gradient(135deg, #00e5ff 0%, #3b82f6 100%)',
+                  color: '#07090e',
+                  fontWeight: 800,
+                  fontSize: '0.8125rem',
+                  padding: '0.625rem 1.15rem',
+                  borderRadius: 10,
+                  textDecoration: 'none',
+                  boxShadow: '0 4px 18px rgba(0, 229, 255, 0.35)',
+                  transition: 'all 0.25s ease',
+                  letterSpacing: '0.02em',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.transform = 'translateY(-2px)'
+                  e.currentTarget.style.boxShadow = '0 6px 24px rgba(0, 229, 255, 0.55)'
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.transform = 'translateY(0)'
+                  e.currentTarget.style.boxShadow = '0 4px 18px rgba(0, 229, 255, 0.35)'
+                }}
+              >
+                <span>⭐</span> <span>Dejar mi reseña</span>
+              </a>
+
+              <a
+                href="https://share.google/Vmv20uo1V4pSFQY8h"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  background: 'rgba(234, 67, 53, 0.85)',
+                  backdropFilter: 'blur(8px)',
+                  color: '#ffffff',
+                  fontWeight: 700,
+                  fontSize: '0.8125rem',
+                  padding: '0.625rem 1.125rem',
+                  borderRadius: 10,
+                  textDecoration: 'none',
+                  boxShadow: '0 4px 14px rgba(234, 67, 53, 0.25)',
+                  transition: 'transform 0.2s, background 0.2s',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.transform = 'translateY(-2px)'
+                  e.currentTarget.style.background = 'rgba(234, 67, 53, 1)'
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.transform = 'translateY(0)'
+                  e.currentTarget.style.background = 'rgba(234, 67, 53, 0.85)'
+                }}
+              >
+                <span>📍</span> <span>Ver Ficha en Google</span>
+              </a>
+            </div>
           </div>
 
-          {/* 3 Cards de Reseñas de Google */}
+          {/* Barra de control del Carrusel */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 0.25rem' }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--color-faint)', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
+              <span>↔</span> Deslizá horizontalmente para ver más opiniones
+            </span>
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <button
+                type="button"
+                onClick={() => scrollByCard('prev')}
+                aria-label="Reseña anterior"
+                style={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: '50%',
+                  background: 'rgba(15, 23, 42, 0.6)',
+                  border: '1px solid rgba(255, 255, 255, 0.12)',
+                  color: '#ffffff',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  fontSize: '0.9rem',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.background = 'rgba(0, 229, 255, 0.2)'
+                  e.currentTarget.style.borderColor = 'rgba(0, 229, 255, 0.4)'
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = 'rgba(15, 23, 42, 0.6)'
+                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)'
+                }}
+              >
+                ←
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollByCard('next')}
+                aria-label="Siguiente reseña"
+                style={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: '50%',
+                  background: 'rgba(15, 23, 42, 0.6)',
+                  border: '1px solid rgba(255, 255, 255, 0.12)',
+                  color: '#ffffff',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  fontSize: '0.9rem',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.background = 'rgba(0, 229, 255, 0.2)'
+                  e.currentTarget.style.borderColor = 'rgba(0, 229, 255, 0.4)'
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = 'rgba(15, 23, 42, 0.6)'
+                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)'
+                }}
+              >
+                →
+              </button>
+            </div>
+          </div>
+
+          {/* Carrusel Horizontal de Reseñas de Google */}
           <div
+            ref={carouselRef}
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => {
+              setIsPaused(false)
+              handleMouseUpOrLeave()
+            }}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUpOrLeave}
+            onTouchStart={() => setIsPaused(true)}
+            onTouchEnd={() => setIsPaused(false)}
             style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              display: 'flex',
               gap: '1rem',
+              overflowX: 'auto',
+              scrollSnapType: 'x mandatory',
+              WebkitOverflowScrolling: 'touch',
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none',
+              paddingBottom: '0.5rem',
+              cursor: isDragging ? 'grabbing' : 'grab',
+              userSelect: isDragging ? 'none' : 'auto',
             }}
           >
             {GOOGLE_REVIEWS.map((rev, i) => (
               <div
                 key={i}
                 style={{
+                  flex: '0 0 clamp(290px, 31vw, 360px)',
+                  scrollSnapAlign: 'start',
                   background: 'rgba(15, 23, 42, 0.35)',
                   backdropFilter: 'blur(16px)',
                   WebkitBackdropFilter: 'blur(16px)',
@@ -236,7 +463,7 @@ export default function Footer() {
                 </div>
 
                 {/* Star rating & Comment */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', flex: 1 }}>
                   <div style={{ color: '#fbbc04', fontSize: '0.85rem', letterSpacing: '2px' }}>
                     ★★★★★
                   </div>

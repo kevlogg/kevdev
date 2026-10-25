@@ -112,9 +112,6 @@ function classifyClick(target: HTMLElement): CtaInfo | null {
   if (href.includes('/contacto') || href === '/contacto' || href.includes('/#contacto')) {
     return { buttonId: 'cta_contacto', label: 'Ir a Contacto' }
   }
-  if (href.includes('/impulso-digital') || href.includes('/convocatoria')) {
-    return { buttonId: 'cta_impulso_digital', label: 'Impulso Digital / Convocatoria' }
-  }
   if (href.includes('/diseno-web')) {
     return { buttonId: 'cta_diseno_web', label: 'Servicios Diseño Web' }
   }

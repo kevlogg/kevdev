@@ -101,7 +101,6 @@ export default function Navbar() {
     { href: '/proyectos', label: t('items.proyectos'), index: '05' },
     { href: '/contacto',  label: t('items.contacto'),  index: '06' },
     { href: '/vault',     label: t('items.vault'),     index: '07' },
-    { href: '/impulso-digital', label: 'Convocatoria Impulso 🚀', index: '08' },
   ]
 
   const stackLabels = t.raw('stackTags') as string[]
@@ -223,34 +222,6 @@ export default function Navbar() {
           >
             {!open && (
               <>
-                <button
-                  type="button"
-                  onClick={() => handleNav('/impulso-digital')}
-                  style={{
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '0.75rem',
-                    fontWeight: 700,
-                    letterSpacing: '0.06em',
-                    color: '#33ebff',
-                    background: 'rgba(12, 12, 12, 0.88)',
-                    backdropFilter: 'blur(12px)',
-                    WebkitBackdropFilter: 'blur(12px)',
-                    border: '1px solid rgba(0, 229, 255, 0.65)',
-                    padding: '0.4rem 0.85rem',
-                    borderRadius: 99,
-                    cursor: 'pointer',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.45rem',
-                    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.7), 0 0 14px rgba(0, 229, 255, 0.3)',
-                    textShadow: '0 2px 8px rgba(0, 0, 0, 0.95), 0 0 8px rgba(0, 229, 255, 0.6)',
-                    transition: 'all 0.25s',
-                  }}
-                >
-                  <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#00e5ff', boxShadow: '0 0 8px #00e5ff', display: 'inline-block' }} />
-                  <span>IMPULSO DIGITAL</span>
-                  <span className="badge-rocket">🚀</span>
-                </button>
                 <button
                   type="button"
                   onClick={() => handleNav('/vault')}

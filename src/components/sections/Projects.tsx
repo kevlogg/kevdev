@@ -317,12 +317,19 @@ export default function Projects() {
                       overflow: 'hidden',
                       border: '1px solid rgba(255,255,255,0.06)',
                       borderTop: 'none',
+                      background: 'radial-gradient(circle at 50% 30%, rgba(30, 41, 59, 0.6), rgba(10, 13, 22, 0.95))',
                     }}
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={previewImg}
                       alt={`${p.name} website preview`}
+                      loading="lazy"
+                      decoding="async"
+                      onError={(e) => {
+                        e.currentTarget.onerror = null
+                        e.currentTarget.src = '/projects/kronitt.webp'
+                      }}
                       style={{
                         width: '100%',
                         height: '100%',

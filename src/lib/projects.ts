@@ -77,17 +77,17 @@ export const PROJECT_SCREENSHOTS: Record<string, string> = {
   'entre-rios-on': '/projects/entre-rios-on.png',
   'sitio-automotor': '/projects/sitio-automotor.png',
   'pajaros-en-la-cabeza': '/projects/pajaros-en-la-cabeza.png',
-  'aquapro-studio': '/projects/aquapro-studio.svg',
-  'aire-y-luz-arquitectura': '/projects/aire-y-luz-arquitectura.svg',
-  'don-lorenzo-panaderia': '/projects/don-lorenzo-panaderia.svg',
-  'gabriel-70': '/projects/gabriel-70.svg',
-  'aura-estetica': '/projects/aura-estetica.svg',
-  'aura-farm': '/projects/aura-farm.svg',
-  'modo-living': '/projects/modo-living.svg',
-  'duplack': '/projects/duplack.svg',
-  'orimar-concepto': '/projects/orimar-concepto.svg',
-  'dvamoblamientos': '/projects/dvamoblamientos.svg',
-  'crdecoradores': '/projects/crdecoradores.svg',
+  'aquapro-studio': '/projects/aquapro-studio.png',
+  'aire-y-luz-arquitectura': '/projects/aire-y-luz-arquitectura.png',
+  'don-lorenzo-panaderia': '/projects/don-lorenzo-panaderia.png',
+  'gabriel-70': '/projects/gabriel-70.png',
+  'aura-estetica': '/projects/aura-estetica.png',
+  'aura-farm': '/projects/aura-farm.png',
+  'modo-living': '/projects/modo-living.png',
+  'duplack': '/projects/duplack.png',
+  'orimar-concepto': '/projects/orimar-concepto.png',
+  'dvamoblamientos': '/projects/dvamoblamientos.png',
+  'crdecoradores': '/projects/crdecoradores.png',
 }
 
 const STATUS: Record<StatusKey, Record<Locale, string>> = {
@@ -1097,7 +1097,7 @@ export const PROJECTS: Project[] = [
     statusDot: 'var(--color-accent)',
     tags: ['Next.js', 'Estética', 'Turnos', 'Salud'],
     year: '2026',
-    href: 'https://aura-estetica-landing.vercel.app',
+    href: 'https://aura-estetica.vercel.app',
     color: '#f472b6',
     i18n: {
       es: {

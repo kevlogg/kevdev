@@ -6,7 +6,6 @@ import QRCode from 'qrcode'
 // Presets de accesos rápidos de KevDev
 const PRESETS = [
   { label: '🌐 Sitio Principal', url: 'https://kevdev.app' },
-  { label: '🚀 Convocatoria Impulso', url: 'https://kevdev.app/impulso' },
   { label: '💬 WhatsApp KevDev', url: 'https://wa.me/5491100000000?text=Hola%20KevDev!%20Quiero%20consultar%20por%20un%20proyecto' },
   { label: '📄 Solicitud Presupuesto', url: 'https://kevdev.app/admin/presupuesto' },
 ]
