@@ -583,6 +583,30 @@ export default function Footer() {
                   Google Business Profile ↗
                 </a>
               </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (typeof window !== 'undefined') {
+                      window.dispatchEvent(new CustomEvent('open-pwa-install'))
+                    }
+                  }}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    padding: 0,
+                    color: '#00e5ff',
+                    fontSize: '0.8125rem',
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    fontWeight: 600,
+                  }}
+                >
+                  📲 Instalar App (PWA)
+                </button>
+              </li>
             </ul>
           </div>
         </div>

@@ -445,6 +445,55 @@ export default function Navbar() {
                       transformOrigin: 'left',
                     }}
                   />
+
+                  {/* PWA Download Button */}
+                  <motion.div
+                    custom={NAV_ITEMS.length + 1}
+                    variants={itemV}
+                    style={{ paddingTop: '1.25rem' }}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setOpen(false)
+                        window.dispatchEvent(new CustomEvent('open-pwa-install'))
+                      }}
+                      style={{
+                        background: 'rgba(0, 229, 255, 0.08)',
+                        border: '1px solid rgba(0, 229, 255, 0.3)',
+                        borderRadius: 99,
+                        padding: '0.65rem 1.25rem',
+                        color: '#00e5ff',
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.78rem',
+                        fontWeight: 700,
+                        letterSpacing: '0.08em',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.55rem',
+                        cursor: 'pointer',
+                        boxShadow: '0 4px 16px rgba(0, 0, 0, 0.6), 0 0 12px rgba(0, 229, 255, 0.15)',
+                        transition: 'all 0.25s ease',
+                      }}
+                      onMouseEnter={e => {
+                        e.currentTarget.style.background = 'rgba(0, 229, 255, 0.16)'
+                        e.currentTarget.style.borderColor = 'rgba(0, 229, 255, 0.6)'
+                        e.currentTarget.style.transform = 'translateY(-2px)'
+                      }}
+                      onMouseLeave={e => {
+                        e.currentTarget.style.background = 'rgba(0, 229, 255, 0.08)'
+                        e.currentTarget.style.borderColor = 'rgba(0, 229, 255, 0.3)'
+                        e.currentTarget.style.transform = 'translateY(0)'
+                      }}
+                    >
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                      </svg>
+                      DESCARGAR APP PWA
+                    </button>
+                  </motion.div>
                 </div>
 
                 {/* Right panel — hidden on mobile, visible on lg */}

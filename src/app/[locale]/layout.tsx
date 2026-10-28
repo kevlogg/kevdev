@@ -82,6 +82,12 @@ export async function generateMetadata({
       canonical: locale === routing.defaultLocale ? '/' : `/${locale}`,
       languages,
     },
+    manifest: '/manifest.webmanifest',
+    appleWebApp: {
+      capable: true,
+      statusBarStyle: 'black-translucent',
+      title: 'KevDev',
+    },
     icons: {
       icon: [
         { url: '/favicon.ico?v=3', sizes: 'any' },
@@ -123,6 +129,8 @@ import { Analytics as VercelAnalytics } from '@vercel/analytics/react'
 import AnalyticsTracker from '@/components/AnalyticsTracker'
 import GoogleAnalytics from '@/components/GoogleAnalytics'
 import MetaPixel from '@/components/MetaPixel'
+import PwaRegister from '@/components/pwa/PwaRegister'
+import InstallPwa from '@/components/pwa/InstallPwa'
 
 export default async function RootLayout({
   children,
@@ -272,6 +280,14 @@ export default async function RootLayout({
             }),
           }}
         />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="KevDev" />
+        <meta name="application-name" content="KevDev" />
+        <meta name="theme-color" content="#121212" />
+        <link rel="manifest" href="/manifest.webmanifest" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </head>
       <body className={`${inter.variable} ${jetbrainsMono.variable} ${plusJakartaSans.variable}`} suppressHydrationWarning>
         <NextIntlClientProvider messages={messages}>
@@ -279,6 +295,8 @@ export default async function RootLayout({
           <MetaPixel pixelId={process.env.NEXT_PUBLIC_META_PIXEL_ID} />
           <AnalyticsTracker />
           <VercelAnalytics />
+          <PwaRegister />
+          <InstallPwa />
           {children}
         </NextIntlClientProvider>
       </body>
