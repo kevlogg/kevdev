@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useMemo } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import {
   getCliente, updateCliente, deleteCliente, getChecklistProgreso, toggleChecklistStep,
@@ -22,6 +22,15 @@ const ESTADOS_PAGO: { value: EstadoPago; label: string; color: string }[] = [
 
 function formatARS(n: number) {
   return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }).format(n)
+}
+
+function formatFechaDisplay(fechaStr?: string) {
+  if (!fechaStr) return '—'
+  const parts = fechaStr.split('-')
+  if (parts.length === 3) {
+    return `${parts[2]}/${parts[1]}/${parts[0]}`
+  }
+  return fechaStr
 }
 
 /* Normaliza la url guardada y arma el link al panel de plan del sitio del cliente */
@@ -52,6 +61,10 @@ export default function ClienteDetailPage() {
   const [progreso,        setProgreso]        = useState<Record<number, boolean>>({})
   const [pagos,           setPagos]           = useState<HistorialPago[]>([])
   const [loading,         setLoading]         = useState(true)
+
+  const sortedPagos = useMemo(() => {
+    return [...pagos].sort((a, b) => (b.fecha || '').localeCompare(a.fecha || ''))
+  }, [pagos])
   const [saving,          setSaving]          = useState(false)
   const [saved,           setSaved]           = useState(false)
   const [form,            setForm]            = useState<Partial<Cliente>>({})
@@ -188,18 +201,20 @@ export default function ClienteDetailPage() {
         })
         .catch(err => console.warn('Push a web del cliente falló:', err))
 
-      setPagos(prev => [
-        {
-          id: newId,
-          clienteId: id,
-          monto: montoNum,
-          fecha: pagoForm.fecha,
-          concepto: pagoForm.concepto || 'Cuota Mensual',
-          medioPago: pagoForm.medioPago || 'Transferencia',
-          confirmado: pagoForm.confirmado,
-        },
-        ...prev,
-      ])
+      setPagos(prev =>
+        [
+          {
+            id: newId,
+            clienteId: id,
+            monto: montoNum,
+            fecha: pagoForm.fecha,
+            concepto: pagoForm.concepto || 'Cuota Mensual',
+            medioPago: pagoForm.medioPago || 'Transferencia',
+            confirmado: pagoForm.confirmado,
+          },
+          ...prev,
+        ].sort((a, b) => (b.fecha || '').localeCompare(a.fecha || ''))
+      )
       setPagoForm({
         monto: '',
         fecha: todayIso,
@@ -739,34 +754,34 @@ export default function ClienteDetailPage() {
         </form>
 
         {/* Tabla de historial de pagos */}
-        {pagos.length === 0 ? (
+        {sortedPagos.length === 0 ? (
           <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.8125rem', color: 'var(--color-faint)', margin: 0 }}>
             Sin pagos registrados para este cliente.
           </p>
         ) : (
           <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <table style={{ width: '100%', minWidth: 680, borderCollapse: 'collapse' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--color-border)' }}>
                   {['Fecha', 'Concepto', 'Medio / Origen', 'Monto', 'Ref / ID', 'Estado', 'Acciones'].map(h => (
-                    <th key={h} style={{ padding: '8px 12px', textAlign: 'left', fontFamily: 'var(--font-ui)', fontSize: '0.6875rem', color: 'var(--color-muted)', textTransform: 'uppercase' }}>
+                    <th key={h} style={{ padding: '8px 12px', textAlign: h === 'Acciones' ? 'center' : 'left', fontFamily: 'var(--font-ui)', fontSize: '0.6875rem', color: 'var(--color-muted)', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
                       {h}
                     </th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {pagos.map(p => {
+                {sortedPagos.map(p => {
                   const isWebhook = p.origen === 'WEBHOOK' || p.metodo === 'pasarela'
                   return (
                     <tr key={p.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
-                      <td style={{ padding: '10px 12px', fontFamily: 'var(--font-mono)', fontSize: '0.8125rem', color: 'var(--color-star)' }}>
-                        {p.fecha}
+                      <td style={{ padding: '10px 12px', fontFamily: 'var(--font-mono)', fontSize: '0.8125rem', color: 'var(--color-star)', whiteSpace: 'nowrap', minWidth: 105 }}>
+                        {formatFechaDisplay(p.fecha)}
                       </td>
                       <td style={{ padding: '10px 12px', fontFamily: 'var(--font-ui)', fontSize: '0.8125rem', color: 'var(--color-star)' }}>
                         {p.concepto}
                       </td>
-                      <td style={{ padding: '10px 12px', fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: 'var(--color-muted)' }}>
+                      <td style={{ padding: '10px 12px', fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: 'var(--color-muted)', whiteSpace: 'nowrap' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                           <span>{p.medioPago || 'Transferencia'}</span>
                           {isWebhook && (
@@ -776,13 +791,13 @@ export default function ClienteDetailPage() {
                           )}
                         </div>
                       </td>
-                      <td style={{ padding: '10px 12px', fontFamily: 'var(--font-mono)', fontSize: '0.875rem', fontWeight: 600, color: 'var(--color-star)' }}>
+                      <td style={{ padding: '10px 12px', fontFamily: 'var(--font-mono)', fontSize: '0.875rem', fontWeight: 600, color: 'var(--color-star)', whiteSpace: 'nowrap' }}>
                         {formatARS(p.monto)}
                       </td>
-                      <td style={{ padding: '10px 12px', fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: 'var(--color-faint)' }}>
+                      <td style={{ padding: '10px 12px', fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: 'var(--color-faint)', whiteSpace: 'nowrap' }}>
                         {p.referencia || '—'}
                       </td>
-                      <td style={{ padding: '10px 12px' }}>
+                      <td style={{ padding: '10px 12px', whiteSpace: 'nowrap' }}>
                         <button
                           onClick={() => p.id && handleTogglePago(p.id, p.confirmado)}
                           style={{
@@ -790,17 +805,23 @@ export default function ClienteDetailPage() {
                             color: p.confirmado ? '#4ade80' : '#f59e0b',
                             border: `1px solid ${p.confirmado ? '#4ade8040' : '#f59e0b40'}`,
                             borderRadius: 99, padding: '2px 8px', fontSize: '0.6875rem', fontFamily: 'var(--font-mono)',
-                            cursor: 'pointer'
+                            cursor: 'pointer', whiteSpace: 'nowrap'
                           }}
                         >
                           {p.confirmado ? '✓ Confirmado' : '⏳ Pendiente'}
                         </button>
                       </td>
-                      <td style={{ padding: '10px 12px' }}>
+                      <td style={{ padding: '10px 12px', textAlign: 'center', width: 60 }}>
                         <button
                           onClick={() => p.id && handleDeletePago(p.id)}
                           title="Eliminar registro"
-                          style={{ background: 'none', border: 'none', color: '#f87171', cursor: 'pointer', fontSize: '0.75rem' }}
+                          style={{
+                            background: 'none', border: 'none', color: '#f87171',
+                            cursor: 'pointer', fontSize: '0.8rem', padding: '4px 8px', borderRadius: 4,
+                            transition: 'background 0.15s'
+                          }}
+                          onMouseEnter={e => e.currentTarget.style.background = 'rgba(248,113,113,0.1)'}
+                          onMouseLeave={e => e.currentTarget.style.background = 'none'}
                         >
                           ✕
                         </button>
