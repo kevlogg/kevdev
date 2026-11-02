@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore'
+import { db } from '@/lib/firebase'
 
 interface CardActivationClientProps {
   code: string
@@ -52,20 +54,43 @@ export default function CardActivationClient({
     setLoading(true)
 
     try {
-      const res = await fetch('/api/qr/activate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          code,
-          targetUrl: cleanUrl,
-          clientName: clientName.trim(),
-        }),
-      })
+      let saved = false
+      try {
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), 3500)
+        const res = await fetch('/api/qr/activate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            code,
+            targetUrl: cleanUrl,
+            clientName: clientName.trim(),
+          }),
+          signal: controller.signal,
+        })
+        clearTimeout(timeoutId)
+        if (res.ok) {
+          saved = true
+        }
+      } catch (apiErr) {
+        console.warn('API /api/qr/activate timed out or failed, using client fallback:', apiErr)
+      }
 
-      const data = await res.json()
-
-      if (!res.ok) {
-        throw new Error(data.error || 'No se pudo guardar la tarjeta.')
+      if (!saved) {
+        // Fallback directo a Firestore
+        const docRef = doc(db, 'qr_tarjetas', code)
+        await setDoc(
+          docRef,
+          {
+            code,
+            targetUrl: cleanUrl,
+            clientName: clientName.trim(),
+            status: 'active',
+            updatedAt: new Date().toISOString(),
+            serverUpdatedAt: serverTimestamp(),
+          },
+          { merge: true }
+        )
       }
 
       const finalUrl = cleanUrl.match(/^https?:\/\//i) ? cleanUrl : `https://${cleanUrl}`

@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import type { Metadata } from 'next'
 import { getTarjeta, incrementTarjetaScan } from '@/lib/qr-tarjetas'
-import CardActivationClient from './CardActivationClient'
+import QrRedirectDispatcher from './QrRedirectDispatcher'
 
 interface Props {
   params: Promise<{ code: string }>
@@ -26,38 +26,45 @@ export default async function RedirectCardPage({ params, searchParams }: Props) 
   const cleanCode = (code || '').trim()
 
   if (!cleanCode) {
-    return <CardActivationClient code="001" />
+    return <QrRedirectDispatcher code="001" isEditMode={false} />
   }
 
   const isEditMode = search.setup === 'true' || search.edit === 'true'
 
-  // Consultar la tarjeta en Firestore con autenticación garantizada
-  const cardData = await getTarjeta(cleanCode)
+  // Timeout ultra defensivo de 1200ms para evitar que Vercel se cuelgue si la conexión serverless demora
+  let cardData: any = null
+  try {
+    const timeoutPromise = new Promise((resolve) => setTimeout(() => resolve(null), 1200))
+    const fetchPromise = getTarjeta(cleanCode)
+    cardData = await Promise.race([fetchPromise, timeoutPromise])
+  } catch (err) {
+    console.warn('[RedirectCardPage] Server fetch fallback:', err)
+  }
 
   const targetUrl = (cardData?.targetUrl || '').trim()
   const isActive = cardData?.status === 'active' && Boolean(targetUrl)
 
-  // 1. Tarjeta activa con URL y no está en modo edición manual -> REDIRECCIÓN INMEDIATA
+  // 1. Si en el servidor se obtuvo URL activa y no es modo edición -> REDIRECCIÓN INMEDIATA
   if (isActive && !isEditMode) {
-    // Registrar el escaneo en segundo plano
-    incrementTarjetaScan(cleanCode).catch((err) => {
-      console.warn(`[QR Scan Tracker] Error updating scanCount for #${cleanCode}:`, err)
-    })
-
-    // Asegurarse de que comience con http:// o https://
+    incrementTarjetaScan(cleanCode).catch(() => {})
     const finalUrl = targetUrl.match(/^https?:\/\//i) ? targetUrl : `https://${targetUrl}`
     redirect(finalUrl)
   }
 
-  // 2. Tarjeta vacía, sin enlace guardado o en modo edición -> PANTALLA DE CONFIGURACIÓN DIRECTA
+  // 2. Si vino del servidor sin enlace o si hubo timeout, delegar al cliente (cero cuelgues)
   return (
-    <CardActivationClient
+    <QrRedirectDispatcher
       code={cleanCode}
-      initialClientName={cardData?.clientName || ''}
-      initialTargetUrl={targetUrl}
+      serverCardData={
+        cardData
+          ? {
+              targetUrl,
+              clientName: cardData.clientName || '',
+              status: cardData.status || 'unassigned',
+            }
+          : null
+      }
       isEditMode={isEditMode}
     />
   )
 }
-
-

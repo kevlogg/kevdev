@@ -190,7 +190,6 @@ export async function getTarjeta(code: string): Promise<QrTarjeta | null> {
   if (!cleanCode) return null
 
   try {
-    await ensureServerAuth()
     const docRef = doc(db, 'qr_tarjetas', cleanCode)
     const docSnap = await getDoc(docRef)
 
@@ -238,7 +237,6 @@ export async function incrementTarjetaScan(code: string): Promise<void> {
   if (!cleanCode) return
 
   try {
-    await ensureServerAuth()
     const docRef = doc(db, 'qr_tarjetas', cleanCode)
     await updateDoc(docRef, {
       scanCount: increment(1),
