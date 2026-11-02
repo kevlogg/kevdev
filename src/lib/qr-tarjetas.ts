@@ -2,11 +2,14 @@ import {
   collection,
   doc,
   getDocs,
+  getDoc,
+  setDoc,
   writeBatch,
   updateDoc,
   deleteDoc,
   query,
   serverTimestamp,
+  increment,
 } from 'firebase/firestore'
 import { db, ensureServerAuth } from '@/lib/firebase'
 
@@ -169,10 +172,150 @@ export async function updateTarjeta(
 }
 
 /**
- * Eliminar una tarjeta
+ * Eliminar una tarjeta específica por su código
  */
 export async function deleteTarjeta(code: string): Promise<void> {
+  const cleanCode = (code || '').trim()
+  if (!cleanCode) return
   await ensureServerAuth()
-  const docRef = doc(db, 'qr_tarjetas', code)
+  const docRef = doc(db, 'qr_tarjetas', cleanCode)
   await deleteDoc(docRef)
 }
+
+/**
+ * Obtener una tarjeta individual por su código
+ */
+export async function getTarjeta(code: string): Promise<QrTarjeta | null> {
+  const cleanCode = (code || '').trim()
+  if (!cleanCode) return null
+
+  try {
+    await ensureServerAuth()
+    const docRef = doc(db, 'qr_tarjetas', cleanCode)
+    const docSnap = await getDoc(docRef)
+
+    if (!docSnap.exists()) {
+      return null
+    }
+
+    const data = docSnap.data()
+    return {
+      code: docSnap.id,
+      targetUrl: data.targetUrl || '',
+      clientName: data.clientName || '',
+      status: (data.status as QrTarjetaStatus) || (data.targetUrl ? 'active' : 'unassigned'),
+      batchName: data.batchName || 'General',
+      batchId: data.batchId || '',
+      scanCount: data.scanCount || 0,
+      lastScannedAt: data.lastScannedAt
+        ? typeof data.lastScannedAt === 'string'
+          ? data.lastScannedAt
+          : data.lastScannedAt.toDate?.().toISOString()
+        : null,
+      createdAt: data.createdAt
+        ? typeof data.createdAt === 'string'
+          ? data.createdAt
+          : data.createdAt.toDate?.().toISOString()
+        : undefined,
+      updatedAt: data.updatedAt
+        ? typeof data.updatedAt === 'string'
+          ? data.updatedAt
+          : data.updatedAt.toDate?.().toISOString()
+        : undefined,
+      notes: data.notes || '',
+    }
+  } catch (err) {
+    console.error(`[getTarjeta] Error al consultar tarjeta #${cleanCode}:`, err)
+    return null
+  }
+}
+
+/**
+ * Registrar escaneo e incrementar contador
+ */
+export async function incrementTarjetaScan(code: string): Promise<void> {
+  const cleanCode = (code || '').trim()
+  if (!cleanCode) return
+
+  try {
+    await ensureServerAuth()
+    const docRef = doc(db, 'qr_tarjetas', cleanCode)
+    await updateDoc(docRef, {
+      scanCount: increment(1),
+      lastScannedAt: new Date().toISOString(),
+      serverLastScannedAt: serverTimestamp(),
+    })
+  } catch (err) {
+    console.warn(`[incrementTarjetaScan] Error registrando escaneo para #${cleanCode}:`, err)
+  }
+}
+
+/**
+ * Guardar o activar enlace de una tarjeta (incluso si no existía antes en Firestore)
+ */
+export async function saveTarjetaActivation(
+  code: string,
+  targetUrl: string,
+  clientName: string = ''
+): Promise<QrTarjeta> {
+  const cleanCode = (code || '').trim()
+  if (!cleanCode) throw new Error('Código de tarjeta inválido')
+
+  let normalizedUrl = (targetUrl || '').trim()
+  if (normalizedUrl && !/^https?:\/\//i.test(normalizedUrl)) {
+    normalizedUrl = `https://${normalizedUrl}`
+  }
+
+  await ensureServerAuth()
+  const docRef = doc(db, 'qr_tarjetas', cleanCode)
+  const docSnap = await getDoc(docRef)
+
+  const nowIso = new Date().toISOString()
+  const cleanClient = (clientName || '').trim()
+  const newStatus: QrTarjetaStatus = normalizedUrl ? 'active' : 'unassigned'
+
+  if (docSnap.exists()) {
+    const existing = docSnap.data()
+    const updatedData = {
+      targetUrl: normalizedUrl,
+      clientName: cleanClient || existing.clientName || '',
+      status: newStatus,
+      updatedAt: nowIso,
+      serverUpdatedAt: serverTimestamp(),
+    }
+    await updateDoc(docRef, updatedData)
+
+    return {
+      code: cleanCode,
+      targetUrl: normalizedUrl,
+      clientName: cleanClient || existing.clientName || '',
+      status: newStatus,
+      batchName: existing.batchName || 'General',
+      batchId: existing.batchId || '',
+      scanCount: existing.scanCount || 0,
+      lastScannedAt: existing.lastScannedAt || null,
+      createdAt: existing.createdAt || nowIso,
+      updatedAt: nowIso,
+    }
+  } else {
+    // Si la tarjeta no estaba registrada en la base, crearla directamente
+    const newCard: QrTarjeta = {
+      code: cleanCode,
+      targetUrl: normalizedUrl,
+      clientName: cleanClient,
+      status: newStatus,
+      batchName: 'Activación Directa',
+      scanCount: 0,
+      lastScannedAt: null,
+      createdAt: nowIso,
+      updatedAt: nowIso,
+    }
+    await setDoc(docRef, {
+      ...newCard,
+      serverCreatedAt: serverTimestamp(),
+      serverUpdatedAt: serverTimestamp(),
+    })
+    return newCard
+  }
+}
+
