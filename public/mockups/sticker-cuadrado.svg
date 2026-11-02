@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <defs>
+    <linearGradient id="stickerBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </linearGradient>
+    <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00e5ff"/>
+      <stop offset="100%" stop-color="#38bdf8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background with rounded sticker corners -->
+  <rect width="800" height="800" rx="48" fill="url(#stickerBg)"/>
+  <rect x="4" y="4" width="792" height="792" rx="44" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="4"/>
+
+  <!-- Top Headline -->
+  <text x="400" y="110" text-anchor="middle" font-family="'Outfit', 'Inter', sans-serif" font-weight="900" font-size="34" fill="#ffffff" letter-spacing="1">
+    ¿TE GUSTÓ NUESTRA ATENCIÓN?
+  </text>
+  <text x="400" y="150" text-anchor="middle" font-family="'Inter', sans-serif" font-weight="600" font-size="20" fill="#f59e0b" letter-spacing="4">
+    ★★★★★ CALIFICANOS EN GOOGLE
+  </text>
+
+  <!-- QR Background Card -->
+  <rect x="175" y="195" width="450" height="450" rx="32" fill="#ffffff" filter="drop-shadow(0 15px 35px rgba(0,0,0,0.6))"/>
+  <text x="400" y="425" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="16" fill="#94a3b8" font-weight="600">
+    [ Espacio QR Dinámico ]
+  </text>
+
+  <!-- Bottom CTA & Branding -->
+  <text x="400" y="700" text-anchor="middle" font-family="'Outfit', sans-serif" font-weight="800" font-size="22" fill="#00e5ff" letter-spacing="2">
+    ESCANEÁ CON TU TELÉFONO
+  </text>
+  <text x="400" y="740" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="13" fill="#64748b" letter-spacing="2">
+    KEVDEV.NET.AR • RESEÑAS DINÁMICAS
+  </text>
+</svg>

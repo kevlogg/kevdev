@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1200" width="800" height="1200">
+  <defs>
+    <linearGradient id="standBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0a0c"/>
+      <stop offset="50%" stop-color="#141419"/>
+      <stop offset="100%" stop-color="#070709"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="50%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00e5ff"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="1200" rx="36" fill="url(#standBg)"/>
+  <rect x="2" y="2" width="796" height="1196" rx="34" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="3"/>
+
+  <!-- Top Decorative Badge -->
+  <g transform="translate(400, 140)">
+    <circle r="44" fill="#181820" stroke="url(#cyanGrad)" stroke-width="2"/>
+    <text text-anchor="middle" y="14" font-size="38" fill="#00e5ff">⭐</text>
+  </g>
+
+  <!-- Title & Headline -->
+  <text x="400" y="250" text-anchor="middle" font-family="'Outfit', 'Inter', sans-serif" font-weight="900" font-size="44" fill="#ffffff" letter-spacing="1">
+    TU OPINIÓN NOS IMPORTA
+  </text>
+  <text x="400" y="295" text-anchor="middle" font-family="'Outfit', 'Inter', sans-serif" font-weight="500" font-size="22" fill="#94a3b8">
+    Dejanos tu reseña en Google en 10 segundos
+  </text>
+
+  <!-- Rating Stars -->
+  <g transform="translate(400, 360)">
+    <text text-anchor="middle" font-size="34" fill="#f59e0b" letter-spacing="6">★★★★★</text>
+  </g>
+
+  <!-- QR Frame Placeholder Area -->
+  <rect x="200" y="440" width="400" height="400" rx="28" fill="#ffffff" filter="drop-shadow(0 20px 40px rgba(0,0,0,0.5))"/>
+  <text x="400" y="650" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="16" fill="#94a3b8" font-weight="600">
+    [ Espacio QR Dinámico ]
+  </text>
+
+  <!-- Call to Action -->
+  <g transform="translate(400, 930)">
+    <rect x="-180" y="-30" width="360" height="60" rx="30" fill="url(#cyanGrad)" filter="url(#glow)"/>
+    <text text-anchor="middle" y="8" font-family="'Outfit', sans-serif" font-weight="800" font-size="20" fill="#0c0c0c" letter-spacing="2">
+      ESCANEA CON TU CÁMARA
+    </text>
+  </g>
+
+  <text x="400" y="1030" text-anchor="middle" font-family="'Inter', sans-serif" font-weight="400" font-size="18" fill="#64748b">
+    Apuntá con la cámara de tu celular para calificar
+  </text>
+
+  <!-- Footer Branding -->
+  <text x="400" y="1130" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="14" fill="#475569" letter-spacing="2">
+    POWERED BY KEVDEV • NFC &amp; SMART QR
+  </text>
+</svg>

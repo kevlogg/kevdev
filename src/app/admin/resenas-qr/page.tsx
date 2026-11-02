@@ -11,6 +11,7 @@ import {
   getCardRedirectUrl,
   type QrTarjeta,
 } from '@/lib/qr-tarjetas'
+import QrTemplateStamperModal from '@/components/admin/QrTemplateStamperModal'
 
 export default function ResenasQrAdminPage() {
   const [tarjetas, setTarjetas] = useState<QrTarjeta[]>([])
@@ -36,6 +37,7 @@ export default function ResenasQrAdminPage() {
 
   // Modal Vista Imprenta / Catálogo
   const [showPrintView, setShowPrintView] = useState(false)
+  const [showTemplateStamper, setShowTemplateStamper] = useState(false)
   const [exportingZip, setExportingZip] = useState(false)
   const [zipProgress, setZipProgress] = useState<{ current: number; total: number } | null>(null)
 
@@ -427,6 +429,30 @@ export default function ResenasQrAdminPage() {
             }}
           >
             <span>+</span> CREAR NUEVO LOTE
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setShowTemplateStamper(true)}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              background: 'linear-gradient(135deg, #a855f7 0%, #06b6d4 100%)',
+              color: '#ffffff',
+              fontFamily: 'var(--font-mono, monospace)',
+              fontSize: '0.8125rem',
+              fontWeight: 800,
+              letterSpacing: '0.04em',
+              padding: '10px 18px',
+              borderRadius: '99px',
+              border: 'none',
+              cursor: 'pointer',
+              boxShadow: '0 4px 18px rgba(168, 85, 247, 0.4)',
+              transition: 'all 0.2s',
+            }}
+          >
+            <span>🎨</span> ESTAMPAR EN PLANTILLA CANVA
           </button>
 
           <button
@@ -1336,6 +1362,15 @@ export default function ResenasQrAdminPage() {
           onClose={() => setShowPrintView(false)}
         />
       )}
+
+      {/* ─── MODAL ESTAMPADOR DE PLANTILLAS CANVA EN LOTE ─────────────── */}
+      <QrTemplateStamperModal
+        isOpen={showTemplateStamper}
+        onClose={() => setShowTemplateStamper(false)}
+        tarjetas={filteredTarjetas.length > 0 ? filteredTarjetas : tarjetas}
+        batchNames={batchNames}
+        getCardRedirectUrl={getCardRedirectUrl}
+      />
     </div>
   )
 }
