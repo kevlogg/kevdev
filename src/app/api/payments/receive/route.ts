@@ -1,5 +1,15 @@
 import { NextResponse } from 'next/server'
-import { collection, addDoc, getDocs, doc, getDoc, serverTimestamp } from 'firebase/firestore'
+import {
+  collection,
+  addDoc,
+  getDocs,
+  doc,
+  getDoc,
+  updateDoc,
+  query,
+  where,
+  serverTimestamp,
+} from 'firebase/firestore'
 import { db, ensureServerAuth } from '@/lib/firebase'
 
 export const dynamic = 'force-dynamic'
@@ -79,7 +89,34 @@ export async function POST(req: Request) {
       ? fecha
       : new Date().toISOString().split('T')[0]
 
-    // 3. Registrar el pago en Firestore
+    // 3. Verificación de idempotencia (evita duplicados si Mercado Pago reenvía el webhook)
+    if (referencia) {
+      try {
+        const dupQuery = query(
+          collection(db, 'historialPagos'),
+          where('referencia', '==', String(referencia))
+        )
+        const dupSnap = await getDocs(dupQuery)
+        if (!dupSnap.empty) {
+          const existingDoc = dupSnap.docs[0]
+          return NextResponse.json(
+            {
+              success: true,
+              pagoId: existingDoc.id,
+              clienteId: targetClienteId,
+              clienteNombre,
+              monto: Number(monto),
+              message: 'Pago ya registrado previamente (idempotente). No se duplica.',
+            },
+            { status: 200, headers: corsHeaders }
+          )
+        }
+      } catch (checkErr) {
+        console.warn('Advertencia comprobando duplicados de pago:', checkErr)
+      }
+    }
+
+    // 4. Registrar el nuevo pago en Firestore
     const newPagoData = {
       clienteId: targetClienteId,
       monto: Number(monto),
@@ -94,6 +131,19 @@ export async function POST(req: Request) {
     }
 
     const pagoRef = await addDoc(collection(db, 'historialPagos'), newPagoData)
+
+    // 5. Actualizar el estado de la cuenta del cliente a 'AL_DIA'
+    if (confirmado !== false && targetClienteId) {
+      try {
+        await updateDoc(doc(db, 'clientes', targetClienteId), {
+          estadoPago: 'AL_DIA',
+          ultimoPago: fechaFinal,
+          actualizadoEn: serverTimestamp(),
+        })
+      } catch (updErr) {
+        console.warn('Advertencia actualizando estadoPago en cliente:', updErr)
+      }
+    }
 
     return NextResponse.json(
       {
