@@ -44,7 +44,7 @@
   },
   "services": {
     "label": "What I do",
-    "headingPre": "Four ways to add",
+    "headingPre": "Five ways to add",
     "headingItalic": "real value.",
     "items": [
       {
@@ -70,6 +70,12 @@
         "desc": "Minimal versions to test an idea fast.",
         "detail": "Agile MVP development to validate a business idea with real users before investing in a full version.",
         "tag": "Validation"
+      },
+      {
+        "title": "Party & event services",
+        "desc": "Interactive platforms, digital invitations, and live dynamics for events.",
+        "detail": "Digital solutions for celebrations, weddings, birthdays, and corporate events: interactive invitations, real-time RSVP, live games, QR check-in, and platform management via Kronitt.",
+        "tag": "Events"
       }
     ]
   },

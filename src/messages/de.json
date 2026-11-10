@@ -44,7 +44,7 @@
   },
   "services": {
     "label": "Was ich mache",
-    "headingPre": "Vier Wege, echten",
+    "headingPre": "Fünf Wege, echten",
     "headingItalic": "Mehrwert zu schaffen.",
     "items": [
       {
@@ -70,6 +70,12 @@
         "desc": "Minimalversionen, um eine Idee schnell zu testen.",
         "detail": "Agile MVP-Entwicklung, um eine Geschäftsidee mit echten Nutzern zu validieren, bevor in eine vollständige Version investiert wird.",
         "tag": "Validierung"
+      },
+      {
+        "title": "Party- & Event-Services",
+        "desc": "Interaktive Plattformen, digitale Einladungen und Live-Erlebnisse für Events.",
+        "detail": "Digitale Lösungen für Feiern, Hochzeiten, Geburtstage und Firmenevents: interaktive Einladungen, Live-Gästeverwaltung (RSVP), interaktive Spiele, QR-Check-in und Plattformen über Kronitt.",
+        "tag": "Events"
       }
     ]
   },

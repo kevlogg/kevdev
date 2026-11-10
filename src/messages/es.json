@@ -44,7 +44,7 @@
   },
   "services": {
     "label": "Qué hago",
-    "headingPre": "Cuatro formas de sumar",
+    "headingPre": "Cinco formas de sumar",
     "headingItalic": "valor real.",
     "items": [
       {
@@ -70,6 +70,12 @@
         "desc": "Versiones mínimas para probar una idea rápido.",
         "detail": "Desarrollo ágil de MVPs para validar una idea de negocio con usuarios reales antes de invertir en una versión completa.",
         "tag": "Validación"
+      },
+      {
+        "title": "Servicios para fiestas y eventos",
+        "desc": "Plataformas interactivas, invitaciones digitales y dinámicas en vivo para eventos.",
+        "detail": "Desarrollo de experiencias digitales para fiestas, casamientos, cumpleaños y eventos corporativos: invitaciones interactivas, confirmación de asistencia (RSVP), juegos en vivo, acreditaciones QR y gestión a través de Kronitt.",
+        "tag": "Eventos"
       }
     ]
   },

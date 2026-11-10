@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef } from 'react'
+import Link from 'next/link'
 import {
   motion, AnimatePresence,
   useScroll, useTransform, useMotionValueEvent,
@@ -14,6 +15,7 @@ const SERVICES_META = [
   { num: '02', stack: 'React  ·  Node.js  ·  Firebase' },
   { num: '03', stack: 'n8n  ·  OpenAI  ·  Make' },
   { num: '04', stack: 'FlutterFlow  ·  Firebase  ·  IA' },
+  { num: '05', stack: 'Kronitt  ·  QR Interactivo  ·  Next.js' },
 ]
 
 type ServiceItem = {
@@ -25,7 +27,7 @@ type ServiceItem = {
   tag: string
 }
 
-const N = SERVICES_META.length   // 4
+const N = SERVICES_META.length   // 5
 
 export default function Services() {
   const t = useTranslations('services')
@@ -137,7 +139,7 @@ export default function Services() {
               </div>
 
               {/* Right: animated detail panel */}
-              <div>
+              <div className="service-desktop-panel">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={active}
@@ -172,12 +174,25 @@ export default function Services() {
       </section>
 
       <style>{`
+        .service-mobile-cta {
+          display: none;
+        }
         @media (max-width: 768px) {
           .services-grid { grid-template-columns: 1fr !important; }
+          .service-desktop-panel { display: none !important; }
+          .service-mobile-cta { display: block !important; }
         }
       `}</style>
     </>
   )
+}
+
+const SERVICE_HREFS: Record<string, { href: string; label: string; isExternal?: boolean }> = {
+  '01': { href: '/diseno-web', label: 'Ver servicio de Diseño Web →' },
+  '02': { href: '/desarrollo-a-medida', label: 'Ver servicio de Desarrollo a Medida →' },
+  '03': { href: '/tiendas-online', label: 'Ver servicio de Tiendas Online →' },
+  '04': { href: '/desarrollo-a-medida', label: 'Ver servicio de MVPs →' },
+  '05': { href: 'https://kronitt.com.ar', label: 'Ir a kronitt.com.ar →', isExternal: true },
 }
 
 /* ─── Left item ──────────────────────────────────────────────────────── */
@@ -191,6 +206,7 @@ function ServiceItem({
   scrollYProgress: ReturnType<typeof useScroll>['scrollYProgress']
   index: number
 }) {
+  const serviceTarget = SERVICE_HREFS[service.num] || { href: '/diseno-web', label: 'Ver detalles →' }
   /* Progress intervals */
   const lo = index / N
   const hi = (index + 1) / N
@@ -262,7 +278,7 @@ function ServiceItem({
 
       {/* Content */}
       <div style={{
-        padding: 'clamp(1.25rem, 2.5vw, 1.875rem) 0',
+        padding: 'clamp(0.85rem, 1.8vw, 1.35rem) 0',
         flex: 1,
         opacity: active ? 1 : done ? 0.65 : 0.38,
         transition: 'opacity 0.4s',
@@ -272,7 +288,7 @@ function ServiceItem({
           fontFamily: 'var(--font-mono)', fontSize: '0.625rem',
           letterSpacing: '0.12em',
           color: active ? 'var(--color-accent)' : 'var(--color-faint)',
-          marginBottom: '0.5rem',
+          marginBottom: '0.35rem',
           transition: 'color 0.3s',
         }}>
           {service.num}
@@ -280,7 +296,7 @@ function ServiceItem({
 
         <h3 style={{
           fontFamily: 'var(--font-display)', fontWeight: 800,
-          fontSize: 'clamp(1.5rem, 2.75vw, 2.375rem)',
+          fontSize: 'clamp(1.35rem, 2.3vw, 2.1rem)',
           letterSpacing: '-0.025em', lineHeight: 1.07,
           color: 'var(--color-star)', margin: 0,
         }}>
@@ -299,19 +315,56 @@ function ServiceItem({
           }}>
             {service.desc}
           </p>
+
+          <div className="service-mobile-cta" style={{ marginTop: '0.875rem' }}>
+            {serviceTarget.isExternal ? (
+              <a
+                href={serviceTarget.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.375rem',
+                  background: 'rgba(34, 211, 238, 0.12)',
+                  border: '1px solid rgba(34, 211, 238, 0.35)',
+                  color: '#22d3ee',
+                  fontFamily: 'var(--font-ui)',
+                  fontWeight: 700,
+                  fontSize: '0.8125rem',
+                  padding: '0.5rem 0.875rem',
+                  borderRadius: 8,
+                  textDecoration: 'none',
+                }}
+              >
+                {serviceTarget.label}
+              </a>
+            ) : (
+              <Link
+                href={serviceTarget.href}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.375rem',
+                  background: 'rgba(34, 211, 238, 0.12)',
+                  border: '1px solid rgba(34, 211, 238, 0.35)',
+                  color: '#22d3ee',
+                  fontFamily: 'var(--font-ui)',
+                  fontWeight: 700,
+                  fontSize: '0.8125rem',
+                  padding: '0.5rem 0.875rem',
+                  borderRadius: 8,
+                  textDecoration: 'none',
+                }}
+              >
+                {serviceTarget.label}
+              </Link>
+            )}
+          </div>
         </motion.div>
       </div>
     </div>
   )
-}
-
-import Link from 'next/link'
-
-const SERVICE_HREFS: Record<string, { href: string; label: string }> = {
-  '01': { href: '/diseno-web', label: 'Ver servicio de Diseño Web →' },
-  '02': { href: '/desarrollo-a-medida', label: 'Ver servicio de Desarrollo a Medida →' },
-  '03': { href: '/tiendas-online', label: 'Ver servicio de Tiendas Online →' },
-  '04': { href: '/desarrollo-a-medida', label: 'Ver servicio de MVPs →' },
 }
 
 /* ─── Right detail panel ─────────────────────────────────────────────── */
@@ -321,7 +374,7 @@ function ServiceDetail({ service }: { service: ServiceItem }) {
   return (
     <div style={{
       position: 'relative',
-      padding: 'clamp(2rem, 3.5vw, 3rem)',
+      padding: 'clamp(1.75rem, 3vw, 2.5rem)',
       background: 'rgba(18,18,18,0.65)',
       backdropFilter: 'blur(12px)',
       WebkitBackdropFilter: 'blur(12px)',
@@ -354,45 +407,70 @@ function ServiceDetail({ service }: { service: ServiceItem }) {
 
         <h3 style={{
           fontFamily: 'var(--font-display)', fontWeight: 800,
-          fontSize: 'clamp(1.75rem, 2.75vw, 2.5rem)',
+          fontSize: 'clamp(1.5rem, 2.4vw, 2.25rem)',
           letterSpacing: '-0.03em', lineHeight: 1.06,
           color: 'var(--color-star)',
-          margin: '0.875rem 0 1.5rem',
+          margin: '0.75rem 0 1.25rem',
         }}>
           {service.title}
         </h3>
 
-        <div style={{ height: 1, background: 'rgba(255,255,255,0.07)', marginBottom: '1.5rem' }} />
+        <div style={{ height: 1, background: 'rgba(255,255,255,0.07)', marginBottom: '1.25rem' }} />
 
         <p style={{
           fontFamily: 'var(--font-ui)', fontSize: '0.9375rem',
           lineHeight: 1.8, color: 'var(--color-muted)',
-          margin: '0 0 1.5rem',
+          margin: '0 0 1.25rem',
         }}>
           {service.detail}
         </p>
 
-        <div style={{ marginBottom: '1.5rem' }}>
-          <Link
-            href={serviceTarget.href}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              background: 'rgba(34, 211, 238, 0.1)',
-              border: '1px solid rgba(34, 211, 238, 0.3)',
-              color: '#22d3ee',
-              fontFamily: 'var(--font-ui)',
-              fontWeight: 700,
-              fontSize: '0.875rem',
-              padding: '0.625rem 1.25rem',
-              borderRadius: 10,
-              textDecoration: 'none',
-              transition: 'all 0.2s ease',
-            }}
-          >
-            {serviceTarget.label}
-          </Link>
+        <div style={{ marginBottom: '1.25rem' }}>
+          {serviceTarget.isExternal ? (
+            <a
+              href={serviceTarget.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                background: 'rgba(34, 211, 238, 0.1)',
+                border: '1px solid rgba(34, 211, 238, 0.3)',
+                color: '#22d3ee',
+                fontFamily: 'var(--font-ui)',
+                fontWeight: 700,
+                fontSize: '0.875rem',
+                padding: '0.625rem 1.25rem',
+                borderRadius: 10,
+                textDecoration: 'none',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              {serviceTarget.label}
+            </a>
+          ) : (
+            <Link
+              href={serviceTarget.href}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                background: 'rgba(34, 211, 238, 0.1)',
+                border: '1px solid rgba(34, 211, 238, 0.3)',
+                color: '#22d3ee',
+                fontFamily: 'var(--font-ui)',
+                fontWeight: 700,
+                fontSize: '0.875rem',
+                padding: '0.625rem 1.25rem',
+                borderRadius: 10,
+                textDecoration: 'none',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              {serviceTarget.label}
+            </Link>
+          )}
         </div>
 
         <span style={{

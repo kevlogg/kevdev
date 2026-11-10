@@ -44,7 +44,7 @@
   },
   "services": {
     "label": "O que eu faço",
-    "headingPre": "Quatro formas de gerar",
+    "headingPre": "Cinco formas de gerar",
     "headingItalic": "valor real.",
     "items": [
       {
@@ -70,6 +70,12 @@
         "desc": "Versões mínimas para testar uma ideia rápido.",
         "detail": "Desenvolvimento ágil de MVPs para validar uma ideia de negócio com usuários reais antes de investir numa versão completa.",
         "tag": "Validação"
+      },
+      {
+        "title": "Serviços para festas e eventos",
+        "desc": "Plataformas interativas, convites digitais e dinâmicas ao vivo para eventos.",
+        "detail": "Soluções digitais sob medida para celebrações, casamentos, aniversários e eventos corporativos: convites interativos, confirmação de presença (RSVP) em tempo real, jogos ao vivo, credenciamento via QR e gestão através da Kronitt.",
+        "tag": "Eventos"
       }
     ]
   },

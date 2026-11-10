@@ -44,7 +44,7 @@
   },
   "services": {
     "label": "Ce que je fais",
-    "headingPre": "Quatre façons d'apporter",
+    "headingPre": "Cinq façons d'apporter",
     "headingItalic": "une réelle valeur.",
     "items": [
       {
@@ -70,6 +70,12 @@
         "desc": "Versions minimales pour tester une idée rapidement.",
         "detail": "Développement agile de MVP pour valider une idée d'entreprise avec de vrais utilisateurs avant d'investir dans une version complète.",
         "tag": "Validation"
+      },
+      {
+        "title": "Services pour fêtes & événements",
+        "desc": "Plateformes interactives, invitations numériques et animations en direct.",
+        "detail": "Solutions numériques complètes pour célébrations, mariages, anniversaires et événements d'entreprise : invitations interactives, confirmation de présence (RSVP) en temps réel, jeux en direct, accréditations QR et gestion complète via Kronitt.",
+        "tag": "Événements"
       }
     ]
   },
