@@ -12,7 +12,7 @@ interface LinkItem {
   subtitle: string
   url: string
   category: LinkCategory
-  badge: string
+  badge?: string
   isExternal: boolean
   accentColor: string
   icon: React.ReactNode
@@ -532,28 +532,17 @@ export default function LinkTreeClient() {
 
                 {/* Content info */}
                 <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-                    <span style={{
-                      fontFamily: 'var(--font-display)',
-                      fontSize: 'clamp(0.85rem, 1.6vh, 0.95rem)',
-                      fontWeight: 700,
-                      color: 'var(--color-star)',
-                    }}>
-                      {item.title}
-                    </span>
-                    <span style={{
-                      fontSize: 'clamp(0.58rem, 1.1vh, 0.65rem)',
-                      fontFamily: 'var(--font-mono)',
-                      color: item.accentColor,
-                      background: `${item.accentColor}15`,
-                      border: `1px solid ${item.accentColor}30`,
-                      padding: '1px 6px',
-                      borderRadius: 99,
-                      whiteSpace: 'nowrap',
-                    }}>
-                      {item.badge}
-                    </span>
-                  </div>
+                  <span style={{
+                    fontFamily: 'var(--font-display)',
+                    fontSize: 'clamp(0.85rem, 1.6vh, 0.95rem)',
+                    fontWeight: 700,
+                    color: 'var(--color-star)',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}>
+                    {item.title}
+                  </span>
 
                   <span style={{
                     fontFamily: 'var(--font-ui)',
