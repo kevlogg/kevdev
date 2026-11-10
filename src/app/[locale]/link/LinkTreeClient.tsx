@@ -22,10 +22,9 @@ const LINK_ITEMS: LinkItem[] = [
   {
     id: 'web',
     title: 'Sitio Web Oficial',
-    subtitle: 'Conoce nuestros servicios, software a medida y cotizaciones.',
+    subtitle: 'Servicios de software a medida y cotizaciones online.',
     url: 'https://kevdev.net.ar',
     category: 'web',
-    badge: 'Oficial & Servicios',
     isExternal: true,
     accentColor: '#00e5ff',
     icon: (
@@ -39,10 +38,9 @@ const LINK_ITEMS: LinkItem[] = [
   {
     id: 'eventos',
     title: 'Servicios para fiestas/eventos',
-    subtitle: 'Experiencias interactivas, invitaciones y dinámicas en vivo.',
+    subtitle: 'Invitaciones interactivas, turnos y dinámicas en vivo.',
     url: 'https://kronitt.com.ar',
     category: 'eventos',
-    badge: 'Kronitt',
     isExternal: true,
     accentColor: '#f59e0b',
     icon: (
@@ -58,10 +56,9 @@ const LINK_ITEMS: LinkItem[] = [
   {
     id: 'proyectos',
     title: 'Portafolio de Proyectos',
-    subtitle: 'Explora nuestros casos de éxito, landing pages de alta conversión y demos.',
+    subtitle: 'Casos de éxito, tiendas online y aplicaciones web.',
     url: '/proyectos',
     category: 'proyectos',
-    badge: 'Casos de Éxito',
     isExternal: false,
     accentColor: '#3b82f6',
     icon: (
@@ -79,10 +76,9 @@ const LINK_ITEMS: LinkItem[] = [
   {
     id: 'instagram',
     title: 'Instagram Oficial',
-    subtitle: '@kevdev_software — Novedades, desarrollos y detrás de escena.',
+    subtitle: '@kevdev_software · Desarrollos, demos y novedades.',
     url: 'https://www.instagram.com/kevdev_software/',
     category: 'instagram',
-    badge: '@kevdev_software',
     isExternal: true,
     accentColor: '#e1306c',
     icon: (
@@ -96,10 +92,9 @@ const LINK_ITEMS: LinkItem[] = [
   {
     id: 'wsp',
     title: 'WhatsApp Directo',
-    subtitle: 'Chatea directamente con nuestro equipo técnico para iniciar tu proyecto.',
+    subtitle: 'Chatea directo con nosotros para cotizar tu proyecto.',
     url: 'https://wa.me/5492235851419?text=Hola%20KevDev!%20Vengo%20desde%20tu%20pagina%20de%20links',
     category: 'wsp',
-    badge: 'Atención Directa 24/7',
     isExternal: true,
     accentColor: '#25d366',
     icon: (
@@ -300,11 +295,11 @@ export default function LinkTreeClient() {
         width: '100%',
         margin: '0 auto',
         minHeight: '100dvh',
-        padding: 'clamp(14px, 2.2vh, 26px) clamp(14px, 4vw, 24px)',
+        padding: 'clamp(16px, 2.5vh, 28px) clamp(16px, 4vw, 24px)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        gap: 'clamp(10px, 1.8vh, 18px)',
+        gap: 'clamp(12px, 2vh, 20px)',
         boxSizing: 'border-box',
       }}>
         {/* Profile Header */}
@@ -313,17 +308,17 @@ export default function LinkTreeClient() {
           flexDirection: 'column',
           alignItems: 'center',
           textAlign: 'center',
-          gap: 'clamp(6px, 1vh, 12px)',
+          gap: 'clamp(6px, 1.1vh, 12px)',
         }}>
           {/* Avatar frame */}
           <div style={{
             position: 'relative',
-            width: 'clamp(56px, 7.8vh, 80px)',
-            height: 'clamp(56px, 7.8vh, 80px)',
+            width: 'clamp(60px, 8.2vh, 84px)',
+            height: 'clamp(60px, 8.2vh, 84px)',
             borderRadius: '50%',
             padding: 2.5,
             background: 'linear-gradient(135deg, #00e5ff 0%, #3b82f6 50%, #8b5cf6 100%)',
-            boxShadow: '0 0 20px rgba(0,229,255,0.25)',
+            boxShadow: '0 0 24px rgba(0,229,255,0.25)',
           }}>
             <div style={{
               width: '100%',
@@ -336,8 +331,8 @@ export default function LinkTreeClient() {
               <Image
                 src="/favicon-512x512.png"
                 alt="KevDev Studio"
-                width={80}
-                height={80}
+                width={84}
+                height={84}
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 priority
               />
@@ -348,7 +343,7 @@ export default function LinkTreeClient() {
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
             <h1 style={{
               fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(1.25rem, 2.4vh, 1.6rem)',
+              fontSize: 'clamp(1.3rem, 2.5vh, 1.65rem)',
               fontWeight: 800,
               color: 'var(--color-star)',
               margin: 0,
@@ -379,7 +374,7 @@ export default function LinkTreeClient() {
 
             <p style={{
               fontFamily: 'var(--font-mono)',
-              fontSize: 'clamp(0.6875rem, 1.1vh, 0.78rem)',
+              fontSize: 'clamp(0.6875rem, 1.15vh, 0.78rem)',
               color: 'var(--color-accent)',
               letterSpacing: '0.06em',
               textTransform: 'uppercase',
@@ -392,7 +387,7 @@ export default function LinkTreeClient() {
           {/* Bio text */}
           <p style={{
             fontFamily: 'var(--font-ui)',
-            fontSize: 'clamp(0.78rem, 1.3vh, 0.875rem)',
+            fontSize: 'clamp(0.78rem, 1.35vh, 0.875rem)',
             color: 'var(--color-muted)',
             margin: 0,
             maxWidth: 440,
@@ -403,7 +398,13 @@ export default function LinkTreeClient() {
         </div>
 
         {/* Links Stack List */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(7px, 1.1vh, 12px)' }}>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 'clamp(10px, 1.6vh, 16px)',
+          flex: 1,
+          justifyContent: 'center',
+        }}>
           {LINK_ITEMS.map((item, index) => {
             const isActive = index === activeCardIndex
             return (
@@ -415,12 +416,12 @@ export default function LinkTreeClient() {
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: 'clamp(10px, 2.5vw, 14px)',
-                  padding: 'clamp(8px, 1.3vh, 13px) clamp(12px, 3vw, 18px)',
+                  gap: 'clamp(12px, 3vw, 16px)',
+                  padding: 'clamp(12px, 1.8vh, 18px) clamp(14px, 3.5vw, 20px)',
                   background: 'rgba(24, 24, 24, 0.85)',
                   backdropFilter: 'blur(12px)',
                   border: `1.5px solid ${isActive ? '#00e5ff' : 'rgba(255, 255, 255, 0.08)'}`,
-                  borderRadius: 14,
+                  borderRadius: 16,
                   color: 'inherit',
                   textDecoration: 'none',
                   transition: 'border-color 0.8s ease-in-out, box-shadow 0.8s ease-in-out, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)',
@@ -453,7 +454,7 @@ export default function LinkTreeClient() {
                     height: '100%',
                     pointerEvents: 'none',
                     overflow: 'visible',
-                    borderRadius: 14,
+                    borderRadius: 16,
                     zIndex: 3,
                   }}
                 >
@@ -478,7 +479,7 @@ export default function LinkTreeClient() {
                     y="1"
                     width="calc(100% - 2px)"
                     height="calc(100% - 2px)"
-                    rx="13"
+                    rx="15"
                     fill="none"
                     stroke={`url(#beam-grad-${item.id})`}
                     strokeWidth="3.5"
@@ -509,16 +510,16 @@ export default function LinkTreeClient() {
                 <div style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: 'clamp(10px, 2.5vw, 14px)',
+                  gap: 'clamp(12px, 3vw, 16px)',
                   width: '100%',
                   position: 'relative',
                   zIndex: 2,
                 }}>
                 {/* Left Glowing Icon Box */}
                 <div style={{
-                  width: 'clamp(36px, 4.8vh, 44px)',
-                  height: 'clamp(36px, 4.8vh, 44px)',
-                  borderRadius: 10,
+                  width: 'clamp(40px, 5.2vh, 48px)',
+                  height: 'clamp(40px, 5.2vh, 48px)',
+                  borderRadius: 12,
                   background: `${item.accentColor}18`,
                   border: `1px solid ${item.accentColor}40`,
                   color: item.accentColor,
@@ -531,27 +532,22 @@ export default function LinkTreeClient() {
                 </div>
 
                 {/* Content info */}
-                <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 3 }}>
                   <span style={{
                     fontFamily: 'var(--font-display)',
-                    fontSize: 'clamp(0.85rem, 1.6vh, 0.95rem)',
+                    fontSize: 'clamp(0.9rem, 1.8vh, 1.02rem)',
                     fontWeight: 700,
                     color: 'var(--color-star)',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
+                    letterSpacing: '-0.01em',
                   }}>
                     {item.title}
                   </span>
 
                   <span style={{
                     fontFamily: 'var(--font-ui)',
-                    fontSize: 'clamp(0.6875rem, 1.2vh, 0.78rem)',
+                    fontSize: 'clamp(0.72rem, 1.35vh, 0.8125rem)',
                     color: 'var(--color-muted)',
-                    lineHeight: 1.3,
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
+                    lineHeight: 1.35,
                   }}>
                     {item.subtitle}
                   </span>
@@ -560,7 +556,7 @@ export default function LinkTreeClient() {
                 {/* Right Arrow */}
                 <div style={{
                   color: isActive ? '#00e5ff' : 'var(--color-muted)',
-                  fontSize: 'clamp(1rem, 1.8vh, 1.2rem)',
+                  fontSize: 'clamp(1.05rem, 2vh, 1.25rem)',
                   flexShrink: 0,
                   transition: 'transform 0.2s, color 0.2s',
                   transform: isActive ? 'translateX(2px)' : 'none',
@@ -576,8 +572,7 @@ export default function LinkTreeClient() {
         {/* Footer info */}
         <footer style={{
           textAlign: 'center',
-          marginTop: 'auto',
-          paddingTop: 'clamp(8px, 1vh, 14px)',
+          paddingTop: 'clamp(10px, 1.5vh, 18px)',
           borderTop: '1px solid var(--color-border)',
           display: 'flex',
           alignItems: 'center',
@@ -587,18 +582,18 @@ export default function LinkTreeClient() {
         }}>
           <p style={{
             fontFamily: 'var(--font-mono)',
-            fontSize: 'clamp(0.65rem, 1.1vh, 0.72rem)',
+            fontSize: 'clamp(0.6875rem, 1.2vh, 0.75rem)',
             color: 'var(--color-faint)',
             margin: 0,
           }}>
             © {new Date().getFullYear()} KevDev Studio
           </p>
-          <span style={{ color: 'var(--color-faint)', fontSize: '0.65rem' }}>·</span>
+          <span style={{ color: 'var(--color-faint)', fontSize: '0.6875rem' }}>·</span>
           <Link
             href="/"
             style={{
               fontFamily: 'var(--font-ui)',
-              fontSize: 'clamp(0.68rem, 1.1vh, 0.78rem)',
+              fontSize: 'clamp(0.72rem, 1.2vh, 0.8125rem)',
               color: 'var(--color-accent)',
               textDecoration: 'none',
               fontWeight: 600,
