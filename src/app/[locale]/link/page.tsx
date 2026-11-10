@@ -4,13 +4,13 @@ import LinkTreeClient from './LinkTreeClient'
 export const metadata: Metadata = {
   title: 'KevDev — Enlaces Oficiales & Contacto Directo',
   description:
-    'Accede a todos los canales oficiales de KevDev: Sitio Web Oficial, Portafolio de Proyectos, Instagram y atención directa por WhatsApp.',
+    'Accede a todos los canales oficiales de KevDev: Sitio Web Oficial, Servicios para fiestas y eventos (Kronitt), Portafolio de Proyectos, Instagram y atención directa por WhatsApp.',
   alternates: {
     canonical: 'https://kevdev.net.ar/link',
   },
   openGraph: {
     title: 'KevDev — Enlaces Oficiales & Contacto',
-    description: 'Sitio Web, Proyectos, Instagram y WhatsApp oficial de KevDev.',
+    description: 'Sitio Web, Servicios para eventos, Proyectos, Instagram y WhatsApp oficial de KevDev.',
     url: 'https://kevdev.net.ar/link',
     siteName: 'KevDev',
     images: [
@@ -37,6 +37,7 @@ export default function LinkPage() {
       logo: 'https://kevdev.net.ar/favicon-512x512.png',
       sameAs: [
         'https://kevdev.net.ar',
+        'https://kronitt.com.ar',
         'https://www.instagram.com/kevdev_software/',
         'https://wa.me/5492235851419',
       ],
