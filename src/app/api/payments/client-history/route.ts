@@ -35,6 +35,7 @@ export async function GET(req: Request) {
       const isDulceHogarQuery = normId.includes('dulce')
       const isOnmasQuery = normId.includes('onmas') || normId.includes('entre-rios') || normId.includes('entrerios') || normId.includes('on_mas')
       const isAutomotorQuery = normId.includes('automotor') || normId.includes('sitio') || normId.includes('j7rq')
+      const isNievasQuery = normId.includes('nievas') || normId.includes('ji5nhkgmz6nn9dceyjib')
 
       const matchedCli = clientes.find(c => {
         const cId = String(c.id || '').toLowerCase()
@@ -46,6 +47,7 @@ export async function GET(req: Request) {
         if (isDulceHogarQuery && (cNom.includes('dulce') || cUrl.includes('dulce'))) return true
         if (isOnmasQuery && (cNom.includes('onmas') || cNom.includes('entre') || cUrl.includes('onmas') || cUrl.includes('entre-rios'))) return true
         if (isAutomotorQuery && (cNom.includes('automotor') || cUrl.includes('automotor') || cId.includes('j7rq'))) return true
+        if (isNievasQuery && (cNom.includes('nievas') || cUrl.includes('nievas') || cId.includes('ji5nhkgmz6nn9dceyjib'))) return true
         return false
       })
 

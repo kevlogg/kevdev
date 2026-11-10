@@ -87,6 +87,7 @@ const DULCE_HOGAR_IDS = ['dulcehogar', 'dulce-hogar', 'dulce_hogar', 'gz3g7r0ld4
 const PAJAROS_IDS = ['pajarosenlacabeza', 'pajaros-en-la-cabeza', 'pajaros_en_la_cabeza', 'pajaros', 'pajaro', 'qrkvonucfeuojzw32bee']
 const ONMAS_IDS = ['onmas', 'entre-rios-on', 'entre_rios_on', 'entrerios-on', 'entrerioson', 'on_mas', 'on-mas']
 const AUTOMOTOR_IDS = ['sitioautomotor', 'sitio-automotor', 'sitio_automotor', 'j7rqjxzppbba1bgp1pb7', 'J7RqjxzpPBaG1bGp1pB7']
+const NIEVAS_IDS = ['nievas', 'nievasacademia', 'nievas-academia', 'nievas-academia-deportiva', 'ji5nhkgmz6nn9dceyjib']
 
 export function getPaymentsFromStore(clienteId: string): StoredPayment[] {
   const store = loadStore()
@@ -96,6 +97,7 @@ export function getPaymentsFromStore(clienteId: string): StoredPayment[] {
   const isDulceHogarQuery = DULCE_HOGAR_IDS.includes(normId) || normId.includes('dulce')
   const isOnmasQuery = ONMAS_IDS.includes(normId) || normId.includes('onmas') || normId.includes('entre-rios') || normId.includes('entrerios')
   const isAutomotorQuery = AUTOMOTOR_IDS.includes(normId) || normId.includes('automotor') || normId.includes('sitio') || normId.includes('j7rq')
+  const isNievasQuery = NIEVAS_IDS.includes(normId) || normId.includes('nievas')
 
   return store.filter(p => {
     const pNorm = String(p.clienteId || '').toLowerCase().trim()
@@ -105,6 +107,7 @@ export function getPaymentsFromStore(clienteId: string): StoredPayment[] {
     if (isDulceHogarQuery && (DULCE_HOGAR_IDS.includes(pNorm) || pNorm.includes('dulce'))) return true
     if (isOnmasQuery && (ONMAS_IDS.includes(pNorm) || pNorm.includes('onmas') || pNorm.includes('entre-rios') || pNorm.includes('entrerios'))) return true
     if (isAutomotorQuery && (AUTOMOTOR_IDS.includes(pNorm) || pNorm.includes('automotor') || pNorm.includes('sitio'))) return true
+    if (isNievasQuery && (NIEVAS_IDS.includes(pNorm) || pNorm.includes('nievas'))) return true
     return false
   }).sort((a, b) => (b.date || '').localeCompare(a.date || ''))
 }

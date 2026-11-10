@@ -181,6 +181,7 @@ const DULCE_HOGAR_IDS = ['dulcehogar', 'dulce-hogar', 'dulce_hogar', 'gz3g7r0ld4
 const PAJAROS_IDS = ['pajarosenlacabeza', 'pajaros-en-la-cabeza', 'pajaros_en_la_cabeza', 'pajaros', 'pajaro', 'qrkvonucfeuojzw32bee', 'qrkvonucfeuojzw32bee']
 const ONMAS_IDS = ['onmas', 'entre-rios-on', 'entre_rios_on', 'entrerios-on', 'entrerioson', 'on_mas', 'on-mas']
 const AUTOMOTOR_IDS = ['sitioautomotor', 'sitio-automotor', 'sitio_automotor', 'j7rqjxzppbba1bgp1pb7', 'J7RqjxzpPBaG1bGp1pB7']
+const NIEVAS_IDS = ['nievas', 'nievasacademia', 'nievas-academia', 'nievas-academia-deportiva', 'ji5nhkgmz6nn9dceyjib']
 
 export async function getHistorialPagos(clienteId: string): Promise<HistorialPago[]> {
   try {
@@ -191,6 +192,7 @@ export async function getHistorialPagos(clienteId: string): Promise<HistorialPag
     const isPajarosQuery = PAJAROS_IDS.includes(normId) || normId.includes('pajaro') || normId.includes('cabeza') || normId.includes('qrkvon')
     const isOnmasQuery = ONMAS_IDS.includes(normId) || normId.includes('onmas') || normId.includes('entre-rios') || normId.includes('entrerios')
     const isAutomotorQuery = AUTOMOTOR_IDS.includes(normId) || normId.includes('automotor') || normId.includes('sitio') || normId.includes('j7rq')
+    const isNievasQuery = NIEVAS_IDS.includes(normId) || normId.includes('nievas')
 
     // Resolver IDs de documentos de clientes coincidentes en Firestore
     const matchingClientDocIds = new Set<string>([clienteId, normId])
@@ -201,6 +203,9 @@ export async function getHistorialPagos(clienteId: string): Promise<HistorialPag
     if (isAutomotorQuery) {
       matchingClientDocIds.add('J7RqjxzpPBaG1bGp1pB7')
       matchingClientDocIds.add('j7rqjxzppbba1bgp1pb7')
+    }
+    if (isNievasQuery) {
+      matchingClientDocIds.add('JI5NHkgmz6nn9dCeyjiB')
     }
     try {
       const cliSnap = await getDocs(collection(db, 'clientes'))
@@ -227,6 +232,9 @@ export async function getHistorialPagos(clienteId: string): Promise<HistorialPag
           matchingClientDocIds.add(cId)
         }
         if (isAutomotorQuery && (cNombre.includes('automotor') || cUrl.includes('automotor') || AUTOMOTOR_IDS.includes(cIdLower))) {
+          matchingClientDocIds.add(cId)
+        }
+        if (isNievasQuery && (cNombre.includes('nievas') || cUrl.includes('nievas') || NIEVAS_IDS.includes(cIdLower))) {
           matchingClientDocIds.add(cId)
         }
       })
