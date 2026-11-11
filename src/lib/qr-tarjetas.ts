@@ -9,7 +9,6 @@ import {
   deleteDoc,
   query,
   serverTimestamp,
-  increment,
 } from 'firebase/firestore'
 import { db, ensureServerAuth } from '@/lib/firebase'
 
@@ -183,6 +182,55 @@ export async function deleteTarjeta(code: string): Promise<void> {
 }
 
 /**
+ * Consulta ultrarrápida de una tarjeta individual vía Firestore REST API (~80ms)
+ * Compatible con Node.js, Vercel Serverless y Edge Runtime.
+ */
+export async function getTarjetaFast(code: string): Promise<QrTarjeta | null> {
+  const cleanCode = (code || '').trim()
+  if (!cleanCode) return null
+
+  const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'kevdev-1234'
+  const apiKey = process.env.NEXT_PUBLIC_FIREBASE_API_KEY || 'AIzaSyAcoTvuqhnDegDQc49z4iH4GL3X0OHB5po'
+  const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/qr_tarjetas/${cleanCode}?key=${apiKey}`
+
+  try {
+    const res = await fetch(url, {
+      method: 'GET',
+      headers: { Accept: 'application/json' },
+      signal: AbortSignal.timeout(1800),
+      cache: 'no-store',
+    })
+
+    if (!res.ok) {
+      return getTarjeta(cleanCode)
+    }
+
+    const data = await res.json()
+    const fields = data?.fields || {}
+
+    const targetUrl = fields?.targetUrl?.stringValue || ''
+    const status = (fields?.status?.stringValue as QrTarjetaStatus) || (targetUrl ? 'active' : 'unassigned')
+
+    return {
+      code: cleanCode,
+      targetUrl,
+      clientName: fields?.clientName?.stringValue || '',
+      status,
+      batchName: fields?.batchName?.stringValue || 'General',
+      batchId: fields?.batchId?.stringValue || '',
+      scanCount: parseInt(fields?.scanCount?.integerValue || '0', 10),
+      lastScannedAt: fields?.lastScannedAt?.stringValue || fields?.lastScannedAt?.timestampValue || null,
+      createdAt: fields?.createdAt?.stringValue || undefined,
+      updatedAt: fields?.updatedAt?.stringValue || undefined,
+      notes: fields?.notes?.stringValue || '',
+    }
+  } catch (err) {
+    console.warn(`[getTarjetaFast] Fallback a client SDK para #${cleanCode}:`, err)
+    return getTarjeta(cleanCode)
+  }
+}
+
+/**
  * Obtener una tarjeta individual por su código
  */
 export async function getTarjeta(code: string): Promise<QrTarjeta | null> {
@@ -230,18 +278,46 @@ export async function getTarjeta(code: string): Promise<QrTarjeta | null> {
 }
 
 /**
- * Registrar escaneo e incrementar contador
+ * Registrar escaneo e incrementar contador de forma atómica y no bloqueante
  */
 export async function incrementTarjetaScan(code: string): Promise<void> {
   const cleanCode = (code || '').trim()
   if (!cleanCode) return
 
+  const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'kevdev-1234'
+  const apiKey = process.env.NEXT_PUBLIC_FIREBASE_API_KEY || 'AIzaSyAcoTvuqhnDegDQc49z4iH4GL3X0OHB5po'
+  const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents:commit?key=${apiKey}`
+
+  const body = {
+    writes: [
+      {
+        transform: {
+          document: `projects/${projectId}/databases/(default)/documents/qr_tarjetas/${cleanCode}`,
+          fieldTransforms: [
+            {
+              fieldPath: 'scanCount',
+              increment: { integerValue: '1' },
+            },
+            {
+              fieldPath: 'lastScannedAt',
+              setToServerValue: 'REQUEST_TIME',
+            },
+            {
+              fieldPath: 'serverLastScannedAt',
+              setToServerValue: 'REQUEST_TIME',
+            },
+          ],
+        },
+      },
+    ],
+  }
+
   try {
-    const docRef = doc(db, 'qr_tarjetas', cleanCode)
-    await updateDoc(docRef, {
-      scanCount: increment(1),
-      lastScannedAt: new Date().toISOString(),
-      serverLastScannedAt: serverTimestamp(),
+    await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+      signal: AbortSignal.timeout(3000),
     })
   } catch (err) {
     console.warn(`[incrementTarjetaScan] Error registrando escaneo para #${cleanCode}:`, err)

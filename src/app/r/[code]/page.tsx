@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import type { Metadata } from 'next'
-import { getTarjeta, incrementTarjetaScan } from '@/lib/qr-tarjetas'
+import { getTarjetaFast, incrementTarjetaScan, type QrTarjeta } from '@/lib/qr-tarjetas'
 import QrRedirectDispatcher from './QrRedirectDispatcher'
 
 interface Props {
@@ -31,14 +31,12 @@ export default async function RedirectCardPage({ params, searchParams }: Props) 
 
   const isEditMode = search.setup === 'true' || search.edit === 'true'
 
-  // Timeout ultra defensivo de 1200ms para evitar que Vercel se cuelgue si la conexión serverless demora
-  let cardData: any = null
+  // Consulta rápida mediante REST API (~80ms)
+  let cardData: QrTarjeta | null = null
   try {
-    const timeoutPromise = new Promise((resolve) => setTimeout(() => resolve(null), 1200))
-    const fetchPromise = getTarjeta(cleanCode)
-    cardData = await Promise.race([fetchPromise, timeoutPromise])
+    cardData = await getTarjetaFast(cleanCode)
   } catch (err) {
-    console.warn('[RedirectCardPage] Server fetch fallback:', err)
+    console.warn('[RedirectCardPage] Fast fetch fallback:', err)
   }
 
   const targetUrl = (cardData?.targetUrl || '').trim()
@@ -51,7 +49,7 @@ export default async function RedirectCardPage({ params, searchParams }: Props) 
     redirect(finalUrl)
   }
 
-  // 2. Si vino del servidor sin enlace o si hubo timeout, delegar al cliente (cero cuelgues)
+  // 2. Si vino del servidor sin enlace o es modo edición, mostrar activador
   return (
     <QrRedirectDispatcher
       code={cleanCode}
