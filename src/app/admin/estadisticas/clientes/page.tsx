@@ -15,6 +15,7 @@ import {
   ESTADO_PAGO_COLORS,
 } from '@/lib/cliente-ui'
 import ClientRevenueChart from '@/components/admin/ClientRevenueChart'
+import ClientPaymentDatesTable from '@/components/admin/ClientPaymentDatesTable'
 
 function formatARS(n: number) {
   return new Intl.NumberFormat('es-AR', {
@@ -442,7 +443,18 @@ export default function EstadisticasClientesPage() {
           {/* ── 4. GRÁFICO INTERACTIVO DE RECAUDACIÓN Y EVOLUCIÓN ─────────────── */}
           <ClientRevenueChart pagos={pagos} />
 
-          {/* ── 5. MÓDULO DIVIDIDO: RANKING DE CLIENTES vs EMBUDO Y RUBROS ───── */}
+          {/* ── 5. CRONOGRAMA Y TABLA DE FECHAS DE PAGO DE CLIENTES ───────────── */}
+          <ClientPaymentDatesTable
+            clientes={clientes}
+            onUpdateCliente={async (id, updates) => {
+              setClientes(prev => prev.map(c => c.id === id ? { ...c, ...updates } : c))
+            }}
+            title="📅 Cronograma y Fechas de Pago de Clientes"
+            subtitle="Calendario de cobros recurrentes y vencimientos mensuales calculado a partir de la fecha de inicio en la fila situación de cada cliente."
+            initialFilter="produccion"
+          />
+
+          {/* ── 6. MÓDULO DIVIDIDO: RANKING DE CLIENTES vs EMBUDO Y RUBROS ───── */}
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(480px, 1fr))',
@@ -694,7 +706,7 @@ export default function EstadisticasClientesPage() {
             </div>
           </div>
 
-          {/* ── 6. AUDITORÍA Y EXPLORADOR DE TRANSACCIONES EN VIVO ────────────── */}
+          {/* ── 7. AUDITORÍA Y EXPLORADOR DE TRANSACCIONES EN VIVO ────────────── */}
           <section style={cardStyle}>
             <div style={{
               display: 'flex',

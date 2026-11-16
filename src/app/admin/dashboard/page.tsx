@@ -20,6 +20,7 @@ import {
   ESTADO_PAGO_LABELS,
   ESTADO_PAGO_COLORS,
 } from '@/lib/cliente-ui'
+import ClientPaymentDatesTable from '@/components/admin/ClientPaymentDatesTable'
 
 const DEMOS: DemoEstado[] = ['SIN HACER', 'PRESENTADA', 'HECHA', '']
 
@@ -585,6 +586,15 @@ export default function DashboardPage() {
           </div>
         )}
       </div>
+
+      {/* ─── Cronograma y Fechas de Pago de Clientes ───────────────────────── */}
+      <ClientPaymentDatesTable
+        clientes={clientes}
+        onUpdateCliente={async (id, updates) => {
+          setClientes(prev => prev.map(c => c.id === id ? { ...c, ...updates } : c))
+        }}
+        initialFilter="produccion"
+      />
 
       {/* ─── Bento Grid Principal (2 Columnas Balanceadas) ───────────────── */}
       <div style={{
@@ -1186,7 +1196,7 @@ export default function DashboardPage() {
                             {pagoLabel}
                           </span>
                         </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '0.75rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '0.75rem', flexWrap: 'wrap' }}>
                           <span style={{ color: 'var(--color-faint)', fontFamily: 'var(--font-ui)' }}>
                             {c.rubro || 'Desarrollo web'}
                           </span>
@@ -1194,6 +1204,14 @@ export default function DashboardPage() {
                           <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--color-accent)' }}>
                             {monto}
                           </span>
+                          {c.fechaInicioProyecto && (
+                            <>
+                              <span style={{ color: 'var(--color-border)' }}>•</span>
+                              <span style={{ fontFamily: 'var(--font-mono)', color: '#38bdf8', fontSize: '0.6875rem' }}>
+                                📅 Cobro: día {parseInt(c.fechaInicioProyecto.split('-')[2], 10)}
+                              </span>
+                            </>
+                          )}
                         </div>
                       </div>
 
