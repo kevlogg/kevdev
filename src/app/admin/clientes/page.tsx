@@ -4,7 +4,7 @@ import { useEffect, useState, FormEvent } from 'react'
 import Link from 'next/link'
 import {
   getClientes, addCliente, updateCliente, deleteCliente, addHistorialPago,
-  type Cliente, type DemoEstado, type Situacion,
+  type Cliente, type DemoEstado, type Situacion, type MetodoCobro,
 } from '@/lib/firestore'
 import { SITUACIONES, SITUACION_COLORS, DEMO_COLORS } from '@/lib/cliente-ui'
 
@@ -39,6 +39,7 @@ const EMPTY_FORM = {
   situacion: '' as Situacion,
   plan: '', url: '', notas: '',
   fechaPresentacionDemo: '', fechaInicioProyecto: '',
+  metodoCobro: 'MANUAL' as MetodoCobro,
   passwordAdmin: '',
 }
 
@@ -296,6 +297,11 @@ export default function ClientesPage() {
             <option value="">Situación: —</option>
             {SITUACIONES.filter(s => s !== '').map(s => <option key={s} value={s}>{s}</option>)}
           </select>
+          <select value={form.metodoCobro || 'MANUAL'} onChange={e => setForm(f => ({ ...f, metodoCobro: e.target.value as MetodoCobro }))} style={{ ...inputStyle }}>
+            <option value="MANUAL">Cobro: Manual / Transferencia</option>
+            <option value="MP_SUSCRIPCION">Cobro: Mercado Pago (Suscripción)</option>
+            <option value="MP_LINK">Cobro: Mercado Pago (Link)</option>
+          </select>
           <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
             <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6875rem', color: 'var(--color-faint)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
               Fecha presentación demo
@@ -468,21 +474,38 @@ export default function ClientesPage() {
                         <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.875rem', color: 'var(--color-muted)', cursor: 'pointer' }}>
                           {c.plan || (c.montoMensual ? `$${c.montoMensual.toLocaleString('es-AR')}/mes` : '—')}
                         </span>
-                        {c.estadoPago === 'AL_DIA' && (
-                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: '#4ade80', background: 'rgba(74, 222, 128, 0.1)', border: '1px solid rgba(74, 222, 128, 0.3)', borderRadius: 99, padding: '1px 6px' }}>
-                            Al día
-                          </span>
-                        )}
-                        {c.estadoPago === 'PENDIENTE' && (
-                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: '#f59e0b', background: 'rgba(245, 158, 11, 0.1)', border: '1px solid rgba(245, 158, 11, 0.3)', borderRadius: 99, padding: '1px 6px' }}>
-                            Pendiente
-                          </span>
-                        )}
-                        {c.estadoPago === 'VENCIDO' && (
-                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: '#f87171', background: 'rgba(248, 113, 113, 0.1)', border: '1px solid rgba(248, 113, 113, 0.3)', borderRadius: 99, padding: '1px 6px' }}>
-                            Vencido
-                          </span>
-                        )}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 4, flexWrap: 'wrap' }}>
+                          {c.estadoPago === 'AL_DIA' && (
+                            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: '#4ade80', background: 'rgba(74, 222, 128, 0.1)', border: '1px solid rgba(74, 222, 128, 0.3)', borderRadius: 99, padding: '1px 6px' }}>
+                              Al día
+                            </span>
+                          )}
+                          {c.estadoPago === 'PENDIENTE' && (
+                            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: '#f59e0b', background: 'rgba(245, 158, 11, 0.1)', border: '1px solid rgba(245, 158, 11, 0.3)', borderRadius: 99, padding: '1px 6px' }}>
+                              Pendiente
+                            </span>
+                          )}
+                          {c.estadoPago === 'VENCIDO' && (
+                            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: '#f87171', background: 'rgba(248, 113, 113, 0.1)', border: '1px solid rgba(248, 113, 113, 0.3)', borderRadius: 99, padding: '1px 6px' }}>
+                              Vencido
+                            </span>
+                          )}
+                          {c.metodoCobro === 'MP_SUSCRIPCION' ? (
+                            <span
+                              title="Débito automático activo en Mercado Pago"
+                              style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: '#38bdf8', background: 'rgba(56, 189, 248, 0.12)', border: '1px solid rgba(56, 189, 248, 0.3)', borderRadius: 99, padding: '1px 6px' }}
+                            >
+                              💳 MP
+                            </span>
+                          ) : (
+                            <span
+                              title="Cobro manual / transferencia"
+                              style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', color: 'var(--color-faint)', background: 'rgba(255, 255, 255, 0.04)', border: '1px solid var(--color-border)', borderRadius: 99, padding: '1px 6px' }}
+                            >
+                              🏦 Manual
+                            </span>
+                          )}
+                        </div>
                       </div>
                     )}
                   </td>

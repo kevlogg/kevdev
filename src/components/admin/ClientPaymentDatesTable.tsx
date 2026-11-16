@@ -6,6 +6,7 @@ import {
   type Cliente,
   type Situacion,
   type EstadoPago,
+  type MetodoCobro,
   updateCliente,
 } from '@/lib/firestore'
 import {
@@ -13,6 +14,8 @@ import {
   SITUACION_LABELS,
   ESTADO_PAGO_COLORS,
   ESTADO_PAGO_LABELS,
+  METODO_COBRO_BADGES,
+  METODO_COBRO_LABELS,
 } from '@/lib/cliente-ui'
 
 export interface ClientPaymentDatesTableProps {
@@ -20,13 +23,13 @@ export interface ClientPaymentDatesTableProps {
   onUpdateCliente?: (id: string, updates: Partial<Cliente>) => Promise<void> | void
   title?: string
   subtitle?: string
-  initialFilter?: 'todos' | 'produccion' | 'alertas' | 'proximos' | 'al_dia' | 'sin_fecha'
+  initialFilter?: 'todos' | 'produccion' | 'alertas' | 'proximos' | 'al_dia' | 'sin_fecha' | 'mp' | 'manual'
   compact?: boolean
   hideHeaderStats?: boolean
 }
 
 type SortField = 'urgencia' | 'dia' | 'nombre' | 'monto'
-type FilterMode = 'todos' | 'produccion' | 'alertas' | 'proximos' | 'al_dia' | 'sin_fecha'
+type FilterMode = 'todos' | 'produccion' | 'alertas' | 'proximos' | 'al_dia' | 'sin_fecha' | 'mp' | 'manual'
 
 export interface PaymentScheduleItem {
   cliente: Cliente
@@ -272,6 +275,8 @@ export default function ClientPaymentDatesTable({
     const proximos = allSchedules.filter(s => s.estadoTemporal === 'proximo_urgente')
     const alDia = allSchedules.filter(s => s.estadoTemporal === 'al_dia')
     const sinFecha = allSchedules.filter(s => s.diaCobro === null)
+    const mpCount = allSchedules.filter(s => s.cliente.metodoCobro === 'MP_SUSCRIPCION').length
+    const manualCount = allSchedules.filter(s => !s.cliente.metodoCobro || s.cliente.metodoCobro === 'MANUAL').length
 
     const mrrTotal = enProduccion.reduce((acc, s) => acc + s.montoMensual, 0)
     const mrrCobrado = allSchedules
@@ -285,6 +290,8 @@ export default function ClientPaymentDatesTable({
       proximosCount: proximos.length,
       alDiaCount: alDia.length,
       sinFechaCount: sinFecha.length,
+      mpCount,
+      manualCount,
       mrrTotal,
       mrrCobrado,
     }
@@ -301,6 +308,8 @@ export default function ClientPaymentDatesTable({
       if (filter === 'proximos' && item.estadoTemporal !== 'proximo_urgente') return false
       if (filter === 'al_dia' && item.estadoTemporal !== 'al_dia') return false
       if (filter === 'sin_fecha' && item.diaCobro !== null) return false
+      if (filter === 'mp' && c.metodoCobro !== 'MP_SUSCRIPCION') return false
+      if (filter === 'manual' && c.metodoCobro === 'MP_SUSCRIPCION') return false
 
       // Búsqueda
       if (search.trim()) {
@@ -384,6 +393,48 @@ export default function ClientPaymentDatesTable({
     }
   }
 
+  // Manejo de actualización inline de método de cobro
+  const handleMetodoCobroChange = async (clienteId: string, nuevoMetodo: MetodoCobro) => {
+    if (!clienteId) return
+    setSavingState(prev => ({ ...prev, [clienteId]: true }))
+    try {
+      await updateCliente(clienteId, { metodoCobro: nuevoMetodo })
+      if (onUpdateCliente) {
+        await onUpdateCliente(clienteId, { metodoCobro: nuevoMetodo })
+      }
+    } catch (err) {
+      console.error('Error al actualizar método de cobro:', err)
+    } finally {
+      setSavingState(prev => ({ ...prev, [clienteId]: false }))
+    }
+  }
+
+  // Sincronización 1-Click con Mercado Pago
+  const [syncingMP, setSyncingMP] = useState(false)
+  const [syncMsg, setSyncMsg] = useState<{ text: string; error?: boolean } | null>(null)
+
+  const handleSyncMP = async () => {
+    setSyncingMP(true)
+    setSyncMsg(null)
+    try {
+      const res = await fetch('/api/admin/sync-mp-payments', { method: 'POST' })
+      const data = await res.json()
+      if (data.success) {
+        setSyncMsg({ text: `✓ ${data.message}` })
+        setTimeout(() => setSyncMsg(null), 6000)
+        if (data.updatedClientsCount > 0 || data.synchronizedPaymentsCount > 0) {
+          window.location.reload()
+        }
+      } else {
+        setSyncMsg({ text: data.error || 'Error al sincronizar con Mercado Pago', error: true })
+      }
+    } catch {
+      setSyncMsg({ text: 'Error de red al conectar con KevDev API', error: true })
+    } finally {
+      setSyncingMP(false)
+    }
+  }
+
   return (
     <section style={{
       background: 'var(--color-depth)',
@@ -439,7 +490,7 @@ export default function ClientPaymentDatesTable({
           </p>
         </div>
 
-        {/* Resumen de KPIs rápidos */}
+        {/* Resumen de KPIs rápidos y botón de sincronización MP */}
         {!hideHeaderStats && (
           <div style={{
             display: 'flex',
@@ -447,6 +498,29 @@ export default function ClientPaymentDatesTable({
             gap: 10,
             flexWrap: 'wrap',
           }}>
+            <button
+              onClick={handleSyncMP}
+              disabled={syncingMP}
+              title="Consultar Mercado Pago y registrar cobros de suscripciones automáticamente"
+              style={{
+                background: 'rgba(56, 189, 248, 0.1)',
+                border: '1px solid rgba(56, 189, 248, 0.35)',
+                borderRadius: 8,
+                padding: '7px 12px',
+                color: '#38bdf8',
+                fontFamily: 'var(--font-ui)',
+                fontSize: '0.75rem',
+                fontWeight: 600,
+                cursor: syncingMP ? 'wait' : 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+                transition: 'all 0.15s ease',
+              }}
+            >
+              {syncingMP ? '⌛ Sincronizando MP...' : '⚡ Sincronizar Mercado Pago'}
+            </button>
+
             <div style={{
               background: 'rgba(255, 255, 255, 0.02)',
               border: '1px solid var(--color-border)',
@@ -486,6 +560,30 @@ export default function ClientPaymentDatesTable({
         )}
       </div>
 
+      {/* Banner de mensaje de sincronización */}
+      {syncMsg && (
+        <div style={{
+          background: syncMsg.error ? 'rgba(248, 113, 113, 0.12)' : 'rgba(56, 189, 248, 0.12)',
+          border: `1px solid ${syncMsg.error ? 'rgba(248, 113, 113, 0.3)' : 'rgba(56, 189, 248, 0.3)'}`,
+          borderRadius: 8,
+          padding: '8px 14px',
+          fontFamily: 'var(--font-ui)',
+          fontSize: '0.75rem',
+          color: syncMsg.error ? '#f87171' : '#38bdf8',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}>
+          <span>{syncMsg.text}</span>
+          <button
+            onClick={() => setSyncMsg(null)}
+            style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', fontSize: '0.875rem' }}
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
       {/* ── Barra de Filtros, Pestañas y Búsqueda ── */}
       <div style={{
         display: 'flex',
@@ -509,6 +607,8 @@ export default function ClientPaymentDatesTable({
               { id: 'alertas', label: '⚠️ Vencidos/Pendientes', count: stats.alertasCount },
               { id: 'proximos', label: '⏰ Vencen pronto (7d)', count: stats.proximosCount },
               { id: 'al_dia', label: '✅ Al día', count: stats.alDiaCount },
+              { id: 'mp', label: '💳 MP Débito', count: stats.mpCount },
+              { id: 'manual', label: '🏦 Manual', count: stats.manualCount },
               { id: 'todos', label: 'Todos', count: stats.total },
               { id: 'sin_fecha', label: 'Sin Fecha', count: stats.sinFechaCount },
             ] as const
@@ -639,6 +739,9 @@ export default function ClientPaymentDatesTable({
                 Situación
               </th>
               <th style={{ padding: '10px 12px', color: 'var(--color-muted)', fontWeight: 600, fontSize: '0.6875rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                Método Cobro
+              </th>
+              <th style={{ padding: '10px 12px', color: 'var(--color-muted)', fontWeight: 600, fontSize: '0.6875rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                 Fecha Inicio
               </th>
               <th style={{ padding: '10px 12px', color: 'var(--color-muted)', fontWeight: 600, fontSize: '0.6875rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
@@ -661,7 +764,7 @@ export default function ClientPaymentDatesTable({
           <tbody>
             {sorted.length === 0 ? (
               <tr>
-                <td colSpan={8} style={{ padding: '32px 16px', textAlign: 'center', color: 'var(--color-faint)' }}>
+                <td colSpan={9} style={{ padding: '32px 16px', textAlign: 'center', color: 'var(--color-faint)' }}>
                   No se encontraron clientes con los filtros seleccionados.
                 </td>
               </tr>
@@ -739,6 +842,37 @@ export default function ClientPaymentDatesTable({
                       }}>
                         {SITUACION_LABELS[c.situacion] || c.situacion || '—'}
                       </span>
+                    </td>
+
+                    {/* Método de Cobro */}
+                    <td style={{ padding: '10px 12px' }}>
+                      <select
+                        disabled={isSaving}
+                        value={c.metodoCobro || 'MANUAL'}
+                        onChange={e => handleMetodoCobroChange(id, e.target.value as MetodoCobro)}
+                        style={{
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: '0.6875rem',
+                          fontWeight: 700,
+                          color: (METODO_COBRO_BADGES[c.metodoCobro || 'MANUAL'] || METODO_COBRO_BADGES['MANUAL']).color,
+                          background: (METODO_COBRO_BADGES[c.metodoCobro || 'MANUAL'] || METODO_COBRO_BADGES['MANUAL']).bg,
+                          border: `1px solid ${(METODO_COBRO_BADGES[c.metodoCobro || 'MANUAL'] || METODO_COBRO_BADGES['MANUAL']).border}`,
+                          borderRadius: 6,
+                          padding: '3px 6px',
+                          cursor: isSaving ? 'wait' : 'pointer',
+                          outline: 'none',
+                        }}
+                      >
+                        <option value="MP_SUSCRIPCION" style={{ background: '#0f172a', color: '#38bdf8' }}>
+                          💳 MP Débito
+                        </option>
+                        <option value="MANUAL" style={{ background: '#0f172a', color: 'var(--color-muted)' }}>
+                          🏦 Manual
+                        </option>
+                        <option value="MP_LINK" style={{ background: '#0f172a', color: '#00e5ff' }}>
+                          🔗 MP Link
+                        </option>
+                      </select>
                     </td>
 
                     {/* Fecha Inicio (la fecha que tienen en fila situación) */}

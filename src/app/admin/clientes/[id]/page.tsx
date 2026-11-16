@@ -6,6 +6,7 @@ import {
   getCliente, updateCliente, deleteCliente, getChecklistProgreso, toggleChecklistStep,
   getHistorialPagos, addHistorialPago, togglePagoConfirmado, deleteHistorialPago,
   type Cliente, type EstadoCliente, type DemoEstado, type Situacion, type EstadoPago, type HistorialPago,
+  type MetodoCobro,
 } from '@/lib/firestore'
 import { CHECKLIST_STEPS } from '@/lib/checklist-steps'
 import { SITUACIONES } from '@/lib/cliente-ui'
@@ -50,7 +51,7 @@ const ESTADO_LABELS: Record<EstadoCliente, string> = {
   entregado:   'Entregado',
 }
 
-type EditableField = 'nombre' | 'rubro' | 'contacto' | 'telefono' | 'instagram' | 'notas' | 'estado' | 'demo' | 'situacion' | 'plan' | 'url' | 'fechaPresentacionDemo' | 'fechaInicioProyecto' | 'montoMensual' | 'montoPagoUnico' | 'diaVencimiento' | 'estadoPago' | 'passwordAdmin'
+type EditableField = 'nombre' | 'rubro' | 'contacto' | 'telefono' | 'instagram' | 'notas' | 'estado' | 'demo' | 'situacion' | 'plan' | 'url' | 'fechaPresentacionDemo' | 'fechaInicioProyecto' | 'montoMensual' | 'montoPagoUnico' | 'diaVencimiento' | 'estadoPago' | 'passwordAdmin' | 'metodoCobro' | 'mpPreapprovalId'
 
 export default function ClienteDetailPage() {
   const params = useParams()
@@ -671,7 +672,67 @@ export default function ClienteDetailPage() {
               ))}
             </select>
           </label>
+
+          {/* Método de Cobro */}
+          <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6875rem', color: 'var(--color-faint)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+              Método de Cobro
+            </span>
+            <select
+              value={form.metodoCobro ?? cliente.metodoCobro ?? 'MANUAL'}
+              onChange={e => {
+                const v = e.target.value as MetodoCobro
+                setForm(f => ({ ...f, metodoCobro: v }))
+                saveField('metodoCobro', v)
+              }}
+              style={inputStyle}
+            >
+              <option value="MANUAL">🏦 Manual / Transferencia</option>
+              <option value="MP_SUSCRIPCION">💳 Mercado Pago (Suscripción Automática)</option>
+              <option value="MP_LINK">🔗 Mercado Pago (Link de Pago)</option>
+            </select>
+          </label>
         </div>
+
+        {/* Banner de Suscripción Mercado Pago */}
+        {(cliente.metodoCobro === 'MP_SUSCRIPCION' || cliente.mpPreapprovalId) && (
+          <div style={{
+            marginTop: 12,
+            background: 'rgba(56, 189, 248, 0.08)',
+            border: '1px solid rgba(56, 189, 248, 0.25)',
+            borderRadius: 8,
+            padding: '12px 16px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 12,
+            flexWrap: 'wrap',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <span style={{ fontSize: '1.25rem' }}>💳</span>
+              <div>
+                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.875rem', fontWeight: 700, color: '#38bdf8', margin: 0 }}>
+                  Cobro Automático por Mercado Pago (Suscripción)
+                </p>
+                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: 'var(--color-muted)', margin: '2px 0 0' }}>
+                  ID de suscripción: {cliente.mpPreapprovalId || 'Registrada en Mercado Pago'}
+                </p>
+              </div>
+            </div>
+            <span style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.6875rem',
+              color: '#4ade80',
+              background: 'rgba(74, 222, 128, 0.12)',
+              border: '1px solid rgba(74, 222, 128, 0.3)',
+              padding: '3px 10px',
+              borderRadius: 99,
+              fontWeight: 700,
+            }}>
+              ● Débito Automático Activo
+            </span>
+          </div>
+        )}
 
         {/* Notas */}
         <label style={{ display: 'flex', flexDirection: 'column', gap: 4, marginTop: 12 }}>

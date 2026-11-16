@@ -13,6 +13,7 @@ export type EstadoCliente =
 export type DemoEstado = 'SIN HACER' | 'PRESENTADA' | 'HECHA' | ''
 export type Situacion  = 'NO RESPONDIO' | 'EN ESPERA' | 'EN PRODUCCION' | 'RECHAZADA' | ''
 export type EstadoPago = 'AL_DIA' | 'PENDIENTE' | 'VENCIDO' | ''
+export type MetodoCobro = 'MP_SUSCRIPCION' | 'MANUAL' | 'MP_LINK' | ''
 
 export interface Cliente {
   id?: string
@@ -34,6 +35,8 @@ export interface Cliente {
   montoPagoUnico?: number
   diaVencimiento?: number
   estadoPago?: EstadoPago
+  metodoCobro?: MetodoCobro
+  mpPreapprovalId?: string
   passwordAdmin?: string
 }
 

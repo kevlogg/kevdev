@@ -4,6 +4,18 @@ import { sendVaultAccessEmail } from '@/lib/resend'
 import { mercadopagoWebhookPayloadSchema } from '@/schemas/mercadopago'
 import { checkOrderExists, createOrderRecord } from '@/lib/dal/orders'
 import { updateUserPurchaseHistory } from '@/lib/dal/users'
+import {
+  collection,
+  getDocs,
+  addDoc,
+  doc,
+  updateDoc,
+  query,
+  where,
+  serverTimestamp,
+} from 'firebase/firestore'
+import { db, ensureServerAuth } from '@/lib/firebase'
+import type { Cliente } from '@/lib/firestore'
 
 export const dynamic = 'force-dynamic'
 
@@ -62,6 +74,17 @@ export async function POST(req: Request) {
     if (!payment || payment.status !== 'approved') {
       console.log(`[MercadoPago Webhook] Payment ${paymentId} status is '${payment?.status}'. No action required.`)
       return NextResponse.json({ status: 'received', paymentStatus: payment?.status }, { status: 200 })
+    }
+
+    // 3.1 Check if this payment corresponds to a KevDev Client Subscription
+    const clientProcessed = await processClientSubscriptionPayment(payment, paymentId)
+    if (clientProcessed) {
+      return NextResponse.json({
+        status: 'success',
+        type: 'client_subscription',
+        message: 'Pago de suscripción de cliente registrado con éxito en KevDev.',
+        paymentId,
+      }, { status: 200 })
     }
 
     // 4. Idempotency Check using DAL
@@ -156,3 +179,89 @@ export async function POST(req: Request) {
     )
   }
 }
+
+/**
+ * Detecta y procesa automáticamente cobros de suscripción o mantenimiento de clientes KevDev
+ */
+async function processClientSubscriptionPayment(
+  payment: Record<string, unknown>,
+  paymentId: string
+): Promise<boolean> {
+  const desc = String(payment.description || '')
+  const extRef = String(payment.external_reference || '')
+  const payer = (payment.payer || {}) as Record<string, unknown>
+  const payerEmail = String(payer.email || '')
+  const fullSearch = `${desc} ${extRef} ${payerEmail}`.toLowerCase()
+
+  // Descartar compras de productos del Vault (infoproductos)
+  if (desc.includes('WhatsApp AI Closer') || desc.includes('Blueprints') || extRef.startsWith('VAULT-')) {
+    return false
+  }
+
+  try {
+    await ensureServerAuth()
+    const clisSnap = await getDocs(collection(db, 'clientes'))
+    const clientes: Cliente[] = clisSnap.docs.map(d => ({ id: d.id, ...d.data() } as Cliente))
+
+    // Buscar coincidencia con algún cliente de KevDev
+    const matched = clientes.find(c => {
+      const cName = (c.nombre || '').toLowerCase().trim()
+      const cUrl = (c.url || '')
+        .toLowerCase()
+        .replace(/^https?:\/\//, '')
+        .replace(/\/.*$/, '')
+        .replace(/^www\./, '')
+        .split('.')[0]
+
+      if (c.mpPreapprovalId && fullSearch.includes(c.mpPreapprovalId.toLowerCase())) return true
+      if (extRef && cName && extRef.toLowerCase().includes(cName.replace(/\s+/g, ''))) return true
+      if (extRef && cUrl && extRef.toLowerCase().includes(cUrl)) return true
+      if (cName && cName.length >= 3 && fullSearch.includes(cName)) return true
+      if (cUrl && cUrl.length >= 4 && fullSearch.includes(cUrl)) return true
+
+      return false
+    })
+
+    if (!matched || !matched.id) return false
+
+    const fechaPago = String(payment.date_approved || payment.date_created || new Date().toISOString()).split('T')[0]
+    const monto = Number(payment.transaction_amount) || 0
+
+    // Comprobar idempotencia: si ya existe en historialPagos, no duplicar
+    const dupQuery = query(
+      collection(db, 'historialPagos'),
+      where('referencia', '==', String(paymentId))
+    )
+    const dupSnap = await getDocs(dupQuery)
+
+    if (dupSnap.empty) {
+      await addDoc(collection(db, 'historialPagos'), {
+        clienteId: matched.id,
+        monto,
+        fecha: fechaPago,
+        concepto: desc || 'Cuota Mensual (Suscripción Mercado Pago)',
+        medioPago: 'MercadoPago',
+        metodo: 'pasarela',
+        referencia: String(paymentId),
+        confirmado: true,
+        origen: 'WEBHOOK',
+        creadoEn: serverTimestamp(),
+      })
+
+      await updateDoc(doc(db, 'clientes', matched.id), {
+        estadoPago: 'AL_DIA',
+        metodoCobro: 'MP_SUSCRIPCION',
+        ultimoPago: fechaPago,
+        actualizadoEn: serverTimestamp(),
+      })
+
+      console.log(`[MercadoPago Webhook] Cobro de suscripción registrado para ${matched.nombre} ($${monto})`)
+    }
+
+    return true
+  } catch (err) {
+    console.error('[MercadoPago Webhook] Error al procesar suscripción de cliente:', err)
+    return false
+  }
+}
+
