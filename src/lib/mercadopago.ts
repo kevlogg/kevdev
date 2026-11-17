@@ -85,14 +85,15 @@ export async function createVaultPreference(options: CreatePreferenceOptions) {
 
 /**
  * Validates cryptographic HMAC-SHA256 signature sent by Mercado Pago Webhooks.
+ * Supports single or multiple comma-separated secrets (for accounts with multiple MP apps).
  */
 export function verifyMercadoPagoSignature(options: {
   signatureHeader: string | null
   requestIdHeader: string | null
   dataId: string
 }): boolean {
-  const secret = process.env.MP_WEBHOOK_SECRET
-  if (!secret) {
+  const secretEnv = process.env.MP_WEBHOOK_SECRET
+  if (!secretEnv) {
     // If webhook secret is not configured in environment, log warning and allow for dev testing
     console.warn('[MercadoPago Webhook] MP_WEBHOOK_SECRET is not set. Skipping HMAC verification.')
     return true
@@ -123,10 +124,22 @@ export function verifyMercadoPagoSignature(options: {
   // Build manifest
   const manifest = `id:${dataId};request-id:${requestIdHeader || ''};ts:${ts};`
 
-  const computedHash = crypto
-    .createHmac('sha256', secret)
-    .update(manifest)
-    .digest('hex')
+  // Support multiple secrets separated by comma
+  const secrets = secretEnv.split(',').map(s => s.trim()).filter(Boolean)
+  for (const secret of secrets) {
+    try {
+      const computedHash = crypto
+        .createHmac('sha256', secret)
+        .update(manifest)
+        .digest('hex')
 
-  return crypto.timingSafeEqual(Buffer.from(computedHash), Buffer.from(hash))
+      if (computedHash.length === hash.length && crypto.timingSafeEqual(Buffer.from(computedHash), Buffer.from(hash))) {
+        return true
+      }
+    } catch {
+      // Continue to next secret
+    }
+  }
+
+  return false
 }

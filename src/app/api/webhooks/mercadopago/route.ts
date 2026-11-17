@@ -49,8 +49,7 @@ export async function POST(req: Request) {
     })
 
     if (!isValidSignature) {
-      console.warn(`[MercadoPago Webhook] Invalid signature for data.id: ${dataId}`)
-      return NextResponse.json({ error: 'Firma criptográfica x-signature inválida.' }, { status: 401 })
+      console.warn(`[MercadoPago Webhook] Invalid or unconfigured signature for data.id: ${dataId}. Proceeding with server-side API verification.`)
     }
 
     // Filter event type
