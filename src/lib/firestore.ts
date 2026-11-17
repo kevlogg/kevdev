@@ -185,6 +185,7 @@ const PAJAROS_IDS = ['pajarosenlacabeza', 'pajaros-en-la-cabeza', 'pajaros_en_la
 const ONMAS_IDS = ['onmas', 'entre-rios-on', 'entre_rios_on', 'entrerios-on', 'entrerioson', 'on_mas', 'on-mas']
 const AUTOMOTOR_IDS = ['sitioautomotor', 'sitio-automotor', 'sitio_automotor', 'j7rqjxzppbba1bgp1pb7', 'J7RqjxzpPBaG1bGp1pB7']
 const NIEVAS_IDS = ['nievas', 'nievasacademia', 'nievas-academia', 'nievas-academia-deportiva', 'ji5nhkgmz6nn9dceyjib']
+const MV_IDS = ['mv-electricista', 'mv-electricidad', 'mvelectricista', 'mvelectricidad', 'e3m06nkwjqsvowts3tzr', 'E3m06nKWjQsVOwts3TzR']
 
 export async function getHistorialPagos(clienteId: string): Promise<HistorialPago[]> {
   try {
@@ -196,6 +197,7 @@ export async function getHistorialPagos(clienteId: string): Promise<HistorialPag
     const isOnmasQuery = ONMAS_IDS.includes(normId) || normId.includes('onmas') || normId.includes('entre-rios') || normId.includes('entrerios')
     const isAutomotorQuery = AUTOMOTOR_IDS.includes(normId) || normId.includes('automotor') || normId.includes('sitio') || normId.includes('j7rq')
     const isNievasQuery = NIEVAS_IDS.includes(normId) || normId.includes('nievas')
+    const isMvQuery = MV_IDS.includes(normId) || normId.includes('mv') || normId.includes('electricista') || normId.includes('vallejos')
 
     // Resolver IDs de documentos de clientes coincidentes en Firestore
     const matchingClientDocIds = new Set<string>([clienteId, normId])
@@ -209,6 +211,10 @@ export async function getHistorialPagos(clienteId: string): Promise<HistorialPag
     }
     if (isNievasQuery) {
       matchingClientDocIds.add('JI5NHkgmz6nn9dCeyjiB')
+    }
+    if (isMvQuery) {
+      matchingClientDocIds.add('E3m06nKWjQsVOwts3TzR')
+      matchingClientDocIds.add('e3m06nkwjqsvowts3tzr')
     }
     try {
       const cliSnap = await getDocs(collection(db, 'clientes'))
@@ -264,6 +270,7 @@ export async function getHistorialPagos(clienteId: string): Promise<HistorialPag
         if (isPajarosQuery && (PAJAROS_IDS.includes(pNormLower) || pNormLower.includes('pajaro') || pNormLower.includes('cabeza') || pNormLower.includes('qrkvon'))) return true
         if (isOnmasQuery && (ONMAS_IDS.includes(pNormLower) || pNormLower.includes('onmas') || pNormLower.includes('entre-rios') || pNormLower.includes('entrerios'))) return true
         if (isAutomotorQuery && (AUTOMOTOR_IDS.includes(pNormLower) || pNormLower.includes('automotor') || pNormLower.includes('sitio'))) return true
+        if (isMvQuery && (MV_IDS.includes(pNormLower) || pNormLower.includes('mv') || pNormLower.includes('electricista') || pNormLower.includes('vallejos'))) return true
         return false
       })
       .sort((a, b) => (b.fecha || '').localeCompare(a.fecha || ''))

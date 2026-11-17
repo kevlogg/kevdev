@@ -36,6 +36,7 @@ export async function GET(req: Request) {
       const isOnmasQuery = normId.includes('onmas') || normId.includes('entre-rios') || normId.includes('entrerios') || normId.includes('on_mas')
       const isAutomotorQuery = normId.includes('automotor') || normId.includes('sitio') || normId.includes('j7rq')
       const isNievasQuery = normId.includes('nievas') || normId.includes('ji5nhkgmz6nn9dceyjib')
+      const isMvQuery = normId.includes('mv') || normId.includes('electricista') || normId.includes('vallejos') || normId.includes('e3m06')
 
       const matchedCli = clientes.find(c => {
         const cId = String(c.id || '').toLowerCase()
@@ -48,6 +49,7 @@ export async function GET(req: Request) {
         if (isOnmasQuery && (cNom.includes('onmas') || cNom.includes('entre') || cUrl.includes('onmas') || cUrl.includes('entre-rios'))) return true
         if (isAutomotorQuery && (cNom.includes('automotor') || cUrl.includes('automotor') || cId.includes('j7rq'))) return true
         if (isNievasQuery && (cNom.includes('nievas') || cUrl.includes('nievas') || cId.includes('ji5nhkgmz6nn9dceyjib'))) return true
+        if (isMvQuery && (cNom.includes('mv') || cNom.includes('electricista') || cNom.includes('vallejos') || cId.includes('e3m06'))) return true
         return false
       })
 
