@@ -118,8 +118,14 @@ export async function POST() {
         continue
       }
 
-      // Buscar si corresponde a un cliente
-      const matched = findMatchingCliente(fullSearch, extRef)
+      // Extraer subscription_id de point_of_interaction si es un cobro recurrente
+      const poi = (p.point_of_interaction || {}) as Record<string, unknown>
+      const txData = (poi.transaction_data || {}) as Record<string, unknown>
+      const subId = String(txData.subscription_id || '')
+      const fullSearchWithSub = `${fullSearch} ${subId}`
+
+      // Buscar si corresponde a un cliente (primero por ID exacto de suscripción)
+      const matched = findMatchingCliente(fullSearchWithSub, extRef, subId)
       if (!matched || !matched.id) continue
 
       const refId = String(p.id)

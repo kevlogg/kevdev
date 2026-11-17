@@ -190,7 +190,10 @@ async function processClientSubscriptionPayment(
   const extRef = String(payment.external_reference || '')
   const payer = (payment.payer || {}) as Record<string, unknown>
   const payerEmail = String(payer.email || '')
-  const fullSearch = `${desc} ${extRef} ${payerEmail}`.toLowerCase()
+  const poi = (payment.point_of_interaction || {}) as Record<string, unknown>
+  const txData = (poi.transaction_data || {}) as Record<string, unknown>
+  const subscriptionId = String(txData.subscription_id || '')
+  const fullSearch = `${desc} ${extRef} ${payerEmail} ${subscriptionId}`.toLowerCase()
 
   // Descartar compras de productos del Vault (infoproductos)
   if (desc.includes('WhatsApp AI Closer') || desc.includes('Blueprints') || extRef.startsWith('VAULT-')) {
@@ -202,8 +205,17 @@ async function processClientSubscriptionPayment(
     const clisSnap = await getDocs(collection(db, 'clientes'))
     const clientes: Cliente[] = clisSnap.docs.map(d => ({ id: d.id, ...d.data() } as Cliente))
 
-    // Buscar coincidencia con algún cliente de KevDev
+    // Buscar coincidencia con algún cliente de KevDev con jerarquía estricta
     const matched = clientes.find(c => {
+      // 1. Coincidencia directa e infalible por ID de suscripción única de Mercado Pago
+      if (c.mpPreapprovalId && subscriptionId && c.mpPreapprovalId.toLowerCase() === subscriptionId.toLowerCase()) {
+        return true
+      }
+      if (c.mpPreapprovalId && fullSearch.includes(c.mpPreapprovalId.toLowerCase())) {
+        return true
+      }
+
+      // 2. Coincidencia por external reference
       const cName = (c.nombre || '').toLowerCase().trim()
       const cUrl = (c.url || '')
         .toLowerCase()
@@ -212,9 +224,10 @@ async function processClientSubscriptionPayment(
         .replace(/^www\./, '')
         .split('.')[0]
 
-      if (c.mpPreapprovalId && fullSearch.includes(c.mpPreapprovalId.toLowerCase())) return true
       if (extRef && cName && extRef.toLowerCase().includes(cName.replace(/\s+/g, ''))) return true
       if (extRef && cUrl && extRef.toLowerCase().includes(cUrl)) return true
+
+      // 3. Coincidencia por nombre en la descripción de la suscripción (ej: "Brian Recke", "Nievas")
       if (cName && cName.length >= 3 && fullSearch.includes(cName)) return true
       if (cUrl && cUrl.length >= 4 && fullSearch.includes(cUrl)) return true
 
