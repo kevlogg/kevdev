@@ -412,6 +412,7 @@ export default function OrganizadorPage() {
   const [newColTitle, setNewColTitle] = useState('')
 
   const syncTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const notesTextareaRef = useRef<HTMLTextAreaElement | null>(null)
   const [, startTransition] = useTransition()
 
   /* 1. Initial Load from LocalStorage + Cloud Sync */
@@ -578,6 +579,65 @@ export default function OrganizadorPage() {
   function handleInsertNotesSnippet(snippet: string) {
     const updated = activeTab.notes ? `${activeTab.notes}\n${snippet}` : snippet
     handleNotesChange(updated)
+  }
+
+  function handleToggleNotesStrikethrough() {
+    const textarea = notesTextareaRef.current
+    const fullText = activeTab.notes || ''
+    if (!textarea) return
+
+    let start = textarea.selectionStart
+    let end = textarea.selectionEnd
+
+    // Si no hay texto seleccionado, expandir a la palabra bajo el cursor
+    if (start === end) {
+      let wStart = start
+      let wEnd = end
+      while (wStart > 0 && !/\s/.test(fullText[wStart - 1])) {
+        wStart--
+      }
+      while (wEnd < fullText.length && !/\s/.test(fullText[wEnd])) {
+        wEnd++
+      }
+      if (wStart < wEnd) {
+        start = wStart
+        end = wEnd
+      } else {
+        return
+      }
+    }
+
+    const selectedText = fullText.substring(start, end)
+    if (!selectedText) return
+
+    // Detectar si ya está tachado (Unicode \u0336 o Markdown ~~)
+    const hasUnicodeStrike = selectedText.includes('\u0336')
+    const hasMarkdownStrike = selectedText.startsWith('~~') && selectedText.endsWith('~~') && selectedText.length >= 4
+
+    let transformed = ''
+    if (hasUnicodeStrike || hasMarkdownStrike) {
+      // Destachar: remover \u0336 y envolturas Markdown ~~
+      transformed = selectedText
+        .replace(/\u0336/g, '')
+        .replace(/^~~([\s\S]*)~~$/, '$1')
+    } else {
+      // Tachar: aplicar la línea que cruza al medio a las palabras (\u0336)
+      const clean = selectedText.replace(/^~~([\s\S]*)~~$/, '$1')
+      transformed = Array.from(clean)
+        .map(char => (char === '\n' || char === '\r' ? char : `${char}\u0336`))
+        .join('')
+    }
+
+    const newNotes = fullText.substring(0, start) + transformed + fullText.substring(end)
+    handleNotesChange(newNotes)
+
+    // Reenfocar y mantener la selección del texto modificado
+    requestAnimationFrame(() => {
+      if (notesTextareaRef.current) {
+        notesTextareaRef.current.focus()
+        notesTextareaRef.current.setSelectionRange(start, start + transformed.length)
+      }
+    })
   }
 
   /* ─── Column Operations ─────────────────────────────────────────────── */
@@ -1770,6 +1830,36 @@ export default function OrganizadorPage() {
               {/* Toolbar */}
               <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                 <button
+                  type="button"
+                  onMouseDown={e => e.preventDefault()}
+                  onClick={handleToggleNotesStrikethrough}
+                  title="Tachar / Destachar texto seleccionado (Alt+S o Ctrl+Shift+X)"
+                  style={{
+                    background: 'rgba(255,255,255,0.05)',
+                    border: '1px solid var(--color-border)',
+                    borderRadius: 4,
+                    padding: '3px 8px',
+                    color: 'var(--color-muted)',
+                    fontSize: '0.6875rem',
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 4,
+                    transition: 'all 0.15s ease',
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.color = 'var(--color-star)'
+                    e.currentTarget.style.borderColor = 'rgba(255,255,255,0.25)'
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.color = 'var(--color-muted)'
+                    e.currentTarget.style.borderColor = 'var(--color-border)'
+                  }}
+                >
+                  <span style={{ textDecoration: 'line-through', fontWeight: 700, fontSize: '0.75rem', color: 'var(--color-accent)' }}>S</span>
+                  <span>Tachar</span>
+                </button>
+                <button
                   onClick={() => handleInsertNotesSnippet('\n- [ ] ')}
                   title="Insertar tarea / checklist"
                   style={{
@@ -1801,6 +1891,7 @@ export default function OrganizadorPage() {
                 </button>
                 <button
                   onClick={() => {
+                    if (!activeTab.notes) return
                     navigator.clipboard.writeText(activeTab.notes)
                     alert('Notas copiadas al portapapeles.')
                   }}
@@ -1822,8 +1913,19 @@ export default function OrganizadorPage() {
 
             {/* Notepad Textarea */}
             <textarea
+              ref={notesTextareaRef}
               value={activeTab.notes || ''}
               onChange={e => handleNotesChange(e.target.value)}
+              onKeyDown={e => {
+                const isShortcut =
+                  (e.altKey && (e.key === 's' || e.key === 'S')) ||
+                  ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'x' || e.key === 'X' || e.key === 's' || e.key === 'S'))
+
+                if (isShortcut) {
+                  e.preventDefault()
+                  handleToggleNotesStrikethrough()
+                }
+              }}
               placeholder="Escribí acá tus notas, enlaces, recordatorios de reuniones o requerimientos para este tema..."
               style={{
                 flex: 1,
@@ -1853,7 +1955,7 @@ export default function OrganizadorPage() {
               background: 'rgba(0,0,0,0.15)',
             }}>
               <span>
-                {activeTab.notes?.length || 0} caracteres · {(activeTab.notes?.trim().split(/\s+/).filter(Boolean).length) || 0} palabras
+                {(activeTab.notes || '').replace(/\u0336/g, '').length} caracteres · {((activeTab.notes || '').replace(/\u0336/g, '').trim().split(/\s+/).filter(Boolean).length) || 0} palabras
               </span>
               <span>Guardado en local y nube</span>
             </div>
