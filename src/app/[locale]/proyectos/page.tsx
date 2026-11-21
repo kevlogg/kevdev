@@ -31,6 +31,20 @@ export default function ProyectosPage() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [direction, setDirection]       = useState<1 | -1>(1)
 
+  // Direct deep link support (?id=... or ?project=...)
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const params = new URLSearchParams(window.location.search)
+    const targetId = params.get('id') || params.get('project')
+    if (targetId) {
+      const idx = PROJECTS.findIndex(p => p.id === targetId)
+      if (idx !== -1) {
+        setCurrentIndex(idx)
+        setPageState('carousel')
+      }
+    }
+  }, [])
+
   const enterCarousel = useCallback(() => setPageState('carousel'), [])
 
   const navigate = useCallback((dir: 1 | -1) => {
@@ -38,8 +52,13 @@ export default function ProyectosPage() {
     setCurrentIndex(prev => (prev + dir + PROJECTS.length) % PROJECTS.length)
   }, [])
 
-  const currentProject = PROJECTS[currentIndex]
-  const previewImg = PROJECT_SCREENSHOTS[currentProject.id] || PROJECT_SCREENSHOTS['kronitt']
+  const selectProject = useCallback((index: number) => {
+    setDirection(index > currentIndex ? 1 : -1)
+    setCurrentIndex(index)
+  }, [currentIndex])
+
+  const currentProject = PROJECTS[currentIndex] || PROJECTS[0]
+  const previewImg = PROJECT_SCREENSHOTS[currentProject.id] || '/projects/kronitt.webp'
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100dvh', minHeight: '100vh', overflow: 'hidden' }}>
@@ -81,7 +100,7 @@ export default function ProyectosPage() {
                 height: '100%',
                 objectFit: 'cover',
                 objectPosition: 'top center',
-                filter: 'blur(4px) brightness(0.3) contrast(1.15)',
+                filter: 'blur(5px) brightness(0.28) contrast(1.15)',
               }}
             />
             {/* Dark Ambient Vignette + Radial Tint matching active project color */}
@@ -89,7 +108,7 @@ export default function ProyectosPage() {
               style={{
                 position: 'absolute',
                 inset: 0,
-                background: `radial-gradient(circle at 50% 45%, ${currentProject.color}30 0%, rgba(6, 8, 16, 0.85) 60%, rgba(4, 6, 12, 0.96) 100%)`,
+                background: `radial-gradient(circle at 50% 45%, ${currentProject.color}35 0%, rgba(6, 8, 16, 0.88) 60%, rgba(4, 6, 12, 0.98) 100%)`,
               }}
             />
           </motion.div>
@@ -108,6 +127,7 @@ export default function ProyectosPage() {
               currentIndex={currentIndex}
               direction={direction}
               onNavigate={navigate}
+              onSelectProject={selectProject}
             />
           )}
         </AnimatePresence>
@@ -155,8 +175,8 @@ function IntroState({ onEnter }: { onEnter: () => void }) {
         style={{
           fontFamily: 'var(--font-display)',
           fontWeight: 800,
-          fontSize: 'clamp(3rem, 7vw, 6rem)',
-          lineHeight: 0.95,
+          fontSize: 'clamp(2.5rem, 6.5vw, 5.5rem)',
+          lineHeight: 0.98,
           letterSpacing: '-0.03em',
           color: 'var(--color-star)',
           margin: 0,
@@ -173,8 +193,9 @@ function IntroState({ onEnter }: { onEnter: () => void }) {
           fontFamily: 'var(--font-ui)',
           fontSize: '1rem',
           color: 'var(--color-muted)',
-          maxWidth: 420,
+          maxWidth: 440,
           margin: 0,
+          lineHeight: 1.5,
         }}
       >
         {t('subcopy')}
@@ -189,17 +210,18 @@ function IntroState({ onEnter }: { onEnter: () => void }) {
         onMouseLeave={() => setHov(false)}
         style={{
           marginTop: '0.5rem',
-          padding: '0.75rem 2rem',
+          padding: '0.8rem 2.2rem',
           border: '1px solid var(--color-accent)',
           borderRadius: 99,
-          background: hov ? 'var(--color-accent)' : 'transparent',
+          background: hov ? 'var(--color-accent)' : 'rgba(0, 229, 255, 0.08)',
           color: hov ? 'var(--color-on-accent)' : 'var(--color-accent)',
           fontFamily: 'var(--font-ui)',
           fontSize: '0.875rem',
-          fontWeight: 600,
-          letterSpacing: '0.06em',
+          fontWeight: 700,
+          letterSpacing: '0.04em',
           cursor: 'pointer',
-          transition: 'background 0.25s, color 0.25s',
+          boxShadow: hov ? '0 0 30px rgba(0,229,255,0.4)' : '0 0 15px rgba(0,229,255,0.15)',
+          transition: 'all 0.25s ease',
         }}
       >
         {t('cta')}
@@ -209,13 +231,29 @@ function IntroState({ onEnter }: { onEnter: () => void }) {
 }
 
 /* ─── Carousel ───────────────────────────────────────────────────────── */
-function CarouselState({ currentIndex, direction, onNavigate }: {
+function CarouselState({
+  currentIndex,
+  direction,
+  onNavigate,
+  onSelectProject,
+}: {
   currentIndex: number
   direction: 1 | -1
   onNavigate: (dir: 1 | -1) => void
+  onSelectProject: (index: number) => void
 }) {
   const lastNav    = useRef(0)
   const touchStart = useRef(0)
+
+  // Keyboard navigation
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight') onNavigate(1)
+      if (e.key === 'ArrowLeft') onNavigate(-1)
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [onNavigate])
 
   const handleWheel = useCallback((e: React.WheelEvent) => {
     const now = Date.now()
@@ -248,18 +286,26 @@ function CarouselState({ currentIndex, direction, onNavigate }: {
         position: 'relative',
       }}
     >
+      {/* Top Counter Bar */}
       <div style={{
         position: 'absolute',
-        top: 'clamp(6rem, 10vh, 8rem)',
+        top: 'clamp(5.5rem, 9vh, 7.5rem)',
         left: '50%',
         transform: 'translateX(-50%)',
         fontFamily: 'var(--font-mono)',
         fontSize: '0.75rem',
-        color: 'var(--color-faint)',
-        letterSpacing: '0.1em',
+        fontWeight: 700,
+        color: 'var(--color-star)',
+        letterSpacing: '0.12em',
+        background: 'rgba(10, 13, 22, 0.85)',
+        border: '1px solid rgba(255,255,255,0.12)',
+        borderRadius: 99,
+        padding: '0.35rem 1rem',
+        backdropFilter: 'blur(8px)',
         whiteSpace: 'nowrap',
+        zIndex: 20,
       }}>
-        {String(currentIndex + 1).padStart(2, '0')} / {String(PROJECTS.length).padStart(2, '0')}
+        <span style={{ color: 'var(--color-accent)' }}>{String(currentIndex + 1).padStart(2, '0')}</span> / {String(PROJECTS.length).padStart(2, '0')}
       </div>
 
       <ArrowButton direction="left"  onClick={() => onNavigate(-1)} />
@@ -273,6 +319,53 @@ function CarouselState({ currentIndex, direction, onNavigate }: {
       </AnimatePresence>
 
       <ArrowButton direction="right" onClick={() => onNavigate(1)} />
+
+      {/* Bottom Horizontal Quick-Switcher Strip */}
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 'clamp(1rem, 3.5vh, 2.5rem)',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          display: 'flex',
+          gap: '0.4rem',
+          alignItems: 'center',
+          maxWidth: '92vw',
+          overflowX: 'auto',
+          padding: '0.4rem 0.65rem',
+          background: 'rgba(10, 13, 22, 0.82)',
+          border: '1px solid rgba(255, 255, 255, 0.12)',
+          borderRadius: 99,
+          backdropFilter: 'blur(12px)',
+          zIndex: 25,
+          scrollbarWidth: 'none',
+        }}
+      >
+        {PROJECTS.map((p, idx) => {
+          const isCurrent = idx === currentIndex
+          return (
+            <button
+              key={p.id}
+              onClick={() => onSelectProject(idx)}
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.625rem',
+                fontWeight: isCurrent ? 700 : 500,
+                padding: '0.3rem 0.65rem',
+                borderRadius: 99,
+                border: `1px solid ${isCurrent ? p.color : 'transparent'}`,
+                background: isCurrent ? `${p.color}25` : 'transparent',
+                color: isCurrent ? p.color : 'var(--color-muted)',
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              {p.name}
+            </button>
+          )
+        })}
+      </div>
     </div>
   )
 }
@@ -296,43 +389,48 @@ function ProjectCard({ project: rawProject, direction }: { project: Project; dir
       animate="center"
       exit="exit"
       style={{
-        maxWidth: 680,
+        maxWidth: 720,
         width: '100%',
         textAlign: 'center',
         paddingInline: 'var(--gutter)',
+        position: 'relative',
+        zIndex: 15,
       }}
     >
+      {/* Status & Year bar */}
       <div style={{
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         gap: '0.5rem',
-        marginBottom: '1.25rem',
+        marginBottom: '1rem',
       }}>
         <span style={{
-          width: 7, height: 7, borderRadius: '50%',
-          background: project.statusDot, flexShrink: 0,
+          width: 8, height: 8, borderRadius: '50%',
+          background: '#10b981', flexShrink: 0,
+          boxShadow: '0 0 10px #10b981',
         }} />
         <span style={{
-          fontFamily: 'var(--font-ui)', fontSize: '0.6875rem',
-          letterSpacing: '0.1em', textTransform: 'uppercase',
-          color: 'var(--color-faint)',
+          fontFamily: 'var(--font-ui)', fontSize: '0.725rem',
+          letterSpacing: '0.12em', textTransform: 'uppercase',
+          color: '#10b981', fontWeight: 700,
         }}>
           {project.status}
         </span>
         <span style={{
-          fontFamily: 'var(--font-mono)', fontSize: '0.6875rem',
+          fontFamily: 'var(--font-mono)', fontSize: '0.725rem',
           color: 'var(--color-faint)', marginLeft: '0.5rem',
         }}>
           {project.year}
         </span>
       </div>
 
+      {/* Project Title */}
       <h2 style={{
         fontFamily: 'var(--font-display)',
         fontWeight: 800,
-        fontSize: 'clamp(2.25rem, 7vw, 7rem)',
-        lineHeight: 0.95,
+        fontSize: 'clamp(2.4rem, 6.5vw, 5rem)',
+        lineHeight: 1,
         letterSpacing: '-0.03em',
         color: project.color,
         margin: '0 0 0.75rem',
@@ -340,79 +438,95 @@ function ProjectCard({ project: rawProject, direction }: { project: Project; dir
         {project.name}
       </h2>
 
+      {/* Tagline */}
       <p style={{
         fontFamily: 'var(--font-ui)',
-        fontSize: '1.0625rem',
-        color: 'var(--color-muted)',
-        margin: '0 0 1rem',
-        lineHeight: 1.5,
+        fontSize: 'clamp(1rem, 2vw, 1.15rem)',
+        fontWeight: 600,
+        color: 'var(--color-star)',
+        margin: '0 0 0.85rem',
+        lineHeight: 1.4,
       }}>
         {project.tagline}
       </p>
 
+      {/* Description */}
       <p style={{
         fontFamily: 'var(--font-ui)',
         fontSize: '0.9375rem',
-        color: 'var(--color-faint)',
-        lineHeight: 1.7,
+        color: 'var(--color-muted)',
+        lineHeight: 1.65,
         margin: '0 auto 1.5rem',
-        maxWidth: 560,
+        maxWidth: 580,
       }}>
         {project.description}
       </p>
 
+      {/* Technology chips */}
       <div style={{
         display: 'flex', flexWrap: 'wrap',
-        gap: '0.375rem', justifyContent: 'center',
-        marginBottom: '2rem',
+        gap: '0.4rem', justifyContent: 'center',
+        marginBottom: '1.75rem',
       }}>
         {project.tags.map(tag => (
           <span key={tag} style={{
             fontFamily: 'var(--font-mono)',
-            fontSize: '0.625rem',
-            letterSpacing: '0.07em',
+            fontSize: '0.65rem',
+            letterSpacing: '0.05em',
             color: project.color,
             border: `1px solid ${colorAlpha}`,
+            background: `${project.color}10`,
             borderRadius: 99,
-            padding: '3px 10px',
+            padding: '4px 12px',
           }}>
             {tag}
           </span>
         ))}
       </div>
 
+      {/* Live Project Link Button */}
       {project.href && (
         <a
           href={project.href}
           target="_blank"
           rel="noopener noreferrer"
           onMouseEnter={e => {
-            (e.currentTarget as HTMLAnchorElement).style.background = project.color + '1A'
+            const el = e.currentTarget as HTMLAnchorElement
+            el.style.background = project.color
+            el.style.color = '#000'
+            el.style.boxShadow = `0 0 25px ${project.color}60`
           }}
           onMouseLeave={e => {
-            (e.currentTarget as HTMLAnchorElement).style.background = 'transparent'
+            const el = e.currentTarget as HTMLAnchorElement
+            el.style.background = 'transparent'
+            el.style.color = project.color
+            el.style.boxShadow = 'none'
           }}
           style={{
-            display: 'inline-block',
-            padding: '0.625rem 1.5rem',
-            border: `1px solid ${project.color}`,
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.4rem',
+            padding: '0.65rem 1.75rem',
+            border: `1.5px solid ${project.color}`,
             borderRadius: 99,
             color: project.color,
             fontFamily: 'var(--font-ui)',
-            fontSize: '0.875rem',
-            fontWeight: 600,
+            fontSize: '0.9rem',
+            fontWeight: 700,
             textDecoration: 'none',
             letterSpacing: '0.04em',
             background: 'transparent',
-            transition: 'background 0.25s',
+            transition: 'all 0.25s ease',
           }}
         >
-          {t('viewProject')}
+          <span>{t('viewProject')}</span>
+          <span>↗</span>
         </a>
       )}
 
+      {/* Tech Spec & Case Study Buttons */}
       {(project.techSpec || project.techSpecs || project.caseStudy) && (
-        <div style={{ marginTop: '1rem', display: 'flex', gap: '0.625rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+        <div style={{ marginTop: '1.15rem', display: 'flex', gap: '0.625rem', justifyContent: 'center', flexWrap: 'wrap' }}>
           {(project.techSpec || project.techSpecs) && (
             <button
               onClick={() => setShowSpec(true)}
@@ -425,15 +539,15 @@ function ProjectCard({ project: rawProject, direction }: { project: Project; dir
                 padding: '0.5rem 1.25rem',
                 border: '1px solid rgba(255,255,255,0.15)',
                 borderRadius: 99,
-                background: 'none',
-                color: hovSpec ? 'var(--color-star)' : 'var(--color-faint)',
+                background: hovSpec ? 'rgba(255,255,255,0.08)' : 'none',
+                color: hovSpec ? 'var(--color-star)' : 'var(--color-muted)',
                 fontFamily: 'var(--font-ui)',
                 fontSize: '0.75rem',
                 fontWeight: 600,
                 letterSpacing: '0.04em',
                 cursor: 'pointer',
-                transition: 'color 0.25s, border-color 0.25s',
-                borderColor: hovSpec ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.15)',
+                transition: 'all 0.25s ease',
+                borderColor: hovSpec ? 'rgba(255,255,255,0.35)' : 'rgba(255,255,255,0.15)',
               }}
             >
               {t('techSpecBtn')}
@@ -452,15 +566,15 @@ function ProjectCard({ project: rawProject, direction }: { project: Project; dir
                 padding: '0.5rem 1.25rem',
                 border: '1px solid rgba(255,255,255,0.15)',
                 borderRadius: 99,
-                background: 'none',
-                color: hovCase ? 'var(--color-star)' : 'var(--color-faint)',
+                background: hovCase ? 'rgba(255,255,255,0.08)' : 'none',
+                color: hovCase ? 'var(--color-star)' : 'var(--color-muted)',
                 fontFamily: 'var(--font-ui)',
                 fontSize: '0.75rem',
                 fontWeight: 600,
                 letterSpacing: '0.04em',
                 cursor: 'pointer',
-                transition: 'color 0.25s, border-color 0.25s',
-                borderColor: hovCase ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.15)',
+                transition: 'all 0.25s ease',
+                borderColor: hovCase ? 'rgba(255,255,255,0.35)' : 'rgba(255,255,255,0.15)',
               }}
             >
               {t('caseStudyBtn')}
@@ -499,23 +613,23 @@ function ArrowButton({ direction, onClick }: {
         position: 'absolute',
         [side]: 'clamp(0.5rem, 3vw, 3rem)',
         top: '50%',
-        transform: `translateY(-50%) scale(${hov ? 1.06 : 1})`,
-        width: 'clamp(40px, 8vw, 52px)',
-        height: 'clamp(40px, 8vw, 52px)',
+        transform: `translateY(-50%) scale(${hov ? 1.08 : 1})`,
+        width: 'clamp(42px, 7vw, 54px)',
+        height: 'clamp(42px, 7vw, 54px)',
         borderRadius: '50%',
-        border: `1.5px solid ${hov ? 'var(--color-star)' : 'rgba(255,255,255,0.45)'}`,
-        background: hov ? 'rgba(255,255,255,0.16)' : 'rgba(10,12,20,0.45)',
-        backdropFilter: 'blur(6px)',
-        boxShadow: hov ? '0 4px 20px rgba(0,0,0,0.35)' : '0 2px 12px rgba(0,0,0,0.25)',
-        color: 'var(--color-star)',
-        fontSize: 'clamp(1rem, 3vw, 1.375rem)',
+        border: `1.5px solid ${hov ? 'var(--color-accent)' : 'rgba(255,255,255,0.35)'}`,
+        background: hov ? 'rgba(0, 229, 255, 0.15)' : 'rgba(10,12,20,0.65)',
+        backdropFilter: 'blur(8px)',
+        boxShadow: hov ? '0 0 25px rgba(0,229,255,0.35)' : '0 2px 12px rgba(0,0,0,0.35)',
+        color: hov ? 'var(--color-accent)' : 'var(--color-star)',
+        fontSize: 'clamp(1rem, 3vw, 1.35rem)',
         cursor: 'pointer',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        transition: 'border-color 0.25s, color 0.25s, background 0.25s, transform 0.25s, box-shadow 0.25s',
+        transition: 'all 0.25s ease',
         flexShrink: 0,
-        zIndex: 20,
+        zIndex: 25,
       }}
     >
       {direction === 'left' ? '←' : '→'}
